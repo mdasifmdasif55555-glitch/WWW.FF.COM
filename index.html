@@ -1,1324 +1,2597 @@
 <!DOCTYPE html>
+
 <html lang="bn">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ANSU YT BUY SELL | Free Fire Marketplace</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>ANSU YT BUY SELL</title>
 
 <style>
-:root{
+
+:root {
+
   --bg:#090b10;
-  --panel:#121722;
-  --panel2:#171e2b;
-  --line:#293244;
-  --red:#ff3b45;
-  --orange:#ff8a24;
-  --text:#f4f6fb;
-  --muted:#9aa5b7;
-  --green:#21c98b
+
+  --card:#151b27;
+
+  --line:#30394b;
+
+  --red:#ff3948;
+
+  --orange:#ff8b27;
+
+  --text:#f5f6fa;
+
+  --muted:#a4aec0;
+
+  --green:#19c98b;
+
 }
 
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
+* {
+
+  box-sizing:border-box;
+
+}
+
+body {
+
   margin:0;
-  background:radial-gradient(circle at 80% -10%,#3a121c 0,transparent 30%),var(--bg);
+
+  background:var(--bg);
+
   color:var(--text);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+
+  font-family:Arial,sans-serif;
+
 }
 
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.wrap{width:min(1160px,92%);margin:auto}
+button,input,textarea,select {
 
-header{
+  font:inherit;
+
+}
+
+button {
+
+  cursor:pointer;
+
+}
+
+.container {
+
+  width:min(1100px,92%);
+
+  margin:auto;
+
+}
+
+header {
+
+  background:#10141e;
+
+  border-bottom:1px solid var(--line);
+
+  padding:14px 0;
+
   position:sticky;
+
   top:0;
+
   z-index:10;
-  background:#090b10ef;
-  border-bottom:1px solid #252b38;
-  backdrop-filter:blur(12px)
+
 }
 
-.nav{
-  min-height:72px;
+.nav {
+
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
-  gap:14px
-}
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:950;
-  letter-spacing:.4px
-}
-
-.logo{
-  width:42px;
-  height:42px;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  background:linear-gradient(135deg,var(--red),var(--orange));
-  color:white;
-  font-size:20px;
-  box-shadow:0 8px 25px #ff3b4533
-}
-
-.brand small{
-  display:block;
-  font-size:10px;
-  color:var(--muted);
-  letter-spacing:2px;
-  margin-top:2px
-}
-
-.navlinks{display:flex;gap:8px;align-items:center}
-
-.navlinks a{
-  color:var(--muted);
-  text-decoration:none;
-  padding:10px 12px;
-  border-radius:10px;
-  font-size:14px
-}
-
-.navlinks a:hover{background:var(--panel2);color:white}
-
-.btn{
-  border:0;
-  border-radius:11px;
-  padding:11px 15px;
-  font-weight:800;
-  color:white;
-  background:linear-gradient(135deg,var(--red),#ff642e);
-  box-shadow:0 7px 20px #ff3b4522
-}
-
-.btn.secondary{
-  background:#202838;
-  border:1px solid #354057;
-  box-shadow:none
-}
-
-.btn.small{padding:8px 11px;font-size:13px}
-
-.hero{
-  padding:56px 0 36px;
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  align-items:center;
-  gap:28px
-}
-
-.eyebrow{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  color:#ffb66b;
-  background:#ff8a2417;
-  border:1px solid #ff8a243a;
-  padding:7px 11px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:1px
-}
-
-.dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 10px var(--green)
-}
-
-h1{
-  font-size:clamp(34px,5.4vw,62px);
-  line-height:1.04;
-  letter-spacing:-2px;
-  margin:18px 0
-}
-
-.grad{
-  background:linear-gradient(90deg,#fff,#ff9a4c 65%,#ff3b45);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent
-}
-
-.hero p{
-  color:var(--muted);
-  line-height:1.75;
-  max-width:590px
-}
-
-.hero-actions{
-  display:flex;
-  gap:10px;
   flex-wrap:wrap;
-  margin-top:22px
-}
 
-.hero-art{
-  min-height:300px;
-  position:relative;
-  display:grid;
-  place-items:center;
-  border:1px solid #352632;
-  border-radius:28px;
-  overflow:hidden;
-  background:radial-gradient(circle at 50% 40%,#8b202e 0,#35121c 30%,#111621 72%);
-  box-shadow:inset 0 0 70px #ff3b4510
-}
-
-.hero-art:before,.hero-art:after{
-  content:"";
-  position:absolute;
-  border:1px solid #ff806b33;
-  transform:rotate(35deg);
-  width:340px;
-  height:500px;
-  border-radius:45%
-}
-
-.hero-art:after{
-  transform:rotate(-35deg);
-  width:240px
-}
-
-.emblem{position:relative;z-index:1;text-align:center}
-.emblem .fire{font-size:100px;filter:drop-shadow(0 0 25px #ff542d66)}
-.emblem strong{display:block;font-size:22px;letter-spacing:3px}
-.emblem span{font-size:11px;letter-spacing:4px;color:#ffb66b}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
   gap:12px;
-  margin:8px 0 42px
+
 }
 
-.stat{
-  background:var(--panel);
-  border:1px solid var(--line);
-  padding:17px;
-  border-radius:16px
-}
+.brand {
 
-.stat strong{display:block;font-size:22px}
-.stat span{font-size:12px;color:var(--muted)}
+  font-size:20px;
 
-section{padding:22px 0 48px}
-
-.section-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-  gap:14px;
-  margin-bottom:20px
-}
-
-.section-head h2{font-size:28px;margin:0;letter-spacing:-.7px}
-.section-head p{color:var(--muted);margin:7px 0 0;font-size:14px}
-
-.filters{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:18px
-}
-
-.field{
-  background:#10151f;
-  border:1px solid #30394b;
-  color:var(--text);
-  border-radius:10px;
-  padding:11px 12px;
-  outline:none;
-  min-width:150px
-}
-
-.field:focus{border-color:#ff6b55}
-.filters .field:first-child{flex:1;min-width:220px}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px
-}
-
-.card{
-  background:linear-gradient(180deg,#171e2b,#10151e);
-  border:1px solid var(--line);
-  border-radius:18px;
-  overflow:hidden;
-  transition:.2s
-}
-
-.card:hover{transform:translateY(-3px);border-color:#75404a}
-
-.cover{
-  height:145px;
-  position:relative;
-  display:grid;
-  place-items:center;
-  background:radial-gradient(circle at 50% 35%,#782632,#25131d 55%,#111722)
-}
-
-.cover .rank{
-  font-size:44px;
-  font-weight:1000;
-  color:#ffffff20;
-  letter-spacing:2px
-}
-
-.pill{
-  position:absolute;
-  left:12px;
-  top:12px;
-  border-radius:999px;
-  background:#0a0d13d9;
-  border:1px solid #ffffff22;
-  padding:6px 9px;
-  font-size:11px;
-  font-weight:800
-}
-
-.cover .tag{
-  position:absolute;
-  right:12px;
-  top:12px;
-  background:#ff8a24;
-  color:#1b0c05;
   font-weight:900;
-  font-size:10px;
-  padding:5px 8px;
-  border-radius:7px
+
+  color:var(--orange);
+
 }
 
-.card-body{padding:15px}
-.card h3{margin:0 0 8px;font-size:17px}
+.brand span {
 
-.meta{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-  margin-bottom:14px
-}
-
-.meta span{
-  background:#202838;
-  color:#b9c3d3;
-  border-radius:7px;
-  padding:5px 7px;
-  font-size:11px
-}
-
-.price-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  border-top:1px solid #283142;
-  padding-top:13px
-}
-
-.price{font-size:22px;font-weight:950;color:#ffb66b}
-.price small{font-size:11px;color:var(--muted);font-weight:600}
-
-.empty{
-  grid-column:1/-1;
-  text-align:center;
-  color:var(--muted);
-  padding:40px;
-  border:1px dashed #374154;
-  border-radius:16px
-}
-
-.info-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px
-}
-
-.info{
-  background:var(--panel);
-  border:1px solid var(--line);
-  padding:20px;
-  border-radius:16px
-}
-
-.info b{display:block;margin:10px 0 7px}
-.info p{color:var(--muted);font-size:13px;line-height:1.65;margin:0}
-.icon{font-size:25px}
-
-.notice{
-  border:1px solid #795a2c;
-  background:#2b2114;
-  border-radius:13px;
-  padding:13px 15px;
-  color:#f7d7a5;
-  font-size:13px;
-  line-height:1.6;
-  margin:18px 0
-}
-
-footer{
-  border-top:1px solid #252b38;
-  padding:25px 0 35px;
-  color:var(--muted);
-  font-size:12px
-}
-
-.foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:30;
-  background:#000b;
-  backdrop-filter:blur(5px);
-  padding:18px;
-  overflow:auto;
-  align-items:center;
-  justify-content:center
-}
-
-.modal.open{display:flex}
-
-.modal-box{
-  width:min(620px,100%);
-  max-height:92vh;
-  overflow-y:auto;
-  background:#111722;
-  border:1px solid #354055;
-  border-radius:20px;
-  padding:22px;
-  box-shadow:0 25px 90px #0009
-}
-
-.modal-head{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:center;
-  margin-bottom:15px
-}
-
-.modal-head h2{margin:0;font-size:22px}
-
-.x{
-  border:0;
-  background:#242c3a;
   color:white;
-  border-radius:9px;
-  width:35px;
-  height:35px;
-  font-size:20px
+
 }
 
-.form-grid{
+.actions {
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:7px;
+
+  align-items:center;
+
+}
+
+.btn {
+
+  border:0;
+
+  border-radius:8px;
+
+  padding:11px 14px;
+
+  background:linear-gradient(135deg,var(--red),var(--orange));
+
+  color:white;
+
+  font-weight:bold;
+
+}
+
+.btn.secondary {
+
+  background:#252e3d;
+
+  border:1px solid #39445a;
+
+}
+
+.btn:disabled {
+
+  opacity:.5;
+
+  cursor:not-allowed;
+
+}
+
+.hero {
+
+  padding:55px 0 35px;
+
+  background:radial-gradient(ellipse at top right,#48151f,transparent 60%);
+
+}
+
+.hero h1 {
+
+  font-size:clamp(35px,6vw,60px);
+
+  line-height:1.08;
+
+  margin:12px 0;
+
+}
+
+.hero h1 span {
+
+  color:var(--orange);
+
+}
+
+.hero p {
+
+  color:var(--muted);
+
+  line-height:1.8;
+
+  max-width:650px;
+
+}
+
+.stats {
+
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:12px;
+
+  margin:20px 0 35px;
+
 }
 
-.form-row{display:flex;flex-direction:column;gap:6px}
-.form-row.full{grid-column:1/-1}
+.stat,.panel {
 
-.form-row label{
+  background:var(--card);
+
+  border:1px solid var(--line);
+
+  border-radius:13px;
+
+  padding:17px;
+
+}
+
+.stat strong {
+
+  display:block;
+
+  font-size:23px;
+
+  color:var(--orange);
+
+}
+
+.stat span {
+
+  color:var(--muted);
+
   font-size:12px;
-  color:#b8c2d2;
-  font-weight:700
+
 }
 
-.form-row .field{width:100%;min-width:0}
-textarea.field{resize:vertical;min-height:75px}
+section {
 
-.help{font-size:11px;color:var(--muted);line-height:1.6}
+  padding:22px 0 35px;
 
-.payment-choice{display:flex;gap:8px;flex-wrap:wrap}
-
-.pay-option{
-  flex:1;
-  min-width:100px;
-  padding:11px;
-  border:1px solid #394457;
-  border-radius:10px;
-  background:#1b2331;
-  color:white
 }
 
-.pay-option.active{border-color:var(--red);background:#381b25}
+.section-title {
 
-.result{
-  padding:12px;
-  border-radius:10px;
-  background:#152a25;
-  color:#9df0ce;
-  font-size:13px;
-  line-height:1.6;
-  display:none;
-  margin-top:12px
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  flex-wrap:wrap;
+
+  gap:12px;
+
+  margin-bottom:17px;
+
 }
 
-.details-image{
-  width:100%;
-  max-height:280px;
-  object-fit:cover;
-  border-radius:12px;
-  margin-bottom:15px;
-  border:1px solid var(--line)
+.section-title h2 {
+
+  margin:0;
+
 }
 
-.detail-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+.filters {
+
+  display:flex;
+
   gap:10px;
-  margin:15px 0
+
+  flex-wrap:wrap;
+
+  margin-bottom:18px;
+
 }
 
-.detail-item{
+.field {
+
+  width:100%;
+
   padding:12px;
-  border:1px solid #30394b;
-  background:#171e2b;
-  border-radius:11px;
-  min-width:0
+
+  background:#0e131c;
+
+  color:white;
+
+  border:1px solid var(--line);
+
+  border-radius:8px;
+
+  outline:none;
+
 }
 
-.detail-item b{
-  display:block;
-  font-size:11px;
-  color:#ffb66b;
-  margin-bottom:6px
+.filters .field {
+
+  flex:1;
+
+  min-width:150px;
+
 }
 
-.detail-item span{
-  display:block;
-  font-size:13px;
-  color:#e5eaf3;
-  line-height:1.6;
+.grid {
+
+  display:grid;
+
+  grid-template-columns:repeat(3,minmax(0,1fr));
+
+  gap:15px;
+
+}
+
+.listing {
+
+  overflow:hidden;
+
+  background:var(--card);
+
+  border:1px solid var(--line);
+
+  border-radius:14px;
+
+}
+
+.cover {
+
+  height:150px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  background:linear-gradient(135deg,#50141f,#161d2b);
+
+  position:relative;
+
+  overflow:hidden;
+
+}
+
+.cover img {
+
+  width:100%;
+
+  height:100%;
+
+  object-fit:cover;
+
+}
+
+.cover .level {
+
+  position:absolute;
+
+  right:10px;
+
+  bottom:10px;
+
+  background:#000b;
+
+  padding:7px;
+
+  border-radius:6px;
+
+}
+
+.listing-body {
+
+  padding:14px;
+
+}
+
+.listing h3 {
+
+  margin:0 0 10px;
+
   overflow-wrap:anywhere;
-  white-space:pre-wrap
+
 }
 
-@media(max-width:800px){
-  .hero{grid-template-columns:1fr;padding-top:38px}
-  .hero-art{min-height:220px}
-  .grid{grid-template-columns:repeat(2,1fr)}
-  .navlinks a{display:none}
-  .stats{margin-bottom:28px}
+.meta {
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  line-height:1.8;
+
+  margin-bottom:12px;
+
 }
 
-@media(max-width:540px){
-  .nav{min-height:64px}
-  .brand{font-size:13px}
-  .logo{width:36px;height:36px}
-  .nav .btn{padding:9px 10px;font-size:12px}
-  .hero{gap:20px}
-  .hero-art{min-height:190px}
-  .emblem .fire{font-size:70px}
-  .stats{gap:7px}
-  .stat{padding:12px}
-  .stat strong{font-size:18px}
-  .stat span{font-size:10px}
-  .grid,.info-grid{grid-template-columns:1fr}
-  .section-head{align-items:start;flex-direction:column}
-  .form-grid{grid-template-columns:1fr}
-  .form-row.full{grid-column:auto}
-  .filters .field{width:100%}
-  .detail-grid{grid-template-columns:1fr}
+.price-row {
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:8px;
+
+  border-top:1px solid var(--line);
+
+  padding-top:12px;
+
 }
+
+.price {
+
+  font-size:21px;
+
+  color:var(--orange);
+
+  font-weight:900;
+
+}
+
+.notice {
+
+  background:#2c2115;
+
+  border:1px solid #74522a;
+
+  color:#f5d5a3;
+
+  border-radius:10px;
+
+  padding:14px;
+
+  font-size:13px;
+
+  line-height:1.7;
+
+  margin:20px 0;
+
+}
+
+.hidden {
+
+  display:none!important;
+
+}
+
+.modal {
+
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:30;
+
+  background:#000c;
+
+  padding:15px;
+
+  overflow:auto;
+
+  align-items:center;
+
+  justify-content:center;
+
+}
+
+.modal.open {
+
+  display:flex;
+
+}
+
+.modal-box {
+
+  width:min(550px,100%);
+
+  max-height:95vh;
+
+  overflow:auto;
+
+  background:#151b27;
+
+  border:1px solid var(--line);
+
+  border-radius:15px;
+
+  padding:20px;
+
+}
+
+.modal-head {
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:10px;
+
+  margin-bottom:17px;
+
+}
+
+.modal-head h2 {
+
+  margin:0;
+
+}
+
+.close {
+
+  background:#30394b;
+
+  color:white;
+
+  border:0;
+
+  border-radius:7px;
+
+  padding:8px 12px;
+
+}
+
+.form {
+
+  display:grid;
+
+  gap:12px;
+
+}
+
+.form label {
+
+  display:block;
+
+  color:#c5ccda;
+
+  font-size:13px;
+
+  margin-bottom:6px;
+
+}
+
+.form textarea {
+
+  resize:vertical;
+
+}
+
+.message {
+
+  padding:12px;
+
+  background:#202b3b;
+
+  border-radius:8px;
+
+  margin-top:12px;
+
+  overflow-wrap:anywhere;
+
+  font-size:13px;
+
+  line-height:1.6;
+
+}
+
+.message.error {
+
+  color:#ffadb4;
+
+}
+
+.message.success {
+
+  color:#8ef0bf;
+
+}
+
+.table-wrap {
+
+  overflow-x:auto;
+
+}
+
+table {
+
+  width:100%;
+
+  border-collapse:collapse;
+
+  font-size:13px;
+
+}
+
+th,td {
+
+  padding:10px;
+
+  border-bottom:1px solid var(--line);
+
+  text-align:left;
+
+  vertical-align:top;
+
+}
+
+th {
+
+  color:var(--orange);
+
+}
+
+footer {
+
+  margin-top:30px;
+
+  border-top:1px solid var(--line);
+
+  padding:25px 0;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+}
+
+@media(max-width:800px) {
+
+  .grid {
+
+    grid-template-columns:repeat(2,minmax(0,1fr));
+
+  }
+
+}
+
+@media(max-width:520px) {
+
+  .grid {
+
+    grid-template-columns:1fr;
+
+  }
+
+  .stats {
+
+    gap:6px;
+
+  }
+
+  .stat {
+
+    padding:10px;
+
+  }
+
+  .stat strong {
+
+    font-size:18px;
+
+  }
+
+  .brand {
+
+    font-size:16px;
+
+  }
+
+  .hero {
+
+    padding-top:35px;
+
+  }
+
+}
+
 </style>
+
 </head>
 
 <body>
+
 <header>
-  <div class="wrap nav">
-    <div class="brand">
-      <div class="logo">🔥</div>
-      <div>ANSU YT BUY SELL<small>FREE FIRE MARKETPLACE</small></div>
+
+  <div class="container nav">
+
+    <div class="brand">🔥 ANSU <span>YT BUY SELL</span></div>
+
+    <div class="actions">
+
+      <span id="userLabel" style="font-size:12px;color:#a4aec0">
+
+        Not logged in
+
+      </span>
+
+      <button class="btn secondary" id="authBtn" onclick="openAuth()">
+
+        Login / Register
+
+      </button>
+
+      <button class="btn secondary hidden" id="ordersBtn"
+
+        onclick="showOrders()">
+
+        My Orders
+
+      </button>
+
+      <button class="btn secondary hidden" id="adminBtn"
+
+        onclick="showAdmin()">
+
+        Admin
+
+      </button>
+
+      <button class="btn hidden" id="logoutBtn" onclick="logout()">
+
+        Logout
+
+      </button>
+
     </div>
 
-    <nav class="navlinks">
-      <a href="#market">Marketplace</a>
-      <a href="#how">How it works</a>
-      <a href="#safety">Safety</a>
-    </nav>
-
-    <button class="btn small" onclick="openSell()">＋ Sell Account</button>
   </div>
+
 </header>
 
-<main class="wrap">
+<main class="container">
+
   <div class="hero">
-    <div>
-      <div class="eyebrow"><span class="dot"></span> GAMING MARKETPLACE • BETA DEMO</div>
-      <h1>Find your next<br><span class="grad">Free Fire account.</span></h1>
-      <p>Explore account listings, compare features, and create an order in a few simple steps. Built for the ANSU YT BUY SELL marketplace.</p>
 
-      <div class="hero-actions">
-        <a class="btn" href="#market" style="text-decoration:none">Explore Accounts ↗</a>
-        <button class="btn secondary" onclick="openSell()">List Your Account</button>
-      </div>
-    </div>
+    <h1>
 
-    <div class="hero-art">
-      <div class="emblem">
-        <div class="fire">🎮</div>
-        <strong>ANSU YT</strong>
-        <span>BUY • SELL • GAME</span>
-      </div>
-    </div>
+      FREE FIRE<br>
+
+      <span>BUY & SELL MARKETPLACE</span>
+
+    </h1>
+
+    <p>
+
+      Welcome to ANSU YT BUY SELL.
+
+      Login to publish listings, browse accounts and create orders.
+
+      Your listings are stored in the shared Supabase database.
+
+    </p>
+
+    <button class="btn" onclick="openSell()">
+
+      + Sell Account
+
+    </button>
+
+    <button class="btn secondary"
+
+      onclick="document.getElementById('market').scrollIntoView({behavior:'smooth'})">
+
+      Browse Accounts
+
+    </button>
+
   </div>
 
   <div class="stats">
-    <div class="stat"><strong id="listingCount">06</strong><span>Demo listings</span></div>
-    <div class="stat"><strong>2</strong><span>Payment methods planned</span></div>
-    <div class="stat"><strong>24/7</strong><span>Browse listings</span></div>
+
+    <div class="stat">
+
+      <strong id="listingCount">0</strong>
+
+      <span>Available Listings</span>
+
+    </div>
+
+    <div class="stat">
+
+      <strong>2</strong>
+
+      <span>Payment Choices</span>
+
+    </div>
+
+    <div class="stat">
+
+      <strong>24/7</strong>
+
+      <span>Browse Marketplace</span>
+
+    </div>
+
   </div>
 
   <section id="market">
-    <div class="section-head">
+
+    <div class="section-title">
+
       <div>
-        <h2>🔥 Featured Accounts</h2>
-        <p>Choose an account to see details and start a demo order.</p>
+
+        <h2>🔥 Available Accounts</h2>
+
+        <p style="color:#a4aec0;font-size:13px">
+
+          Live listings from Supabase
+
+        </p>
+
       </div>
-      <button class="btn secondary small" onclick="resetDemo()">Reset demo listings</button>
+
+      <button class="btn secondary" onclick="loadListings()">
+
+        Refresh
+
+      </button>
+
     </div>
 
     <div class="filters">
-      <input id="search" class="field" placeholder="Search by title, level, skins..." oninput="renderListings()" />
 
-      <select id="sort" class="field" onchange="renderListings()">
-        <option value="featured">Sort: Featured</option>
+      <input class="field" id="search"
+
+        placeholder="Search account..."
+
+        oninput="renderListings()">
+
+      <select class="field" id="sort"
+
+        onchange="renderListings()">
+
+        <option value="new">Newest first</option>
+
         <option value="low">Price: Low to High</option>
+
         <option value="high">Price: High to Low</option>
+
       </select>
 
-      <select id="rarity" class="field" onchange="renderListings()">
-        <option value="all">All account types</option>
-        <option value="Starter">Starter</option>
-        <option value="Rare Skins">Rare Skins</option>
-        <option value="Collector">Collector</option>
-      </select>
     </div>
 
-    <div class="grid" id="listingGrid"></div>
+    <div class="grid" id="listingGrid">
+
+      <div class="panel">Loading listings...</div>
+
+    </div>
 
     <div class="notice">
-      ⚠️ Demo version: listings and orders are saved only in this browser.
-      No real payment is collected and no game login details should be entered here.
-      A live launch needs a secure database, authentication, payment verification,
-      and a review of Garena's account-transfer rules.
+
+      ⚠️ Payment options below only create pending order records.
+
+      They do not transfer money. Never share passwords, OTPs,
+
+      recovery codes or private login information.
+
     </div>
+
   </section>
 
-  <section id="how">
-    <div class="section-head">
-      <div>
-        <h2>How it works</h2>
-        <p>A simple order journey for buyers and sellers.</p>
-      </div>
+  <section id="ordersSection" class="hidden">
+
+    <div class="section-title">
+
+      <h2>📦 My Orders</h2>
+
+      <button class="btn secondary" onclick="loadOrders()">
+
+        Refresh
+
+      </button>
+
     </div>
 
-    <div class="info-grid">
-      <div class="info">
-        <div class="icon">🔎</div>
-        <b>1. Browse accounts</b>
-        <p>Compare listed features, level, price, and the seller's listing details before choosing.</p>
-      </div>
+    <div class="panel" id="ordersContent"></div>
 
-      <div class="info">
-        <div class="icon">🧾</div>
-        <b>2. Create an order</b>
-        <p>Enter contact details and choose bKash or Nagad in the demo checkout flow.</p>
-      </div>
-
-      <div class="info">
-        <div class="icon">🛡️</div>
-        <b>3. Verify before handover</b>
-        <p>A live marketplace must verify payments securely and provide a clear dispute process.</p>
-      </div>
-    </div>
   </section>
 
-  <section id="safety">
-    <div class="section-head">
-      <div>
-        <h2>Trust & Safety</h2>
-        <p>Important safeguards before this site goes live.</p>
-      </div>
+  <section id="adminSection" class="hidden">
+
+    <div class="section-title">
+
+      <h2>👑 Admin Panel</h2>
+
+      <button class="btn secondary" onclick="loadAdmin()">
+
+        Refresh
+
+      </button>
+
     </div>
 
-    <div class="info-grid">
-      <div class="info">
-        <div class="icon">🔐</div>
-        <b>Protect account data</b>
-        <p>Never ask users to share their Facebook, Google, or game passwords in listing forms or chat.</p>
-      </div>
+    <div class="panel" id="adminContent"></div>
 
-      <div class="info">
-        <div class="icon">💳</div>
-        <b>Verified payments</b>
-        <p>Use an approved merchant/payment gateway or a properly reviewed manual process. Do not trust screenshots alone.</p>
-      </div>
-
-      <div class="info">
-        <div class="icon">📋</div>
-        <b>Clear rules</b>
-        <p>Publish refund, seller verification, fraud reporting, and dispute policies before accepting real orders.</p>
-      </div>
-    </div>
   </section>
+
 </main>
 
 <footer>
-  <div class="wrap foot">
-    <span>© 2026 ANSU YT BUY SELL</span>
-    <span>Community marketplace concept • Not affiliated with Garena</span>
+
+  <div class="container">
+
+    © 2026 ANSU YT BUY SELL · Community Marketplace
+
   </div>
+
 </footer>
 
-<!-- ACCOUNT DETAILS MODAL -->
-<div class="modal" id="detailsModal" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+<!-- LOGIN / REGISTER -->
+
+<div class="modal" id="authModal">
+
   <div class="modal-box">
-    <div class="modal-head">
-      <h2 id="detailsTitle">Account details</h2>
-      <button class="x" onclick="closeModal('detailsModal')" aria-label="Close">×</button>
-    </div>
-    <div id="detailsContent"></div>
-  </div>
-</div>
 
-<!-- SELL ACCOUNT MODAL -->
-<div class="modal" id="sellModal" role="dialog" aria-modal="true" aria-labelledby="sellTitle">
-  <div class="modal-box">
     <div class="modal-head">
-      <h2 id="sellTitle">＋ List an account</h2>
-      <button class="x" onclick="closeModal('sellModal')" aria-label="Close">×</button>
+
+      <h2>🔐 Login / Register</h2>
+
+      <button class="close" onclick="closeModal('authModal')">
+
+        ✕
+
+      </button>
+
     </div>
 
-    <form id="sellForm" class="form-grid">
+    <form class="form" id="loginForm">
 
-      <div class="form-row full">
-        <label for="sellTitleInput">Listing title</label>
-        <input class="field" id="sellTitleInput" required maxlength="70"
-          placeholder="e.g. Level 65 account with rare bundles">
+      <div>
+
+        <label>Full Name (Register)</label>
+
+        <input class="field" id="fullName"
+
+          maxlength="80" placeholder="Your name">
+
       </div>
 
-      <div class="form-row">
-        <label for="sellLevel">Account Level</label>
-        <input class="field" id="sellLevel" type="number" min="1" max="100"
-          required placeholder="65">
+      <div>
+
+        <label>Email</label>
+
+        <input class="field" id="email"
+
+          type="email" required autocomplete="email">
+
       </div>
 
-      <div class="form-row">
-        <label for="sellPrice">Asking price (৳)</label>
-        <input class="field" id="sellPrice" type="number" min="1"
-          required placeholder="2500">
+      <div>
+
+        <label>Password (minimum 8 characters)</label>
+
+        <input class="field" id="password"
+
+          type="password" minlength="8" required
+
+          autocomplete="current-password">
+
       </div>
 
-      <div class="form-row">
-        <label for="sellType">Account type</label>
-        <select class="field" id="sellType">
-          <option>Starter</option>
-          <option>Rare Skins</option>
-          <option>Collector</option>
-        </select>
-      </div>
+      <button class="btn" type="submit">Login</button>
 
-      <div class="form-row">
-        <label for="sellRegion">Region</label>
-        <select class="field" id="sellRegion">
-          <option>Bangladesh</option>
-          <option>Global</option>
-          <option>Other</option>
-        </select>
-      </div>
+      <button class="btn secondary" type="button"
 
-      <div class="form-row full">
-        <label for="sellImage">Account image URL (optional)</label>
-        <input class="field" id="sellImage" type="url"
-          placeholder="https://example.com/account-image.jpg">
-        <span class="help">শুধু ছবির লিংক দিন। কোনো লগইন তথ্য দেবেন না।</span>
-      </div>
+        onclick="registerUser()">
 
-      <div class="form-row full">
-        <label for="sellBundles">Rare Bundles</label>
-        <textarea class="field" id="sellBundles" rows="2"
-          maxlength="1000" placeholder="Rare bundle-এর নামগুলো লিখুন"></textarea>
-      </div>
+        Create Account / Register
 
-      <div class="form-row full">
-        <label for="sellEvoGuns">Evo Guns & Levels</label>
-        <textarea class="field" id="sellEvoGuns" rows="2"
-          maxlength="1000" placeholder="যেমন: AK Blue Flame Draco Lv.7, M1014 Lv.4"></textarea>
-      </div>
+      </button>
 
-      <div class="form-row full">
-        <label for="sellEmotes">Emotes</label>
-        <textarea class="field" id="sellEmotes" rows="2"
-          maxlength="1000" placeholder="কোন কোন rare বা special emote আছে"></textarea>
-      </div>
+      <button class="btn secondary" type="button"
 
-      <div class="form-row full">
-        <label for="sellOutfits">Outfits & Collection</label>
-        <textarea class="field" id="sellOutfits" rows="2"
-          maxlength="1000" placeholder="Outfit, collection ও rare items-এর বিবরণ"></textarea>
-      </div>
+        onclick="resetPassword()">
 
-      <div class="form-row">
-        <label for="sellDiamonds">Diamonds সংখ্যা</label>
-        <input class="field" id="sellDiamonds" type="number"
-          min="0" max="9999999" placeholder="যেমন: 500">
-      </div>
+        Forgot Password?
 
-      <div class="form-row">
-        <label for="sellRank">Current Rank</label>
-        <input class="field" id="sellRank" maxlength="100"
-          placeholder="যেমন: Heroic / Master">
-      </div>
+      </button>
 
-      <div class="form-row full">
-        <label for="sellFeatures">Additional Details</label>
-        <textarea class="field" id="sellFeatures" rows="3" maxlength="2000"
-          placeholder="অ্যাকাউন্ট সম্পর্কে আরও বিস্তারিত লিখুন"></textarea>
-      </div>
-
-      <div class="form-row full">
-        <label for="sellerContact">Seller contact (optional)</label>
-        <input class="field" id="sellerContact" maxlength="60"
-          placeholder="Public contact handle only; don't enter passwords">
-      </div>
-
-      <div class="form-row full">
-        <div class="help">
-          Demo only: এই listing শুধু এই browser ও device-এ সেভ হবে।
-          Password, OTP, recovery code বা private login information দেবেন না।
-        </div>
-        <button class="btn" type="submit">Create demo listing</button>
-      </div>
     </form>
 
-    <div id="sellResult" class="result"></div>
+    <div id="authMessage"></div>
+
   </div>
+
 </div>
 
-<!-- CHECKOUT MODAL -->
-<div class="modal" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+<!-- CREATE LISTING -->
+
+<div class="modal" id="sellModal">
+
   <div class="modal-box">
+
     <div class="modal-head">
-      <h2 id="checkoutTitle">Checkout</h2>
-      <button class="x" onclick="closeModal('checkoutModal')" aria-label="Close">×</button>
+
+      <h2>🎮 Sell Free Fire Account</h2>
+
+      <button class="close" onclick="closeModal('sellModal')">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <form class="form" id="sellForm">
+
+      <div>
+
+        <label>Account Title</label>
+
+        <input class="field" id="sellTitle"
+
+          required maxlength="70"
+
+          placeholder="Rare bundles and skins">
+
+      </div>
+
+      <div>
+
+        <label>Price (BDT)</label>
+
+        <input class="field" id="sellPrice"
+
+          type="number" min="1" max="10000000" required>
+
+      </div>
+
+      <div>
+
+        <label>Account Level</label>
+
+        <input class="field" id="sellLevel"
+
+          type="number" min="1" max="100" required>
+
+      </div>
+
+      <div>
+
+        <label>Account Type</label>
+
+        <select class="field" id="sellType">
+
+          <option>Starter</option>
+
+          <option>Rare Skins</option>
+
+          <option>Collector</option>
+
+        </select>
+
+      </div>
+
+      <div>
+
+        <label>Region</label>
+
+        <select class="field" id="sellRegion">
+
+          <option>Bangladesh</option>
+
+          <option>Global</option>
+
+          <option>Other</option>
+
+        </select>
+
+      </div>
+
+      <div>
+
+        <label>Description</label>
+
+        <textarea class="field" id="sellDescription"
+
+          rows="3" maxlength="1000"
+
+          placeholder="Describe skins, bundles, emotes..."></textarea>
+
+      </div>
+
+      <div>
+
+        <label>Account Image URL (optional)</label>
+
+        <input class="field" id="sellImage"
+
+          type="url" maxlength="500"
+
+          placeholder="https://example.com/image.jpg">
+
+      </div>
+
+      <button class="btn" type="submit">
+
+        Publish Listing
+
+      </button>
+
+    </form>
+
+    <div id="sellMessage"></div>
+
+  </div>
+
+</div>
+
+<!-- LISTING DETAILS -->
+
+<div class="modal" id="detailsModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2 id="detailsTitle">Account Details</h2>
+
+      <button class="close" onclick="closeModal('detailsModal')">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <div id="detailsContent"></div>
+
+  </div>
+
+</div>
+
+<!-- CHECKOUT -->
+
+<div class="modal" id="checkoutModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2>📦 Create Order</h2>
+
+      <button class="close" onclick="closeModal('checkoutModal')">
+
+        ✕
+
+      </button>
+
     </div>
 
     <div id="checkoutAccount"></div>
 
-    <form id="checkoutForm" class="form-grid">
-      <div class="form-row full">
-        <label for="buyerName">Your name</label>
-        <input class="field" id="buyerName" required maxlength="70"
-          placeholder="Enter your name">
+    <form class="form" id="checkoutForm">
+
+      <div>
+
+        <label>Your Name</label>
+
+        <input class="field" id="buyerName"
+
+          maxlength="80" required>
+
       </div>
 
-      <div class="form-row full">
-        <label for="buyerContact">Contact number or email</label>
-        <input class="field" id="buyerContact" required maxlength="100"
-          placeholder="For order updates">
+      <div>
+
+        <label>Contact Email or Phone</label>
+
+        <input class="field" id="buyerContact"
+
+          maxlength="120" required>
+
       </div>
 
-      <div class="form-row full">
-        <label>Choose payment method (demo)</label>
-        <div class="payment-choice">
-          <button type="button" class="pay-option active" data-pay="bKash"
-            onclick="choosePay(this)">🩷 bKash</button>
-          <button type="button" class="pay-option" data-pay="Nagad"
-            onclick="choosePay(this)">🟠 Nagad</button>
-        </div>
+      <div>
+
+        <label>Payment Method</label>
+
+        <select class="field" id="paymentMethod">
+
+          <option value="bkash">bKash</option>
+
+          <option value="nagad">Nagad</option>
+
+        </select>
+
       </div>
 
-      <div class="form-row full">
-        <div class="help">
-          No real payment will be made here. Live checkout requires a merchant-approved
-          payment gateway and server-side transaction verification.
-        </div>
-        <button class="btn" type="submit">Create demo order</button>
-      </div>
+      <p style="font-size:12px;color:#a4aec0;line-height:1.7">
+
+        This only creates a pending order. No money will be
+
+        collected or transferred.
+
+      </p>
+
+      <button class="btn" type="submit">
+
+        Create Pending Order
+
+      </button>
+
     </form>
 
-    <div id="checkoutResult" class="result"></div>
+    <div id="checkoutMessage"></div>
+
   </div>
+
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-"use strict";
 
-const demoListings = [
-  {
-    id:1,
-    title:"Rare Bundle Collection",
-    level:68,
-    price:3200,
-    type:"Collector",
-    region:"Bangladesh",
-    features:"Rare bundles, multiple emotes, ranked history.",
-    bundles:"Rare bundle collection",
-    evoGuns:"Not specified",
-    emotes:"Multiple emotes",
-    outfits:"Collector outfits",
-    diamonds:0,
-    rank:"Not specified",
-    image:"",
-    seller:"Verified demo seller",
-    featured:true
-  },
-  {
-    id:2,
-    title:"Evo Gun Starter Pack",
-    level:52,
-    price:1800,
-    type:"Rare Skins",
-    region:"Global",
-    features:"Evo gun skins listed by seller; verify all details before purchase.",
-    bundles:"",
-    evoGuns:"Evo gun skins",
-    emotes:"",
-    outfits:"",
-    diamonds:0,
-    rank:"Not specified",
-    image:"",
-    seller:"Demo seller",
-    featured:true
-  },
-  {
-    id:3,
-    title:"Budget Starter Account",
-    level:28,
-    price:450,
-    type:"Starter",
-    region:"Bangladesh",
-    features:"Entry-level account with a few cosmetic items.",
-    bundles:"",
-    evoGuns:"",
-    emotes:"",
-    outfits:"",
-    diamonds:0,
-    rank:"Not specified",
-    image:"",
-    seller:"Demo seller",
-    featured:false
-  },
-  {
-    id:4,
-    title:"Collector Style Account",
-    level:72,
-    price:5400,
-    type:"Collector",
-    region:"Bangladesh",
-    features:"Collector-style inventory; all features are example data.",
-    bundles:"Collector bundles",
-    evoGuns:"",
-    emotes:"",
-    outfits:"Collector-style outfits",
-    diamonds:0,
-    rank:"Not specified",
-    image:"",
-    seller:"Verified demo seller",
-    featured:true
-  },
-  {
-    id:5,
-    title:"Rare Outfit Set",
-    level:45,
-    price:1250,
-    type:"Rare Skins",
-    region:"Global",
-    features:"Outfit and emote details are sample listing text.",
-    bundles:"",
-    evoGuns:"",
-    emotes:"",
-    outfits:"Rare outfit set",
-    diamonds:0,
-    rank:"Not specified",
-    image:"",
-    seller:"Demo seller",
-    featured:false
-  },
-  {
-    id:6,
-    title:"New Player Account",
-    level:16,
-    price:250,
-    type:"Starter",
-    region:"Bangladesh",
-    features:"Starter example listing.",
-    bundles:"",
-    evoGuns:"",
-    emotes:"",
-    outfits:"",
-    diamonds:0,
-    rank:"Not specified",
-    image:"",
-    seller:"Demo seller",
-    featured:false
-  }
-];
+/* ==========================================
 
-let listings = loadListings();
-let selectedAccount = null;
-let selectedPay = "bKash";
+   STEP 1: ENTER YOUR SUPABASE DETAILS
 
-function loadListings(){
-  try{
-    const saved = localStorage.getItem("ansuListings");
-    if(!saved) return demoListings.slice();
+   ========================================== */
 
-    const parsed = JSON.parse(saved);
+const SUPABASE_URL = "https://qpcmfmhrigfdmvdtezli.supabase.co";
 
-    if(!Array.isArray(parsed)) return demoListings.slice();
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwY21mbWhyaWdmZG12ZHRlemxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3Njc5OTUsImV4cCI6MjEwODM0Mzk5NX0.0ToYY8IHVByxRZksJzd-O4_ztxVivKrgSYHU6Uzz0Y4";
 
-    return parsed.map(item => ({
-      ...item,
-      bundles:item.bundles || "",
-      evoGuns:item.evoGuns || "",
-      emotes:item.emotes || "",
-      outfits:item.outfits || "",
-      diamonds:Number(item.diamonds || 0),
-      rank:item.rank || "",
-      image:item.image || ""
-    }));
-  }catch(e){
-    return demoListings.slice();
-  }
+const configured =
+
+  SUPABASE_URL.startsWith("https://") &&
+
+  !SUPABASE_URL.includes("YOUR_SUPABASE") &&
+
+  !SUPABASE_KEY.includes("YOUR_SUPABASE");
+
+const sb = configured
+
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+  : null;
+
+/* ==========================================
+
+   GLOBAL VARIABLES
+
+   ========================================== */
+
+let currentUser = null;
+
+let currentProfile = null;
+
+let listings = [];
+
+let selectedListing = null;
+
+const $ = id => document.getElementById(id);
+
+function esc(value) {
+
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+
+    "&":"&amp;",
+
+    "<":"&lt;",
+
+    ">":"&gt;",
+
+    '"':"&quot;",
+
+    "'":"&#39;"
+
+  })[char]);
+
 }
 
-function saveListings(){
-  localStorage.setItem("ansuListings",JSON.stringify(listings));
+function money(value) {
+
+  return "৳" + Number(value || 0).toLocaleString("en-BD");
+
 }
 
-function esc(value){
-  return String(value ?? "").replace(/[&<>"']/g,function(c){
-    return {
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-    }[c];
+function message(id, text, success = false) {
+
+  const el = $(id);
+
+  el.className = "message " + (success ? "success" : "error");
+
+  el.textContent = text;
+
+}
+
+function openModal(id) {
+
+  $(id).classList.add("open");
+
+}
+
+function closeModal(id) {
+
+  $(id).classList.remove("open");
+
+}
+
+function openAuth() {
+
+  openModal("authModal");
+
+}
+
+function requireLogin() {
+
+  if (!currentUser) {
+
+    openAuth();
+
+    return false;
+
+  }
+
+  return true;
+
+}
+
+/* ==========================================
+
+   INITIALIZE
+
+   ========================================== */
+
+async function init() {
+
+  if (!configured) {
+
+    $("listingGrid").innerHTML =
+
+      '<div class="panel">Supabase URL ও Key এখনো বসানো হয়নি। index.html-এর নিচের অংশে সেগুলো বসাও।</div>';
+
+    return;
+
+  }
+
+  const { data, error } = await sb.auth.getSession();
+
+  if (error) {
+
+    console.error(error);
+
+  }
+
+  currentUser = data?.session?.user || null;
+
+  await loadProfile();
+
+  updateUI();
+
+  await loadListings();
+
+  sb.auth.onAuthStateChange((_event, session) => {
+
+    currentUser = session?.user || null;
+
+    setTimeout(async () => {
+
+      await loadProfile();
+
+      updateUI();
+
+      await loadListings();
+
+    }, 0);
+
   });
+
 }
 
-function taka(n){
-  return "৳" + Number(n || 0).toLocaleString("en-BD");
+/* ==========================================
+
+   PROFILE
+
+   ========================================== */
+
+async function loadProfile() {
+
+  currentProfile = null;
+
+  if (!sb || !currentUser) return;
+
+  const { data, error } = await sb
+
+    .from("profiles")
+
+    .select("id,full_name,role,avatar_url")
+
+    .eq("id", currentUser.id)
+
+    .maybeSingle();
+
+  if (error) {
+
+    console.error("Profile error:", error.message);
+
+    return;
+
+  }
+
+  currentProfile = data;
+
 }
 
-function renderListings(){
-  const q = document.getElementById("search").value.toLowerCase().trim();
-  const type = document.getElementById("rarity").value;
-  const sort = document.getElementById("sort").value;
+function updateUI() {
 
-  let items = listings.filter(x => {
-    const searchable = [
-      x.title,
-      x.features,
-      x.type,
-      x.level,
-      x.region,
-      x.bundles,
-      x.evoGuns,
-      x.emotes,
-      x.outfits,
-      x.diamonds,
-      x.rank
+  $("userLabel").textContent = currentUser
+
+    ? (currentProfile?.full_name || currentUser.email)
+
+    : "Not logged in";
+
+  $("authBtn").classList.toggle("hidden", !!currentUser);
+
+  $("logoutBtn").classList.toggle("hidden", !currentUser);
+
+  $("ordersBtn").classList.toggle("hidden", !currentUser);
+
+  $("adminBtn").classList.toggle(
+
+    "hidden",
+
+    currentProfile?.role !== "admin"
+
+  );
+
+}
+
+/* ==========================================
+
+   REGISTER
+
+   ========================================== */
+
+async function registerUser() {
+
+  if (!sb) return;
+
+  const name = $("fullName").value.trim();
+
+  const email = $("email").value.trim();
+
+  const password = $("password").value;
+
+  if (!name) {
+
+    message("authMessage", "Register করার আগে Full Name লেখো।");
+
+    return;
+
+  }
+
+  if (password.length < 8) {
+
+    message("authMessage", "Password কমপক্ষে ৮ অক্ষরের হতে হবে।");
+
+    return;
+
+  }
+
+  const { data, error } = await sb.auth.signUp({
+
+    email,
+
+    password,
+
+    options: {
+
+      data: {
+
+        full_name: name
+
+      }
+
+    }
+
+  });
+
+  if (error) {
+
+    message("authMessage", error.message);
+
+    return;
+
+  }
+
+  if (data.session) {
+
+    currentUser = data.user;
+
+    await loadProfile();
+
+    updateUI();
+
+    await loadListings();
+
+    closeModal("authModal");
+
+  } else {
+
+    message(
+
+      "authMessage",
+
+      "Registration request successful. Email confirmation প্রয়োজন হলে Inbox চেক করো।",
+
+      true
+
+    );
+
+  }
+
+}
+
+/* ==========================================
+
+   LOGIN
+
+   ========================================== */
+
+$("loginForm").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  if (!sb) return;
+
+  const email = $("email").value.trim();
+
+  const password = $("password").value;
+
+  const { data, error } = await sb.auth.signInWithPassword({
+
+    email,
+
+    password
+
+  });
+
+  if (error) {
+
+    message("authMessage", error.message);
+
+    return;
+
+  }
+
+  currentUser = data.user;
+
+  await loadProfile();
+
+  updateUI();
+
+  await loadListings();
+
+  closeModal("authModal");
+
+});
+
+/* ==========================================
+
+   FORGOT PASSWORD
+
+   ========================================== */
+
+async function resetPassword() {
+
+  if (!sb) return;
+
+  const email = $("email").value.trim();
+
+  if (!email) {
+
+    message("authMessage", "আগে তোমার Email লেখো।");
+
+    return;
+
+  }
+
+  const { error } = await sb.auth.resetPasswordForEmail(email);
+
+  if (error) {
+
+    message("authMessage", error.message);
+
+  } else {
+
+    message(
+
+      "authMessage",
+
+      "যদি Email-টি নিবন্ধিত থাকে, Password Reset Email পাঠানো হবে।",
+
+      true
+
+    );
+
+  }
+
+}
+
+/* ==========================================
+
+   LOGOUT
+
+   ========================================== */
+
+async function logout() {
+
+  if (!sb) return;
+
+  const { error } = await sb.auth.signOut();
+
+  if (error) {
+
+    alert(error.message);
+
+    return;
+
+  }
+
+  currentUser = null;
+
+  currentProfile = null;
+
+  updateUI();
+
+  await loadListings();
+
+}
+
+/* ==========================================
+
+   LOAD LISTINGS
+
+   ========================================== */
+
+async function loadListings() {
+
+  if (!sb) return;
+
+  $("listingGrid").innerHTML =
+
+    '<div class="panel">Loading...</div>';
+
+  const { data, error } = await sb
+
+    .from("listings")
+
+    .select("*")
+
+    .eq("status", "available")
+
+    .order("created_at", { ascending: false })
+
+    .limit(200);
+
+  if (error) {
+
+    $("listingGrid").innerHTML =
+
+      '<div class="panel">Database Error: ' +
+
+      esc(error.message) +
+
+      '</div>';
+
+    return;
+
+  }
+
+  listings = (data || []).map(row => {
+
+    let extra = {};
+
+    try {
+
+      extra = JSON.parse(row.description || "{}");
+
+    } catch (_) {
+
+      extra = { features: row.description || "" };
+
+    }
+
+    return {
+
+      ...row,
+
+      type: row.account_type || extra.type || "Starter",
+
+      region: row.region || extra.region || "Bangladesh",
+
+      features: extra.features || row.description || ""
+
+    };
+
+  });
+
+  renderListings();
+
+}
+
+/* ==========================================
+
+   RENDER LISTINGS
+
+   ========================================== */
+
+function renderListings() {
+
+  const query = $("search").value.toLowerCase().trim();
+
+  const sort = $("sort").value;
+
+  let items = listings.filter(item => {
+
+    const text = [
+
+      item.title,
+
+      item.description,
+
+      item.features,
+
+      item.level,
+
+      item.region,
+
+      item.account_type
+
     ].join(" ").toLowerCase();
 
-    return (type === "all" || x.type === type) && searchable.includes(q);
+    return text.includes(query);
+
   });
 
-  if(sort === "low"){
+  if (sort === "low") {
+
     items.sort((a,b) => Number(a.price) - Number(b.price));
+
   }
 
-  if(sort === "high"){
+  if (sort === "high") {
+
     items.sort((a,b) => Number(b.price) - Number(a.price));
+
   }
 
-  document.getElementById("listingCount").textContent =
-    String(listings.length).padStart(2,"0");
+  $("listingCount").textContent = items.length;
 
-  const grid = document.getElementById("listingGrid");
+  if (!items.length) {
 
-  if(!items.length){
-    grid.innerHTML =
-      '<div class="empty">No matching accounts found. Try another search.</div>';
+    $("listingGrid").innerHTML =
+
+      '<div class="panel">কোনো Listing পাওয়া যায়নি।</div>';
+
     return;
+
   }
 
-  grid.innerHTML = items.map(x => `
-    <article class="card">
-      <div class="cover"
-        ${x.image ? `style="background-image:linear-gradient(#0005,#0008),url('${esc(x.image)}');background-size:cover;background-position:center"` : ""}>
-        <span class="pill">${esc(x.type)}</span>
-        ${x.featured ? '<span class="tag">FEATURED</span>' : ''}
-        <div class="rank">LV.${esc(x.level)}</div>
-      </div>
+  $("listingGrid").innerHTML = items.map(item => {
 
-      <div class="card-body">
-        <h3>${esc(x.title)}</h3>
+    const image = item.account_image
 
-        <div class="meta">
-          <span>Level ${esc(x.level)}</span>
-          <span>${esc(x.region)}</span>
-          <span>${esc(x.type)}</span>
-          ${x.rank ? `<span>${esc(x.rank)}</span>` : ""}
+      ? `<img src="${esc(item.account_image)}" alt="Account image" onerror="this.style.display='none'">`
+
+      : `<span style="font-size:45px">🎮</span>`;
+
+    return `
+
+      <article class="listing">
+
+        <div class="cover">
+
+          ${image}
+
+          <span class="level">
+
+            Level ${esc(item.level ?? "—")}
+
+          </span>
+
         </div>
 
-        <div class="price-row">
-          <div class="price">
-            ${taka(x.price)}
-            <small> / asking</small>
+        <div class="listing-body">
+
+          <h3>${esc(item.title)}</h3>
+
+          <div class="meta">
+
+            Type: ${esc(item.account_type || "Starter")}<br>
+
+            Region: ${esc(item.region || "Bangladesh")}<br>
+
+            Level: ${esc(item.level ?? "—")}
+
           </div>
-          <button class="btn small" onclick="showDetails(${Number(x.id)})">
-            View ID ↗
-          </button>
+
+          <div class="price-row">
+
+            <span class="price">${money(item.price)}</span>
+
+            <button class="btn"
+
+              onclick="showDetails('${esc(item.id)}')">
+
+              Details
+
+            </button>
+
+          </div>
+
         </div>
-      </div>
-    </article>
-  `).join("");
+
+      </article>
+
+    `;
+
+  }).join("");
+
 }
 
-function openModal(id){
-  document.getElementById(id).classList.add("open");
-  document.body.style.overflow = "hidden";
-}
+/* ==========================================
 
-function closeModal(id){
-  document.getElementById(id).classList.remove("open");
-  document.body.style.overflow = "";
-}
+   LISTING DETAILS
 
-function detailItem(label,value){
-  return `
-    <div class="detail-item">
-      <b>${esc(label)}</b>
-      <span>${esc(value || "Not provided")}</span>
-    </div>
-  `;
-}
+   ========================================== */
 
-function showDetails(id){
-  const x = listings.find(a => String(a.id) === String(id));
-  if(!x) return;
+function showDetails(id) {
 
-  selectedAccount = x;
+  const item = listings.find(x => x.id === id);
 
-  document.getElementById("detailsTitle").textContent = x.title;
+  if (!item) return;
 
-  const imageHTML = x.image
-    ? `<img class="details-image" src="${esc(x.image)}" alt="Account image"
-         onerror="this.style.display='none'">`
-    : `<div class="cover" style="border-radius:12px;margin-bottom:15px">
-         <span class="pill">${esc(x.type)}</span>
-         <div class="rank">LV.${esc(x.level)}</div>
-       </div>`;
+  selectedListing = item;
 
-  document.getElementById("detailsContent").innerHTML = `
-    ${imageHTML}
+  $("detailsTitle").textContent = item.title;
 
-    <div class="meta">
-      <span>Level ${esc(x.level)}</span>
-      <span>${esc(x.region)}</span>
-      <span>${esc(x.type)}</span>
-    </div>
+  $("detailsContent").innerHTML = `
 
-    <div class="detail-grid">
-      ${detailItem("🎁 RARE BUNDLES",x.bundles)}
-      ${detailItem("🔫 EVO GUNS & LEVELS",x.evoGuns)}
-      ${detailItem("💃 EMOTES",x.emotes)}
-      ${detailItem("👕 OUTFITS & COLLECTION",x.outfits)}
-      ${detailItem("💎 DIAMONDS",Number(x.diamonds || 0).toLocaleString("en-BD"))}
-      ${detailItem("🏆 CURRENT RANK",x.rank)}
-      ${detailItem("🌍 REGION",x.region)}
-      ${detailItem("🎮 ACCOUNT LEVEL",x.level)}
-    </div>
+    <div class="panel">
 
-    <div class="info" style="margin:12px 0;padding:14px">
-      <b style="margin:0 0 8px">📝 Additional Details</b>
-      <p style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(x.features || "No extra details provided.")}</p>
-    </div>
+      ${item.account_image
 
-    <p style="color:#9aa5b7;font-size:12px">
-      Seller: ${esc(x.seller || "Demo seller")}
-    </p>
+        ? `<img src="${esc(item.account_image)}"
 
-    <div class="price-row">
-      <div class="price">${taka(x.price)}</div>
-      <button class="btn" onclick="startCheckout(${Number(x.id)})">
-        Buy Now →
+             alt="Account image"
+
+             style="width:100%;max-height:220px;object-fit:cover;border-radius:8px">`
+
+        : ""}
+
+      <h3>${esc(item.title)}</h3>
+
+      <p style="color:#a4aec0;line-height:1.7">
+
+        ${esc(item.features || "No description provided.")}
+
+      </p>
+
+      <p>Level: ${esc(item.level ?? "—")}</p>
+
+      <p>Type: ${esc(item.account_type || "Starter")}</p>
+
+      <p>Region: ${esc(item.region || "Bangladesh")}</p>
+
+      <div class="price">${money(item.price)}</div>
+
+      <br>
+
+      <button class="btn" onclick="startCheckout()">
+
+        Create Order
+
       </button>
+
     </div>
 
-    <p class="help">
-      Demo listing only. No ownership or account transfer is verified.
-    </p>
   `;
 
   openModal("detailsModal");
+
 }
 
-function openSell(){
-  document.getElementById("sellResult").style.display = "none";
+/* ==========================================
+
+   CREATE LISTING
+
+   ========================================== */
+
+function openSell() {
+
+  if (!requireLogin()) return;
+
+  $("sellMessage").textContent = "";
+
   openModal("sellModal");
+
 }
 
-document.getElementById("sellForm").addEventListener("submit",function(e){
-  e.preventDefault();
+$("sellForm").addEventListener("submit", async event => {
 
-  const title = document.getElementById("sellTitleInput").value.trim();
-  const level = Number(document.getElementById("sellLevel").value);
-  const price = Number(document.getElementById("sellPrice").value);
+  event.preventDefault();
 
-  if(!title || level < 1 || price < 1){
-    alert("Please enter a valid title, level, and price.");
+  if (!requireLogin() || !sb) return;
+
+  const title = $("sellTitle").value.trim();
+
+  const price = Number($("sellPrice").value);
+
+  const level = Number($("sellLevel").value);
+
+  const type = $("sellType").value;
+
+  const region = $("sellRegion").value;
+
+  const features = $("sellDescription").value.trim();
+
+  const image = $("sellImage").value.trim();
+
+  if (!title || price <= 0 || level < 1) {
+
+    message("sellMessage", "সব তথ্য সঠিকভাবে পূরণ করো।");
+
     return;
+
   }
 
-  const item = {
-    id:Date.now(),
-    title:title,
-    level:level,
-    price:price,
-    type:document.getElementById("sellType").value,
-    region:document.getElementById("sellRegion").value,
+  const payload = {
 
-    image:document.getElementById("sellImage").value.trim(),
+    seller_id: currentUser.id,
 
-    bundles:document.getElementById("sellBundles").value.trim(),
-    evoGuns:document.getElementById("sellEvoGuns").value.trim(),
-    emotes:document.getElementById("sellEmotes").value.trim(),
-    outfits:document.getElementById("sellOutfits").value.trim(),
+    title,
 
-    diamonds:Number(document.getElementById("sellDiamonds").value || 0),
-    rank:document.getElementById("sellRank").value.trim(),
+    description: JSON.stringify({
 
-    features:document.getElementById("sellFeatures").value.trim(),
-    seller:document.getElementById("sellerContact").value.trim() || "Demo seller",
-    featured:false
+      features,
+
+      type,
+
+      region
+
+    }),
+
+    price,
+
+    level,
+
+    account_image: image || null,
+
+    account_type: type,
+
+    region,
+
+    status: "available"
+
   };
 
-  listings.unshift(item);
-  saveListings();
-  renderListings();
-  e.target.reset();
+  const { error } = await sb
 
-  const r = document.getElementById("sellResult");
-  r.textContent = "Demo listing created! It is visible only in this browser on this device.";
-  r.style.display = "block";
+    .from("listings")
+
+    .insert(payload);
+
+  if (error) {
+
+    message("sellMessage", error.message);
+
+    return;
+
+  }
+
+  $("sellForm").reset();
+
+  message(
+
+    "sellMessage",
+
+    "Listing সফলভাবে Publish হয়েছে!",
+
+    true
+
+  );
+
+  await loadListings();
+
 });
 
-function startCheckout(id){
-  const x = listings.find(a => String(a.id) === String(id));
-  if(!x) return;
+/* ==========================================
 
-  selectedAccount = x;
-  selectedPay = "bKash";
+   CREATE ORDER
 
-  document.getElementById("checkoutAccount").innerHTML = `
-    <div class="info" style="margin-bottom:16px;padding:14px">
-      <b style="margin:0 0 5px">${esc(x.title)}</b>
-      <span class="price">${taka(x.price)}</span>
-      <p class="help">This is a demo order, not a real purchase.</p>
+   ========================================== */
+
+function startCheckout() {
+
+  if (!requireLogin()) return;
+
+  if (!selectedListing) return;
+
+  if (selectedListing.seller_id === currentUser.id) {
+
+    alert("নিজের Listing নিজে কিনতে পারবে না।");
+
+    return;
+
+  }
+
+  $("checkoutAccount").innerHTML = `
+
+    <div class="panel">
+
+      <b>${esc(selectedListing.title)}</b>
+
+      <div class="price">${money(selectedListing.price)}</div>
+
     </div>
+
+    <br>
+
   `;
-
-  document.querySelectorAll(".pay-option").forEach(button => {
-    button.classList.toggle("active",button.dataset.pay === "bKash");
-  });
-
-  document.getElementById("checkoutResult").style.display = "none";
 
   closeModal("detailsModal");
+
+  $("checkoutMessage").textContent = "";
+
   openModal("checkoutModal");
+
 }
 
-function choosePay(btn){
-  selectedPay = btn.dataset.pay;
+$("checkoutForm").addEventListener("submit", async event => {
 
-  document.querySelectorAll(".pay-option").forEach(button => {
-    button.classList.toggle("active",button === btn);
-  });
-}
+  event.preventDefault();
 
-document.getElementById("checkoutForm").addEventListener("submit",function(e){
-  e.preventDefault();
+  if (!requireLogin() || !selectedListing || !sb) return;
 
-  if(!selectedAccount) return;
+  if (selectedListing.seller_id === currentUser.id) {
 
-  const order = {
-    orderId:"ANSU-" + Date.now().toString().slice(-8),
-    accountId:selectedAccount.id,
-    title:selectedAccount.title,
-    price:selectedAccount.price,
-    buyer:document.getElementById("buyerName").value.trim(),
-    contact:document.getElementById("buyerContact").value.trim(),
-    paymentMethod:selectedPay,
-    status:"DEMO — NOT PAID",
-    createdAt:new Date().toISOString()
+    message("checkoutMessage", "নিজের Listing-এর জন্য Order করা যাবে না।");
+
+    return;
+
+  }
+
+  const payload = {
+
+    buyer_id: currentUser.id,
+
+    listing_id: selectedListing.id,
+
+    amount: Number(selectedListing.price),
+
+    payment_method: $("paymentMethod").value,
+
+    payment_status: "pending",
+
+    order_status: "pending",
+
+    buyer_name: $("buyerName").value.trim(),
+
+    buyer_contact: $("buyerContact").value.trim()
+
   };
 
-  try{
-    const orders = JSON.parse(localStorage.getItem("ansuOrders") || "[]");
-    orders.unshift(order);
-    localStorage.setItem("ansuOrders",JSON.stringify(orders));
-  }catch(error){
-    console.error("Could not save order:",error);
+  const { data, error } = await sb
+
+    .from("orders")
+
+    .insert(payload)
+
+    .select("id")
+
+    .single();
+
+  if (error) {
+
+    message("checkoutMessage", error.message);
+
+    return;
+
   }
 
-  const r = document.getElementById("checkoutResult");
+  message(
 
-  r.innerHTML = `
-    <b>Demo order created: ${esc(order.orderId)}</b><br>
-    Account: ${esc(order.title)}<br>
-    Amount: ${taka(order.price)}<br>
-    Selected method: ${esc(order.paymentMethod)}<br>
-    Status: <b>DEMO — NOT PAID</b><br><br>
-    No money was collected. Real payment integration is not connected yet.
-  `;
+    "checkoutMessage",
 
-  r.style.display = "block";
+    "Order তৈরি হয়েছে!\nOrder ID: " + data.id +
+
+    "\nPayment এখনো Pending। কোনো টাকা নেওয়া হয়নি।",
+
+    true
+
+  );
+
 });
 
-function resetDemo(){
-  if(confirm("Reset all demo listings to the original examples?")){
-    listings = demoListings.slice();
-    saveListings();
-    renderListings();
-  }
+/* ==========================================
+
+   MY ORDERS
+
+   ========================================== */
+
+async function showOrders() {
+
+  if (!requireLogin()) return;
+
+  $("ordersSection").classList.remove("hidden");
+
+  $("adminSection").classList.add("hidden");
+
+  $("ordersSection").scrollIntoView({
+
+    behavior:"smooth"
+
+  });
+
+  await loadOrders();
+
 }
 
-document.querySelectorAll(".modal").forEach(modal => {
-  modal.addEventListener("click",function(e){
-    if(e.target === modal){
-      closeModal(modal.id);
-    }
-  });
-});
+async function loadOrders() {
 
-document.addEventListener("keydown",function(e){
-  if(e.key === "Escape"){
-    document.querySelectorAll(".modal.open").forEach(modal => {
-      closeModal(modal.id);
-    });
+  if (!sb || !currentUser) return;
+
+  const { data, error } = await sb
+
+    .from("orders")
+
+    .select("id,listing_id,amount,payment_method,payment_status,order_status,created_at")
+
+    .eq("buyer_id", currentUser.id)
+
+    .order("created_at", { ascending:false })
+
+    .limit(100);
+
+  if (error) {
+
+    $("ordersContent").textContent = error.message;
+
+    return;
+
   }
+
+  if (!data.length) {
+
+    $("ordersContent").textContent = "এখনো কোনো Order নেই।";
+
+    return;
+
+  }
+
+  $("ordersContent").innerHTML = `
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>Order ID</th>
+
+            <th>Amount</th>
+
+            <th>Payment</th>
+
+            <th>Status</th>
+
+            <th>Date</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${data.map(order => `
+
+            <tr>
+
+              <td>${esc(order.id.slice(0,8))}</td>
+
+              <td>${money(order.amount)}</td>
+
+              <td>
+
+                ${esc(order.payment_method)} /
+
+                ${esc(order.payment_status)}
+
+              </td>
+
+              <td>${esc(order.order_status)}</td>
+
+              <td>${esc(new Date(order.created_at).toLocaleDateString())}</td>
+
+            </tr>
+
+          `).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
+
+}
+
+/* ==========================================
+
+   ADMIN PANEL
+
+   ========================================== */
+
+async function showAdmin() {
+
+  if (currentProfile?.role !== "admin") {
+
+    alert("Admin access required.");
+
+    return;
+
+  }
+
+  $("adminSection").classList.remove("hidden");
+
+  $("ordersSection").classList.add("hidden");
+
+  $("adminSection").scrollIntoView({
+
+    behavior:"smooth"
+
+  });
+
+  await loadAdmin();
+
+}
+
+async function loadAdmin() {
+
+  if (!sb || currentProfile?.role !== "admin") return;
+
+  const [ordersResult, listingsResult] = await Promise.all([
+
+    sb.from("orders")
+
+      .select("id,buyer_name,buyer_contact,amount,payment_method,payment_status,order_status,created_at")
+
+      .order("created_at", {ascending:false})
+
+      .limit(100),
+
+    sb.from("listings")
+
+      .select("id,title,price,status")
+
+      .order("created_at", {ascending:false})
+
+      .limit(100)
+
+  ]);
+
+  if (ordersResult.error || listingsResult.error) {
+
+    $("adminContent").textContent =
+
+      ordersResult.error?.message ||
+
+      listingsResult.error?.message;
+
+    return;
+
+  }
+
+  let html = "<h3>Orders</h3>";
+
+  if (!ordersResult.data.length) {
+
+    html += "<p>No orders yet.</p>";
+
+  } else {
+
+    html += `
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Buyer</th>
+
+              <th>Amount</th>
+
+              <th>Payment</th>
+
+              <th>Order Status</th>
+
+              <th>Action</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+    `;
+
+    for (const order of ordersResult.data) {
+
+      html += `
+
+        <tr>
+
+          <td>
+
+            ${esc(order.buyer_name || "Buyer")}<br>
+
+            <small>${esc(order.buyer_contact || "")}</small>
+
+          </td>
+
+          <td>${money(order.amount)}</td>
+
+          <td>
+
+            ${esc(order.payment_method)}<br>
+
+            ${esc(order.payment_status)}
+
+          </td>
+
+          <td>${esc(order.order_status)}</td>
+
+          <td>
+
+            <select class="field"
+
+              id="order-${esc(order.id)}">
+
+              <option value="pending"
+
+                ${order.order_status==="pending"?"selected":""}>
+
+                Pending
+
+              </option>
+
+              <option value="confirmed"
+
+                ${order.order_status==="confirmed"?"selected":""}>
+
+                Confirmed
+
+              </option>
+
+              <option value="completed"
+
+                ${order.order_status==="completed"?"selected":""}>
+
+                Completed
+
+              </option>
+
+              <option value="cancelled"
+
+                ${order.order_status==="cancelled"?"selected":""}>
+
+                Cancelled
+
+              </option>
+
+            </select>
+
+            <br><br>
+
+            <button class="btn"
+
+              onclick="updateOrder('${esc(order.id)}')">
+
+              Save
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+
+    html += "</tbody></table></div>";
+
+  }
+
+  html += "<h3 style='margin-top:25px'>Listings</h3>";
+
+  if (!listingsResult.data.length) {
+
+    html += "<p>No listings.</p>";
+
+  } else {
+
+    html += `
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Title</th>
+
+              <th>Price</th>
+
+              <th>Status</th>
+
+              <th>Action</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+    `;
+
+    for (const item of listingsResult.data) {
+
+      const nextStatus =
+
+        item.status === "removed" ? "available" : "removed";
+
+      html += `
+
+        <tr>
+
+          <td>${esc(item.title)}</td>
+
+          <td>${money(item.price)}</td>
+
+          <td>${esc(item.status)}</td>
+
+          <td>
+
+            <button class="btn secondary"
+
+              onclick="toggleListing('${esc(item.id)}','${nextStatus}')">
+
+              ${nextStatus==="available"?"Restore":"Remove"}
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+
+    html += "</tbody></table></div>";
+
+  }
+
+  html += `
+
+    <div class="notice">
+
+      Admin Panel-এর Order Status পরিবর্তন করলে Payment যাচাই হয় না।
+
+      আসল Payment যাচাইয়ের জন্য আলাদা নিরাপদ ব্যবস্থা প্রয়োজন।
+
+    </div>
+
+  `;
+
+  $("adminContent").innerHTML = html;
+
+}
+
+async function updateOrder(id) {
+
+  if (currentProfile?.role !== "admin") return;
+
+  const status = $("order-" + id).value;
+
+  const { error } = await sb
+
+    .from("orders")
+
+    .update({order_status:status})
+
+    .eq("id",id);
+
+  if (error) {
+
+    alert(error.message);
+
+    return;
+
+  }
+
+  await loadAdmin();
+
+}
+
+async function toggleListing(id,status) {
+
+  if (currentProfile?.role !== "admin") return;
+
+  const { error } = await sb
+
+    .from("listings")
+
+    .update({status})
+
+    .eq("id",id);
+
+  if (error) {
+
+    alert(error.message);
+
+    return;
+
+  }
+
+  await loadAdmin();
+
+  await loadListings();
+
+}
+
+/* ==========================================
+
+   MODAL CONTROLS
+
+   ========================================== */
+
+document.querySelectorAll(".modal").forEach(modal => {
+
+  modal.addEventListener("click", event => {
+
+    if (event.target === modal) {
+
+      closeModal(modal.id);
+
+    }
+
+  });
+
 });
 
-renderListings();
+document.addEventListener("keydown", event => {
+
+  if (event.key === "Escape") {
+
+    document.querySelectorAll(".modal.open")
+
+      .forEach(modal => closeModal(modal.id));
+
+  }
+
+});
+
+/* START APP */
+  
+  console.log("ANSU WEBSITE JAVASCRIPT STARTED");
+
+window.onerror = function(message, source, line, column) {
+  alert("JavaScript Error: " + message + " | Line: " + line);
+};
+
+init();
+
 </script>
+
 </body>
+
 </html>
