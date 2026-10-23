@@ -12,125 +12,673 @@
 
 <style>
 
-:root{--bg:#090b10;--card:#151b27;--line:#30394b;--red:#ff3948;--orange:#ff8b27;--text:#f5f6fa;--muted:#a4aec0;--green:#19c98b}
+:root {
 
-*{box-sizing:border-box}
+  --bg:#090b10;
 
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+  --card:#151b27;
 
-button,input,textarea,select{font:inherit}
+  --line:#30394b;
 
-button{cursor:pointer}
+  --red:#ff3948;
 
-.container{width:min(1100px,92%);margin:auto}
+  --orange:#ff8b27;
 
-header{background:#10141e;border-bottom:1px solid var(--line);padding:14px 0;position:sticky;top:0;z-index:10}
+  --text:#f5f6fa;
 
-.nav,.actions,.section-title,.filters,.price-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  --muted:#a4aec0;
 
-.brand{font-size:20px;font-weight:900;color:var(--orange)}
+  --green:#19c98b;
 
-.brand span{color:white}
+}
 
-.btn{border:0;border-radius:8px;padding:11px 14px;background:linear-gradient(135deg,var(--red),var(--orange));color:white;font-weight:bold}
+* {
 
-.btn.secondary{background:#252e3d;border:1px solid #39445a}
+  box-sizing:border-box;
 
-.btn:disabled{opacity:.5;cursor:not-allowed}
+}
 
-.hero{padding:50px 0 35px;background:radial-gradient(ellipse at top right,#48151f,transparent 60%)}
+body {
 
-.hero h1{font-size:clamp(35px,6vw,60px);line-height:1.08;margin:12px 0}
+  margin:0;
 
-.hero h1 span,.price{color:var(--orange)}
+  background:var(--bg);
 
-.hero p{color:var(--muted);line-height:1.8;max-width:650px}
+  color:var(--text);
 
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0 35px}
+  font-family:Arial,sans-serif;
 
-.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:17px}
+}
 
-.stat strong{display:block;font-size:23px;color:var(--orange)}
+button,input,textarea,select {
 
-.stat span{color:var(--muted);font-size:12px}
+  font:inherit;
 
-section{padding:22px 0 35px}
+}
 
-.section-title{margin-bottom:17px}
+button {
 
-.section-title h2{margin:0}
+  cursor:pointer;
 
-.field{width:100%;padding:12px;background:#0e131c;color:white;border:1px solid var(--line);border-radius:8px;outline:none}
+}
 
-.filters{margin-bottom:18px}
+.container {
 
-.filters .field{flex:1;min-width:150px}
+  width:min(1100px,92%);
 
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+  margin:auto;
 
-.listing{overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:14px}
+}
 
-.cover{height:150px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#50141f,#161d2b);position:relative;overflow:hidden}
+header {
 
-.cover img{width:100%;height:100%;object-fit:cover}
+  background:#10141e;
 
-.cover .level{position:absolute;right:10px;bottom:10px;background:#000b;padding:7px;border-radius:6px}
+  border-bottom:1px solid var(--line);
 
-.listing-body{padding:14px}
+  padding:14px 0;
 
-.listing h3{margin:0 0 10px;overflow-wrap:anywhere}
+  position:sticky;
 
-.meta{color:var(--muted);font-size:12px;line-height:1.8;margin-bottom:12px}
+  top:0;
 
-.price-row{border-top:1px solid var(--line);padding-top:12px}
+  z-index:10;
 
-.price{font-size:21px;font-weight:900}
+}
 
-.notice{background:#2c2115;border:1px solid #74522a;color:#f5d5a3;border-radius:10px;padding:14px;font-size:13px;line-height:1.7;margin:20px 0}
+.nav {
 
-.hidden{display:none!important}
+  display:flex;
 
-.modal{display:none;position:fixed;inset:0;z-index:30;background:#000c;padding:15px;overflow:auto;align-items:center;justify-content:center}
+  align-items:center;
 
-.modal.open{display:flex}
+  justify-content:space-between;
 
-.modal-box{width:min(580px,100%);max-height:95vh;overflow:auto;background:#151b27;border:1px solid var(--line);border-radius:15px;padding:20px}
+  flex-wrap:wrap;
 
-.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:17px}
+  gap:12px;
 
-.modal-head h2{margin:0}
+}
 
-.close{background:#30394b;color:white;border:0;border-radius:7px;padding:8px 12px}
+.brand {
 
-.form{display:grid;gap:12px}
+  font-size:20px;
 
-.form label{display:block;color:#c5ccda;font-size:13px;margin-bottom:6px}
+  font-weight:900;
 
-.form textarea{resize:vertical}
+  color:var(--orange);
 
-.message{padding:12px;background:#202b3b;border-radius:8px;margin-top:12px;overflow-wrap:anywhere;font-size:13px;line-height:1.6;white-space:pre-wrap}
+}
 
-.message.error{color:#ffadb4}
+.brand span {
 
-.message.success{color:#8ef0bf}
+  color:white;
 
-.table-wrap{overflow-x:auto}
+}
 
-table{width:100%;border-collapse:collapse;font-size:13px}
+.actions {
 
-th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  display:flex;
 
-th{color:var(--orange)}
+  flex-wrap:wrap;
 
-footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var(--muted);font-size:12px}
+  gap:7px;
 
-.review{padding:12px;border-bottom:1px solid var(--line);line-height:1.7}
+  align-items:center;
 
-.badge{display:inline-block;padding:4px 8px;border-radius:6px;background:#252e3d;font-size:12px}
+}
 
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.btn {
 
-@media(max-width:520px){.grid{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:18px}.brand{font-size:16px}.hero{padding-top:35px}}
+  border:0;
+
+  border-radius:8px;
+
+  padding:11px 14px;
+
+  background:linear-gradient(135deg,var(--red),var(--orange));
+
+  color:white;
+
+  font-weight:bold;
+
+}
+
+.btn.secondary {
+
+  background:#252e3d;
+
+  border:1px solid #39445a;
+
+}
+
+.btn:disabled {
+
+  opacity:.5;
+
+  cursor:not-allowed;
+
+}
+
+.hero {
+
+  padding:55px 0 35px;
+
+  background:radial-gradient(ellipse at top right,#48151f,transparent 60%);
+
+}
+
+.hero h1 {
+
+  font-size:clamp(35px,6vw,60px);
+
+  line-height:1.08;
+
+  margin:12px 0;
+
+}
+
+.hero h1 span {
+
+  color:var(--orange);
+
+}
+
+.hero p {
+
+  color:var(--muted);
+
+  line-height:1.8;
+
+  max-width:650px;
+
+}
+
+.stats {
+
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:12px;
+
+  margin:20px 0 35px;
+
+}
+
+.stat,.panel {
+
+  background:var(--card);
+
+  border:1px solid var(--line);
+
+  border-radius:13px;
+
+  padding:17px;
+
+}
+
+.stat strong {
+
+  display:block;
+
+  font-size:23px;
+
+  color:var(--orange);
+
+}
+
+.stat span {
+
+  color:var(--muted);
+
+  font-size:12px;
+
+}
+
+section {
+
+  padding:22px 0 35px;
+
+}
+
+.section-title {
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  flex-wrap:wrap;
+
+  gap:12px;
+
+  margin-bottom:17px;
+
+}
+
+.section-title h2 {
+
+  margin:0;
+
+}
+
+.filters {
+
+  display:flex;
+
+  gap:10px;
+
+  flex-wrap:wrap;
+
+  margin-bottom:18px;
+
+}
+
+.field {
+
+  width:100%;
+
+  padding:12px;
+
+  background:#0e131c;
+
+  color:white;
+
+  border:1px solid var(--line);
+
+  border-radius:8px;
+
+  outline:none;
+
+}
+
+.filters .field {
+
+  flex:1;
+
+  min-width:150px;
+
+}
+
+.grid {
+
+  display:grid;
+
+  grid-template-columns:repeat(3,minmax(0,1fr));
+
+  gap:15px;
+
+}
+
+.listing {
+
+  overflow:hidden;
+
+  background:var(--card);
+
+  border:1px solid var(--line);
+
+  border-radius:14px;
+
+}
+
+.cover {
+
+  height:150px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  background:linear-gradient(135deg,#50141f,#161d2b);
+
+  position:relative;
+
+  overflow:hidden;
+
+}
+
+.cover img {
+
+  width:100%;
+
+  height:100%;
+
+  object-fit:cover;
+
+}
+
+.cover .level {
+
+  position:absolute;
+
+  right:10px;
+
+  bottom:10px;
+
+  background:#000b;
+
+  padding:7px;
+
+  border-radius:6px;
+
+}
+
+.listing-body {
+
+  padding:14px;
+
+}
+
+.listing h3 {
+
+  margin:0 0 10px;
+
+  overflow-wrap:anywhere;
+
+}
+
+.meta {
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  line-height:1.8;
+
+  margin-bottom:12px;
+
+}
+
+.price-row {
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:8px;
+
+  border-top:1px solid var(--line);
+
+  padding-top:12px;
+
+}
+
+.price {
+
+  font-size:21px;
+
+  color:var(--orange);
+
+  font-weight:900;
+
+}
+
+.notice {
+
+  background:#2c2115;
+
+  border:1px solid #74522a;
+
+  color:#f5d5a3;
+
+  border-radius:10px;
+
+  padding:14px;
+
+  font-size:13px;
+
+  line-height:1.7;
+
+  margin:20px 0;
+
+}
+
+.hidden {
+
+  display:none!important;
+
+}
+
+.modal {
+
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:30;
+
+  background:#000c;
+
+  padding:15px;
+
+  overflow:auto;
+
+  align-items:center;
+
+  justify-content:center;
+
+}
+
+.modal.open {
+
+  display:flex;
+
+}
+
+.modal-box {
+
+  width:min(550px,100%);
+
+  max-height:95vh;
+
+  overflow:auto;
+
+  background:#151b27;
+
+  border:1px solid var(--line);
+
+  border-radius:15px;
+
+  padding:20px;
+
+}
+
+.modal-head {
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:10px;
+
+  margin-bottom:17px;
+
+}
+
+.modal-head h2 {
+
+  margin:0;
+
+}
+
+.close {
+
+  background:#30394b;
+
+  color:white;
+
+  border:0;
+
+  border-radius:7px;
+
+  padding:8px 12px;
+
+}
+
+.form {
+
+  display:grid;
+
+  gap:12px;
+
+}
+
+.form label {
+
+  display:block;
+
+  color:#c5ccda;
+
+  font-size:13px;
+
+  margin-bottom:6px;
+
+}
+
+.form textarea {
+
+  resize:vertical;
+
+}
+
+.message {
+
+  padding:12px;
+
+  background:#202b3b;
+
+  border-radius:8px;
+
+  margin-top:12px;
+
+  overflow-wrap:anywhere;
+
+  font-size:13px;
+
+  line-height:1.6;
+
+}
+
+.message.error {
+
+  color:#ffadb4;
+
+}
+
+.message.success {
+
+  color:#8ef0bf;
+
+}
+
+.table-wrap {
+
+  overflow-x:auto;
+
+}
+
+table {
+
+  width:100%;
+
+  border-collapse:collapse;
+
+  font-size:13px;
+
+}
+
+th,td {
+
+  padding:10px;
+
+  border-bottom:1px solid var(--line);
+
+  text-align:left;
+
+  vertical-align:top;
+
+}
+
+th {
+
+  color:var(--orange);
+
+}
+
+footer {
+
+  margin-top:30px;
+
+  border-top:1px solid var(--line);
+
+  padding:25px 0;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+}
+
+@media(max-width:800px) {
+
+  .grid {
+
+    grid-template-columns:repeat(2,minmax(0,1fr));
+
+  }
+
+}
+
+@media(max-width:520px) {
+
+  .grid {
+
+    grid-template-columns:1fr;
+
+  }
+
+  .stats {
+
+    gap:6px;
+
+  }
+
+  .stat {
+
+    padding:10px;
+
+  }
+
+  .stat strong {
+
+    font-size:18px;
+
+  }
+
+  .brand {
+
+    font-size:16px;
+
+  }
+
+  .hero {
+
+    padding-top:35px;
+
+  }
+
+}
 
 </style>
 
@@ -140,259 +688,565 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
 <header>
 
-<div class="container nav">
+  <div class="container nav">
 
-<div class="brand">🔥 ANSU <span>YT BUY SELL</span></div>
+    <div class="brand">🔥 ANSU <span>YT BUY SELL</span></div>
 
-<div class="actions">
+    <div class="actions">
 
-<span id="userLabel" style="font-size:12px;color:#a4aec0">Not logged in</span>
+      <span id="userLabel" style="font-size:12px;color:#a4aec0">
 
-<button class="btn secondary" id="authBtn" onclick="openAuth()">Login / Register</button>
+        Not logged in
 
-<button class="btn secondary hidden" id="profileBtn" onclick="showProfile()">My Profile</button>
+      </span>
 
-<button class="btn secondary hidden" id="ordersBtn" onclick="showOrders()">My Orders</button>
+      <button class="btn secondary" id="authBtn" onclick="openAuth()">
 
-<button class="btn secondary hidden" id="notifyBtn" onclick="showNotifications()">🔔 <span id="notificationCount">0</span></button>
+        Login / Register
 
-<button class="btn secondary hidden" id="adminBtn" onclick="showAdmin()">Admin</button>
+      </button>
 
-<button class="btn hidden" id="logoutBtn" onclick="logout()">Logout</button>
+      <button class="btn secondary hidden" id="ordersBtn"
 
-</div>
+        onclick="showOrders()">
 
-</div>
+        My Orders
+
+      </button>
+
+      <button class="btn secondary hidden" id="adminBtn"
+
+        onclick="showAdmin()">
+
+        Admin
+
+      </button>
+
+      <button class="btn hidden" id="logoutBtn" onclick="logout()">
+
+        Logout
+
+      </button>
+
+    </div>
+
+  </div>
 
 </header>
 
 <main class="container">
 
-<div class="hero">
+  <div class="hero">
 
-<h1>FREE FIRE<br><span>BUY & SELL MARKETPLACE</span></h1>
+    <h1>
 
-<p>Welcome to ANSU YT BUY SELL. Login to publish listings, browse accounts and create orders. Listings are stored in Supabase.</p>
+      FREE FIRE<br>
 
-<button class="btn" onclick="openSell()">+ Sell Account</button>
+      <span>BUY & SELL MARKETPLACE</span>
 
-<button class="btn secondary" onclick="$('market').scrollIntoView({behavior:'smooth'})">Browse Accounts</button>
+    </h1>
 
-</div>
+    <p>
 
-<div class="stats">
+      Welcome to ANSU YT BUY SELL.
 
-<div class="stat"><strong id="listingCount">0</strong><span>Available Listings</span></div>
+      Login to publish listings, browse accounts and create orders.
 
-<div class="stat"><strong>2</strong><span>Payment Choices</span></div>
+      Your listings are stored in the shared Supabase database.
 
-<div class="stat"><strong>24/7</strong><span>Browse Marketplace</span></div>
+    </p>
 
-</div>
+    <button class="btn" onclick="openSell()">
 
-<section id="profileSection" class="hidden">
+      + Sell Account
 
-<div class="section-title"><h2>👤 My Profile & Balance</h2><button class="btn secondary" onclick="loadProfile()">Refresh</button></div>
+    </button>
 
-<div class="grid">
+    <button class="btn secondary"
 
-<div class="panel"><h3>Profile</h3><p id="profileName">—</p><p id="profileEmail" style="overflow-wrap:anywhere;color:var(--muted)">—</p><p id="profileRole"></p></div>
+      onclick="document.getElementById('market').scrollIntoView({behavior:'smooth'})">
 
-<div class="panel"><h3>💰 Account Balance</h3><div class="price" id="myBalance">৳0</div><p style="color:var(--muted);font-size:12px">Balance shown from your profile.</p></div>
+      Browse Accounts
 
-<div class="panel"><h3>🔔 Notifications</h3><div id="profileNotifyList">No notifications loaded.</div><button class="btn secondary" onclick="showNotifications()">View all</button></div>
+    </button>
 
-</div>
+  </div>
 
-</section>
+  <div class="stats">
 
-<section id="market">
+    <div class="stat">
 
-<div class="section-title">
+      <strong id="listingCount">0</strong>
 
-<div><h2>🔥 Available Accounts</h2><p style="color:var(--muted);font-size:13px">Live listings from Supabase</p></div>
+      <span>Available Listings</span>
 
-<button class="btn secondary" onclick="loadListings()">Refresh</button>
+    </div>
 
-</div>
+    <div class="stat">
 
-<div class="filters">
+      <strong>2</strong>
 
-<input class="field" id="search" placeholder="Search title, level, region..." oninput="renderListings()">
+      <span>Payment Choices</span>
 
-<select class="field" id="sort" onchange="renderListings()">
+    </div>
 
-<option value="new">Newest first</option>
+    <div class="stat">
 
-<option value="low">Price: Low to High</option>
+      <strong>24/7</strong>
 
-<option value="high">Price: High to Low</option>
+      <span>Browse Marketplace</span>
 
-</select>
+    </div>
 
-<select class="field" id="typeFilter" onchange="renderListings()">
+  </div>
 
-<option value="">All account types</option>
+  <section id="market">
 
-<option>Starter</option><option>Rare Skins</option><option>Collector</option>
+    <div class="section-title">
 
-</select>
+      <div>
 
-</div>
+        <h2>🔥 Available Accounts</h2>
 
-<div class="grid" id="listingGrid"><div class="panel">Loading listings...</div></div>
+        <p style="color:#a4aec0;font-size:13px">
 
-<div class="notice">⚠️ Orders and Transaction IDs do not automatically transfer or verify money. Never share passwords, OTPs, recovery codes or private login information.</div>
+          Live listings from Supabase
 
-</section>
+        </p>
 
-<section id="ordersSection" class="hidden">
+      </div>
 
-<div class="section-title"><h2>📦 My Orders & Tracking</h2><button class="btn secondary" onclick="loadOrders()">Refresh</button></div>
+      <button class="btn secondary" onclick="loadListings()">
 
-<div class="panel" id="ordersContent"></div>
+        Refresh
 
-</section>
+      </button>
 
-<section id="notificationsSection" class="hidden">
+    </div>
 
-<div class="section-title"><h2>🔔 Notifications</h2><button class="btn secondary" onclick="loadNotifications()">Refresh</button></div>
+    <div class="filters">
 
-<div class="panel" id="notificationsContent"></div>
+      <input class="field" id="search"
 
-</section>
+        placeholder="Search account..."
 
-<section id="adminSection" class="hidden">
+        oninput="renderListings()">
 
-<div class="section-title"><h2>👑 Admin Panel</h2><button class="btn secondary" onclick="loadAdmin()">Refresh</button></div>
+      <select class="field" id="sort"
 
-<div class="panel" id="adminContent"></div>
+        onchange="renderListings()">
 
-</section>
+        <option value="new">Newest first</option>
+
+        <option value="low">Price: Low to High</option>
+
+        <option value="high">Price: High to Low</option>
+
+      </select>
+
+    </div>
+
+    <div class="grid" id="listingGrid">
+
+      <div class="panel">Loading listings...</div>
+
+    </div>
+
+    <div class="notice">
+
+      ⚠️ Payment options below only create pending order records.
+
+      They do not transfer money. Never share passwords, OTPs,
+
+      recovery codes or private login information.
+
+    </div>
+
+  </section>
+
+  <section id="ordersSection" class="hidden">
+
+    <div class="section-title">
+
+      <h2>📦 My Orders</h2>
+
+      <button class="btn secondary" onclick="loadOrders()">
+
+        Refresh
+
+      </button>
+
+    </div>
+
+    <div class="panel" id="ordersContent"></div>
+
+  </section>
+
+  <section id="adminSection" class="hidden">
+
+    <div class="section-title">
+
+      <h2>👑 Admin Panel</h2>
+
+      <button class="btn secondary" onclick="loadAdmin()">
+
+        Refresh
+
+      </button>
+
+    </div>
+
+    <div class="panel" id="adminContent"></div>
+
+  </section>
 
 </main>
 
-<footer><div class="container">© 2026 ANSU YT BUY SELL · Community Marketplace</div></footer>
+<footer>
 
-<!-- AUTH -->
+  <div class="container">
 
-<div class="modal" id="authModal"><div class="modal-box">
+    © 2026 ANSU YT BUY SELL · Community Marketplace
 
-<div class="modal-head"><h2>🔐 Login / Register</h2><button class="close" onclick="closeModal('authModal')">✕</button></div>
+  </div>
 
-<form class="form" id="loginForm">
+</footer>
 
-<div><label>Full Name (Register)</label><input class="field" id="fullName" maxlength="80" placeholder="Your name"></div>
+<!-- LOGIN / REGISTER -->
 
-<div><label>Email</label><input class="field" id="email" type="email" required autocomplete="email"></div>
+<div class="modal" id="authModal">
 
-<div><label>Password (minimum 8 characters)</label><input class="field" id="password" type="password" minlength="8" required autocomplete="current-password"></div>
+  <div class="modal-box">
 
-<button class="btn" type="submit">Login</button>
+    <div class="modal-head">
 
-<button class="btn secondary" type="button" onclick="registerUser()">Create Account / Register</button>
+      <h2>🔐 Login / Register</h2>
 
-<button class="btn secondary" type="button" onclick="resetPassword()">Forgot Password?</button>
+      <button class="close" onclick="closeModal('authModal')">
 
-</form><div id="authMessage"></div>
+        ✕
 
-</div></div>
+      </button>
 
-<!-- SELL -->
+    </div>
 
-<div class="modal" id="sellModal"><div class="modal-box">
+    <form class="form" id="loginForm">
 
-<div class="modal-head"><h2>🎮 Sell Free Fire Account</h2><button class="close" onclick="closeModal('sellModal')">✕</button></div>
+      <div>
 
-<form class="form" id="sellForm">
+        <label>Full Name (Register)</label>
 
-<div><label>Account Title</label><input class="field" id="sellTitle" required maxlength="70" placeholder="Rare bundles and skins"></div>
+        <input class="field" id="fullName"
 
-<div><label>Price (BDT)</label><input class="field" id="sellPrice" type="number" min="1" max="10000000" required></div>
+          maxlength="80" placeholder="Your name">
 
-<div><label>Account Level</label><input class="field" id="sellLevel" type="number" min="1" max="100" required></div>
+      </div>
 
-<div><label>Account Type</label><select class="field" id="sellType"><option>Starter</option><option>Rare Skins</option><option>Collector</option></select></div>
+      <div>
 
-<div><label>Region</label><select class="field" id="sellRegion"><option>Bangladesh</option><option>Global</option><option>Other</option></select></div>
+        <label>Email</label>
 
-<div><label>Description</label><textarea class="field" id="sellDescription" rows="3" maxlength="1000" placeholder="Describe skins, bundles, emotes..."></textarea></div>
+        <input class="field" id="email"
 
-<div><label>Account Image URL (optional)</label><input class="field" id="sellImage" type="url" maxlength="500" placeholder="https://example.com/image.jpg"></div>
+          type="email" required autocomplete="email">
 
-<button class="btn" type="submit">Publish Listing</button>
+      </div>
 
-</form><div id="sellMessage"></div>
+      <div>
 
-</div></div>
+        <label>Password (minimum 8 characters)</label>
 
-<!-- DETAILS -->
+        <input class="field" id="password"
 
-<div class="modal" id="detailsModal"><div class="modal-box">
+          type="password" minlength="8" required
 
-<div class="modal-head"><h2 id="detailsTitle">Account Details</h2><button class="close" onclick="closeModal('detailsModal')">✕</button></div>
+          autocomplete="current-password">
 
-<div id="detailsContent"></div>
+      </div>
 
-</div></div>
+      <button class="btn" type="submit">Login</button>
+
+      <button class="btn secondary" type="button"
+
+        onclick="registerUser()">
+
+        Create Account / Register
+
+      </button>
+
+      <button class="btn secondary" type="button"
+
+        onclick="resetPassword()">
+
+        Forgot Password?
+
+      </button>
+
+    </form>
+
+    <div id="authMessage"></div>
+
+  </div>
+
+</div>
+
+<!-- CREATE LISTING -->
+
+<div class="modal" id="sellModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2>🎮 Sell Free Fire Account</h2>
+
+      <button class="close" onclick="closeModal('sellModal')">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <form class="form" id="sellForm">
+
+      <div>
+
+        <label>Account Title</label>
+
+        <input class="field" id="sellTitle"
+
+          required maxlength="70"
+
+          placeholder="Rare bundles and skins">
+
+      </div>
+
+      <div>
+
+        <label>Price (BDT)</label>
+
+        <input class="field" id="sellPrice"
+
+          type="number" min="1" max="10000000" required>
+
+      </div>
+
+      <div>
+
+        <label>Account Level</label>
+
+        <input class="field" id="sellLevel"
+
+          type="number" min="1" max="100" required>
+
+      </div>
+
+      <div>
+
+        <label>Account Type</label>
+
+        <select class="field" id="sellType">
+
+          <option>Starter</option>
+
+          <option>Rare Skins</option>
+
+          <option>Collector</option>
+
+        </select>
+
+      </div>
+
+      <div>
+
+        <label>Region</label>
+
+        <select class="field" id="sellRegion">
+
+          <option>Bangladesh</option>
+
+          <option>Global</option>
+
+          <option>Other</option>
+
+        </select>
+
+      </div>
+
+      <div>
+
+        <label>Description</label>
+
+        <textarea class="field" id="sellDescription"
+
+          rows="3" maxlength="1000"
+
+          placeholder="Describe skins, bundles, emotes..."></textarea>
+
+      </div>
+
+      <div>
+
+        <label>Account Image URL (optional)</label>
+
+        <input class="field" id="sellImage"
+
+          type="url" maxlength="500"
+
+          placeholder="https://example.com/image.jpg">
+
+      </div>
+
+      <button class="btn" type="submit">
+
+        Publish Listing
+
+      </button>
+
+    </form>
+
+    <div id="sellMessage"></div>
+
+  </div>
+
+</div>
+
+<!-- LISTING DETAILS -->
+
+<div class="modal" id="detailsModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2 id="detailsTitle">Account Details</h2>
+
+      <button class="close" onclick="closeModal('detailsModal')">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <div id="detailsContent"></div>
+
+  </div>
+
+</div>
 
 <!-- CHECKOUT -->
 
-<div class="modal" id="checkoutModal"><div class="modal-box">
+<div class="modal" id="checkoutModal">
 
-<div class="modal-head"><h2>📦 Create Order</h2><button class="close" onclick="closeModal('checkoutModal')">✕</button></div>
+  <div class="modal-box">
 
-<div id="checkoutAccount"></div>
+    <div class="modal-head">
 
-<form class="form" id="checkoutForm">
+      <h2>📦 Create Order</h2>
 
-<div><label>Your Name</label><input class="field" id="buyerName" maxlength="80" required></div>
+      <button class="close" onclick="closeModal('checkoutModal')">
 
-<div><label>Contact Email or Phone</label><input class="field" id="buyerContact" maxlength="120" required></div>
+        ✕
 
-<div><label>Payment Method</label><select class="field" id="paymentMethod"><option value="bkash">bKash</option><option value="nagad">Nagad</option></select></div>
+      </button>
 
-<div><label>Sender Payment Number (optional)</label><input class="field" id="paymentNumber" maxlength="30" placeholder="Number used to send payment"></div>
+    </div>
 
-<div><label>Transaction ID (optional)</label><input class="field" id="transactionId" maxlength="120" placeholder="Enter transaction ID if already paid"></div>
+    <div id="checkoutAccount"></div>
 
-<p style="font-size:12px;color:var(--muted);line-height:1.7">Submitting a Transaction ID does not verify payment. Admin must verify it independently.</p>
+    <form class="form" id="checkoutForm">
 
-<button class="btn" type="submit">Create Pending Order</button>
+      <div>
 
-</form><div id="checkoutMessage"></div>
+        <label>Your Name</label>
 
-</div></div>
+        <input class="field" id="buyerName"
 
-<!-- REVIEW -->
+          maxlength="80" required>
 
-<div class="modal" id="reviewModal"><div class="modal-box">
+      </div>
 
-<div class="modal-head"><h2>⭐ Write a Review</h2><button class="close" onclick="closeModal('reviewModal')">✕</button></div>
+      <div>
 
-<form class="form" id="reviewForm">
+        <label>Contact Email or Phone</label>
 
-<label>Rating</label><select class="field" id="reviewRating"><option value="5">⭐⭐⭐⭐⭐ - Excellent</option><option value="4">⭐⭐⭐⭐ - Good</option><option value="3">⭐⭐⭐ - Average</option><option value="2">⭐⭐ - Poor</option><option value="1">⭐ - Very Poor</option></select>
+        <input class="field" id="buyerContact"
 
-<label>Your Review</label><textarea class="field" id="reviewText" maxlength="500" rows="4" placeholder="Write your experience..."></textarea>
+          maxlength="120" required>
 
-<button class="btn" type="submit">Submit Review</button>
+      </div>
 
-</form><div id="reviewMessage"></div>
+      <div>
 
-</div></div>
+        <label>Payment Method</label>
+
+        <select class="field" id="paymentMethod">
+
+          <option value="bkash">bKash</option>
+
+          <option value="nagad">Nagad</option>
+
+        </select>
+
+      </div>
+
+      <p style="font-size:12px;color:#a4aec0;line-height:1.7">
+
+        This only creates a pending order. No money will be
+
+        collected or transferred.
+
+      </p>
+
+      <button class="btn" type="submit">
+
+        Create Pending Order
+
+      </button>
+
+    </form>
+
+    <div id="checkoutMessage"></div>
+
+  </div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-"use strict";
+/* ==========================================
+
+   STEP 1: ENTER YOUR SUPABASE DETAILS
+
+   ========================================== */
 
 const SUPABASE_URL = "https://qpcmfmhrigfdmvdtezli.supabase.co";
 
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwY21mbWhyaWdmZG12ZHRlemxpIiwiaWF0IjoxNzkyNzY3OTk1LCJleHAiOjIxMDgzNDM5OTV9.0ToYY8IHVByxRZksJzd-O4_ztxVivKrgSYHU6Uzz0Y4";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwY21mbWhyaWdmZG12ZHRlemxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3Njc5OTUsImV4cCI6MjEwODM0Mzk5NX0.0ToYY8IHVByxRZksJzd-O4_ztxVivKrgSYHU6Uzz0Y4";
 
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const configured =
+
+  SUPABASE_URL.startsWith("https://") &&
+
+  !SUPABASE_URL.includes("YOUR_SUPABASE") &&
+
+  !SUPABASE_KEY.includes("YOUR_SUPABASE");
+
+const sb = configured
+
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+  : null;
+
+/* ==========================================
+
+   GLOBAL VARIABLES
+
+   ========================================== */
 
 let currentUser = null;
 
@@ -402,19 +1256,23 @@ let listings = [];
 
 let selectedListing = null;
 
-let reviewListingId = null;
-
-let notificationCache = [];
-
 const $ = id => document.getElementById(id);
 
 function esc(value) {
 
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
 
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    "&":"&amp;",
 
-  })[c]);
+    "<":"&lt;",
+
+    ">":"&gt;",
+
+    '"':"&quot;",
+
+    "'":"&#39;"
+
+  })[char]);
 
 }
 
@@ -428,19 +1286,29 @@ function message(id, text, success = false) {
 
   const el = $(id);
 
-  if (!el) return;
-
   el.className = "message " + (success ? "success" : "error");
 
   el.textContent = text;
 
 }
 
-function openModal(id) { $(id).classList.add("open"); }
+function openModal(id) {
 
-function closeModal(id) { $(id).classList.remove("open"); }
+  $(id).classList.add("open");
 
-function openAuth() { openModal("authModal"); }
+}
+
+function closeModal(id) {
+
+  $(id).classList.remove("open");
+
+}
+
+function openAuth() {
+
+  openModal("authModal");
+
+}
 
 function requireLogin() {
 
@@ -456,23 +1324,31 @@ function requireLogin() {
 
 }
 
-function hideSections(except = "") {
+/* ==========================================
 
-  ["ordersSection","adminSection","notificationsSection","profileSection"].forEach(id => {
+   INITIALIZE
 
-    if (id !== except) $(id).classList.add("hidden");
-
-  });
-
-}
-
-/* INITIALIZE */
+   ========================================== */
 
 async function init() {
 
-  const {data,error} = await sb.auth.getSession();
+  if (!configured) {
 
-  if (error) console.error(error);
+    $("listingGrid").innerHTML =
+
+      '<div class="panel">Supabase URL ও Key এখনো বসানো হয়নি। index.html-এর নিচের অংশে সেগুলো বসাও।</div>';
+
+    return;
+
+  }
+
+  const { data, error } = await sb.auth.getSession();
+
+  if (error) {
+
+    console.error(error);
+
+  }
 
   currentUser = data?.session?.user || null;
 
@@ -482,13 +1358,7 @@ async function init() {
 
   await loadListings();
 
-  if (currentUser) {
-
-    await loadNotifications();
-
-  }
-
-  sb.auth.onAuthStateChange((_event,session) => {
+  sb.auth.onAuthStateChange((_event, session) => {
 
     currentUser = session?.user || null;
 
@@ -500,57 +1370,43 @@ async function init() {
 
       await loadListings();
 
-      if (currentUser) await loadNotifications();
-
-      else {
-
-        notificationCache = [];
-
-        $("notificationCount").textContent = "0";
-
-      }
-
-    },0);
+    }, 0);
 
   });
 
 }
 
-/* PROFILE AND BALANCE */
+/* ==========================================
+
+   PROFILE
+
+   ========================================== */
 
 async function loadProfile() {
 
   currentProfile = null;
 
-  if (!currentUser) return;
+  if (!sb || !currentUser) return;
 
-  const {data,error} = await sb
+  const { data, error } = await sb
 
     .from("profiles")
 
-    .select("id,full_name,role,avatar_url,balance")
+    .select("id,full_name,role,avatar_url")
 
-    .eq("id",currentUser.id)
+    .eq("id", currentUser.id)
 
     .maybeSingle();
 
   if (error) {
 
-    console.error("Profile error:",error.message);
+    console.error("Profile error:", error.message);
 
     return;
 
   }
 
   currentProfile = data;
-
-  if ($("profileName")) $("profileName").textContent = data?.full_name || "Name not set";
-
-  if ($("profileEmail")) $("profileEmail").textContent = currentUser.email || "";
-
-  if ($("profileRole")) $("profileRole").textContent = "Role: " + (data?.role || "user");
-
-  if ($("myBalance")) $("myBalance").textContent = money(data?.balance);
 
 }
 
@@ -562,37 +1418,31 @@ function updateUI() {
 
     : "Not logged in";
 
-  $("authBtn").classList.toggle("hidden",!!currentUser);
+  $("authBtn").classList.toggle("hidden", !!currentUser);
 
-  $("logoutBtn").classList.toggle("hidden",!currentUser);
+  $("logoutBtn").classList.toggle("hidden", !currentUser);
 
-  $("ordersBtn").classList.toggle("hidden",!currentUser);
+  $("ordersBtn").classList.toggle("hidden", !currentUser);
 
-  $("profileBtn").classList.toggle("hidden",!currentUser);
+  $("adminBtn").classList.toggle(
 
-  $("notifyBtn").classList.toggle("hidden",!currentUser);
+    "hidden",
 
-  $("adminBtn").classList.toggle("hidden",currentProfile?.role !== "admin");
+    currentProfile?.role !== "admin"
 
-  $("profileSection").classList.toggle("hidden",!currentUser);
-
-}
-
-function showProfile() {
-
-  if (!requireLogin()) return;
-
-  hideSections("profileSection");
-
-  $("profileSection").scrollIntoView({behavior:"smooth"});
-
-  loadProfile();
+  );
 
 }
 
-/* AUTH */
+/* ==========================================
+
+   REGISTER
+
+   ========================================== */
 
 async function registerUser() {
+
+  if (!sb) return;
 
   const name = $("fullName").value.trim();
 
@@ -600,17 +1450,47 @@ async function registerUser() {
 
   const password = $("password").value;
 
-  if (!name) return message("authMessage","Register করার আগে Full Name লেখো।");
+  if (!name) {
 
-  if (password.length < 8) return message("authMessage","Password কমপক্ষে ৮ অক্ষরের হতে হবে।");
+    message("authMessage", "Register করার আগে Full Name লেখো।");
 
-  const {data,error} = await sb.auth.signUp({
+    return;
 
-    email,password,options:{data:{full_name:name}}
+  }
+
+  if (password.length < 8) {
+
+    message("authMessage", "Password কমপক্ষে ৮ অক্ষরের হতে হবে।");
+
+    return;
+
+  }
+
+  const { data, error } = await sb.auth.signUp({
+
+    email,
+
+    password,
+
+    options: {
+
+      data: {
+
+        full_name: name
+
+      }
+
+    }
 
   });
 
-  if (error) return message("authMessage",error.message);
+  if (error) {
+
+    message("authMessage", error.message);
+
+    return;
+
+  }
 
   if (data.session) {
 
@@ -626,25 +1506,51 @@ async function registerUser() {
 
   } else {
 
-    message("authMessage","Registration সফল। Email confirmation চাইলে Inbox চেক করো।",true);
+    message(
+
+      "authMessage",
+
+      "Registration request successful. Email confirmation প্রয়োজন হলে Inbox চেক করো।",
+
+      true
+
+    );
 
   }
 
 }
 
-$("loginForm").addEventListener("submit",async event => {
+/* ==========================================
+
+   LOGIN
+
+   ========================================== */
+
+$("loginForm").addEventListener("submit", async event => {
 
   event.preventDefault();
 
-  const {data,error} = await sb.auth.signInWithPassword({
+  if (!sb) return;
 
-    email:$("email").value.trim(),
+  const email = $("email").value.trim();
 
-    password:$("password").value
+  const password = $("password").value;
+
+  const { data, error } = await sb.auth.signInWithPassword({
+
+    email,
+
+    password
 
   });
 
-  if (error) return message("authMessage",error.message);
+  if (error) {
+
+    message("authMessage", error.message);
+
+    return;
+
+  }
 
   currentUser = data.user;
 
@@ -654,67 +1560,117 @@ $("loginForm").addEventListener("submit",async event => {
 
   await loadListings();
 
-  await loadNotifications();
-
   closeModal("authModal");
 
 });
 
+/* ==========================================
+
+   FORGOT PASSWORD
+
+   ========================================== */
+
 async function resetPassword() {
+
+  if (!sb) return;
 
   const email = $("email").value.trim();
 
-  if (!email) return message("authMessage","আগে তোমার Email লেখো।");
+  if (!email) {
 
-  const {error} = await sb.auth.resetPasswordForEmail(email);
+    message("authMessage", "আগে তোমার Email লেখো।");
 
-  if (error) return message("authMessage",error.message);
+    return;
 
-  message("authMessage","যদি Email নিবন্ধিত থাকে, Password Reset Email পাঠানো হবে।",true);
+  }
+
+  const { error } = await sb.auth.resetPasswordForEmail(email);
+
+  if (error) {
+
+    message("authMessage", error.message);
+
+  } else {
+
+    message(
+
+      "authMessage",
+
+      "যদি Email-টি নিবন্ধিত থাকে, Password Reset Email পাঠানো হবে।",
+
+      true
+
+    );
+
+  }
 
 }
 
+/* ==========================================
+
+   LOGOUT
+
+   ========================================== */
+
 async function logout() {
 
-  const {error} = await sb.auth.signOut();
+  if (!sb) return;
 
-  if (error) return alert(error.message);
+  const { error } = await sb.auth.signOut();
+
+  if (error) {
+
+    alert(error.message);
+
+    return;
+
+  }
 
   currentUser = null;
 
   currentProfile = null;
 
-  notificationCache = [];
-
   updateUI();
-
-  hideSections();
 
   await loadListings();
 
 }
 
-/* LOAD LISTINGS */
+/* ==========================================
+
+   LOAD LISTINGS
+
+   ========================================== */
 
 async function loadListings() {
 
-  $("listingGrid").innerHTML = '<div class="panel">Loading...</div>';
+  if (!sb) return;
 
-  const {data,error} = await sb
+  $("listingGrid").innerHTML =
+
+    '<div class="panel">Loading...</div>';
+
+  const { data, error } = await sb
 
     .from("listings")
 
     .select("*")
 
-    .eq("status","available")
+    .eq("status", "available")
 
-    .order("created_at",{ascending:false})
+    .order("created_at", { ascending: false })
 
     .limit(200);
 
   if (error) {
 
-    $("listingGrid").innerHTML = '<div class="panel">Database Error: '+esc(error.message)+'</div>';
+    $("listingGrid").innerHTML =
+
+      '<div class="panel">Database Error: ' +
+
+      esc(error.message) +
+
+      '</div>';
 
     return;
 
@@ -724,19 +1680,25 @@ async function loadListings() {
 
     let extra = {};
 
-    try { extra = JSON.parse(row.description || "{}"); }
+    try {
 
-    catch (_) { extra = {features:row.description || ""}; }
+      extra = JSON.parse(row.description || "{}");
+
+    } catch (_) {
+
+      extra = { features: row.description || "" };
+
+    }
 
     return {
 
       ...row,
 
-      account_type:row.account_type || extra.type || "Starter",
+      type: row.account_type || extra.type || "Starter",
 
-      region:row.region || extra.region || "Bangladesh",
+      region: row.region || extra.region || "Bangladesh",
 
-      features:extra.features || row.description || ""
+      features: extra.features || row.description || ""
 
     };
 
@@ -746,37 +1708,59 @@ async function loadListings() {
 
 }
 
+/* ==========================================
+
+   RENDER LISTINGS
+
+   ========================================== */
+
 function renderListings() {
 
   const query = $("search").value.toLowerCase().trim();
 
   const sort = $("sort").value;
 
-  const typeFilter = $("typeFilter").value;
-
   let items = listings.filter(item => {
 
     const text = [
 
-      item.title,item.description,item.features,item.level,
+      item.title,
 
-      item.region,item.account_type,item.price
+      item.description,
+
+      item.features,
+
+      item.level,
+
+      item.region,
+
+      item.account_type
 
     ].join(" ").toLowerCase();
 
-    return text.includes(query) && (!typeFilter || item.account_type === typeFilter);
+    return text.includes(query);
 
   });
 
-  if (sort === "low") items.sort((a,b) => Number(a.price)-Number(b.price));
+  if (sort === "low") {
 
-  if (sort === "high") items.sort((a,b) => Number(b.price)-Number(a.price));
+    items.sort((a,b) => Number(a.price) - Number(b.price));
+
+  }
+
+  if (sort === "high") {
+
+    items.sort((a,b) => Number(b.price) - Number(a.price));
+
+  }
 
   $("listingCount").textContent = items.length;
 
   if (!items.length) {
 
-    $("listingGrid").innerHTML = '<div class="panel">কোনো Listing পাওয়া যায়নি।</div>';
+    $("listingGrid").innerHTML =
+
+      '<div class="panel">কোনো Listing পাওয়া যায়নি।</div>';
 
     return;
 
@@ -786,15 +1770,25 @@ function renderListings() {
 
     const image = item.account_image
 
-      ? `<img src="${esc(item.account_image)}" alt="Account image" loading="lazy" onerror="this.style.display='none'">`
+      ? `<img src="${esc(item.account_image)}" alt="Account image" onerror="this.style.display='none'">`
 
-      : '<span style="font-size:45px">🎮</span>';
+      : `<span style="font-size:45px">🎮</span>`;
 
     return `
 
       <article class="listing">
 
-        <div class="cover">${image}<span class="level">Level ${esc(item.level ?? "—")}</span></div>
+        <div class="cover">
+
+          ${image}
+
+          <span class="level">
+
+            Level ${esc(item.level ?? "—")}
+
+          </span>
+
+        </div>
 
         <div class="listing-body">
 
@@ -802,9 +1796,9 @@ function renderListings() {
 
           <div class="meta">
 
-            Type: ${esc(item.account_type)}<br>
+            Type: ${esc(item.account_type || "Starter")}<br>
 
-            Region: ${esc(item.region)}<br>
+            Region: ${esc(item.region || "Bangladesh")}<br>
 
             Level: ${esc(item.level ?? "—")}
 
@@ -814,23 +1808,35 @@ function renderListings() {
 
             <span class="price">${money(item.price)}</span>
 
-            <button class="btn" onclick="showDetails('${esc(item.id)}')">Details</button>
+            <button class="btn"
+
+              onclick="showDetails('${esc(item.id)}')">
+
+              Details
+
+            </button>
 
           </div>
 
         </div>
 
-      </article>`;
+      </article>
+
+    `;
 
   }).join("");
 
 }
 
-/* DETAILS, RATINGS AND REVIEWS */
+/* ==========================================
 
-async function showDetails(id) {
+   LISTING DETAILS
 
-  const item = listings.find(x => String(x.id) === String(id));
+   ========================================== */
+
+function showDetails(id) {
+
+  const item = listings.find(x => x.id === id);
 
   if (!item) return;
 
@@ -842,11 +1848,23 @@ async function showDetails(id) {
 
     <div class="panel">
 
-      ${item.account_image ? `<img src="${esc(item.account_image)}" alt="Account image" style="width:100%;max-height:220px;object-fit:cover;border-radius:8px">` : ""}
+      ${item.account_image
+
+        ? `<img src="${esc(item.account_image)}"
+
+             alt="Account image"
+
+             style="width:100%;max-height:220px;object-fit:cover;border-radius:8px">`
+
+        : ""}
 
       <h3>${esc(item.title)}</h3>
 
-      <p style="color:var(--muted);line-height:1.7">${esc(item.features || "No description provided.")}</p>
+      <p style="color:#a4aec0;line-height:1.7">
+
+        ${esc(item.features || "No description provided.")}
+
+      </p>
 
       <p>Level: ${esc(item.level ?? "—")}</p>
 
@@ -858,129 +1876,25 @@ async function showDetails(id) {
 
       <br>
 
-      <button class="btn" onclick="startCheckout()">Create Order</button>
+      <button class="btn" onclick="startCheckout()">
 
-      <button class="btn secondary" onclick="openReview('${esc(item.id)}')">⭐ Write Review</button>
+        Create Order
 
-      <div id="reviewsArea" style="margin-top:20px"><p>Loading reviews...</p></div>
+      </button>
 
-    </div>`;
+    </div>
+
+  `;
 
   openModal("detailsModal");
 
-  await loadReviews(item.id);
-
 }
 
-async function loadReviews(listingId) {
+/* ==========================================
 
-  const area = $("reviewsArea");
+   CREATE LISTING
 
-  if (!area) return;
-
-  const {data,error} = await sb
-
-    .from("listing_reviews")
-
-    .select("id,rating,review_text,created_at,reviewer_id")
-
-    .eq("listing_id",listingId)
-
-    .order("created_at",{ascending:false})
-
-    .limit(50);
-
-  if (error) {
-
-    area.innerHTML = '<p style="color:var(--muted)">Reviews load হয়নি: '+esc(error.message)+'</p>';
-
-    return;
-
-  }
-
-  if (!data?.length) {
-
-    area.innerHTML = "<h3>⭐ Reviews</h3><p>No reviews yet.</p>";
-
-    return;
-
-  }
-
-  const average = data.reduce((sum,r) => sum + Number(r.rating),0) / data.length;
-
-  area.innerHTML = `<h3>⭐ Reviews (${average.toFixed(1)}/5 · ${data.length})</h3>` +
-
-    data.map(r => `
-
-      <div class="review">
-
-        <strong>${"⭐".repeat(Number(r.rating))}</strong>
-
-        <p>${esc(r.review_text || "No written comment.")}</p>
-
-        <small style="color:var(--muted)">${esc(new Date(r.created_at).toLocaleDateString())}</small>
-
-      </div>`).join("");
-
-}
-
-function openReview(listingId) {
-
-  if (!requireLogin()) return;
-
-  reviewListingId = listingId;
-
-  $("reviewText").value = "";
-
-  $("reviewMessage").textContent = "";
-
-  openModal("reviewModal");
-
-}
-
-$("reviewForm").addEventListener("submit",async event => {
-
-  event.preventDefault();
-
-  if (!requireLogin() || !reviewListingId) return;
-
-  const payload = {
-
-    listing_id:reviewListingId,
-
-    reviewer_id:currentUser.id,
-
-    rating:Number($("reviewRating").value),
-
-    review_text:$("reviewText").value.trim()
-
-  };
-
-  const {error} = await sb.from("listing_reviews").insert(payload);
-
-  if (error) {
-
-    return message("reviewMessage",
-
-      error.code === "23505"
-
-        ? "এই Listing-এর জন্য তুমি ইতিমধ্যে Review দিয়েছ।"
-
-        : error.message
-
-    );
-
-  }
-
-  message("reviewMessage","Review সফলভাবে জমা হয়েছে।",true);
-
-  await loadReviews(reviewListingId);
-
-  setTimeout(() => closeModal("reviewModal"),800);
-
-});
-
-/* CREATE LISTING */
+   ========================================== */
 
 function openSell() {
 
@@ -992,11 +1906,11 @@ function openSell() {
 
 }
 
-$("sellForm").addEventListener("submit",async event => {
+$("sellForm").addEventListener("submit", async event => {
 
   event.preventDefault();
 
-  if (!requireLogin()) return;
+  if (!requireLogin() || !sb) return;
 
   const title = $("sellTitle").value.trim();
 
@@ -1014,49 +1928,85 @@ $("sellForm").addEventListener("submit",async event => {
 
   if (!title || price <= 0 || level < 1) {
 
-    return message("sellMessage","সব তথ্য সঠিকভাবে পূরণ করো।");
+    message("sellMessage", "সব তথ্য সঠিকভাবে পূরণ করো।");
+
+    return;
 
   }
 
   const payload = {
 
-    seller_id:currentUser.id,
+    seller_id: currentUser.id,
 
     title,
 
-    description:JSON.stringify({features,type,region}),
+    description: JSON.stringify({
 
-    price,level,
+      features,
 
-    account_image:image || null,
+      type,
 
-    account_type:type,
+      region
+
+    }),
+
+    price,
+
+    level,
+
+    account_image: image || null,
+
+    account_type: type,
 
     region,
 
-    status:"available"
+    status: "available"
 
   };
 
-  const {error} = await sb.from("listings").insert(payload);
+  const { error } = await sb
 
-  if (error) return message("sellMessage",error.message);
+    .from("listings")
+
+    .insert(payload);
+
+  if (error) {
+
+    message("sellMessage", error.message);
+
+    return;
+
+  }
 
   $("sellForm").reset();
 
-  message("sellMessage","Listing সফলভাবে Publish হয়েছে!",true);
+  message(
+
+    "sellMessage",
+
+    "Listing সফলভাবে Publish হয়েছে!",
+
+    true
+
+  );
 
   await loadListings();
 
 });
 
-/* CHECKOUT */
+/* ==========================================
+
+   CREATE ORDER
+
+   ========================================== */
 
 function startCheckout() {
 
-  if (!requireLogin() || !selectedListing) return;
+  if (!requireLogin()) return;
 
-  if (String(selectedListing.seller_id) === String(currentUser.id)) {
+  if (!selectedListing) return;
+
+  if (selectedListing.seller_id === currentUser.id) {
 
     alert("নিজের Listing নিজে কিনতে পারবে না।");
 
@@ -1072,93 +2022,105 @@ function startCheckout() {
 
       <div class="price">${money(selectedListing.price)}</div>
 
-    </div><br>`;
+    </div>
 
-  $("buyerName").value = currentProfile?.full_name || "";
+    <br>
 
-  $("checkoutMessage").textContent = "";
+  `;
 
   closeModal("detailsModal");
+
+  $("checkoutMessage").textContent = "";
 
   openModal("checkoutModal");
 
 }
 
-$("checkoutForm").addEventListener("submit",async event => {
+$("checkoutForm").addEventListener("submit", async event => {
 
   event.preventDefault();
 
-  if (!requireLogin() || !selectedListing) return;
+  if (!requireLogin() || !selectedListing || !sb) return;
 
-  if (String(selectedListing.seller_id) === String(currentUser.id)) {
+  if (selectedListing.seller_id === currentUser.id) {
 
-    return message("checkoutMessage","নিজের Listing-এর জন্য Order করা যাবে না।");
+    message("checkoutMessage", "নিজের Listing-এর জন্য Order করা যাবে না।");
+
+    return;
 
   }
 
   const payload = {
 
-    buyer_id:currentUser.id,
+    buyer_id: currentUser.id,
 
-    listing_id:selectedListing.id,
+    listing_id: selectedListing.id,
 
-    amount:Number(selectedListing.price),
+    amount: Number(selectedListing.price),
 
-    payment_method:$("paymentMethod").value,
+    payment_method: $("paymentMethod").value,
 
-    payment_status:"pending",
+    payment_status: "pending",
 
-    order_status:"pending",
+    order_status: "pending",
 
-    buyer_name:$("buyerName").value.trim(),
+    buyer_name: $("buyerName").value.trim(),
 
-    buyer_contact:$("buyerContact").value.trim(),
-
-    payment_number:$("paymentNumber").value.trim() || null,
-
-    transaction_id:$("transactionId").value.trim() || null
+    buyer_contact: $("buyerContact").value.trim()
 
   };
 
-  const {data,error} = await sb.from("orders").insert(payload).select("id").single();
+  const { data, error } = await sb
 
-  if (error) return message("checkoutMessage",error.message);
+    .from("orders")
 
-  await createNotification(
+    .insert(payload)
 
-    currentUser.id,
+    .select("id")
 
-    "Order Created",
+    .single();
 
-    "Your order " + data.id + " was created and is pending review."
+  if (error) {
 
-  );
+    message("checkoutMessage", error.message);
 
-  message("checkoutMessage",
+    return;
 
-    "Order তৈরি হয়েছে!\nOrder ID: "+data.id+
+  }
 
-    "\nPayment status: Pending.\nTransaction ID থাকলেও Admin যাচাই না করা পর্যন্ত Payment Confirmed নয়।",
+  message(
+
+    "checkoutMessage",
+
+    "Order তৈরি হয়েছে!\nOrder ID: " + data.id +
+
+    "\nPayment এখনো Pending। কোনো টাকা নেওয়া হয়নি।",
 
     true
 
   );
 
-  $("checkoutForm").reset();
-
 });
 
-/* MY ORDERS / TRACKING */
+/* ==========================================
+
+   MY ORDERS
+
+   ========================================== */
 
 async function showOrders() {
 
   if (!requireLogin()) return;
 
-  hideSections("ordersSection");
-
   $("ordersSection").classList.remove("hidden");
 
-  $("ordersSection").scrollIntoView({behavior:"smooth"});
+  $("adminSection").classList.add("hidden");
+
+  $("ordersSection").scrollIntoView({
+
+    behavior:"smooth"
+
+  });
 
   await loadOrders();
 
@@ -1166,17 +2128,17 @@ async function showOrders() {
 
 async function loadOrders() {
 
-  if (!currentUser) return;
+  if (!sb || !currentUser) return;
 
-  const {data,error} = await sb
+  const { data, error } = await sb
 
     .from("orders")
 
-    .select("id,listing_id,amount,payment_method,payment_status,order_status,created_at,transaction_id,payment_number,admin_note")
+    .select("id,listing_id,amount,payment_method,payment_status,order_status,created_at")
 
-    .eq("buyer_id",currentUser.id)
+    .eq("buyer_id", currentUser.id)
 
-    .order("created_at",{ascending:false})
+    .order("created_at", { ascending:false })
 
     .limit(100);
 
@@ -1188,7 +2150,7 @@ async function loadOrders() {
 
   }
 
-  if (!data?.length) {
+  if (!data.length) {
 
     $("ordersContent").textContent = "এখনো কোনো Order নেই।";
 
@@ -1198,177 +2160,69 @@ async function loadOrders() {
 
   $("ordersContent").innerHTML = `
 
-    <div class="table-wrap"><table>
+    <div class="table-wrap">
 
-    <thead><tr><th>Order</th><th>Amount</th><th>Payment</th><th>Tracking</th><th>Date</th><th>Review</th></tr></thead>
+      <table>
 
-    <tbody>${data.map(order => `
+        <thead>
 
-      <tr>
+          <tr>
 
-        <td>${esc(String(order.id).slice(0,8))}</td>
+            <th>Order ID</th>
 
-        <td>${money(order.amount)}</td>
+            <th>Amount</th>
 
-        <td>
+            <th>Payment</th>
 
-          ${esc(order.payment_method)}<br>
+            <th>Status</th>
 
-          Payment: <span class="badge">${esc(order.payment_status)}</span><br>
+            <th>Date</th>
 
-          ${order.transaction_id ? "Txn: "+esc(order.transaction_id) : "No Txn ID"}
+          </tr>
 
-        </td>
+        </thead>
 
-        <td>
+        <tbody>
 
-          <span class="badge">${esc(order.order_status)}</span>
+          ${data.map(order => `
 
-          ${order.admin_note ? "<br>"+esc(order.admin_note) : ""}
+            <tr>
 
-        </td>
+              <td>${esc(order.id.slice(0,8))}</td>
 
-        <td>${esc(new Date(order.created_at).toLocaleDateString())}</td>
+              <td>${money(order.amount)}</td>
 
-        <td><button class="btn secondary" onclick="reviewFromOrder('${esc(order.listing_id)}')">Review</button></td>
+              <td>
 
-      </tr>`).join("")}</tbody></table></div>`;
+                ${esc(order.payment_method)} /
 
-}
+                ${esc(order.payment_status)}
 
-function reviewFromOrder(listingId) {
+              </td>
 
-  if (!listingId) return;
+              <td>${esc(order.order_status)}</td>
 
-  openReview(listingId);
+              <td>${esc(new Date(order.created_at).toLocaleDateString())}</td>
 
-}
+            </tr>
 
-/* NOTIFICATIONS */
+          `).join("")}
 
-async function createNotification(userId,title,body) {
+        </tbody>
 
-  if (!userId) return;
+      </table>
 
-  const {error} = await sb.from("notifications").insert({
+    </div>
 
-    user_id:userId,title,body
-
-  });
-
-  if (error) console.error("Notification insert:",error.message);
+  `;
 
 }
 
-async function loadNotifications() {
+/* ==========================================
 
-  if (!currentUser) return;
+   ADMIN PANEL
 
-  const {data,error} = await sb
-
-    .from("notifications")
-
-    .select("id,title,body,is_read,created_at")
-
-    .eq("user_id",currentUser.id)
-
-    .order("created_at",{ascending:false})
-
-    .limit(50);
-
-  if (error) {
-
-    console.error("Notifications:",error.message);
-
-    return;
-
-  }
-
-  notificationCache = data || [];
-
-  const unread = notificationCache.filter(n => !n.is_read).length;
-
-  $("notificationCount").textContent = unread;
-
-  $("profileNotifyList").innerHTML = notificationCache.length
-
-    ? notificationCache.slice(0,3).map(n =>
-
-        `<div class="review"><b>${esc(n.title)}</b><br>${esc(n.body)}</div>`
-
-      ).join("")
-
-    : "No notifications.";
-
-}
-
-async function showNotifications() {
-
-  if (!requireLogin()) return;
-
-  hideSections("notificationsSection");
-
-  $("notificationsSection").classList.remove("hidden");
-
-  $("notificationsSection").scrollIntoView({behavior:"smooth"});
-
-  await loadNotifications();
-
-  renderNotifications();
-
-}
-
-function renderNotifications() {
-
-  const data = notificationCache;
-
-  if (!data.length) {
-
-    $("notificationsContent").textContent = "কোনো Notification নেই।";
-
-    return;
-
-  }
-
-  $("notificationsContent").innerHTML = data.map(n => `
-
-    <div class="review">
-
-      <b>${esc(n.title)}</b>
-
-      <span class="badge">${n.is_read ? "Read" : "Unread"}</span>
-
-      <p>${esc(n.body)}</p>
-
-      <small style="color:var(--muted)">${esc(new Date(n.created_at).toLocaleString())}</small>
-
-      ${!n.is_read ? `<br><button class="btn secondary" onclick="markNotificationRead(${Number(n.id)})">Mark Read</button>` : ""}
-
-    </div>`).join("");
-
-}
-
-async function markNotificationRead(id) {
-
-  if (!currentUser) return;
-
-  const {error} = await sb.from("notifications")
-
-    .update({is_read:true})
-
-    .eq("id",id)
-
-    .eq("user_id",currentUser.id);
-
-  if (error) return alert(error.message);
-
-  await loadNotifications();
-
-  renderNotifications();
-
-}
-
-/* ADMIN */
+   ========================================== */
 
 async function showAdmin() {
 
@@ -1380,11 +2234,15 @@ async function showAdmin() {
 
   }
 
-  hideSections("adminSection");
-
   $("adminSection").classList.remove("hidden");
 
-  $("adminSection").scrollIntoView({behavior:"smooth"});
+  $("ordersSection").classList.add("hidden");
+
+  $("adminSection").scrollIntoView({
+
+    behavior:"smooth"
+
+  });
 
   await loadAdmin();
 
@@ -1392,21 +2250,25 @@ async function showAdmin() {
 
 async function loadAdmin() {
 
-  if (currentProfile?.role !== "admin") return;
+  if (!sb || currentProfile?.role !== "admin") return;
 
-  const [ordersResult,listingsResult] = await Promise.all([
+  const [ordersResult, listingsResult] = await Promise.all([
 
     sb.from("orders")
 
-      .select("id,buyer_id,buyer_name,buyer_contact,listing_id,amount,payment_method,payment_status,order_status,created_at,transaction_id,payment_number,admin_note")
+      .select("id,buyer_name,buyer_contact,amount,payment_method,payment_status,order_status,created_at")
 
-      .order("created_at",{ascending:false}).limit(100),
+      .order("created_at", {ascending:false})
+
+      .limit(100),
 
     sb.from("listings")
 
-      .select("id,title,price,status,seller_id")
+      .select("id,title,price,status")
 
-      .order("created_at",{ascending:false}).limit(100)
+      .order("created_at", {ascending:false})
+
+      .limit(100)
 
   ]);
 
@@ -1414,13 +2276,15 @@ async function loadAdmin() {
 
     $("adminContent").textContent =
 
-      ordersResult.error?.message || listingsResult.error?.message;
+      ordersResult.error?.message ||
+
+      listingsResult.error?.message;
 
     return;
 
   }
 
-  let html = "<h3>📦 Orders & Payment Verification</h3>";
+  let html = "<h3>Orders</h3>";
 
   if (!ordersResult.data.length) {
 
@@ -1428,69 +2292,115 @@ async function loadAdmin() {
 
   } else {
 
-    html += `<div class="table-wrap"><table>
+    html += `
 
-      <thead><tr><th>Buyer</th><th>Amount</th><th>Payment details</th><th>Order Status</th><th>Actions</th></tr></thead><tbody>`;
+      <div class="table-wrap">
 
-    for (const o of ordersResult.data) {
+        <table>
 
-      html += `<tr>
+          <thead>
 
-        <td>${esc(o.buyer_name || "Buyer")}<br><small>${esc(o.buyer_contact || "")}</small></td>
+            <tr>
 
-        <td>${money(o.amount)}</td>
+              <th>Buyer</th>
 
-        <td>
+              <th>Amount</th>
 
-          Method: ${esc(o.payment_method)}<br>
+              <th>Payment</th>
 
-          Payment: ${esc(o.payment_status)}<br>
+              <th>Order Status</th>
 
-          Sender: ${esc(o.payment_number || "Not provided")}<br>
+              <th>Action</th>
 
-          Txn: ${esc(o.transaction_id || "Not provided")}<br>
+            </tr>
 
-          Note: ${esc(o.admin_note || "")}
+          </thead>
 
-        </td>
+          <tbody>
 
-        <td>
+    `;
 
-          <select class="field" id="order-${esc(o.id)}">
+    for (const order of ordersResult.data) {
 
-            ${["pending","confirmed","completed","cancelled"].map(s =>
+      html += `
 
-              `<option value="${s}" ${o.order_status===s?"selected":""}>${s}</option>`
+        <tr>
 
-            ).join("")}
+          <td>
 
-          </select>
+            ${esc(order.buyer_name || "Buyer")}<br>
 
-          <br><br>
+            <small>${esc(order.buyer_contact || "")}</small>
 
-          <select class="field" id="payment-${esc(o.id)}">
+          </td>
 
-            ${["pending","verified","rejected"].map(s =>
+          <td>${money(order.amount)}</td>
 
-              `<option value="${s}" ${o.payment_status===s?"selected":""}>${s}</option>`
+          <td>
 
-            ).join("")}
+            ${esc(order.payment_method)}<br>
 
-          </select>
+            ${esc(order.payment_status)}
 
-        </td>
+          </td>
 
-        <td>
+          <td>${esc(order.order_status)}</td>
 
-          <input class="field" id="note-${esc(o.id)}" maxlength="500" placeholder="Admin note" value="${esc(o.admin_note || "")}">
+          <td>
 
-          <br><br>
+            <select class="field"
 
-          <button class="btn" onclick="updateOrder('${esc(o.id)}','${esc(o.buyer_id)}')">Save Status</button>
+              id="order-${esc(order.id)}">
 
-        </td>
+              <option value="pending"
 
-      </tr>`;
+                ${order.order_status==="pending"?"selected":""}>
+
+                Pending
+
+              </option>
+
+              <option value="confirmed"
+
+                ${order.order_status==="confirmed"?"selected":""}>
+
+                Confirmed
+
+              </option>
+
+              <option value="completed"
+
+                ${order.order_status==="completed"?"selected":""}>
+
+                Completed
+
+              </option>
+
+              <option value="cancelled"
+
+                ${order.order_status==="cancelled"?"selected":""}>
+
+                Cancelled
+
+              </option>
+
+            </select>
+
+            <br><br>
+
+            <button class="btn"
+
+              onclick="updateOrder('${esc(order.id)}')">
+
+              Save
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
 
     }
 
@@ -1498,7 +2408,7 @@ async function loadAdmin() {
 
   }
 
-  html += "<h3 style='margin-top:25px'>🎮 Listings</h3>";
+  html += "<h3 style='margin-top:25px'>Listings</h3>";
 
   if (!listingsResult.data.length) {
 
@@ -1506,25 +2416,63 @@ async function loadAdmin() {
 
   } else {
 
-    html += `<div class="table-wrap"><table>
+    html += `
 
-      <thead><tr><th>Title</th><th>Price</th><th>Status</th><th>Action</th></tr></thead><tbody>`;
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Title</th>
+
+              <th>Price</th>
+
+              <th>Status</th>
+
+              <th>Action</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+    `;
 
     for (const item of listingsResult.data) {
 
-      const next = item.status === "removed" ? "available" : "removed";
+      const nextStatus =
 
-      html += `<tr>
+        item.status === "removed" ? "available" : "removed";
 
-        <td>${esc(item.title)}</td>
+      html += `
 
-        <td>${money(item.price)}</td>
+        <tr>
 
-        <td>${esc(item.status)}</td>
+          <td>${esc(item.title)}</td>
 
-        <td><button class="btn secondary" onclick="toggleListing('${esc(item.id)}','${next}')">${next==="available"?"Restore":"Remove"}</button></td>
+          <td>${money(item.price)}</td>
 
-      </tr>`;
+          <td>${esc(item.status)}</td>
+
+          <td>
+
+            <button class="btn secondary"
+
+              onclick="toggleListing('${esc(item.id)}','${nextStatus}')">
+
+              ${nextStatus==="available"?"Restore":"Remove"}
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
 
     }
 
@@ -1532,49 +2480,43 @@ async function loadAdmin() {
 
   }
 
-  html += `<div class="notice">Payment Status-এ Verified নির্বাচন করার আগে bKash/Nagad merchant transaction সত্যিই যাচাই করো। এই প্যানেল নিজে থেকে টাকা যাচাই করে না এবং Balance স্বয়ংক্রিয়ভাবে পরিবর্তন করে না।</div>`;
+  html += `
+
+    <div class="notice">
+
+      Admin Panel-এর Order Status পরিবর্তন করলে Payment যাচাই হয় না।
+
+      আসল Payment যাচাইয়ের জন্য আলাদা নিরাপদ ব্যবস্থা প্রয়োজন।
+
+    </div>
+
+  `;
 
   $("adminContent").innerHTML = html;
 
 }
 
-async function updateOrder(id,buyerId) {
+async function updateOrder(id) {
 
-  if (currentProfile?.role !== "admin") return alert("Admin access required.");
+  if (currentProfile?.role !== "admin") return;
 
-  const orderStatus = $("order-"+id).value;
+  const status = $("order-" + id).value;
 
-  const paymentStatus = $("payment-"+id).value;
+  const { error } = await sb
 
-  const note = $("note-"+id).value.trim();
+    .from("orders")
 
-  const {error} = await sb.from("orders").update({
+    .update({order_status:status})
 
-    order_status:orderStatus,
+    .eq("id",id);
 
-    payment_status:paymentStatus,
+  if (error) {
 
-    admin_note:note
+    alert(error.message);
 
-  }).eq("id",id);
+    return;
 
-  if (error) return alert(error.message);
-
-  await createNotification(
-
-    buyerId,
-
-    "Order Status Updated",
-
-    "Order "+String(id)+" status: "+orderStatus+
-
-    ". Payment status: "+paymentStatus+
-
-    (note ? ". Admin note: "+note : "")
-
-  );
-
-  alert("Order status saved.");
+  }
 
   await loadAdmin();
 
@@ -1582,11 +2524,23 @@ async function updateOrder(id,buyerId) {
 
 async function toggleListing(id,status) {
 
-  if (currentProfile?.role !== "admin") return alert("Admin access required.");
+  if (currentProfile?.role !== "admin") return;
 
-  const {error} = await sb.from("listings").update({status}).eq("id",id);
+  const { error } = await sb
 
-  if (error) return alert(error.message);
+    .from("listings")
+
+    .update({status})
+
+    .eq("id",id);
+
+  if (error) {
+
+    alert(error.message);
+
+    return;
+
+  }
 
   await loadAdmin();
 
@@ -1594,33 +2548,45 @@ async function toggleListing(id,status) {
 
 }
 
-/* MODAL CONTROLS */
+/* ==========================================
+
+   MODAL CONTROLS
+
+   ========================================== */
 
 document.querySelectorAll(".modal").forEach(modal => {
 
-  modal.addEventListener("click",event => {
+  modal.addEventListener("click", event => {
 
-    if (event.target === modal) closeModal(modal.id);
+    if (event.target === modal) {
+
+      closeModal(modal.id);
+
+    }
 
   });
 
 });
 
-document.addEventListener("keydown",event => {
+document.addEventListener("keydown", event => {
 
   if (event.key === "Escape") {
 
-    document.querySelectorAll(".modal.open").forEach(m => closeModal(m.id));
+    document.querySelectorAll(".modal.open")
+
+      .forEach(modal => closeModal(modal.id));
 
   }
 
 });
 
-window.addEventListener("error",event => {
+/* START APP */
+  
+  console.log("ANSU WEBSITE JAVASCRIPT STARTED");
 
-  console.error("JavaScript Error:",event.message,event.lineno);
-
-});
+window.onerror = function(message, source, line, column) {
+  alert("JavaScript Error: " + message + " | Line: " + line);
+};
 
 init();
 
