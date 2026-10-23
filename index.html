@@ -2581,6 +2581,12 @@ document.addEventListener("keydown", event => {
 });
 
 /* START APP */
+  
+  console.log("ANSU WEBSITE JAVASCRIPT STARTED");
+
+window.onerror = function(message, source, line, column) {
+  alert("JavaScript Error: " + message + " | Line: " + line);
+};
 
 init();
 
