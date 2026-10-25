@@ -124,7 +124,7 @@ section{padding:20px 0 32px}
 
 .modal.open{display:flex}
 
-.modal-box{width:min(600px,100%);max-height:95vh;overflow:auto;background:linear-gradient(145deg,#17261e,#0b1510);border:1px solid #e8c87955;border-radius:18px;padding:19px}
+.modal-box{width:min(700px,100%);max-height:95vh;overflow:auto;background:linear-gradient(145deg,#17261e,#0b1510);border:1px solid #e8c87955;border-radius:18px;padding:19px}
 
 .modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
 
@@ -194,11 +194,33 @@ th{color:var(--gold)}
 
 .owner-panel{border:1px solid var(--gold);background:linear-gradient(120deg,#292512,#102017)}
 
+.feature-card{background:linear-gradient(145deg,#14231c,#0c1712);border:1px solid #b99a5030;border-radius:15px;padding:17px;margin:14px 0}
+
+.feature-card h3{margin-top:0;color:var(--gold2)}
+
+.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+
+.stat-box{background:#0b1711;border:1px solid var(--line);border-radius:12px;padding:13px}
+
+.stat-box span{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}
+
+.stat-box strong{display:block;font-size:19px;color:var(--gold);overflow-wrap:anywhere}
+
+.rank-progress{height:9px;background:#26372d;border-radius:99px;overflow:hidden;margin:10px 0}
+
+.rank-progress span{display:block;height:100%;background:linear-gradient(90deg,#c69b49,#fff0b8);border-radius:99px}
+
+.rank-badge{display:inline-block;padding:8px 12px;border:1px solid var(--gold);border-radius:10px;background:#302817;color:var(--gold2);font-weight:900}
+
+.policy-step{display:flex;gap:12px;align-items:flex-start;margin:13px 0;padding:13px;background:#0b1711;border:1px solid var(--line);border-radius:12px;line-height:1.8}
+
+.policy-step b.step-number{flex:0 0 30px;height:30px;display:grid;place-items:center;background:linear-gradient(135deg,#f4dc94,#b68a3d);color:#172017;border-radius:50%}
+
 footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(--muted);font-size:12px}
 
 @media(max-width:800px){.grid,.ad-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-@media(max-width:520px){.grid,.ad-grid{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:19px}.brand{font-size:15px}.hero{padding-top:30px}.actions .btn{padding:8px 9px;font-size:11px}.modal-box{padding:14px}}
+@media(max-width:520px){.grid,.ad-grid{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:19px}.brand{font-size:15px}.hero{padding-top:30px}.actions .btn{padding:8px 9px;font-size:11px}.modal-box{padding:14px}.stat-grid{grid-template-columns:1fr 1fr}.stat-box strong{font-size:16px}}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
@@ -266,6 +288,32 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(-
 
 </div>
 
+<section id="paymentPolicy">
+
+<div class="feature-card">
+
+<h2 style="color:var(--gold);margin-top:0">💳 পেমেন্ট পলিসি</h2>
+
+<p class="small-note">অ্যাকাউন্ট কেনার আগে নিচের নিয়মগুলো পড়ুন। ভুল নম্বরে টাকা পাঠালে বা ভুল Transaction ID দিলে অর্ডার যাচাইয়ে সমস্যা হতে পারে।</p>
+
+<div class="policy-step"><b class="step-number">১</b><div><strong>অ্যাকাউন্ট নির্বাচন করুন</strong><br>আপনার পছন্দের Free Fire অ্যাকাউন্টের Details / Buy Now বাটনে চাপ দিন। দাম ও অ্যাকাউন্টের বিবরণ ভালোভাবে যাচাই করুন।</div></div>
+
+<div class="policy-step"><b class="step-number">২</b><div><strong>পেমেন্টের মাধ্যম নির্বাচন করুন</strong><br>অর্ডার ফর্মে bKash অথবা Nagad নির্বাচন করুন। স্ক্রিনে দেখানো পেমেন্ট নম্বরটি মিলিয়ে নিন।</div></div>
+
+<div class="policy-step"><b class="step-number">৩</b><div><strong>Send Money করুন</strong><br>bKash/Nagad অ্যাপ খুলে Send Money নির্বাচন করুন। অর্ডারের স্ক্রিনে দেখানো সঠিক নম্বর এবং অ্যাকাউন্টের সঠিক মূল্য লিখে পাঠান। টাকা পাঠানোর আগে প্রাপকের নম্বর ও পরিমাণ আবার যাচাই করুন।</div></div>
+
+<div class="policy-step"><b class="step-number">৪</b><div><strong>Transaction ID দিন</strong><br>টাকা পাঠানোর পর পাওয়া আসল Transaction ID এবং যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি অর্ডার ফর্মে লিখুন। ভুয়া Transaction ID দেবেন না।</div></div>
+
+<div class="policy-step"><b class="step-number">৫</b><div><strong>অর্ডার জমা দিয়ে অপেক্ষা করুন</strong><br>Submit করার পর My Orders-এ অর্ডারের অবস্থা দেখুন। Admin পেমেন্ট যাচাই না করা পর্যন্ত Payment Pending থাকবে। Approved হওয়া মানেই অ্যাকাউন্টের সব তথ্য যাচাই হয়েছে—এমন ধরে নেবেন না; অর্ডারের চূড়ান্ত অবস্থা দেখুন।</div></div>
+
+<div class="notice"><strong>🔒 নিরাপত্তা:</strong> PIN, OTP, পাসওয়ার্ড বা Recovery Code কাউকে দেবেন না। টাকা পাঠানোর আগে পেমেন্ট নম্বর নিশ্চিত করুন। ভুল নম্বরে পাঠানো টাকা ফেরত পাওয়ার নিশ্চয়তা নেই। পেমেন্ট করার আগে সন্দেহ হলে অর্ডার করবেন না।</div>
+
+<div class="small-note">গুরুত্বপূর্ণ: এখানে দেখানো bKash/Nagad নম্বর সাইটের কনফিগারেশনে নির্ধারিত। নম্বরগুলো সঠিক ও আপনার নিয়ন্ত্রণে আছে কি না, মালিক/অ্যাডমিনকে নিশ্চিত করতে হবে।</div>
+
+</div>
+
+</section>
+
 <section id="adSection" class="hidden">
 
 <div class="section-title"><div><h2>▶ Featured Video Ads</h2><p class="small-note">ভিডিও বিজ্ঞাপন স্বয়ংক্রিয়ভাবে লুপে চলবে</p></div></div>
@@ -322,7 +370,9 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(-
 
 <button class="btn secondary" type="button" onclick="resetPassword()">পাসওয়ার্ড ভুলে গেছেন?</button>
 
-</form><div id="authMessage"></div>
+</form>
+
+<div id="authMessage"></div>
 
 </div></div>
 
@@ -428,9 +478,9 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(-
 
 const SUPABASE_URL="https://qpcmfmhrigfdmvdtezli.supabase.co";
 
-/* এখানে নিজের Supabase anon/publishable key বসাও */
+/* নিজের Supabase Project Settings → API থেকে সঠিক anon/publishable key ব্যবহার করুন। */
 
-const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwY21mbWhyaWdmZG12ZHRlemxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3Njc5OTUsImV4cCI6MjEwODM0Mzk5NX0.0ToYY8IHVByxRZksJzd-O4_ztxVivKrgSYHU6Uzz0Y4";
+const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXMiLCJyZWYiOiJxcGNtZm1ocmlnZmRtdmR0ZXpsaSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzkyNzY3OTk1LCJleHAiOjIxMDgzNDM5OTl9.0ToYY8IHVByxRZksJzd-O4_ztxVivKrgSYHU6Uzz0Y4";
 
 const STORAGE_BUCKET="listing-images";
 
@@ -444,7 +494,19 @@ const PAYMENT_NUMBERS={bkash:"8801726270731",nagad:"8801344875536"};
 
 const configured=SUPABASE_URL.startsWith("https://")&&SUPABASE_KEY!=="PASTE_YOUR_SUPABASE_ANON_KEY_HERE"&&SUPABASE_KEY.trim().length>20;
 
-const sb=configured&&window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
+const sb=configured&&window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+
+ auth:{
+
+  persistSession:true,
+
+  autoRefreshToken:true,
+
+  detectSessionInUrl:true
+
+ }
+
+}):null;
 
 const $=id=>document.getElementById(id);
 
@@ -455,6 +517,8 @@ let selectedFiles=[],previewUrls=[],selectedVideo=null,videoPreviewUrl=null;
 let currentLanguage=localStorage.getItem("ansu_language")||"bn";
 
 let siteAds=[];
+
+let cachedOrders=[];
 
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
@@ -468,7 +532,17 @@ function closeModal(id){$(id)?.classList.remove("open")}
 
 function tr(bn,en){return currentLanguage==="bn"?bn:en}
 
-function toggleLanguage(){currentLanguage=currentLanguage==="bn"?"en":"bn";localStorage.setItem("ansu_language",currentLanguage);$("languageBtn").textContent=currentLanguage==="bn"?"English":"বাংলা";renderListings()}
+function toggleLanguage(){
+
+ currentLanguage=currentLanguage==="bn"?"en":"bn";
+
+ localStorage.setItem("ansu_language",currentLanguage);
+
+ $("languageBtn").textContent=currentLanguage==="bn"?"English":"বাংলা";
+
+ renderListings();
+
+}
 
 function hideSections(){["ordersSection","sellerSection","adminSection"].forEach(id=>$(id).classList.add("hidden"))}
 
@@ -486,19 +560,67 @@ function showDbError(error){
 
  const message=error?.message||String(error||"Unknown error");
 
- if(/invalid api key|apikey/i.test(message))return "Supabase API Key ভুল বা অসম্পূর্ণ। Dashboard → Project Settings → API থেকে সঠিক anon/publishable key বসাও।";
+ if(/invalid api key|apikey/i.test(message))return "Supabase API Key ভুল বা অসম্পূর্ণ। Dashboard → Project Settings → API থেকে সঠিক anon/publishable key বসান।";
 
- if(/row-level security|permission denied|not allowed/i.test(message))return "Supabase RLS Policy অনুমতি দেয়নি। Table/Storage-এর সঠিক policy যাচাই করো।";
+ if(/row-level security|permission denied|not allowed/i.test(message))return "Supabase RLS Policy অনুমতি দেয়নি। Table/Storage-এর সঠিক policy যাচাই করুন।";
 
- if(/bucket not found/i.test(message))return 'Storage bucket "listing-images" তৈরি আছে কি না যাচাই করো।';
+ if(/bucket not found/i.test(message))return 'Storage bucket "listing-images" তৈরি আছে কি না যাচাই করুন।';
 
  return message;
 
 }
 
+/*
+
+ * Email confirmation redirect:
+
+ * বর্তমানে যে production website URL থেকে সাইট খোলা হয়েছে সেটিই ব্যবহার হবে।
+
+ * localhost-এ খোলা থাকলে localhost redirect তৈরি না করে সতর্ক করা হবে।
+
+ * Supabase Dashboard → Authentication → URL Configuration-এ
+
+ * Site URL এবং Redirect URLs-এ production domain যোগ করা আবশ্যক।
+
+ */
+
+function getPublicRedirectURL(){
+
+ const origin=window.location.origin;
+
+ const host=window.location.hostname;
+
+ if(!/^https?:$/.test(window.location.protocol))return null;
+
+ if(host==="localhost"||host==="127.0.0.1"||host==="0.0.0.0"||host.endsWith(".local"))return null;
+
+ return origin+window.location.pathname;
+
+}
+
+function getAuthRedirectOptions(){
+
+ const redirectTo=getPublicRedirectURL();
+
+ return redirectTo?{emailRedirectTo:redirectTo}:{};
+
+}
+
+function authRedirectWarning(){
+
+ if(!getPublicRedirectURL()){
+
+  return "ইমেইল কনফার্মেশন লিংকের জন্য সাইটটি আগে একটি লাইভ HTTPS ডোমেইনে প্রকাশ করুন। localhost URL ব্যবহার করবেন না।";
+
+ }
+
+ return "";
+
+}
+
 async function uploadFile(file,folder){
 
- if(!sb)throw new Error("আগে সঠিক Supabase Anon Key বসাও।");
+ if(!sb)throw new Error("আগে সঠিক Supabase Anon Key বসান।");
 
  const path=`${currentUser.id}/${folder}/${Date.now()}_${crypto.randomUUID()}_${fileSafe(file.name)}`;
 
@@ -514,9 +636,13 @@ async function uploadImages(files){
 
  const urls=[];
 
- try{for(const file of files)urls.push(await uploadFile(file,"images"));return urls}
+ try{
 
- catch(error){
+  for(const file of files)urls.push(await uploadFile(file,"images"));
+
+  return urls;
+
+ }catch(error){
 
   const marker="/object/public/"+STORAGE_BUCKET+"/";
 
@@ -548,31 +674,79 @@ function getVideo(item){return item?.account_video||item?.video_url||""}
 
 async function init(){
 
- if(!sb){$("listingGrid").innerHTML='<div class="panel">Supabase সংযোগের জন্য script-এ নিজের সঠিক Anon/Publishable Key বসাও।</div>';return}
+ if(!sb){
 
- const {data,error}=await sb.auth.getSession();
+  $("listingGrid").innerHTML='<div class="panel">Supabase সংযোগের জন্য script-এ নিজের সঠিক Anon/Publishable Key বসান।</div>';
 
- if(error)console.error(showDbError(error));
+  return;
 
- currentUser=data?.session?.user||null;
+ }
 
- await loadProfile();updateUI();await loadListings();await loadPublicStats();await loadPublicNotice();await loadSiteAds();
+ try{
 
- if(currentUser)await loadNotifications();
+  const {data,error}=await sb.auth.getSession();
 
- sb.auth.onAuthStateChange((_event,session)=>{
+  if(error)console.error(showDbError(error));
 
-  currentUser=session?.session?.user||session?.user||null;
+  currentUser=data?.session?.user||null;
 
-  setTimeout(async()=>{await loadProfile();updateUI();await loadListings();await loadPublicStats();await loadSiteAds();if(currentUser)await loadNotifications()},0);
+  await loadProfile();
 
- });
+  updateUI();
+
+  await loadListings();
+
+  await loadPublicStats();
+
+  await loadPublicNotice();
+
+  await loadSiteAds();
+
+  if(currentUser)await loadNotifications();
+
+  sb.auth.onAuthStateChange((_event,session)=>{
+
+   currentUser=session?.user||null;
+
+   setTimeout(async()=>{
+
+    await loadProfile();
+
+    updateUI();
+
+    await loadListings();
+
+    await loadPublicStats();
+
+    await loadSiteAds();
+
+    if(currentUser){
+
+     await loadNotifications();
+
+     if($("profileModal").classList.contains("open"))openProfile();
+
+    }
+
+   },0);
+
+  });
+
+ }catch(error){
+
+  console.error("Initialization:",error);
+
+  $("listingGrid").innerHTML='<div class="panel">সাইট লোড করতে সমস্যা হয়েছে: '+esc(showDbError(error))+'</div>';
+
+ }
 
 }
 
 async function loadProfile(){
 
- currentProfile=null;if(!sb||!currentUser)return;
+ currentProfile=null;
+
+ if(!sb||!currentUser)return;
 
  const {data,error}=await sb.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();
 
@@ -600,43 +774,67 @@ function updateUI(){
 
 async function registerUser(){
 
- if(!sb){msg("authMessage","সঠিক Supabase Anon Key বসাও।");return}
+ if(!sb){msg("authMessage","সঠিক Supabase Anon Key বসান।");return}
 
  const name=$("fullName").value.trim(),email=$("email").value.trim(),password=$("password").value;
 
- if(!name){msg("authMessage","রেজিস্ট্রেশনের আগে নাম লেখো।");return}
+ if(!name){msg("authMessage","রেজিস্ট্রেশনের আগে নাম লিখুন।");return}
 
  if(password.length<8){msg("authMessage","পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।");return}
 
- const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});
+ const warning=authRedirectWarning();
+
+ if(warning){msg("authMessage",warning);return}
+
+ const options=getAuthRedirectOptions();
+
+ const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name},...options}});
 
  if(error){msg("authMessage",showDbError(error));return}
 
- if(data.session){currentUser=data.user;await loadProfile();updateUI();await loadListings();closeModal("authModal")}
+ if(data.session){
 
- else msg("authMessage","রেজিস্ট্রেশন হয়েছে। ইমেইল ভেরিফিকেশন চাইলে Inbox দেখো।",true);
+  currentUser=data.user;
+
+  await loadProfile();updateUI();await loadListings();closeModal("authModal");
+
+ }else{
+
+  msg("authMessage","রেজিস্ট্রেশন হয়েছে। আপনার ইমেইলে কনফার্মেশন লিংক পাঠানো হয়েছে। Inbox/Spam দেখুন। লিংকটি এই লাইভ সাইটে ফিরে আসার জন্য সেট করা হয়েছে।",true);
+
+ }
 
 }
 
 $("loginForm").addEventListener("submit",async e=>{
 
- e.preventDefault();if(!sb){msg("authMessage","সঠিক Supabase Anon Key বসাও।");return}
+ e.preventDefault();
+
+ if(!sb){msg("authMessage","সঠিক Supabase Anon Key বসান।");return}
 
  const {data,error}=await sb.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});
 
  if(error){msg("authMessage",showDbError(error));return}
 
- currentUser=data.user;await loadProfile();updateUI();await loadListings();await loadNotifications();closeModal("authModal");
+ currentUser=data.user;
+
+ await loadProfile();updateUI();await loadListings();await loadNotifications();closeModal("authModal");
 
 });
 
 async function resetPassword(){
 
- if(!sb){msg("authMessage","সঠিক Supabase Anon Key বসাও।");return}
+ if(!sb){msg("authMessage","সঠিক Supabase Anon Key বসান।");return}
 
- const email=$("email").value.trim();if(!email){msg("authMessage","আগে ইমেইল লেখো।");return}
+ const email=$("email").value.trim();
 
- const {error}=await sb.auth.resetPasswordForEmail(email);
+ if(!email){msg("authMessage","আগে ইমেইল লিখুন।");return}
+
+ const redirectTo=getPublicRedirectURL();
+
+ if(!redirectTo){msg("authMessage","পাসওয়ার্ড রিসেটের আগে সাইটটি লাইভ HTTPS ডোমেইনে খুলুন।");return}
+
+ const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});
 
  msg("authMessage",error?showDbError(error):"ইমেইলটি নিবন্ধিত থাকলে রিসেট ইমেইল পাঠানো হবে।",!error);
 
@@ -644,9 +842,11 @@ async function resetPassword(){
 
 async function logout(){
 
- const {error}=await sb.auth.signOut();if(error){alert(showDbError(error));return}
+ const {error}=await sb.auth.signOut();
 
- currentUser=null;currentProfile=null;hideSections();updateUI();await loadListings();
+ if(error){alert(showDbError(error));return}
+
+ currentUser=null;currentProfile=null;cachedOrders=[];hideSections();updateUI();await loadListings();
 
 }
 
@@ -678,11 +878,11 @@ async function loadPublicNotice(){
 
  if(!data?.message)return;
 
- $("notificationBar").textContent="📢 "+data.message;$("notificationBar").classList.remove("hidden");
+ $("notificationBar").textContent="📢 "+data.message;
+
+ $("notificationBar").classList.remove("hidden");
 
 }
-
-/* Video ad feed: requires the site_ads SQL below. */
 
 async function loadSiteAds(){
 
@@ -714,7 +914,15 @@ async function loadListings(){
 
  if(error){$("listingGrid").innerHTML='<div class="panel">Database Error: '+esc(showDbError(error))+'</div>';return}
 
- listings=(data||[]).map(row=>{let extra={};try{extra=JSON.parse(row.description||"{}")}catch(_){extra={features:row.description||""}}return{...row,type:row.account_type||extra.type||"Starter",region:row.region||extra.region||"Bangladesh",features:extra.features||row.description||""}});
+ listings=(data||[]).map(row=>{
+
+  let extra={};
+
+  try{extra=JSON.parse(row.description||"{}")}catch(_){extra={features:row.description||""}}
+
+  return {...row,type:row.account_type||extra.type||"Starter",region:row.region||extra.region||"Bangladesh",features:extra.features||row.description||""};
+
+ });
 
  renderListings();
 
@@ -746,9 +954,13 @@ function renderListings(){
 
 function showDetails(id){
 
- const item=listings.find(x=>String(x.id)===String(id));if(!item)return;
+ const item=listings.find(x=>String(x.id)===String(id));
 
- selectedListing=item;$("detailsTitle").textContent=item.title;
+ if(!item)return;
+
+ selectedListing=item;
+
+ $("detailsTitle").textContent=item.title;
 
  const imgs=getImages(item),video=getVideo(item);
 
@@ -760,13 +972,39 @@ function showDetails(id){
 
 }
 
-function openFullImage(url){const w=window.open("","_blank");if(!w){alert(url);return}const i=w.document.createElement("img");i.src=url;i.style.cssText="max-width:100%;height:auto";w.document.body.style.background="#07100d";w.document.body.appendChild(i)}
+function openFullImage(url){
 
-function openSell(){if(!requireLogin())return;$("sellForm").reset();selectedFiles=[];selectedVideo=null;renderImagePreview();renderVideoPreview();$("sellMessage").textContent="";openModal("sellModal")}
+ const w=window.open("","_blank");
+
+ if(!w){alert(url);return}
+
+ const i=w.document.createElement("img");
+
+ i.src=url;i.style.cssText="max-width:100%;height:auto";
+
+ w.document.body.style.background="#07100d";
+
+ w.document.body.appendChild(i);
+
+}
+
+function openSell(){
+
+ if(!requireLogin())return;
+
+ $("sellForm").reset();selectedFiles=[];selectedVideo=null;
+
+ renderImagePreview();renderVideoPreview();$("sellMessage").textContent="";
+
+ openModal("sellModal");
+
+}
 
 $("sellImages").addEventListener("change",e=>{
 
- const incoming=Array.from(e.target.files||[]);let combined=[...selectedFiles];
+ const incoming=Array.from(e.target.files||[]);
+
+ let combined=[...selectedFiles];
 
  for(const f of incoming){
 
@@ -788,7 +1026,19 @@ function renderImagePreview(){
 
  previewUrls.forEach(URL.revokeObjectURL);previewUrls=[];$("imagePreview").innerHTML="";
 
- selectedFiles.forEach((f,i)=>{const url=URL.createObjectURL(f);previewUrls.push(url);const d=document.createElement("div");d.className="preview";d.innerHTML=`<img src="${url}" alt=""><button type="button" aria-label="Remove">×</button>`;d.querySelector("button").onclick=()=>{selectedFiles.splice(i,1);renderImagePreview()};$("imagePreview").appendChild(d)});
+ selectedFiles.forEach((f,i)=>{
+
+  const url=URL.createObjectURL(f);previewUrls.push(url);
+
+  const d=document.createElement("div");d.className="preview";
+
+  d.innerHTML=`<img src="${url}" alt=""><button type="button" aria-label="Remove">×</button>`;
+
+  d.querySelector("button").onclick=()=>{selectedFiles.splice(i,1);renderImagePreview()};
+
+  $("imagePreview").appendChild(d);
+
+ });
 
 }
 
@@ -818,13 +1068,21 @@ function renderVideoPreview(){
 
  videoPreviewUrl=URL.createObjectURL(selectedVideo);
 
- const d=document.createElement("div");d.className="preview";d.innerHTML=`<video src="${videoPreviewUrl}" controls></video><button type="button">×</button>`;d.querySelector("button").onclick=()=>{selectedVideo=null;$("sellVideo").value="";renderVideoPreview()};$("videoPreview").appendChild(d);
+ const d=document.createElement("div");d.className="preview";
+
+ d.innerHTML=`<video src="${videoPreviewUrl}" controls></video><button type="button">×</button>`;
+
+ d.querySelector("button").onclick=()=>{selectedVideo=null;$("sellVideo").value="";if(videoPreviewUrl)URL.revokeObjectURL(videoPreviewUrl);videoPreviewUrl=null;renderVideoPreview()};
+
+ $("videoPreview").appendChild(d);
 
 }
 
 $("sellForm").addEventListener("submit",async e=>{
 
- e.preventDefault();if(!requireLogin()||!sb)return;
+ e.preventDefault();
+
+ if(!requireLogin()||!sb)return;
 
  const title=$("sellTitle").value.trim(),price=Number($("sellPrice").value),level=Number($("sellLevel").value);
 
@@ -854,7 +1112,9 @@ $("sellForm").addEventListener("submit",async e=>{
 
   $("sellForm").reset();selectedFiles=[];selectedVideo=null;renderImagePreview();renderVideoPreview();
 
-  msg("sellMessage","বিজ্ঞাপন সফলভাবে প্রকাশ হয়েছে!",true);await loadListings();await loadPublicStats();
+  msg("sellMessage","বিজ্ঞাপন সফলভাবে প্রকাশ হয়েছে!",true);
+
+  await loadListings();await loadPublicStats();
 
  }catch(error){msg("sellMessage","প্রকাশ করা যায়নি: "+showDbError(error))}
 
@@ -866,7 +1126,7 @@ function showPaymentInstructions(){
 
  const method=$("paymentMethod").value;
 
- $("paymentInstructions").innerHTML=`<b>${method==="bkash"?"bKash":"Nagad"}</b><br>টাকা পাঠানোর নম্বর: <strong>${esc(PAYMENT_NUMBERS[method])}</strong><br>পাঠানোর পরিমাণ: <strong>${money(selectedListing?.price)}</strong><br>টাকা পাঠানোর আগে নম্বর যাচাই করুন।`;
+ $("paymentInstructions").innerHTML=`<b>${method==="bkash"?"bKash":"Nagad"}</b><br>টাকা পাঠানোর নম্বর: <strong>${esc(PAYMENT_NUMBERS[method])}</strong><br>পাঠানোর পরিমাণ: <strong>${money(selectedListing?.price)}</strong><br>Send Money করার পর আসল Transaction ID লিখুন। টাকা পাঠানোর আগে নম্বর যাচাই করুন।`;
 
 }
 
@@ -878,13 +1138,17 @@ function startCheckout(){
 
  $("checkoutAccount").innerHTML=`<div class="panel"><b>${esc(selectedListing.title)}</b><div class="price">${money(selectedListing.price)}</div></div><br>`;
 
- $("checkoutForm").reset();$("checkoutMessage").textContent="";showPaymentInstructions();closeModal("detailsModal");openModal("checkoutModal");
+ $("checkoutForm").reset();$("checkoutMessage").textContent="";
+
+ showPaymentInstructions();closeModal("detailsModal");openModal("checkoutModal");
 
 }
 
 $("checkoutForm").addEventListener("submit",async e=>{
 
- e.preventDefault();if(!requireLogin()||!selectedListing||!sb)return;
+ e.preventDefault();
+
+ if(!requireLogin()||!selectedListing||!sb)return;
 
  if(selectedListing.seller_id===currentUser.id){msg("checkoutMessage","নিজের বিজ্ঞাপনে অর্ডার করা যাবে না।");return}
 
@@ -898,7 +1162,9 @@ $("checkoutForm").addEventListener("submit",async e=>{
 
   if(error)throw new Error(showDbError(error));
 
-  msg("checkoutMessage","অর্ডার জমা হয়েছে। Order ID: "+data.id+" · Payment Pending",true);await loadPublicStats();
+  msg("checkoutMessage","অর্ডার জমা হয়েছে। Order ID: "+data.id+" · Payment Pending",true);
+
+  await loadPublicStats();
 
  }catch(error){msg("checkoutMessage","অর্ডার জমা হয়নি: "+showDbError(error))}
 
@@ -906,7 +1172,17 @@ $("checkoutForm").addEventListener("submit",async e=>{
 
 });
 
-async function showOrders(){if(!requireLogin())return;hideSections();$("ordersSection").classList.remove("hidden");$("ordersSection").scrollIntoView({behavior:"smooth"});await loadOrders()}
+async function showOrders(){
+
+ if(!requireLogin())return;
+
+ hideSections();$("ordersSection").classList.remove("hidden");
+
+ $("ordersSection").scrollIntoView({behavior:"smooth"});
+
+ await loadOrders();
+
+}
 
 async function loadOrders(){
 
@@ -916,13 +1192,25 @@ async function loadOrders(){
 
  if(error){$("ordersContent").textContent=showDbError(error);return}
 
+ cachedOrders=data||[];
+
  if(!data?.length){$("ordersContent").textContent="এখনো কোনো অর্ডার নেই।";return}
 
  $("ordersContent").innerHTML=`<div class="table-wrap"><table><thead><tr><th>Order</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th><th>Note</th></tr></thead><tbody>${data.map(o=>`<tr><td>${esc(String(o.id).slice(0,8))}</td><td>${money(o.amount)}</td><td>${esc(o.payment_method)}<br>Txn: ${esc(o.transaction_id||"—")}<br>Sender: ${esc(o.payment_number||"—")}</td><td><span class="status ${esc(o.payment_status)}">${esc(o.payment_status)}</span><br><span class="status ${esc(o.order_status)}">${esc(o.order_status)}</span></td><td>${esc(new Date(o.created_at).toLocaleDateString())}</td><td>${esc(o.admin_note||"—")}</td></tr>`).join("")}</tbody></table></div>`;
 
 }
 
-async function showSellerOrders(){if(!requireLogin())return;hideSections();$("sellerSection").classList.remove("hidden");$("sellerSection").scrollIntoView({behavior:"smooth"});await loadSellerOrders()}
+async function showSellerOrders(){
+
+ if(!requireLogin())return;
+
+ hideSections();$("sellerSection").classList.remove("hidden");
+
+ $("sellerSection").scrollIntoView({behavior:"smooth"});
+
+ await loadSellerOrders();
+
+}
 
 async function loadSellerOrders(){
 
@@ -938,7 +1226,125 @@ async function loadSellerOrders(){
 
 }
 
-async function showAdmin(){if(!isAdmin()){alert("Admin access required.");return}hideSections();$("adminSection").classList.remove("hidden");$("adminSection").scrollIntoView({behavior:"smooth"});await loadAdmin()}
+async function showAdmin(){
+
+ if(!isAdmin()){alert("Admin access required.");return}
+
+ hideSections();$("adminSection").classList.remove("hidden");
+
+ $("adminSection").scrollIntoView({behavior:"smooth"});
+
+ await loadAdmin();
+
+}
+
+/* Trade statistics are computed from listings and orders.
+
+   Amounts here are activity totals, not verified profit or wallet balance. */
+
+function rankForAmount(amount){
+
+ const tiers=[
+
+  {name:"Bronze",min:0,next:1000,icon:"🥉"},
+
+  {name:"Silver",min:1000,next:2500,icon:"🥈"},
+
+  {name:"Gold",min:2500,next:5000,icon:"🥇"},
+
+  {name:"Platinum",min:5000,next:10000,icon:"💠"},
+
+  {name:"Diamond",min:10000,next:25000,icon:"💎"},
+
+  {name:"Heroic",min:25000,next:50000,icon:"🔥"},
+
+  {name:"Grand Master",min:50000,next:100000,icon:"👑"},
+
+  {name:"Elite Grand Master",min:100000,next:null,icon:"🏆"}
+
+ ];
+
+ let rank=tiers[0];
+
+ for(const tier of tiers){if(amount>=tier.min)rank=tier}
+
+ return {...rank,tiers};
+
+}
+
+function renderRankCard(tradeAmount){
+
+ const rank=rankForAmount(tradeAmount);
+
+ const progress=rank.next?Math.max(0,Math.min(100,((tradeAmount-rank.min)/(rank.next-rank.min))*100)):100;
+
+ const nextText=rank.next?`পরবর্তী র‍্যাঙ্ক ${money(rank.next)}-এ`:"সর্বোচ্চ র‍্যাঙ্ক অর্জিত";
+
+ return `<div class="feature-card"><h3>🏆 Trading Rank</h3><div class="rank-badge">${rank.icon} ${esc(rank.name)}</div><p class="small-note">মোট সম্পন্ন কেনাবেচার হিসাব: ${money(tradeAmount)}</p><div class="rank-progress"><span style="width:${progress}%"></span></div><div class="small-note">${nextText}</div><div class="small-note" style="margin-top:8px">৳৫,০০০ মোট ট্রেডে Platinum এবং ৳১,০০,০০০ মোট ট্রেডে Grand Master স্তর। র‍্যাঙ্ক কখনো Admin permission পরিবর্তন করে না।</div></div>`;
+
+}
+
+async function getMemberStats(userId){
+
+ const [listResult,orderResult]=await Promise.all([
+
+  sb.from("listings").select("id,seller_id,price,status,created_at").eq("seller_id",userId).limit(1000),
+
+  sb.from("orders").select("id,buyer_id,listing_id,amount,payment_status,order_status,created_at").or(`buyer_id.eq.${userId}`).limit(1000)
+
+ ]);
+
+ const [soldResult]=await Promise.all([
+
+  sb.from("orders").select("id,listing_id,amount,payment_status,order_status,created_at,listings!inner(seller_id)").eq("listings.seller_id",userId).limit(1000)
+
+ ]);
+
+ const ownListings=listResult.data||[];
+
+ const boughtOrders=orderResult.data||[];
+
+ const soldOrders=soldResult.data||[];
+
+ const approvedStatuses=new Set(["approved","completed","confirmed"]);
+
+ const completedBought=boughtOrders.filter(o=>o.order_status==="completed"&&approvedStatuses.has(o.payment_status));
+
+ const completedSold=soldOrders.filter(o=>o.order_status==="completed"&&approvedStatuses.has(o.payment_status));
+
+ const boughtAmount=completedBought.reduce((s,o)=>s+Number(o.amount||0),0);
+
+ const soldAmount=completedSold.reduce((s,o)=>s+Number(o.amount||0),0);
+
+ const spent=boughtAmount;
+
+ const earned=soldAmount;
+
+ const approvedTransactions=[...boughtOrders,...soldOrders].filter(o=>approvedStatuses.has(o.payment_status));
+
+ const uniqueApproved=new Set(approvedTransactions.map(o=>String(o.id)));
+
+ const totalTrade=spent+earned;
+
+ return {
+
+  listingError:listResult.error,orderError:orderResult.error,soldError:soldResult.error,
+
+  spent,earned,totalTrade,
+
+  boughtCount:completedBought.length,
+
+  soldCount:completedSold.length,
+
+  approvedCount:uniqueApproved.size,
+
+  listingCount:ownListings.length,
+
+  pendingCount:boughtOrders.filter(o=>o.payment_status==="pending").length
+
+ };
+
+}
 
 async function loadAdmin(){
 
@@ -952,7 +1358,7 @@ async function loadAdmin(){
 
   sb.from("listings").select("*").order("created_at",{ascending:false}).limit(100),
 
-  sb.from("profiles").select("id,full_name,role,is_premium,avatar_url").order("created_at",{ascending:false}).limit(100),
+  sb.from("profiles").select("id,full_name,role,is_premium,avatar_url,created_at").order("created_at",{ascending:false}).limit(100),
 
   sb.from("site_ads").select("*").order("sort_order",{ascending:true}).limit(100)
 
@@ -968,21 +1374,33 @@ async function loadAdmin(){
 
  html+=lr.data.length?`<div class="table-wrap"><table><thead><tr><th>Title</th><th>Price</th><th>Status</th><th>Premium</th><th>Action</th></tr></thead><tbody>${lr.data.map(x=>`<tr><td>${esc(x.title)}</td><td>${money(x.price)}</td><td>${esc(x.status)}</td><td><button class="btn secondary" onclick="toggleListingPremium('${esc(x.id)}',${!x.is_premium})">${x.is_premium?"Remove VIP":"Make VIP"}</button></td><td><button class="btn secondary" onclick="toggleListing('${esc(x.id)}','${x.status==="removed"?"available":"removed"}')">${x.status==="removed"?"Restore":"Remove"}</button></td></tr>`).join("")}</tbody></table></div>`:"<p>কোনো বিজ্ঞাপন নেই।";
 
- html+=`<h3>👑 Member & Admin Management</h3><p class="small-note">Role পরিবর্তনের অনুমতি Supabase RLS-এ সীমিত করুন।</p>`;
+ html+=`<h3>👑 Member & Admin Management</h3><p class="small-note">Role পরিবর্তনের অনুমতি Supabase RLS-এ সীমিত করুন। ট্রেডের পরিমাণ অনুযায়ী কাউকে স্বয়ংক্রিয় Admin করা হয় না।</p>`;
 
  html+=pr.data.length?`<div class="table-wrap"><table><thead><tr><th>Member</th><th>User ID</th><th>Role</th><th>Premium</th><th>Save</th></tr></thead><tbody>${pr.data.map(p=>`<tr><td>${esc(p.full_name||"Member")}</td><td>${esc(p.id.slice(0,8).toUpperCase())}</td><td><select class="field" id="role-${esc(p.id)}"><option value="user" ${p.role!=="admin"?"selected":""}>user</option><option value="admin" ${p.role==="admin"?"selected":""}>admin</option></select></td><td><input type="checkbox" id="vip-${esc(p.id)}" ${p.is_premium?"checked":""}></td><td><button class="btn" onclick="updateMember('${esc(p.id)}')">Save</button></td></tr>`).join("")}</tbody></table></div>`:"<p>কোনো সদস্য নেই।";
+
+ html+=`<h3>📊 Member Trading Summary</h3><p class="small-note">এখানে সম্পন্ন এবং পেমেন্ট-অনুমোদিত অর্ডারের হিসাব দেখানো হবে। একটি অর্ডার ক্রেতা ও বিক্রেতা উভয়ের হিসাবেই প্রতিফলিত হতে পারে।</p><button class="btn secondary" onclick="loadAdminMemberStats()">Member Stats রিফ্রেশ</button><div id="adminMemberStats" class="panel">Stats লোড করতে উপরের বাটনে চাপ দিন।</div>`;
 
  html+=`<h3>📺 Live Video Advertisements</h3><p class="small-note">ভিডিও URL Supabase Storage বা অন্য বিশ্বস্ত ভিডিও হোস্টিং থেকে দিন। MP4/WebM direct video URL ব্যবহার করুন।</p>
 
  <form id="adForm" class="form"><div><label>বিজ্ঞাপনের শিরোনাম</label><input id="adTitle" class="field" maxlength="120" required></div><div><label>ভিডিও URL</label><input id="adUrl" class="field" type="url" maxlength="1000" required placeholder="https://example.com/video.mp4"></div><div><label>ক্রম</label><input id="adOrder" class="field" type="number" min="0" value="0"></div><label><input id="adActive" type="checkbox" checked> বিজ্ঞাপন সক্রিয় রাখুন</label><button class="btn">ভিডিও বিজ্ঞাপন যোগ করুন</button></form><div id="adAdminMessage"></div>`;
 
- html+=ar.error?`<div class="message error">site_ads table পাওয়া যায়নি। নিচের SQL চালান: ${esc(showDbError(ar.error))}</div>`:`<h4>বর্তমান বিজ্ঞাপন</h4>${(ar.data||[]).map(a=>`<div class="notification-bar"><b>${esc(a.title)}</b><br><small>${esc(a.video_url)}</small><br><button class="btn secondary" onclick="toggleAd('${esc(a.id)}',${!a.is_active})">${a.is_active?"বন্ধ করুন":"চালু করুন"}</button> <button class="btn secondary" onclick="deleteAd('${esc(a.id)}')">Delete</button></div>`).join("")||"<p>এখনো বিজ্ঞাপন যোগ করা হয়নি।"}`;
+ html+=ar.error?`<div class="message error">site_ads table পাওয়া যায়নি। SQL সেটআপ যাচাই করুন: ${esc(showDbError(ar.error))}</div>`:`<h4>বর্তমান বিজ্ঞাপন</h4>${(ar.data||[]).map(a=>`<div class="notification-bar"><b>${esc(a.title)}</b><br><small>${esc(a.video_url)}</small><br><button class="btn secondary" onclick="toggleAd('${esc(a.id)}',${!a.is_active})">${a.is_active?"বন্ধ করুন":"চালু করুন"}</button> <button class="btn secondary" onclick="deleteAd('${esc(a.id)}')">Delete</button></div>`).join("")||"<p>এখনো বিজ্ঞাপন যোগ করা হয়নি।"}`;
 
  html+=`<h3>📢 Public Notice</h3><form id="noticeForm" class="form"><textarea id="noticeText" class="field" maxlength="1000" rows="3" placeholder="সবার জন্য নোটিশ"></textarea><button class="btn">নোটিশ প্রকাশ</button></form><div id="noticeAdminMessage"></div>`;
 
  $("adminContent").innerHTML=html;
 
- $("noticeForm").addEventListener("submit",async e=>{e.preventDefault();const message=$("noticeText").value.trim();if(!message)return;const {error}=await sb.from("site_notices").insert({message,is_active:true,created_by:currentUser.id});if(error){msg("noticeAdminMessage",showDbError(error));return}msg("noticeAdminMessage","নোটিশ প্রকাশ হয়েছে।",true);await loadPublicNotice()});
+ $("noticeForm").addEventListener("submit",async e=>{
+
+  e.preventDefault();const message=$("noticeText").value.trim();if(!message)return;
+
+  const {error}=await sb.from("site_notices").insert({message,is_active:true,created_by:currentUser.id});
+
+  if(error){msg("noticeAdminMessage",showDbError(error));return}
+
+  msg("noticeAdminMessage","নোটিশ প্রকাশ হয়েছে।",true);await loadPublicNotice();
+
+ });
 
  $("adForm").addEventListener("submit",async e=>{
 
@@ -1002,6 +1420,34 @@ async function loadAdmin(){
 
 }
 
+async function loadAdminMemberStats(){
+
+ if(!isAdmin())return;
+
+ const box=$("adminMemberStats");
+
+ if(!box)return;
+
+ box.textContent="সদস্যদের ট্রেডিং হিসাব লোড হচ্ছে...";
+
+ const {data:members,error}=await sb.from("profiles").select("id,full_name,email,role").order("created_at",{ascending:false}).limit(100);
+
+ if(error){box.textContent=showDbError(error);return}
+
+ const results=[];
+
+ for(const member of (members||[])){
+
+  const stats=await getMemberStats(member.id);
+
+  results.push({member,stats});
+
+ }
+
+ box.innerHTML=`<div class="table-wrap"><table><thead><tr><th>সদস্য</th><th>মোট খরচ</th><th>মোট আয়</th><th>কেনা</th><th>বিক্রি</th><th>অনুমোদিত ট্রানজ্যাকশন</th><th>র‍্যাঙ্ক</th></tr></thead><tbody>${results.map(({member,stats})=>`<tr><td>${esc(member.full_name||member.email||member.id.slice(0,8))}<br><small>${esc(member.id.slice(0,8).toUpperCase())}</small></td><td>${money(stats.spent)}</td><td>${money(stats.earned)}</td><td>${stats.boughtCount}</td><td>${stats.soldCount}</td><td>${stats.approvedCount}</td><td>${esc(rankForAmount(stats.totalTrade).name)}</td></tr>`).join("")}</tbody></table></div><p class="small-note">সর্বোচ্চ ১০০টি সদস্যের হিসাব দেখানো হচ্ছে।</p>`;
+
+}
+
 async function updateMember(id){
 
  if(!isAdmin())return;
@@ -1016,7 +1462,11 @@ async function updateMember(id){
 
  if(error){alert("আপডেট হয়নি: "+showDbError(error));return}
 
- alert("Member আপডেট হয়েছে।");if(id===currentUser.id){await loadProfile();updateUI()}await loadAdmin();
+ alert("Member আপডেট হয়েছে।");
+
+ if(id===currentUser.id){await loadProfile();updateUI()}
+
+ await loadAdmin();
 
 }
 
@@ -1030,7 +1480,9 @@ async function updateOrder(id){
 
  const {error}=await sb.from("orders").update({payment_status,order_status,admin_note}).eq("id",id);
 
- if(error){alert(showDbError(error));return}alert("অর্ডার আপডেট হয়েছে।");await loadAdmin();await loadPublicStats();
+ if(error){alert(showDbError(error));return}
+
+ alert("অর্ডার আপডেট হয়েছে।");await loadAdmin();await loadPublicStats();
 
 }
 
@@ -1040,7 +1492,9 @@ async function toggleListing(id,status){
 
  const {error}=await sb.from("listings").update({status}).eq("id",id);
 
- if(error){alert(showDbError(error));return}await loadAdmin();await loadListings();
+ if(error){alert(showDbError(error));return}
+
+ await loadAdmin();await loadListings();
 
 }
 
@@ -1050,7 +1504,9 @@ async function toggleListingPremium(id,value){
 
  const {error}=await sb.from("listings").update({is_premium:value}).eq("id",id);
 
- if(error){alert(showDbError(error));return}await loadAdmin();await loadListings();
+ if(error){alert(showDbError(error));return}
+
+ await loadAdmin();await loadListings();
 
 }
 
@@ -1060,7 +1516,9 @@ async function toggleAd(id,is_active){
 
  const {error}=await sb.from("site_ads").update({is_active}).eq("id",id);
 
- if(error){alert(showDbError(error));return}await loadAdmin();await loadSiteAds();
+ if(error){alert(showDbError(error));return}
+
+ await loadAdmin();await loadSiteAds();
 
 }
 
@@ -1070,33 +1528,77 @@ async function deleteAd(id){
 
  const {error}=await sb.from("site_ads").delete().eq("id",id);
 
- if(error){alert(showDbError(error));return}await loadAdmin();await loadSiteAds();
+ if(error){alert(showDbError(error));return}
+
+ await loadAdmin();await loadSiteAds();
 
 }
 
-function openProfile(){
+async function openProfile(){
 
  if(!requireLogin())return;
 
  const badge=isAdmin()?'<span class="admin-badge">👑 VERIFIED ADMIN</span>':(isPremium()?'<span class="vip-text">✦ PREMIUM</span>':"");
 
- $("profileSummary").innerHTML=`<img class="avatar" src="${esc(currentProfile?.avatar_url||"https://placehold.co/100x100/14251e/ffffff?text=User")}" alt="Profile"><h3>${esc(currentProfile?.full_name||currentUser.email||"Member")}</h3>${badge}<p>Email: ${esc(currentUser.email)}</p><p>Account ID: <b>${esc(shortId())}</b></p><p>Role: ${esc(currentProfile?.role||"user")}</p>`;
+ const {data:ownListings,error:listingError}=await sb.from("listings").select("id,price,status").eq("seller_id",currentUser.id).limit(1000);
 
- $("personalId").textContent=shortId();$("profileName").value=currentProfile?.full_name||"";$("profileMessage").textContent="";openModal("profileModal");
+ const {data:buyOrders,error:buyError}=await sb.from("orders").select("id,amount,payment_status,order_status,created_at").eq("buyer_id",currentUser.id).limit(1000);
+
+ const {data:sellOrders,error:sellError}=await sb.from("orders").select("id,amount,payment_status,order_status,created_at,listings!inner(seller_id)").eq("listings.seller_id",currentUser.id).limit(1000);
+
+ const bought=(buyOrders||[]).filter(o=>o.order_status==="completed"&&["approved","completed","confirmed"].includes(o.payment_status));
+
+ const sold=(sellOrders||[]).filter(o=>o.order_status==="completed"&&["approved","completed","confirmed"].includes(o.payment_status));
+
+ const spent=bought.reduce((s,o)=>s+Number(o.amount||0),0);
+
+ const earned=sold.reduce((s,o)=>s+Number(o.amount||0),0);
+
+ const totalTrade=spent+earned;
+
+ const approved=new Set([...(buyOrders||[]),...(sellOrders||[])].filter(o=>["approved","completed","confirmed"].includes(o.payment_status)).map(o=>String(o.id)));
+
+ const rank=rankForAmount(totalTrade);
+
+ const statError=listingError||buyError||sellError;
+
+ const statsHtml=statError?`<div class="message error">অ্যাকাউন্ট স্ট্যাটস লোড করা যায়নি: ${esc(showDbError(statError))}</div>`:`<div class="stat-grid"><div class="stat-box"><span>💸 মোট খরচ (সম্পন্ন কেনা)</span><strong>${money(spent)}</strong></div><div class="stat-box"><span>💰 মোট আয় (সম্পন্ন বিক্রি)</span><strong>${money(earned)}</strong></div><div class="stat-box"><span>🛒 সম্পন্ন কেনা</span><strong>${bought.length} টি</strong></div><div class="stat-box"><span>🏷️ সম্পন্ন বিক্রি</span><strong>${sold.length} টি</strong></div><div class="stat-box"><span>📦 মোট বিজ্ঞাপন</span><strong>${(ownListings||[]).length} টি</strong></div><div class="stat-box"><span>✅ অনুমোদিত ইউনিক ট্রানজ্যাকশন</span><strong>${approved.size} টি</strong></div></div>`;
+
+ $("profileSummary").innerHTML=`<div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><img class="avatar" src="${esc(currentProfile?.avatar_url||"https://placehold.co/100x100/14251e/ffffff?text=User")}" alt="Profile"><div><h3>${esc(currentProfile?.full_name||currentUser.email||"Member")}</h3>${badge}<p class="small-note">${esc(currentUser.email||"")}</p></div></div><div class="feature-card"><h3>👤 Account Information</h3><p>Email: ${esc(currentUser.email||"—")}</p><p>Account ID: <b>${esc(shortId())}</b></p><p>Role: <b>${esc(currentProfile?.role||"user")}</b></p><p>Account Status: <b>${esc(currentProfile?.status||"active")}</b></p></div><div class="feature-card"><h3>📊 আমার কেনাবেচার হিসাব</h3>${statsHtml}</div>${renderRankCard(totalTrade)}<div class="small-note">হিসাব কেবল database-এ থাকা সম্পন্ন ও পেমেন্ট-অনুমোদিত অর্ডার থেকে গণনা করা হয়। Database schema বা RLS অনুমতি না দিলে কিছু তথ্য লোড নাও হতে পারে।</div>`;
+
+ $("personalId").textContent=shortId();
+
+ $("profileName").value=currentProfile?.full_name||"";
+
+ $("profileMessage").textContent="";
+
+ openModal("profileModal");
 
 }
 
 $("profileForm").addEventListener("submit",async e=>{
 
- e.preventDefault();if(!requireLogin())return;
+ e.preventDefault();
+
+ if(!requireLogin())return;
 
  try{
 
-  const name=$("profileName").value.trim();const file=$("avatarFile").files?.[0];const update={};
+  const name=$("profileName").value.trim();
+
+  const file=$("avatarFile").files?.[0];
+
+  const update={};
 
   if(name)update.full_name=name;
 
-  if(file){if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>3*1024*1024)throw new Error("JPEG, PNG বা WEBP ছবি সর্বোচ্চ ৩ MB হতে হবে।");update.avatar_url=await uploadFile(file,"avatars")}
+  if(file){
+
+   if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>3*1024*1024)throw new Error("JPEG, PNG বা WEBP ছবি সর্বোচ্চ ৩ MB হতে হবে।");
+
+   update.avatar_url=await uploadFile(file,"avatars");
+
+  }
 
   if(!Object.keys(update).length)throw new Error("নতুন নাম বা ছবি বেছে নিন।");
 
@@ -1104,7 +1606,7 @@ $("profileForm").addEventListener("submit",async e=>{
 
   if(error)throw new Error(showDbError(error));
 
-  await loadProfile();updateUI();openProfile();msg("profileMessage","প্রোফাইল আপডেট হয়েছে।",true);
+  await loadProfile();updateUI();await openProfile();msg("profileMessage","প্রোফাইল আপডেট হয়েছে।",true);
 
  }catch(error){msg("profileMessage",showDbError(error))}
 
@@ -1116,11 +1618,25 @@ async function loadNotifications(){
 
  const {data,error}=await sb.from("notifications").select("*").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
 
- const existing=document.getElementById("notificationButton");if(existing)existing.remove();
+ const existing=document.getElementById("notificationButton");
 
- const button=document.createElement("button");button.id="notificationButton";button.className="btn secondary";button.textContent="🔔 "+(error?"Notifications":`Notifications (${data?.length||0})`);
+ if(existing)existing.remove();
 
- button.onclick=()=>{openModal("notificationsModal");if(error){$("notificationsContent").textContent="Notification table সেটআপ করা হয়নি: "+showDbError(error);return}$("notificationsContent").innerHTML=data?.length?data.map(n=>`<div class="notification-bar"><b>${esc(n.title||"Notification")}</b><br>${esc(n.message||"")}<br><small>${esc(n.created_at?new Date(n.created_at).toLocaleString():"")}</small></div>`).join(""):"কোনো নোটিফিকেশন নেই।"};
+ const button=document.createElement("button");
+
+ button.id="notificationButton";button.className="btn secondary";
+
+ button.textContent="🔔 "+(error?"Notifications":`Notifications (${data?.length||0})`);
+
+ button.onclick=()=>{
+
+  openModal("notificationsModal");
+
+  if(error){$("notificationsContent").textContent="Notification table সেটআপ করা হয়নি: "+showDbError(error);return}
+
+  $("notificationsContent").innerHTML=data?.length?data.map(n=>`<div class="notification-bar"><b>${esc(n.title||"Notification")}</b><br>${esc(n.message||"")}<br><small>${esc(n.created_at?new Date(n.created_at).toLocaleString():"")}</small></div>`).join(""):"কোনো নোটিফিকেশন নেই।";
+
+ };
 
  $("userLabel").parentElement.appendChild(button);
 
