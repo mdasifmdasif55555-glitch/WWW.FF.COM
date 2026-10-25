@@ -8,79 +8,79 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="theme-color" content="#090b10">
+<meta name="theme-color" content="#08110e">
 
-<title>ANSU YT BUY SELL</title>
+<title>ANSU ELITE | Free Fire Marketplace</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
-:root{--bg:#090b10;--card:#151b27;--line:#30394b;--red:#ff3948;--orange:#ff8b27;--text:#f5f6fa;--muted:#a4aec0;--green:#19c98b}
+:root{
+
+ --bg:#07100d;--card:#101d18;--card2:#14251e;--line:#294536;
+
+ --gold:#e8c879;--gold2:#fff0b8;--text:#f5f7f1;--muted:#a4b5aa;
+
+ --green:#1bc78b;--red:#ff6574;--radius:17px
+
+}
 
 *{box-sizing:border-box}
 
-html{scroll-behavior:smooth;scroll-padding-top:90px}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
 
-body{margin:0;color:var(--text);font-family:Arial,sans-serif;background:radial-gradient(ellipse at 10% 10%,#ff39481a,transparent 35%),radial-gradient(ellipse at 90% 35%,#ff8b2718,transparent 35%),var(--bg);background-size:150% 150%;animation:bgflow 16s ease-in-out infinite alternate;overflow-x:hidden}
-
-@keyframes bgflow{to{background-position:100% 100%}}
-
-@keyframes glow{to{box-shadow:0 0 24px #ff8b2740}}
-
-@keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-
-@keyframes shine{to{background-position:300% center}}
-
-@keyframes rotate{to{transform:rotate(360deg)}}
+body{margin:0;background:radial-gradient(ellipse at 10% 0%,#c8a85b15,transparent 35%),radial-gradient(ellipse at 90% 25%,#1bc78b0d,transparent 35%),var(--bg);color:var(--text);font-family:Inter,"Noto Sans Bengali",sans-serif;overflow-x:hidden}
 
 button,input,textarea,select{font:inherit}
 
 button{cursor:pointer}
 
-button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 
-.container{width:min(1100px,92%);margin:auto}
+.container{width:min(1160px,92%);margin:auto}
 
-header{position:sticky;top:0;z-index:10;background:#10141eeF;backdrop-filter:blur(16px);border-bottom:1px solid #ff8b2738;padding:13px 0}
+header{position:sticky;top:0;z-index:20;background:#08120eeb;backdrop-filter:blur(20px);border-bottom:1px solid #e8c87932;padding:13px 0}
 
 .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
-.brand{font-size:20px;font-weight:900;color:var(--orange);text-shadow:0 0 14px #ff8b2740}
+.brand{font-size:19px;font-weight:900;letter-spacing:.7px;color:var(--gold)}
 
 .brand span{color:white}
 
 .actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
 
-.btn{border:1px solid transparent;border-radius:9px;padding:10px 13px;background:linear-gradient(120deg,var(--red),var(--orange),var(--red));background-size:220% 220%;animation:gradient 6s ease infinite;color:white;font-weight:bold;transition:.25s}
+.btn{border:1px solid #e8c87955;border-radius:10px;padding:10px 14px;background:linear-gradient(135deg,#f4dc94,#b68a3d);color:#172017;font-weight:800;transition:.2s}
 
-@keyframes gradient{50%{background-position:100% 50%}}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px #d3b25c26}
 
-.btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px #ff8b2735}
+.btn.secondary{background:#17251e;border-color:#365340;color:var(--text)}
 
-.btn.secondary{background:#202938;border-color:#39445a;animation:none}
-
-.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
 
 .hidden{display:none!important}
 
-.hero{padding:46px 0 25px;animation:enter .7s}
+.hero{padding:48px 0 25px}
 
-.hero h1{font-size:clamp(34px,6vw,60px);line-height:1.1;margin:10px 0}
+.hero h1{font-size:clamp(31px,6vw,61px);line-height:1.12;letter-spacing:-1.7px;margin:10px 0}
 
-.hero h1 span{background:linear-gradient(90deg,#ff8b27,#ffe0a0,#ff3948,#ff8b27);background-size:300%;animation:shine 6s linear infinite;-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 span{background:linear-gradient(100deg,#fff1b5,#c69b49,#fff0b8);-webkit-background-clip:text;background-clip:text;color:transparent}
 
-.hero p{color:var(--muted);line-height:1.8;max-width:680px}
+.hero p{color:var(--muted);line-height:1.9;max-width:730px}
 
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0 30px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 30px}
 
-.stat,.panel{position:relative;overflow:hidden;background:linear-gradient(145deg,#19202fdd,#101520f2);border:1px solid #788baa35;border-radius:14px;padding:16px;transition:.25s}
+.stat,.panel{background:linear-gradient(145deg,#14231c,#0c1712);border:1px solid #b99a5030;border-radius:var(--radius);padding:17px;transition:.2s}
 
-.stat:hover,.panel:hover{border-color:#ff8b2770;transform:translateY(-2px)}
+.stat:hover,.panel:hover{border-color:#e8c87980}
 
-.stat strong{display:block;font-size:24px;color:var(--orange);margin-bottom:5px}
+.stat strong{display:block;font-size:25px;color:var(--gold);margin-bottom:5px}
 
 .stat span{color:var(--muted);font-size:12px}
 
-section{padding:20px 0 32px;animation:enter .5s}
+section{padding:20px 0 32px}
 
 .section-title{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px}
 
@@ -88,27 +88,27 @@ section{padding:20px 0 32px;animation:enter .5s}
 
 .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
 
-.field{width:100%;padding:12px;background:#0e131c;color:white;border:1px solid var(--line);border-radius:9px;outline:none}
+.field{width:100%;padding:12px;background:#0b1711;color:white;border:1px solid var(--line);border-radius:10px;outline:none}
 
-.field:focus{border-color:var(--orange);box-shadow:0 0 0 3px #ff8b2715}
+.field:focus{border-color:var(--gold)}
 
 .filters .field{flex:1;min-width:145px}
 
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
 
-.listing{overflow:hidden;background:linear-gradient(145deg,#19202f,#0f141e);border:1px solid #788baa35;border-radius:15px;animation:enter .45s;transition:.25s}
+.listing{overflow:hidden;background:linear-gradient(145deg,#14231c,#0b1510);border:1px solid #b99a5030;border-radius:var(--radius);transition:.2s}
 
-.listing:hover{transform:translateY(-5px);border-color:#ff8b2780;box-shadow:0 12px 30px #0005}
+.listing:hover{transform:translateY(-4px);border-color:#e8c87990;box-shadow:0 15px 35px #0005}
 
-.cover{height:190px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#50141f,#161d2b,#2d1a18);position:relative;overflow:hidden}
+.cover{height:190px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#253a2d,#151d17,#493b1d);position:relative;overflow:hidden}
 
 .cover img,.cover video{width:100%;height:100%;object-fit:cover}
 
-.level,.badge{position:absolute;right:9px;bottom:9px;background:#000c;border:1px solid #ff8b2760;padding:6px 8px;border-radius:7px;font-size:12px}
+.level,.badge{position:absolute;right:9px;bottom:9px;background:#07100de8;border:1px solid #e8c87970;padding:6px 8px;border-radius:7px;font-size:11px}
 
-.badge{left:9px;right:auto;bottom:9px;color:#ffe1a0}
+.badge{left:9px;right:auto;bottom:9px;color:var(--gold2);font-weight:900}
 
-.listing-body{padding:14px}
+.listing-body{padding:15px}
 
 .listing h3{margin:0 0 10px;overflow-wrap:anywhere}
 
@@ -116,33 +116,33 @@ section{padding:20px 0 32px;animation:enter .5s}
 
 .price-row{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding-top:12px;flex-wrap:wrap}
 
-.price{font-size:22px;color:var(--orange);font-weight:900}
+.price{font-size:22px;color:var(--gold);font-weight:900}
 
-.notice{background:#2c2115;border:1px solid #74522a;color:#f5d5a3;border-radius:11px;padding:14px;font-size:13px;line-height:1.7;margin:18px 0}
+.notice{background:#241e10;border:1px solid #8c7135;color:#f5dfaa;border-radius:11px;padding:14px;font-size:13px;line-height:1.8;margin:18px 0}
 
-.modal{display:none;position:fixed;inset:0;z-index:30;background:#000c;backdrop-filter:blur(7px);padding:14px;overflow:auto;align-items:center;justify-content:center}
+.modal{display:none;position:fixed;inset:0;z-index:40;background:#000d;backdrop-filter:blur(8px);padding:14px;overflow:auto;align-items:center;justify-content:center}
 
 .modal.open{display:flex}
 
-.modal-box{width:min(570px,100%);max-height:95vh;overflow:auto;background:linear-gradient(145deg,#1a2130,#111722);border:1px solid #ff8b2745;border-radius:16px;padding:19px;animation:enter .25s}
+.modal-box{width:min(600px,100%);max-height:95vh;overflow:auto;background:linear-gradient(145deg,#17261e,#0b1510);border:1px solid #e8c87955;border-radius:18px;padding:19px}
 
 .modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
 
 .modal-head h2{margin:0}
 
-.close{background:#30394b;color:white;border:0;border-radius:8px;padding:8px 12px}
+.close{background:#24372b;color:white;border:0;border-radius:8px;padding:8px 12px}
 
 .form{display:grid;gap:12px}
 
-.form label{display:block;color:#c5ccda;font-size:13px;margin-bottom:6px}
+.form label{display:block;color:#d3dfd5;font-size:13px;margin-bottom:6px}
 
 .form textarea{resize:vertical}
 
-.message{padding:12px;background:#202b3b;border:1px solid #788baa35;border-radius:9px;margin-top:12px;overflow-wrap:anywhere;font-size:13px;line-height:1.6;white-space:pre-wrap}
+.message{padding:12px;background:#17271e;border:1px solid #365340;border-radius:9px;margin-top:12px;overflow-wrap:anywhere;font-size:13px;line-height:1.7;white-space:pre-wrap}
 
-.message.error{color:#ffadb4}.message.success{color:#8ef0bf}
+.message.error{color:#ffb4bc}.message.success{color:#9af2c8}
 
-.small-note{font-size:12px;color:var(--muted);line-height:1.7}
+.small-note{font-size:12px;color:var(--muted);line-height:1.8}
 
 .table-wrap{overflow-x:auto}
 
@@ -150,9 +150,9 @@ table{width:100%;border-collapse:collapse;font-size:12px}
 
 th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
 
-th{color:var(--orange)}
+th{color:var(--gold)}
 
-.status{display:inline-block;padding:4px 7px;border-radius:6px;background:#252e3d;font-size:11px}
+.status{display:inline-block;padding:4px 7px;border-radius:6px;background:#24372b;font-size:11px}
 
 .status.approved,.status.completed{color:#8ef0bf}
 
@@ -168,25 +168,39 @@ th{color:var(--orange)}
 
 .preview img,.preview video{display:block;width:100%;height:90px;object-fit:cover}
 
-.preview button{position:absolute;top:4px;right:4px;border:0;border-radius:50%;background:var(--red);color:white;width:25px;height:25px}
+.preview button{position:absolute;top:4px;right:4px;border:0;border-radius:50%;background:#b62c3b;color:white;width:25px;height:25px}
 
-.avatar{width:65px;height:65px;object-fit:cover;border-radius:50%;border:2px solid var(--orange);background:#202938}
+.avatar{width:65px;height:65px;object-fit:cover;border-radius:50%;border:2px solid var(--gold);background:#202938}
 
-.avatar-small{width:30px;height:30px;object-fit:cover;border-radius:50%;vertical-align:middle;border:1px solid var(--orange)}
+.avatar-small{width:30px;height:30px;object-fit:cover;border-radius:50%;vertical-align:middle;border:1px solid var(--gold)}
 
-.vip-card{border:1px solid #e9bd56;background:linear-gradient(135deg,#352712,#181b25);box-shadow:0 0 18px #e9bd5615}
+.vip-card{border:1px solid var(--gold);background:linear-gradient(135deg,#352b14,#121b15);box-shadow:0 0 20px #e8c87915}
 
-.vip-text{color:#ffdc7b}
+.vip-text{color:var(--gold2);font-weight:800}
 
-.notification-bar{background:#1b2535;border:1px solid #ff8b2750;border-radius:10px;padding:12px;margin:12px 0;line-height:1.6;overflow-wrap:anywhere}
+.admin-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(120deg,#fff0b8,#b88b3c);color:#1a1a12;border:1px solid #fff0b8;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.5px}
 
-footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(--muted);font-size:12px}
+.notification-bar{background:#17271e;border:1px solid #e8c87950;border-radius:10px;padding:12px;margin:12px 0;line-height:1.7;overflow-wrap:anywhere}
 
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ad-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 
-@media(max-width:520px){.grid{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:19px}.brand{font-size:16px}.hero{padding-top:30px}.actions .btn{padding:8px 9px;font-size:12px}.modal-box{padding:14px}}
+.ad-card{position:relative;overflow:hidden;background:#101d18;border:1px solid #b99a5040;border-radius:14px}
 
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+.ad-card video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#000}
+
+.ad-card .ad-caption{padding:10px;color:var(--gold2);font-size:12px;font-weight:700}
+
+.ad-label{position:absolute;top:9px;left:9px;background:#000b;border:1px solid #e8c87980;border-radius:6px;padding:5px 8px;font-size:10px;color:var(--gold2)}
+
+.owner-panel{border:1px solid var(--gold);background:linear-gradient(120deg,#292512,#102017)}
+
+footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(--muted);font-size:12px}
+
+@media(max-width:800px){.grid,.ad-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+@media(max-width:520px){.grid,.ad-grid{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:19px}.brand{font-size:15px}.hero{padding-top:30px}.actions .btn{padding:8px 9px;font-size:11px}.modal-box{padding:14px}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
 </style>
 
@@ -198,13 +212,13 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <div class="container nav">
 
-<div class="brand">🔥 ANSU <span>YT BUY SELL</span></div>
+<div class="brand">✦ ANSU <span>ELITE MARKET</span></div>
 
 <div class="actions">
 
 <button class="btn secondary" id="languageBtn" onclick="toggleLanguage()">English</button>
 
-<span id="userLabel" style="font-size:12px;color:#a4aec0">লগইন করা নেই</span>
+<span id="userLabel" style="font-size:12px;color:#a4b5aa">লগইন করা নেই</span>
 
 <button class="btn secondary" id="authBtn" onclick="openModal('authModal')">Login / Register</button>
 
@@ -214,7 +228,7 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <button class="btn secondary hidden" id="sellerBtn" onclick="showSellerOrders()">Seller Orders</button>
 
-<button class="btn secondary hidden" id="adminBtn" onclick="showAdmin()">Admin</button>
+<button class="btn secondary hidden" id="adminBtn" onclick="showAdmin()">👑 Admin</button>
 
 <button class="btn hidden" id="logoutBtn" onclick="logout()">Logout</button>
 
@@ -230,13 +244,15 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <div class="hero">
 
+<p style="color:var(--gold);font-weight:800;letter-spacing:3px;font-size:11px">PREMIUM GAMING MARKETPLACE</p>
+
 <h1>FREE FIRE<br><span>BUY & SELL MARKETPLACE</span></h1>
 
-<p>ANSU YT BUY SELL-এ স্বাগতম। অ্যাকাউন্ট কিনতে, বিক্রি করতে এবং নিজের প্রোফাইল পরিচালনা করতে লগইন করো।</p>
+<p>ANSU Elite Marketplace-এ স্বাগতম। Free Fire অ্যাকাউন্ট কিনুন, বিক্রি করুন এবং আপনার লিস্টিং পরিচালনা করুন। নিরাপদ লেনদেনের জন্য অর্ডারের তথ্য যাচাই করুন।</p>
 
-<button class="btn" onclick="openSell()">+ অ্যাকাউন্ট বিক্রি</button>
+<button class="btn" onclick="openSell()">＋ অ্যাকাউন্ট বিক্রি</button>
 
-<button class="btn secondary" onclick="$('market').scrollIntoView({behavior:'smooth'})">অ্যাকাউন্ট দেখো</button>
+<button class="btn secondary" onclick="$('market').scrollIntoView({behavior:'smooth'})">অ্যাকাউন্ট দেখুন</button>
 
 </div>
 
@@ -250,13 +266,21 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 </div>
 
+<section id="adSection" class="hidden">
+
+<div class="section-title"><div><h2>▶ Featured Video Ads</h2><p class="small-note">ভিডিও বিজ্ঞাপন স্বয়ংক্রিয়ভাবে লুপে চলবে</p></div></div>
+
+<div id="adGrid" class="ad-grid"></div>
+
+</section>
+
 <section id="market">
 
-<div class="section-title"><div><h2>🔥 উপলভ্য অ্যাকাউন্ট</h2><p class="small-note">Supabase থেকে লাইভ বিজ্ঞাপন</p></div><button class="btn secondary" onclick="loadListings()">রিফ্রেশ</button></div>
+<div class="section-title"><div><h2>✦ উপলভ্য অ্যাকাউন্ট</h2><p class="small-note">Supabase থেকে লাইভ বিজ্ঞাপন</p></div><button class="btn secondary" onclick="loadListings()">রিফ্রেশ</button></div>
 
 <div class="filters">
 
-<input class="field" id="search" placeholder="অ্যাকাউন্ট খুঁজো..." oninput="renderListings()">
+<input class="field" id="search" placeholder="অ্যাকাউন্ট খুঁজুন..." oninput="renderListings()">
 
 <select class="field" id="sort" onchange="renderListings()"><option value="new">নতুন আগে</option><option value="low">দাম: কম থেকে বেশি</option><option value="high">দাম: বেশি থেকে কম</option></select>
 
@@ -266,7 +290,7 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <div class="grid" id="listingGrid"><div class="panel">অ্যাকাউন্ট লোড হচ্ছে...</div></div>
 
-<div class="notice">⚠️ টাকা পাঠানোর আগে অর্ডারের তথ্য ভালোভাবে যাচাই করো। Admin যাচাই না করা পর্যন্ত Payment Pending থাকবে। কখনো Password, OTP বা Recovery Code শেয়ার করবে না।</div>
+<div class="notice">⚠️ টাকা পাঠানোর আগে অর্ডারের তথ্য যাচাই করুন। Admin যাচাই না করা পর্যন্ত পেমেন্ট Pending থাকবে। কখনো Password, OTP বা Recovery Code শেয়ার করবেন না।</div>
 
 </section>
 
@@ -274,11 +298,11 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <section id="sellerSection" class="hidden"><div class="section-title"><h2>🛍️ বিক্রেতার অর্ডার</h2><button class="btn secondary" onclick="loadSellerOrders()">রিফ্রেশ</button></div><div class="panel" id="sellerContent"></div></section>
 
-<section id="adminSection" class="hidden"><div class="section-title"><h2>👑 VIP Admin Panel</h2><button class="btn secondary" onclick="loadAdmin()">রিফ্রেশ</button></div><div class="panel" id="adminContent"></div></section>
+<section id="adminSection" class="hidden"><div class="section-title"><h2>👑 Elite Admin Console</h2><button class="btn secondary" onclick="loadAdmin()">রিফ্রেশ</button></div><div class="panel" id="adminContent"></div></section>
 
 </main>
 
-<footer><div class="container">© 2026 ANSU YT BUY SELL · Community Marketplace</div></footer>
+<footer><div class="container">© 2026 ANSU ELITE MARKETPLACE · Premium Gaming Community</div></footer>
 
 <div class="modal" id="authModal"><div class="modal-box">
 
@@ -286,7 +310,7 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <form class="form" id="loginForm">
 
-<div><label>পুরো নাম (রেজিস্ট্রেশনের সময়)</label><input class="field" id="fullName" maxlength="80" placeholder="তোমার নাম"></div>
+<div><label>পুরো নাম (রেজিস্ট্রেশনের সময়)</label><input class="field" id="fullName" maxlength="80" placeholder="আপনার নাম"></div>
 
 <div><label>ইমেইল</label><input class="field" id="email" type="email" required autocomplete="email"></div>
 
@@ -296,7 +320,7 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <button class="btn secondary" type="button" onclick="registerUser()">অ্যাকাউন্ট তৈরি / রেজিস্টার</button>
 
-<button class="btn secondary" type="button" onclick="resetPassword()">পাসওয়ার্ড ভুলে গেছ?</button>
+<button class="btn secondary" type="button" onclick="resetPassword()">পাসওয়ার্ড ভুলে গেছেন?</button>
 
 </form><div id="authMessage"></div>
 
@@ -312,13 +336,13 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <div><label>প্রোফাইল ছবি</label><input class="field" id="avatarFile" type="file" accept="image/jpeg,image/png,image/webp"></div>
 
-<div><label>নতুন নাম</label><input class="field" id="profileName" maxlength="80" placeholder="তোমার নাম"></div>
+<div><label>নতুন নাম</label><input class="field" id="profileName" maxlength="80" placeholder="আপনার নাম"></div>
 
 <button class="btn" type="submit">প্রোফাইল আপডেট</button>
 
 </form>
 
-<div class="notice">VIP/Premium সুবিধা Admin অনুমোদন করলে চালু হবে। নিজের অ্যাকাউন্ট ID: <b id="personalId">—</b></div>
+<div class="notice">VIP/Premium সুবিধা Admin অনুমোদন করলে চালু হবে। Account ID: <b id="personalId">—</b></div>
 
 <div id="profileMessage"></div>
 
@@ -342,13 +366,13 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <div><label>বিবরণ</label><textarea class="field" id="sellDescription" rows="3" maxlength="1000" placeholder="Skin, Bundle, Emote ইত্যাদি"></textarea></div>
 
-<div><label>📸 একাধিক ছবি (সর্বোচ্চ ৬টি)</label><input class="field" id="sellImages" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple><div class="small-note">প্রতি ছবি সর্বোচ্চ ৫ MB।</div><div id="imagePreview" class="preview-grid"></div></div>
+<div><label>📸 একাধিক ছবি (সর্বোচ্চ ৬টি)</label><input class="field" id="sellImages" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple><div class="small-note">প্রতি ছবি সর্বোচ্চ ১০ MB।</div><div id="imagePreview" class="preview-grid"></div></div>
 
-<div><label>🎬 অ্যাকাউন্টের ভিডিও (ঐচ্ছিক, সর্বোচ্চ ১টি)</label><input class="field" id="sellVideo" type="file" accept="video/mp4,video/webm,video/quicktime"><div class="small-note">সর্বোচ্চ ভিডিও সাইজ ২৫ MB।</div><div id="videoPreview" class="preview-grid"></div></div>
+<div><label>🎬 অ্যাকাউন্টের ভিডিও (ঐচ্ছিক, সর্বোচ্চ ১টি)</label><input class="field" id="sellVideo" type="file" accept="video/mp4,video/webm,video/quicktime"><div class="small-note">ক্লায়েন্ট সাইডে সর্বোচ্চ ৫০ MB। Supabase Storage-এর ফাইল সাইজ সীমাও ৫০ MB বা তার বেশি হতে হবে।</div><div id="videoPreview" class="preview-grid"></div></div>
 
 <div><label>অথবা একটি পুরোনো Image URL (ঐচ্ছিক)</label><input class="field" id="sellImage" type="url" maxlength="500" placeholder="https://example.com/image.jpg"></div>
 
-<button class="btn" id="publishButton" type="submit">বিজ্ঞাপন প্রকাশ করো</button>
+<button class="btn" id="publishButton" type="submit">বিজ্ঞাপন প্রকাশ করুন</button>
 
 </form><div id="sellMessage"></div>
 
@@ -356,9 +380,7 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <div class="modal" id="detailsModal"><div class="modal-box">
 
-<div class="modal-head"><h2 id="detailsTitle">অ্যাকাউন্টের বিবরণ</h2><button class="close" onclick="closeModal('detailsModal')">✕</button></div>
-
-<div id="detailsContent"></div>
+<div class="modal-head"><h2 id="detailsTitle">অ্যাকাউন্টের বিবরণ</h2><button class="close" onclick="closeModal('detailsModal')">✕</button></div><div id="detailsContent"></div>
 
 </div></div>
 
@@ -370,7 +392,7 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <form class="form" id="checkoutForm">
 
-<div><label>তোমার নাম</label><input class="field" id="buyerName" maxlength="80" required></div>
+<div><label>আপনার নাম</label><input class="field" id="buyerName" maxlength="80" required></div>
 
 <div><label>যোগাযোগের ইমেইল বা ফোন</label><input class="field" id="buyerContact" maxlength="120" required></div>
 
@@ -380,11 +402,11 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 <div><label>Transaction ID</label><input class="field" id="transactionId" maxlength="120" required></div>
 
-<div><label>যে নম্বর থেকে টাকা পাঠিয়েছ</label><input class="field" id="paymentNumber" maxlength="30" required placeholder="01XXXXXXXXX"></div>
+<div><label>যে নম্বর থেকে টাকা পাঠিয়েছেন</label><input class="field" id="paymentNumber" maxlength="30" required placeholder="01XXXXXXXXX"></div>
 
-<p class="small-note">Admin যাচাই না করা পর্যন্ত পেমেন্ট Pending থাকবে। টাকা পাঠানোর আগে নম্বরটি নিশ্চিত করে নাও।</p>
+<p class="small-note">Admin যাচাই না করা পর্যন্ত পেমেন্ট Pending থাকবে। টাকা পাঠানোর আগে নম্বরটি নিশ্চিত করুন।</p>
 
-<button class="btn" type="submit">অর্ডার জমা দাও</button>
+<button class="btn" type="submit">অর্ডার জমা দিন</button>
 
 </form><div id="checkoutMessage"></div>
 
@@ -406,17 +428,23 @@ footer{margin-top:25px;border-top:1px solid #ff8b2730;padding:24px 0;color:var(-
 
 const SUPABASE_URL="https://qpcmfmhrigfdmvdtezli.supabase.co";
 
-const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInJlZiI6InFwY21mbWhyaWdmZG12ZHRlemxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3Njc5OTUsImV4cCI6MjEwODM0Mzk5NX0.0ToYY8IHVByxRZksJzd-O4_ztxVivKrgSYHU6Uzz0Y4";
+/* এখানে নিজের Supabase anon/publishable key বসাও */
 
-const STORAGE_BUCKET = "listing-images";
+const SUPABASE_KEY="PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
 
-const MAX_IMAGES=6,MAX_IMAGE_SIZE=5*1024*1024,MAX_VIDEO_SIZE=25*1024*1024;
+const STORAGE_BUCKET="listing-images";
+
+const MAX_IMAGES=6;
+
+const MAX_IMAGE_SIZE=10*1024*1024;
+
+const MAX_VIDEO_SIZE=50*1024*1024;
 
 const PAYMENT_NUMBERS={bkash:"8801726270731",nagad:"8801344875536"};
 
-const configured=SUPABASE_URL.startsWith("https://")&&!SUPABASE_KEY.includes("YOUR_SUPABASE");
+const configured=SUPABASE_URL.startsWith("https://")&&SUPABASE_KEY!=="PASTE_YOUR_SUPABASE_ANON_KEY_HERE"&&SUPABASE_KEY.trim().length>20;
 
-const sb=configured?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
+const sb=configured&&window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
 
 const $=id=>document.getElementById(id);
 
@@ -426,17 +454,19 @@ let selectedFiles=[],previewUrls=[],selectedVideo=null,videoPreviewUrl=null;
 
 let currentLanguage=localStorage.getItem("ansu_language")||"bn";
 
-const tr=(bn,en)=>currentLanguage==="bn"?bn:en;
+let siteAds=[];
 
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
 function money(v){return "৳"+Number(v||0).toLocaleString("en-BD")}
 
-function msg(id,text,ok=false){const e=$(id);e.className="message "+(ok?"success":"error");e.textContent=text}
+function msg(id,text,ok=false){const e=$(id);if(!e)return;e.className="message "+(ok?"success":"error");e.textContent=text}
 
-function openModal(id){$(id).classList.add("open")}
+function openModal(id){$(id)?.classList.add("open")}
 
-function closeModal(id){$(id).classList.remove("open")}
+function closeModal(id){$(id)?.classList.remove("open")}
+
+function tr(bn,en){return currentLanguage==="bn"?bn:en}
 
 function toggleLanguage(){currentLanguage=currentLanguage==="bn"?"en":"bn";localStorage.setItem("ansu_language",currentLanguage);$("languageBtn").textContent=currentLanguage==="bn"?"English":"বাংলা";renderListings()}
 
@@ -452,13 +482,29 @@ function isPremium(){return currentProfile?.is_premium===true||isAdmin()}
 
 function fileSafe(name){return name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]/g,"_").slice(-100)}
 
+function showDbError(error){
+
+ const message=error?.message||String(error||"Unknown error");
+
+ if(/invalid api key|apikey/i.test(message))return "Supabase API Key ভুল বা অসম্পূর্ণ। Dashboard → Project Settings → API থেকে সঠিক anon/publishable key বসাও।";
+
+ if(/row-level security|permission denied|not allowed/i.test(message))return "Supabase RLS Policy অনুমতি দেয়নি। Table/Storage-এর সঠিক policy যাচাই করো।";
+
+ if(/bucket not found/i.test(message))return 'Storage bucket "listing-images" তৈরি আছে কি না যাচাই করো।';
+
+ return message;
+
+}
+
 async function uploadFile(file,folder){
+
+ if(!sb)throw new Error("আগে সঠিক Supabase Anon Key বসাও।");
 
  const path=`${currentUser.id}/${folder}/${Date.now()}_${crypto.randomUUID()}_${fileSafe(file.name)}`;
 
  const {data,error}=await sb.storage.from(STORAGE_BUCKET).upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
 
- if(error)throw error;
+ if(error)throw new Error(showDbError(error));
 
  return sb.storage.from(STORAGE_BUCKET).getPublicUrl(data.path).data.publicUrl;
 
@@ -476,7 +522,7 @@ async function uploadImages(files){
 
   const paths=urls.map(url=>{const i=url.indexOf(marker);return i>=0?decodeURIComponent(url.slice(i+marker.length)):null}).filter(Boolean);
 
-  if(paths.length)await sb.storage.from(STORAGE_BUCKET).remove(paths);
+  if(paths.length&&sb)await sb.storage.from(STORAGE_BUCKET).remove(paths);
 
   throw error;
 
@@ -502,23 +548,23 @@ function getVideo(item){return item?.account_video||item?.video_url||""}
 
 async function init(){
 
- if(!sb){$("listingGrid").innerHTML='<div class="panel">Supabase URL/Key সেট করা নেই।</div>';return}
+ if(!sb){$("listingGrid").innerHTML='<div class="panel">Supabase সংযোগের জন্য script-এ নিজের সঠিক Anon/Publishable Key বসাও।</div>';return}
 
  const {data,error}=await sb.auth.getSession();
 
- if(error)console.error(error);
+ if(error)console.error(showDbError(error));
 
  currentUser=data?.session?.user||null;
 
- await loadProfile();updateUI();await loadListings();await loadPublicStats();await loadPublicNotice();
+ await loadProfile();updateUI();await loadListings();await loadPublicStats();await loadPublicNotice();await loadSiteAds();
 
- if(currentUser){await loadNotifications()}
+ if(currentUser)await loadNotifications();
 
  sb.auth.onAuthStateChange((_event,session)=>{
 
-  currentUser=session?.user||null;
+  currentUser=session?.session?.user||session?.user||null;
 
-  setTimeout(async()=>{await loadProfile();updateUI();await loadListings();await loadPublicStats();if(currentUser)await loadNotifications()},0);
+  setTimeout(async()=>{await loadProfile();updateUI();await loadListings();await loadPublicStats();await loadSiteAds();if(currentUser)await loadNotifications()},0);
 
  });
 
@@ -530,7 +576,7 @@ async function loadProfile(){
 
  const {data,error}=await sb.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();
 
- if(error){console.warn("Profile:",error.message);return}
+ if(error){console.warn("Profile:",showDbError(error));return}
 
  currentProfile=data;
 
@@ -540,7 +586,9 @@ function updateUI(){
 
  const name=currentProfile?.full_name||currentUser?.email||tr("লগইন করা নেই","Not logged in");
 
- $("userLabel").innerHTML=currentUser?(currentProfile?.avatar_url?`<img class="avatar-small" src="${esc(currentProfile.avatar_url)}" alt=""> `:"")+esc(name)+(isPremium()?' <span class="vip-text">👑 VIP</span>':""):esc(name);
+ const badge=isAdmin()?'<span class="admin-badge">👑 VERIFIED ADMIN</span>':(isPremium()?'<span class="vip-text">✦ PREMIUM</span>':"");
+
+ $("userLabel").innerHTML=currentUser?(currentProfile?.avatar_url?`<img class="avatar-small" src="${esc(currentProfile.avatar_url)}" alt=""> `:"")+esc(name)+" "+badge:esc(name);
 
  $("authBtn").classList.toggle("hidden",!!currentUser);
 
@@ -552,7 +600,7 @@ function updateUI(){
 
 async function registerUser(){
 
- if(!sb)return;
+ if(!sb){msg("authMessage","সঠিক Supabase Anon Key বসাও।");return}
 
  const name=$("fullName").value.trim(),email=$("email").value.trim(),password=$("password").value;
 
@@ -562,7 +610,7 @@ async function registerUser(){
 
  const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});
 
- if(error){msg("authMessage",error.message);return}
+ if(error){msg("authMessage",showDbError(error));return}
 
  if(data.session){currentUser=data.user;await loadProfile();updateUI();await loadListings();closeModal("authModal")}
 
@@ -572,11 +620,11 @@ async function registerUser(){
 
 $("loginForm").addEventListener("submit",async e=>{
 
- e.preventDefault();if(!sb)return;
+ e.preventDefault();if(!sb){msg("authMessage","সঠিক Supabase Anon Key বসাও।");return}
 
  const {data,error}=await sb.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});
 
- if(error){msg("authMessage",error.message);return}
+ if(error){msg("authMessage",showDbError(error));return}
 
  currentUser=data.user;await loadProfile();updateUI();await loadListings();await loadNotifications();closeModal("authModal");
 
@@ -584,17 +632,19 @@ $("loginForm").addEventListener("submit",async e=>{
 
 async function resetPassword(){
 
+ if(!sb){msg("authMessage","সঠিক Supabase Anon Key বসাও।");return}
+
  const email=$("email").value.trim();if(!email){msg("authMessage","আগে ইমেইল লেখো।");return}
 
  const {error}=await sb.auth.resetPasswordForEmail(email);
 
- msg("authMessage",error?.message||"ইমেইলটি নিবন্ধিত থাকলে রিসেট ইমেইল পাঠানো হবে।",!error);
+ msg("authMessage",error?showDbError(error):"ইমেইলটি নিবন্ধিত থাকলে রিসেট ইমেইল পাঠানো হবে।",!error);
 
 }
 
 async function logout(){
 
- const {error}=await sb.auth.signOut();if(error){alert(error.message);return}
+ const {error}=await sb.auth.signOut();if(error){alert(showDbError(error));return}
 
  currentUser=null;currentProfile=null;hideSections();updateUI();await loadListings();
 
@@ -624,9 +674,33 @@ async function loadPublicNotice(){
 
  const {data,error}=await sb.from("site_notices").select("message,is_active").eq("is_active",true).order("created_at",{ascending:false}).limit(1).maybeSingle();
 
- if(error||!data?.message)return;
+ if(error){console.warn("Notice:",showDbError(error));return}
+
+ if(!data?.message)return;
 
  $("notificationBar").textContent="📢 "+data.message;$("notificationBar").classList.remove("hidden");
+
+}
+
+/* Video ad feed: requires the site_ads SQL below. */
+
+async function loadSiteAds(){
+
+ if(!sb)return;
+
+ const {data,error}=await sb.from("site_ads").select("id,title,video_url,is_active,sort_order").eq("is_active",true).order("sort_order",{ascending:true}).limit(12);
+
+ if(error){console.warn("Video ads:",showDbError(error));return}
+
+ siteAds=data||[];
+
+ const section=$("adSection"),grid=$("adGrid");
+
+ if(!siteAds.length){section.classList.add("hidden");grid.innerHTML="";return}
+
+ section.classList.remove("hidden");
+
+ grid.innerHTML=siteAds.map(ad=>`<article class="ad-card"><span class="ad-label">FEATURED AD</span><video src="${esc(ad.video_url)}" autoplay muted loop playsinline controls preload="metadata"></video><div class="ad-caption">${esc(ad.title||"Featured Video")}</div></article>`).join("");
 
 }
 
@@ -638,7 +712,7 @@ async function loadListings(){
 
  const {data,error}=await sb.from("listings").select("*").eq("status","available").order("created_at",{ascending:false}).limit(200);
 
- if(error){$("listingGrid").innerHTML='<div class="panel">Database Error: '+esc(error.message)+'</div>';return}
+ if(error){$("listingGrid").innerHTML='<div class="panel">Database Error: '+esc(showDbError(error))+'</div>';return}
 
  listings=(data||[]).map(row=>{let extra={};try{extra=JSON.parse(row.description||"{}")}catch(_){extra={features:row.description||""}}return{...row,type:row.account_type||extra.type||"Starter",region:row.region||extra.region||"Bangladesh",features:extra.features||row.description||""}});
 
@@ -664,19 +738,7 @@ function renderListings(){
 
   const imgs=getImages(item),video=getVideo(item),cover=imgs[0]||"";
 
-  return `<article class="listing ${item.is_premium?"vip-card":""}">
-
-   <div class="cover">${cover?`<img src="${esc(cover)}" alt="Account image" loading="lazy">`:(video?`<video src="${esc(video)}" muted playsinline preload="metadata"></video>`:'<span style="font-size:48px">🎮</span>')}
-
-   <span class="level">Level ${esc(item.level??"—")}</span>${item.is_premium?'<span class="badge">👑 PREMIUM</span>':""}</div>
-
-   <div class="listing-body"><h3>${esc(item.title)}</h3>
-
-   <div class="meta">ধরন: ${esc(item.account_type||"Starter")}<br>রিজিয়ন: ${esc(item.region||"Bangladesh")}<br>লেভেল: ${esc(item.level??"—")}<br>📸 ${imgs.length} ছবি ${video?" · 🎬 ভিডিও":""}</div>
-
-   <div class="price-row"><span class="price">${money(item.price)}</span><button class="btn" onclick="showDetails('${esc(item.id)}')">Details / Buy Now</button></div></div>
-
-  </article>`;
+  return `<article class="listing ${item.is_premium?"vip-card":""}"><div class="cover">${cover?`<img src="${esc(cover)}" alt="Account image" loading="lazy">`:(video?`<video src="${esc(video)}" muted playsinline preload="metadata"></video>`:'<span style="font-size:48px">🎮</span>')}<span class="level">Level ${esc(item.level??"—")}</span>${item.is_premium?'<span class="badge">👑 PREMIUM</span>':""}</div><div class="listing-body"><h3>${esc(item.title)}</h3><div class="meta">ধরন: ${esc(item.account_type||"Starter")}<br>রিজিয়ন: ${esc(item.region||"Bangladesh")}<br>লেভেল: ${esc(item.level??"—")}<br>📸 ${imgs.length} ছবি ${video?" · 🎬 ভিডিও":""}</div><div class="price-row"><span class="price">${money(item.price)}</span><button class="btn" onclick="showDetails('${esc(item.id)}')">Details / Buy Now</button></div></div></article>`;
 
  }).join("");
 
@@ -698,7 +760,7 @@ function showDetails(id){
 
 }
 
-function openFullImage(url){const w=window.open("","_blank");if(!w){alert(url);return}const i=w.document.createElement("img");i.src=url;i.style.cssText="max-width:100%;height:auto";w.document.body.style.background="#090b10";w.document.body.appendChild(i)}
+function openFullImage(url){const w=window.open("","_blank");if(!w){alert(url);return}const i=w.document.createElement("img");i.src=url;i.style.cssText="max-width:100%;height:auto";w.document.body.style.background="#07100d";w.document.body.appendChild(i)}
 
 function openSell(){if(!requireLogin())return;$("sellForm").reset();selectedFiles=[];selectedVideo=null;renderImagePreview();renderVideoPreview();$("sellMessage").textContent="";openModal("sellModal")}
 
@@ -708,11 +770,11 @@ $("sellImages").addEventListener("change",e=>{
 
  for(const f of incoming){
 
-  if(combined.length>=MAX_IMAGES){alert("সর্বোচ্চ ৬টি ছবি বেছে নাও।");break}
+  if(combined.length>=MAX_IMAGES){alert("সর্বোচ্চ ৬টি ছবি বেছে নিন।");break}
 
-  if(!["image/jpeg","image/png","image/webp","image/gif"].includes(f.type)){alert("শুধু JPEG, PNG, WEBP বা GIF ছবি।");continue}
+  if(!["image/jpeg","image/png","image/webp","image/gif"].includes(f.type)){alert("শুধু JPEG, PNG, WEBP বা GIF ছবি ব্যবহার করুন।");continue}
 
-  if(f.size>MAX_IMAGE_SIZE){alert("প্রতিটি ছবি সর্বোচ্চ ৫ MB হতে পারবে।");continue}
+  if(f.size>MAX_IMAGE_SIZE){alert("প্রতিটি ছবি সর্বোচ্চ ১০ MB হতে পারবে।");continue}
 
   combined.push(f);
 
@@ -740,9 +802,9 @@ $("sellVideo").addEventListener("change",e=>{
 
  if(!f)return;
 
- if(!["video/mp4","video/webm","video/quicktime"].includes(f.type)){alert("MP4, WEBM অথবা MOV ভিডিও বেছে নাও।");e.target.value="";return}
+ if(!["video/mp4","video/webm","video/quicktime"].includes(f.type)){alert("MP4, WEBM অথবা MOV ভিডিও বেছে নিন।");e.target.value="";return}
 
- if(f.size>MAX_VIDEO_SIZE){alert("ভিডিও সর্বোচ্চ ২৫ MB হতে পারবে।");e.target.value="";return}
+ if(f.size>MAX_VIDEO_SIZE){alert("ভিডিও সর্বোচ্চ ৫০ MB হতে পারবে। Supabase Storage limit-ও যাচাই করুন।");e.target.value="";return}
 
  selectedVideo=f;renderVideoPreview();
 
@@ -766,7 +828,7 @@ $("sellForm").addEventListener("submit",async e=>{
 
  const title=$("sellTitle").value.trim(),price=Number($("sellPrice").value),level=Number($("sellLevel").value);
 
- if(!title||price<=0||level<1){msg("sellMessage","সঠিক তথ্য পূরণ করো।");return}
+ if(!title||price<=0||level<1){msg("sellMessage","সঠিক তথ্য পূরণ করুন।");return}
 
  const button=$("publishButton");button.disabled=true;button.textContent="আপলোড হচ্ছে...";
 
@@ -788,15 +850,15 @@ $("sellForm").addEventListener("submit",async e=>{
 
   const {error}=await sb.from("listings").insert(payload);
 
-  if(error)throw error;
+  if(error)throw new Error(showDbError(error));
 
   $("sellForm").reset();selectedFiles=[];selectedVideo=null;renderImagePreview();renderVideoPreview();
 
   msg("sellMessage","বিজ্ঞাপন সফলভাবে প্রকাশ হয়েছে!",true);await loadListings();await loadPublicStats();
 
- }catch(error){msg("sellMessage","প্রকাশ করা যায়নি: "+error.message)}
+ }catch(error){msg("sellMessage","প্রকাশ করা যায়নি: "+showDbError(error))}
 
- finally{button.disabled=false;button.textContent="বিজ্ঞাপন প্রকাশ করো"}
+ finally{button.disabled=false;button.textContent="বিজ্ঞাপন প্রকাশ করুন"}
 
 });
 
@@ -804,7 +866,7 @@ function showPaymentInstructions(){
 
  const method=$("paymentMethod").value;
 
- $("paymentInstructions").innerHTML=`<b>${method==="bkash"?"bKash":"Nagad"}</b><br>টাকা পাঠানোর নম্বর: <strong>${esc(PAYMENT_NUMBERS[method])}</strong><br>পাঠানোর পরিমাণ: <strong>${money(selectedListing?.price)}</strong><br>টাকা পাঠানোর আগে নম্বর যাচাই করো। Admin যাচাই করার পর Status আপডেট হবে।`;
+ $("paymentInstructions").innerHTML=`<b>${method==="bkash"?"bKash":"Nagad"}</b><br>টাকা পাঠানোর নম্বর: <strong>${esc(PAYMENT_NUMBERS[method])}</strong><br>পাঠানোর পরিমাণ: <strong>${money(selectedListing?.price)}</strong><br>টাকা পাঠানোর আগে নম্বর যাচাই করুন।`;
 
 }
 
@@ -812,7 +874,7 @@ function startCheckout(){
 
  if(!requireLogin()||!selectedListing)return;
 
- if(selectedListing.seller_id===currentUser.id){alert("নিজের বিজ্ঞাপন নিজে কিনতে পারবে না।");return}
+ if(selectedListing.seller_id===currentUser.id){alert("নিজের বিজ্ঞাপন নিজে কিনতে পারবেন না।");return}
 
  $("checkoutAccount").innerHTML=`<div class="panel"><b>${esc(selectedListing.title)}</b><div class="price">${money(selectedListing.price)}</div></div><br>`;
 
@@ -834,13 +896,11 @@ $("checkoutForm").addEventListener("submit",async e=>{
 
   const {data,error}=await sb.from("orders").insert(payload).select("id").single();
 
-  if(error)throw error;
+  if(error)throw new Error(showDbError(error));
 
-  msg("checkoutMessage","অর্ডার জমা হয়েছে। Order ID: "+data.id+" · Payment Pending",true);
+  msg("checkoutMessage","অর্ডার জমা হয়েছে। Order ID: "+data.id+" · Payment Pending",true);await loadPublicStats();
 
-  await loadPublicStats();
-
- }catch(error){msg("checkoutMessage","অর্ডার জমা হয়নি: "+error.message)}
+ }catch(error){msg("checkoutMessage","অর্ডার জমা হয়নি: "+showDbError(error))}
 
  finally{btn.disabled=false}
 
@@ -854,7 +914,7 @@ async function loadOrders(){
 
  const {data,error}=await sb.from("orders").select("id,listing_id,amount,payment_method,payment_status,order_status,created_at,transaction_id,payment_number,admin_note").eq("buyer_id",currentUser.id).order("created_at",{ascending:false}).limit(100);
 
- if(error){$("ordersContent").textContent=error.message;return}
+ if(error){$("ordersContent").textContent=showDbError(error);return}
 
  if(!data?.length){$("ordersContent").textContent="এখনো কোনো অর্ডার নেই।";return}
 
@@ -870,9 +930,9 @@ async function loadSellerOrders(){
 
  const {data,error}=await sb.from("orders").select("id,listing_id,amount,payment_method,payment_status,order_status,created_at,buyer_name,buyer_contact,transaction_id,listings!inner(title,seller_id)").eq("listings.seller_id",currentUser.id).order("created_at",{ascending:false}).limit(100);
 
- if(error){$("sellerContent").textContent="Seller orders error: "+error.message;return}
+ if(error){$("sellerContent").textContent="Seller orders error: "+showDbError(error);return}
 
- if(!data?.length){$("sellerContent").textContent="তোমার বিজ্ঞাপনে এখনো কোনো অর্ডার নেই।";return}
+ if(!data?.length){$("sellerContent").textContent="আপনার বিজ্ঞাপনে এখনো কোনো অর্ডার নেই।";return}
 
  $("sellerContent").innerHTML=`<div class="table-wrap"><table><thead><tr><th>Account</th><th>Buyer</th><th>Amount</th><th>Payment</th><th>Status</th></tr></thead><tbody>${data.map(o=>{const l=Array.isArray(o.listings)?o.listings[0]:o.listings;return `<tr><td>${esc(l?.title||o.listing_id)}</td><td>${esc(o.buyer_name||"—")}<br>${esc(o.buyer_contact||"")}</td><td>${money(o.amount)}</td><td>${esc(o.payment_method)}<br>Txn: ${esc(o.transaction_id||"—")}<br>${esc(o.payment_status)}</td><td>${esc(o.order_status)}</td></tr>`}).join("")}</tbody></table></div>`;
 
@@ -886,35 +946,77 @@ async function loadAdmin(){
 
  $("adminContent").textContent="Admin data লোড হচ্ছে...";
 
- const [or,lr,pr]=await Promise.all([
+ const [or,lr,pr,ar]=await Promise.all([
 
   sb.from("orders").select("*").order("created_at",{ascending:false}).limit(100),
 
   sb.from("listings").select("*").order("created_at",{ascending:false}).limit(100),
 
-  sb.from("profiles").select("id,full_name,role,is_premium,avatar_url").order("created_at",{ascending:false}).limit(100)
+  sb.from("profiles").select("id,full_name,role,is_premium,avatar_url").order("created_at",{ascending:false}).limit(100),
+
+  sb.from("site_ads").select("*").order("sort_order",{ascending:true}).limit(100)
 
  ]);
 
- if(or.error||lr.error||pr.error){$("adminContent").textContent=or.error?.message||lr.error?.message||pr.error?.message;return}
+ if(or.error||lr.error||pr.error){$("adminContent").textContent=showDbError(or.error||lr.error||pr.error);return}
 
- let html=`<h3>📦 Orders & Payment Review</h3>`;
+ let html=`<div class="owner-panel panel"><h3>👑 Admin Console</h3><p class="small-note">Admin permissions database policy দ্বারা সুরক্ষিত রাখতে হবে।</p></div><h3>📦 Orders & Payment Review</h3>`;
 
- html+=or.data.length?`<div class="table-wrap"><table><thead><tr><th>Buyer</th><th>Amount</th><th>Transaction</th><th>Payment</th><th>Order</th><th>Note</th><th>Save</th></tr></thead><tbody>${or.data.map(o=>`<tr><td>${esc(o.buyer_name||o.buyer_id)}<br>${esc(o.buyer_contact||"")}</td><td>${money(o.amount)}</td><td>${esc(o.transaction_id||"—")}<br>${esc(o.payment_number||"—")}</td><td><select class="field" id="pay-${esc(o.id)}"><option value="pending" ${o.payment_status==="pending"?"selected":""}>pending</option><option value="approved" ${o.payment_status==="approved"?"selected":""}>approved</option><option value="rejected" ${o.payment_status==="rejected"?"selected":""}>rejected</option></select></td><td><select class="field" id="ord-${esc(o.id)}"><option value="pending" ${o.order_status==="pending"?"selected":""}>pending</option><option value="confirmed" ${o.order_status==="confirmed"?"selected":""}>confirmed</option><option value="completed" ${o.order_status==="completed"?"selected":""}>completed</option><option value="cancelled" ${o.order_status==="cancelled"?"selected":""}>cancelled</option></select></td><td><input class="field" id="note-${esc(o.id)}" value="${esc(o.admin_note||"")}" maxlength="500"></td><td><button class="btn" onclick="updateOrder('${esc(o.id)}')">Save</button></td></tr>`).join("")}</tbody></table></div>`:"<p>কোনো অর্ডার নেই।</p>";
+ html+=or.data.length?`<div class="table-wrap"><table><thead><tr><th>Buyer</th><th>Amount</th><th>Transaction</th><th>Payment</th><th>Order</th><th>Note</th><th>Save</th></tr></thead><tbody>${or.data.map(o=>`<tr><td>${esc(o.buyer_name||o.buyer_id)}<br>${esc(o.buyer_contact||"")}</td><td>${money(o.amount)}</td><td>${esc(o.transaction_id||"—")}<br>${esc(o.payment_number||"—")}</td><td><select class="field" id="pay-${esc(o.id)}"><option value="pending" ${o.payment_status==="pending"?"selected":""}>pending</option><option value="approved" ${o.payment_status==="approved"?"selected":""}>approved</option><option value="rejected" ${o.payment_status==="rejected"?"selected":""}>rejected</option></select></td><td><select class="field" id="ord-${esc(o.id)}"><option value="pending" ${o.order_status==="pending"?"selected":""}>pending</option><option value="confirmed" ${o.order_status==="confirmed"?"selected":""}>confirmed</option><option value="completed" ${o.order_status==="completed"?"selected":""}>completed</option><option value="cancelled" ${o.order_status==="cancelled"?"selected":""}>cancelled</option></select></td><td><input class="field" id="note-${esc(o.id)}" value="${esc(o.admin_note||"")}" maxlength="500"></td><td><button class="btn" onclick="updateOrder('${esc(o.id)}')">Save</button></td></tr>`).join("")}</tbody></table></div>`:"<p>কোনো অর্ডার নেই।";
 
  html+=`<h3>🎮 Listings</h3>`;
 
  html+=lr.data.length?`<div class="table-wrap"><table><thead><tr><th>Title</th><th>Price</th><th>Status</th><th>Premium</th><th>Action</th></tr></thead><tbody>${lr.data.map(x=>`<tr><td>${esc(x.title)}</td><td>${money(x.price)}</td><td>${esc(x.status)}</td><td><button class="btn secondary" onclick="toggleListingPremium('${esc(x.id)}',${!x.is_premium})">${x.is_premium?"Remove VIP":"Make VIP"}</button></td><td><button class="btn secondary" onclick="toggleListing('${esc(x.id)}','${x.status==="removed"?"available":"removed"}')">${x.status==="removed"?"Restore":"Remove"}</button></td></tr>`).join("")}</tbody></table></div>`:"<p>কোনো বিজ্ঞাপন নেই।";
 
- html+=`<h3>👑 Member & VIP Management</h3><p class="small-note">নিজের Admin role অন্য কাউকে দেওয়ার আগে নিশ্চিত হও।</p>`;
+ html+=`<h3>👑 Member & Admin Management</h3><p class="small-note">Role পরিবর্তনের অনুমতি Supabase RLS-এ সীমিত করুন।</p>`;
 
  html+=pr.data.length?`<div class="table-wrap"><table><thead><tr><th>Member</th><th>User ID</th><th>Role</th><th>Premium</th><th>Save</th></tr></thead><tbody>${pr.data.map(p=>`<tr><td>${esc(p.full_name||"Member")}</td><td>${esc(p.id.slice(0,8).toUpperCase())}</td><td><select class="field" id="role-${esc(p.id)}"><option value="user" ${p.role!=="admin"?"selected":""}>user</option><option value="admin" ${p.role==="admin"?"selected":""}>admin</option></select></td><td><input type="checkbox" id="vip-${esc(p.id)}" ${p.is_premium?"checked":""}></td><td><button class="btn" onclick="updateMember('${esc(p.id)}')">Save</button></td></tr>`).join("")}</tbody></table></div>`:"<p>কোনো সদস্য নেই।";
+
+ html+=`<h3>📺 Live Video Advertisements</h3><p class="small-note">ভিডিও URL Supabase Storage বা অন্য বিশ্বস্ত ভিডিও হোস্টিং থেকে দিন। MP4/WebM direct video URL ব্যবহার করুন।</p>
+
+ <form id="adForm" class="form"><div><label>বিজ্ঞাপনের শিরোনাম</label><input id="adTitle" class="field" maxlength="120" required></div><div><label>ভিডিও URL</label><input id="adUrl" class="field" type="url" maxlength="1000" required placeholder="https://example.com/video.mp4"></div><div><label>ক্রম</label><input id="adOrder" class="field" type="number" min="0" value="0"></div><label><input id="adActive" type="checkbox" checked> বিজ্ঞাপন সক্রিয় রাখুন</label><button class="btn">ভিডিও বিজ্ঞাপন যোগ করুন</button></form><div id="adAdminMessage"></div>`;
+
+ html+=ar.error?`<div class="message error">site_ads table পাওয়া যায়নি। নিচের SQL চালান: ${esc(showDbError(ar.error))}</div>`:`<h4>বর্তমান বিজ্ঞাপন</h4>${(ar.data||[]).map(a=>`<div class="notification-bar"><b>${esc(a.title)}</b><br><small>${esc(a.video_url)}</small><br><button class="btn secondary" onclick="toggleAd('${esc(a.id)}',${!a.is_active})">${a.is_active?"বন্ধ করুন":"চালু করুন"}</button> <button class="btn secondary" onclick="deleteAd('${esc(a.id)}')">Delete</button></div>`).join("")||"<p>এখনো বিজ্ঞাপন যোগ করা হয়নি।"}`;
 
  html+=`<h3>📢 Public Notice</h3><form id="noticeForm" class="form"><textarea id="noticeText" class="field" maxlength="1000" rows="3" placeholder="সবার জন্য নোটিশ"></textarea><button class="btn">নোটিশ প্রকাশ</button></form><div id="noticeAdminMessage"></div>`;
 
  $("adminContent").innerHTML=html;
 
- $("noticeForm").addEventListener("submit",async e=>{e.preventDefault();const message=$("noticeText").value.trim();if(!message)return;const {error}=await sb.from("site_notices").insert({message,is_active:true,created_by:currentUser.id});if(error){msg("noticeAdminMessage",error.message);return}msg("noticeAdminMessage","নোটিশ প্রকাশ হয়েছে।",true);await loadPublicNotice()});
+ $("noticeForm").addEventListener("submit",async e=>{e.preventDefault();const message=$("noticeText").value.trim();if(!message)return;const {error}=await sb.from("site_notices").insert({message,is_active:true,created_by:currentUser.id});if(error){msg("noticeAdminMessage",showDbError(error));return}msg("noticeAdminMessage","নোটিশ প্রকাশ হয়েছে।",true);await loadPublicNotice()});
+
+ $("adForm").addEventListener("submit",async e=>{
+
+  e.preventDefault();
+
+  const title=$("adTitle").value.trim(),video_url=$("adUrl").value.trim();
+
+  if(!/^https:\/\//i.test(video_url)){msg("adAdminMessage","HTTPS ভিডিও URL দিন।");return}
+
+  const {error}=await sb.from("site_ads").insert({title,video_url,sort_order:Number($("adOrder").value)||0,is_active:$("adActive").checked,created_by:currentUser.id});
+
+  if(error){msg("adAdminMessage",showDbError(error));return}
+
+  msg("adAdminMessage","ভিডিও বিজ্ঞাপন যোগ হয়েছে।",true);await loadAdmin();await loadSiteAds();
+
+ });
+
+}
+
+async function updateMember(id){
+
+ if(!isAdmin())return;
+
+ const role=$("role-"+id).value,is_premium=$("vip-"+id).checked;
+
+ if(id===currentUser.id&&role!=="admin"){alert("নিজের Admin role সরানো যাবে না।");return}
+
+ if(!confirm("এই সদস্যের role/premium পরিবর্তন করবেন?"))return;
+
+ const {error}=await sb.from("profiles").update({role,is_premium}).eq("id",id);
+
+ if(error){alert("আপডেট হয়নি: "+showDbError(error));return}
+
+ alert("Member আপডেট হয়েছে।");if(id===currentUser.id){await loadProfile();updateUI()}await loadAdmin();
 
 }
 
@@ -924,11 +1026,11 @@ async function updateOrder(id){
 
  const payment_status=$("pay-"+id).value,order_status=$("ord-"+id).value,admin_note=$("note-"+id).value.trim();
 
- if(payment_status==="approved"&&!confirm("নিজের bKash/Nagad অ্যাকাউন্টে টাকা পাওয়া যাচাই করেছ?"))return;
+ if(payment_status==="approved"&&!confirm("নিজের bKash/Nagad অ্যাকাউন্টে টাকা পাওয়া যাচাই করেছেন?"))return;
 
  const {error}=await sb.from("orders").update({payment_status,order_status,admin_note}).eq("id",id);
 
- if(error){alert(error.message);return}alert("অর্ডার আপডেট হয়েছে।");await loadAdmin();await loadPublicStats();
+ if(error){alert(showDbError(error));return}alert("অর্ডার আপডেট হয়েছে।");await loadAdmin();await loadPublicStats();
 
 }
 
@@ -938,7 +1040,7 @@ async function toggleListing(id,status){
 
  const {error}=await sb.from("listings").update({status}).eq("id",id);
 
- if(error){alert(error.message);return}await loadAdmin();await loadListings();
+ if(error){alert(showDbError(error));return}await loadAdmin();await loadListings();
 
 }
 
@@ -948,7 +1050,27 @@ async function toggleListingPremium(id,value){
 
  const {error}=await sb.from("listings").update({is_premium:value}).eq("id",id);
 
- if(error){alert(error.message);return}await loadAdmin();await loadListings();
+ if(error){alert(showDbError(error));return}await loadAdmin();await loadListings();
+
+}
+
+async function toggleAd(id,is_active){
+
+ if(!isAdmin())return;
+
+ const {error}=await sb.from("site_ads").update({is_active}).eq("id",id);
+
+ if(error){alert(showDbError(error));return}await loadAdmin();await loadSiteAds();
+
+}
+
+async function deleteAd(id){
+
+ if(!isAdmin()||!confirm("এই বিজ্ঞাপনটি স্থায়ীভাবে মুছে ফেলবেন?"))return;
+
+ const {error}=await sb.from("site_ads").delete().eq("id",id);
+
+ if(error){alert(showDbError(error));return}await loadAdmin();await loadSiteAds();
 
 }
 
@@ -956,7 +1078,9 @@ function openProfile(){
 
  if(!requireLogin())return;
 
- $("profileSummary").innerHTML=`<img class="avatar" src="${esc(currentProfile?.avatar_url||"https://placehold.co/100x100/202938/ffffff?text=User")}" alt="Profile"><h3>${esc(currentProfile?.full_name||currentUser.email||"Member")}</h3><p>Email: ${esc(currentUser.email)}</p><p>Account ID: <b>${esc(shortId())}</b></p><p>Role: ${esc(currentProfile?.role||"user")} ${isPremium()?'· 👑 PREMIUM':""}</p>`;
+ const badge=isAdmin()?'<span class="admin-badge">👑 VERIFIED ADMIN</span>':(isPremium()?'<span class="vip-text">✦ PREMIUM</span>':"");
+
+ $("profileSummary").innerHTML=`<img class="avatar" src="${esc(currentProfile?.avatar_url||"https://placehold.co/100x100/14251e/ffffff?text=User")}" alt="Profile"><h3>${esc(currentProfile?.full_name||currentUser.email||"Member")}</h3>${badge}<p>Email: ${esc(currentUser.email)}</p><p>Account ID: <b>${esc(shortId())}</b></p><p>Role: ${esc(currentProfile?.role||"user")}</p>`;
 
  $("personalId").textContent=shortId();$("profileName").value=currentProfile?.full_name||"";$("profileMessage").textContent="";openModal("profileModal");
 
@@ -974,15 +1098,15 @@ $("profileForm").addEventListener("submit",async e=>{
 
   if(file){if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>3*1024*1024)throw new Error("JPEG, PNG বা WEBP ছবি সর্বোচ্চ ৩ MB হতে হবে।");update.avatar_url=await uploadFile(file,"avatars")}
 
-  if(!Object.keys(update).length)throw new Error("নতুন নাম বা ছবি বেছে নাও।");
+  if(!Object.keys(update).length)throw new Error("নতুন নাম বা ছবি বেছে নিন।");
 
   const {error}=await sb.from("profiles").update(update).eq("id",currentUser.id);
 
-  if(error)throw error;
+  if(error)throw new Error(showDbError(error));
 
   await loadProfile();updateUI();openProfile();msg("profileMessage","প্রোফাইল আপডেট হয়েছে।",true);
 
- }catch(error){msg("profileMessage",error.message)}
+ }catch(error){msg("profileMessage",showDbError(error))}
 
 });
 
@@ -996,7 +1120,7 @@ async function loadNotifications(){
 
  const button=document.createElement("button");button.id="notificationButton";button.className="btn secondary";button.textContent="🔔 "+(error?"Notifications":`Notifications (${data?.length||0})`);
 
- button.onclick=()=>{openModal("notificationsModal");if(error){$("notificationsContent").textContent="Notification table সেটআপ করা হয়নি: "+error.message;return} $("notificationsContent").innerHTML=data?.length?data.map(n=>`<div class="notification-bar"><b>${esc(n.title||"Notification")}</b><br>${esc(n.message||"")}<br><small>${esc(n.created_at?new Date(n.created_at).toLocaleString():"")}</small></div>`).join(""):"কোনো নোটিফিকেশন নেই।"};
+ button.onclick=()=>{openModal("notificationsModal");if(error){$("notificationsContent").textContent="Notification table সেটআপ করা হয়নি: "+showDbError(error);return}$("notificationsContent").innerHTML=data?.length?data.map(n=>`<div class="notification-bar"><b>${esc(n.title||"Notification")}</b><br>${esc(n.message||"")}<br><small>${esc(n.created_at?new Date(n.created_at).toLocaleString():"")}</small></div>`).join(""):"কোনো নোটিফিকেশন নেই।"};
 
  $("userLabel").parentElement.appendChild(button);
 
