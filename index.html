@@ -212,15 +212,69 @@ th{color:var(--gold)}
 
 .rank-badge{display:inline-block;padding:8px 12px;border:1px solid var(--gold);border-radius:10px;background:#302817;color:var(--gold2);font-weight:900}
 
-.policy-step{display:flex;gap:12px;align-items:flex-start;margin:13px 0;padding:13px;background:#0b1711;border:1px solid var(--line);border-radius:12px;line-height:1.8}
+/* Payment policy icon and modal */
+
+.header-icon-btn{
+
+ width:42px;height:42px;flex:0 0 42px;display:inline-flex;align-items:center;
+
+ justify-content:center;position:relative;border:1px solid #e8c87965;border-radius:12px;
+
+ background:linear-gradient(145deg,#1a3024,#101a13);color:var(--gold2);
+
+ font-size:20px;transition:.2s;box-shadow:inset 0 0 12px #e8c87908
+
+}
+
+.header-icon-btn:hover{border-color:var(--gold);background:#243729;transform:translateY(-2px)}
+
+.header-icon-btn .icon-caption{
+
+ position:absolute;top:calc(100% + 5px);right:0;background:#08110e;
+
+ color:var(--gold2);border:1px solid #e8c87955;border-radius:6px;
+
+ padding:4px 7px;font-size:10px;white-space:nowrap;opacity:0;
+
+ pointer-events:none;transition:.2s
+
+}
+
+.header-icon-btn:hover .icon-caption{opacity:1}
+
+.policy-modal-box{width:min(650px,100%)}
+
+.policy-intro{padding:14px;background:linear-gradient(135deg,#292512,#11231a);border:1px solid #e8c87945;border-radius:12px;margin-bottom:15px;line-height:1.8;color:#f1e5c0;font-size:13px}
+
+.policy-step{display:flex;gap:12px;align-items:flex-start;margin:12px 0;padding:13px;background:#0b1711;border:1px solid var(--line);border-radius:12px;line-height:1.8;font-size:13px}
 
 .policy-step b.step-number{flex:0 0 30px;height:30px;display:grid;place-items:center;background:linear-gradient(135deg,#f4dc94,#b68a3d);color:#172017;border-radius:50%}
+
+.policy-step strong{display:block;color:var(--gold2);margin-bottom:3px}
+
+.policy-safety{background:#241e10;border:1px solid #8c7135;color:#f5dfaa;border-radius:11px;padding:13px;font-size:12px;line-height:1.9;margin-top:15px}
 
 footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(--muted);font-size:12px}
 
 @media(max-width:800px){.grid,.ad-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-@media(max-width:520px){.grid,.ad-grid{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:19px}.brand{font-size:15px}.hero{padding-top:30px}.actions .btn{padding:8px 9px;font-size:11px}.modal-box{padding:14px}.stat-grid{grid-template-columns:1fr 1fr}.stat-box strong{font-size:16px}}
+@media(max-width:520px){
+
+ .grid,.ad-grid{grid-template-columns:1fr}
+
+ .stats{gap:6px}.stat{padding:10px}.stat strong{font-size:19px}
+
+ .brand{font-size:15px}.hero{padding-top:30px}
+
+ .actions .btn{padding:8px 9px;font-size:11px}
+
+ .header-icon-btn{width:36px;height:36px;flex-basis:36px;font-size:18px}
+
+ .modal-box{padding:14px}.stat-grid{grid-template-columns:1fr 1fr}
+
+ .stat-box strong{font-size:16px}
+
+}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
@@ -241,6 +295,16 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(-
 <button class="btn secondary" id="languageBtn" onclick="toggleLanguage()">English</button>
 
 <span id="userLabel" style="font-size:12px;color:#a4b5aa">লগইন করা নেই</span>
+
+<!-- Payment Policy icon: placed beside the notification icon -->
+
+<button class="header-icon-btn" id="paymentPolicyBtn" onclick="openPaymentPolicy()" aria-label="পেমেন্ট পলিসি" title="পেমেন্ট পলিসি">
+
+<span aria-hidden="true">💳</span>
+
+<span class="icon-caption">পেমেন্ট পলিসি</span>
+
+</button>
 
 <button class="btn secondary" id="authBtn" onclick="openModal('authModal')">Login / Register</button>
 
@@ -288,31 +352,9 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(-
 
 </div>
 
-<section id="paymentPolicy">
+<!-- The old large Payment Policy section has been removed.
 
-<div class="feature-card">
-
-<h2 style="color:var(--gold);margin-top:0">💳 পেমেন্ট পলিসি</h2>
-
-<p class="small-note">অ্যাকাউন্ট কেনার আগে নিচের নিয়মগুলো পড়ুন। ভুল নম্বরে টাকা পাঠালে বা ভুল Transaction ID দিলে অর্ডার যাচাইয়ে সমস্যা হতে পারে।</p>
-
-<div class="policy-step"><b class="step-number">১</b><div><strong>অ্যাকাউন্ট নির্বাচন করুন</strong><br>আপনার পছন্দের Free Fire অ্যাকাউন্টের Details / Buy Now বাটনে চাপ দিন। দাম ও অ্যাকাউন্টের বিবরণ ভালোভাবে যাচাই করুন।</div></div>
-
-<div class="policy-step"><b class="step-number">২</b><div><strong>পেমেন্টের মাধ্যম নির্বাচন করুন</strong><br>অর্ডার ফর্মে bKash অথবা Nagad নির্বাচন করুন। স্ক্রিনে দেখানো পেমেন্ট নম্বরটি মিলিয়ে নিন।</div></div>
-
-<div class="policy-step"><b class="step-number">৩</b><div><strong>Send Money করুন</strong><br>bKash/Nagad অ্যাপ খুলে Send Money নির্বাচন করুন। অর্ডারের স্ক্রিনে দেখানো সঠিক নম্বর এবং অ্যাকাউন্টের সঠিক মূল্য লিখে পাঠান। টাকা পাঠানোর আগে প্রাপকের নম্বর ও পরিমাণ আবার যাচাই করুন।</div></div>
-
-<div class="policy-step"><b class="step-number">৪</b><div><strong>Transaction ID দিন</strong><br>টাকা পাঠানোর পর পাওয়া আসল Transaction ID এবং যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি অর্ডার ফর্মে লিখুন। ভুয়া Transaction ID দেবেন না।</div></div>
-
-<div class="policy-step"><b class="step-number">৫</b><div><strong>অর্ডার জমা দিয়ে অপেক্ষা করুন</strong><br>Submit করার পর My Orders-এ অর্ডারের অবস্থা দেখুন। Admin পেমেন্ট যাচাই না করা পর্যন্ত Payment Pending থাকবে। Approved হওয়া মানেই অ্যাকাউন্টের সব তথ্য যাচাই হয়েছে—এমন ধরে নেবেন না; অর্ডারের চূড়ান্ত অবস্থা দেখুন।</div></div>
-
-<div class="notice"><strong>🔒 নিরাপত্তা:</strong> PIN, OTP, পাসওয়ার্ড বা Recovery Code কাউকে দেবেন না। টাকা পাঠানোর আগে পেমেন্ট নম্বর নিশ্চিত করুন। ভুল নম্বরে পাঠানো টাকা ফেরত পাওয়ার নিশ্চয়তা নেই। পেমেন্ট করার আগে সন্দেহ হলে অর্ডার করবেন না।</div>
-
-<div class="small-note">গুরুত্বপূর্ণ: এখানে দেখানো bKash/Nagad নম্বর সাইটের কনফিগারেশনে নির্ধারিত। নম্বরগুলো সঠিক ও আপনার নিয়ন্ত্রণে আছে কি না, মালিক/অ্যাডমিনকে নিশ্চিত করতে হবে।</div>
-
-</div>
-
-</section>
+     Its instructions are now available from the header icon. -->
 
 <section id="adSection" class="hidden">
 
@@ -351,6 +393,100 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(-
 </main>
 
 <footer><div class="container">© 2026 ANSU ELITE MARKETPLACE · Premium Gaming Community</div></footer>
+
+<!-- Payment Policy popup -->
+
+<div class="modal" id="paymentPolicyModal" role="dialog" aria-modal="true" aria-labelledby="paymentPolicyTitle">
+
+<div class="modal-box policy-modal-box">
+
+<div class="modal-head">
+
+<h2 id="paymentPolicyTitle">💳 পেমেন্ট পলিসি</h2>
+
+<button class="close" onclick="closeModal('paymentPolicyModal')" aria-label="বন্ধ করুন">✕</button>
+
+</div>
+
+<div class="policy-intro">
+
+<strong>ANSU ELITE MARKETPLACE</strong><br>
+
+অ্যাকাউন্ট কেনার আগে নিচের পেমেন্টের নিয়মগুলো পড়ুন। সঠিক নম্বরে টাকা পাঠান এবং অর্ডার ফর্মে আসল Transaction ID দিন।
+
+</div>
+
+<div class="policy-step">
+
+<b class="step-number">১</b>
+
+<div><strong>অ্যাকাউন্ট নির্বাচন করুন</strong>আপনার পছন্দের Free Fire অ্যাকাউন্টের <b>Details / Buy Now</b> বাটনে চাপ দিন। দাম, লেভেল এবং অ্যাকাউন্টের বিবরণ ভালোভাবে যাচাই করুন।</div>
+
+</div>
+
+<div class="policy-step">
+
+<b class="step-number">২</b>
+
+<div><strong>পেমেন্টের মাধ্যম নির্বাচন করুন</strong>অর্ডার ফর্মে bKash অথবা Nagad নির্বাচন করুন। পেমেন্ট ফর্মে দেখানো নম্বরটি মিলিয়ে নিন।</div>
+
+</div>
+
+<div class="policy-step">
+
+<b class="step-number">৩</b>
+
+<div><strong>Send Money করুন</strong>bKash/Nagad অ্যাপ খুলে Send Money নির্বাচন করুন। স্ক্রিনে দেখানো সঠিক নম্বরে অর্ডারের সঠিক পরিমাণ পাঠান। নিশ্চিত হওয়ার আগে টাকা পাঠাবেন না।</div>
+
+</div>
+
+<div class="policy-step">
+
+<b class="step-number">৪</b>
+
+<div><strong>Transaction ID লিখুন</strong>টাকা পাঠানোর পর যে আসল Transaction ID পাবেন, সেটি অর্ডার ফর্মে লিখুন। যে নম্বর থেকে টাকা পাঠিয়েছেন সেটিও সঠিকভাবে লিখুন।</div>
+
+</div>
+
+<div class="policy-step">
+
+<b class="step-number">৫</b>
+
+<div><strong>অর্ডার জমা দিন</strong>Submit করার পর <b>My Orders</b> থেকে অর্ডারের অবস্থা দেখুন। Admin পেমেন্ট যাচাই না করা পর্যন্ত Payment Pending থাকবে।</div>
+
+</div>
+
+<div class="policy-step">
+
+<b class="step-number">৬</b>
+
+<div><strong>অর্ডারের চূড়ান্ত অবস্থা যাচাই করুন</strong>পেমেন্ট Approved হলেই অ্যাকাউন্ট হস্তান্তর সম্পন্ন হয়েছে ধরে নেবেন না। অর্ডারের Status এবং Admin-এর নির্দেশনা যাচাই করুন। কোনো সমস্যা হলে সাইটের Admin-এর সঙ্গে যোগাযোগ করুন।</div>
+
+</div>
+
+<div class="policy-safety">
+
+<strong>🔒 নিরাপত্তা নির্দেশনা</strong><br>
+
+• টাকা পাঠানোর আগে প্রাপকের নম্বর এবং টাকার পরিমাণ আবার যাচাই করুন।<br>
+
+• আপনার bKash/Nagad PIN, OTP, পাসওয়ার্ড বা Recovery Code কাউকে দেবেন না।<br>
+
+• ভুয়া Transaction ID বা অন্যের পেমেন্টের তথ্য ব্যবহার করবেন না।<br>
+
+• ভুল নম্বরে টাকা পাঠালে টাকা ফেরত পাওয়ার নিশ্চয়তা নেই।<br>
+
+• সন্দেহ হলে টাকা পাঠানোর আগে থামুন এবং Admin-এর সঙ্গে যোগাযোগ করুন।
+
+</div>
+
+<p class="small-note">পেমেন্ট নম্বর অর্ডার ফর্মে দেখানো হবে। টাকা পাঠানোর আগে নম্বরটি সঠিক এবং অনুমোদিত কি না নিশ্চিত করুন।</p>
+
+<button class="btn" style="width:100%;margin-top:8px" onclick="closeModal('paymentPolicyModal')">বুঝেছি, বন্ধ করুন</button>
+
+</div>
+
+</div>
 
 <div class="modal" id="authModal"><div class="modal-box">
 
@@ -480,7 +616,7 @@ const SUPABASE_URL="https://qpcmfmhrigfdmvdtezli.supabase.co";
 
 /* নিজের Supabase Project Settings → API থেকে সঠিক anon/publishable key ব্যবহার করুন। */
 
-const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwY21mbWhyaWdmZG12ZHRlemxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3Njc5OTUsImV4cCI6MjEwODM0Mzk5NX0.0ToYY8IHVByxRZksJzd-O4_ztxVivKrgSYHU6Uzz0Y4";
+const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwY21mbWhyaWdmZG12ZHRlemxpIiwiaWF0IjoxNzkyNzY3OTk1LCJleHAiOjIxMDgzNDM5OTl9.0ToYY8IHVByxRZksJzd-O4_ztxVivKrgSYHU6UzzY4";
 
 const STORAGE_BUCKET="listing-images";
 
@@ -496,21 +632,13 @@ const configured=SUPABASE_URL.startsWith("https://")&&SUPABASE_KEY!=="PASTE_YOUR
 
 const sb=configured&&window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
 
- auth:{
-
-  persistSession:true,
-
-  autoRefreshToken:true,
-
-  detectSessionInUrl:true
-
- }
+ auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
 
 }):null;
 
 const $=id=>document.getElementById(id);
 
-let currentUser=null,currentProfile=null,listings=[],selectedListing=null;
+let currentUser=null,currentProfile=null, listings=[],selectedListing=null;
 
 let selectedFiles=[],previewUrls=[],selectedVideo=null,videoPreviewUrl=null;
 
@@ -529,6 +657,8 @@ function msg(id,text,ok=false){const e=$(id);if(!e)return;e.className="message "
 function openModal(id){$(id)?.classList.add("open")}
 
 function closeModal(id){$(id)?.classList.remove("open")}
+
+function openPaymentPolicy(){openModal("paymentPolicyModal")}
 
 function tr(bn,en){return currentLanguage==="bn"?bn:en}
 
@@ -570,20 +700,6 @@ function showDbError(error){
 
 }
 
-/*
-
- * Email confirmation redirect:
-
- * বর্তমানে যে production website URL থেকে সাইট খোলা হয়েছে সেটিই ব্যবহার হবে।
-
- * localhost-এ খোলা থাকলে localhost redirect তৈরি না করে সতর্ক করা হবে।
-
- * Supabase Dashboard → Authentication → URL Configuration-এ
-
- * Site URL এবং Redirect URLs-এ production domain যোগ করা আবশ্যক।
-
- */
-
 function getPublicRedirectURL(){
 
  const origin=window.location.origin;
@@ -608,11 +724,7 @@ function getAuthRedirectOptions(){
 
 function authRedirectWarning(){
 
- if(!getPublicRedirectURL()){
-
-  return "ইমেইল কনফার্মেশন লিংকের জন্য সাইটটি আগে একটি লাইভ HTTPS ডোমেইনে প্রকাশ করুন। localhost URL ব্যবহার করবেন না।";
-
- }
+ if(!getPublicRedirectURL())return "ইমেইল কনফার্মেশন লিংকের জন্য সাইটটি আগে একটি লাইভ HTTPS ডোমেইনে প্রকাশ করুন। localhost URL ব্যবহার করবেন না।";
 
  return "";
 
@@ -1090,9 +1202,9 @@ $("sellForm").addEventListener("submit",async e=>{
 
  const button=$("publishButton");button.disabled=true;button.textContent="আপলোড হচ্ছে...";
 
- let urls=[],videoUrl=null;
-
  try{
+
+  let urls=[],videoUrl=null;
 
   if(selectedFiles.length)urls=await uploadImages(selectedFiles);
 
@@ -1238,10 +1350,6 @@ async function showAdmin(){
 
 }
 
-/* Trade statistics are computed from listings and orders.
-
-   Amounts here are activity totals, not verified profit or wallet balance. */
-
 function rankForAmount(amount){
 
  const tiers=[
@@ -1286,15 +1394,11 @@ function renderRankCard(tradeAmount){
 
 async function getMemberStats(userId){
 
- const [listResult,orderResult]=await Promise.all([
+ const [listResult,orderResult,soldResult]=await Promise.all([
 
   sb.from("listings").select("id,seller_id,price,status,created_at").eq("seller_id",userId).limit(1000),
 
-  sb.from("orders").select("id,buyer_id,listing_id,amount,payment_status,order_status,created_at").or(`buyer_id.eq.${userId}`).limit(1000)
-
- ]);
-
- const [soldResult]=await Promise.all([
+  sb.from("orders").select("id,buyer_id,listing_id,amount,payment_status,order_status,created_at").eq("buyer_id",userId).limit(1000),
 
   sb.from("orders").select("id,listing_id,amount,payment_status,order_status,created_at,listings!inner(seller_id)").eq("listings.seller_id",userId).limit(1000)
 
@@ -1312,33 +1416,23 @@ async function getMemberStats(userId){
 
  const completedSold=soldOrders.filter(o=>o.order_status==="completed"&&approvedStatuses.has(o.payment_status));
 
- const boughtAmount=completedBought.reduce((s,o)=>s+Number(o.amount||0),0);
+ const spent=completedBought.reduce((s,o)=>s+Number(o.amount||0),0);
 
- const soldAmount=completedSold.reduce((s,o)=>s+Number(o.amount||0),0);
-
- const spent=boughtAmount;
-
- const earned=soldAmount;
+ const earned=completedSold.reduce((s,o)=>s+Number(o.amount||0),0);
 
  const approvedTransactions=[...boughtOrders,...soldOrders].filter(o=>approvedStatuses.has(o.payment_status));
 
  const uniqueApproved=new Set(approvedTransactions.map(o=>String(o.id)));
 
- const totalTrade=spent+earned;
-
  return {
 
   listingError:listResult.error,orderError:orderResult.error,soldError:soldResult.error,
 
-  spent,earned,totalTrade,
+  spent,earned,totalTrade:spent+earned,
 
-  boughtCount:completedBought.length,
+  boughtCount:completedBought.length,soldCount:completedSold.length,
 
-  soldCount:completedSold.length,
-
-  approvedCount:uniqueApproved.size,
-
-  listingCount:ownListings.length,
+  approvedCount:uniqueApproved.size,listingCount:ownListings.length,
 
   pendingCount:boughtOrders.filter(o=>o.payment_status==="pending").length
 
@@ -1558,8 +1652,6 @@ async function openProfile(){
 
  const approved=new Set([...(buyOrders||[]),...(sellOrders||[])].filter(o=>["approved","completed","confirmed"].includes(o.payment_status)).map(o=>String(o.id)));
 
- const rank=rankForAmount(totalTrade);
-
  const statError=listingError||buyError||sellError;
 
  const statsHtml=statError?`<div class="message error">অ্যাকাউন্ট স্ট্যাটস লোড করা যায়নি: ${esc(showDbError(statError))}</div>`:`<div class="stat-grid"><div class="stat-box"><span>💸 মোট খরচ (সম্পন্ন কেনা)</span><strong>${money(spent)}</strong></div><div class="stat-box"><span>💰 মোট আয় (সম্পন্ন বিক্রি)</span><strong>${money(earned)}</strong></div><div class="stat-box"><span>🛒 সম্পন্ন কেনা</span><strong>${bought.length} টি</strong></div><div class="stat-box"><span>🏷️ সম্পন্ন বিক্রি</span><strong>${sold.length} টি</strong></div><div class="stat-box"><span>📦 মোট বিজ্ঞাপন</span><strong>${(ownListings||[]).length} টি</strong></div><div class="stat-box"><span>✅ অনুমোদিত ইউনিক ট্রানজ্যাকশন</span><strong>${approved.size} টি</strong></div></div>`;
@@ -1624,9 +1716,15 @@ async function loadNotifications(){
 
  const button=document.createElement("button");
 
- button.id="notificationButton";button.className="btn secondary";
+ button.id="notificationButton";
 
- button.textContent="🔔 "+(error?"Notifications":`Notifications (${data?.length||0})`);
+ button.className="header-icon-btn";
+
+ button.setAttribute("aria-label","Notifications");
+
+ button.title="Notifications";
+
+ button.innerHTML=`<span aria-hidden="true">🔔</span><span style="position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:#e8c879;color:#172017;font-size:10px;font-weight:900;display:grid;place-items:center">${error?"!":(data?.length||0)}</span><span class="icon-caption">Notifications</span>`;
 
  button.onclick=()=>{
 
@@ -1638,7 +1736,9 @@ async function loadNotifications(){
 
  };
 
- $("userLabel").parentElement.appendChild(button);
+ const policyButton=$("paymentPolicyBtn");
+
+ if(policyButton&&policyButton.parentElement)policyButton.parentElement.insertBefore(button,policyButton);
 
 }
 
