@@ -18,7 +18,7 @@
 
   --red:#ff3948;--orange:#ff8b27;--text:#f5f6fa;
 
-  --muted:#a4aec0;--green:#19c98b;
+  --muted:#a4aec0;--green:#19c98b
 
 }
 
@@ -80,11 +80,17 @@ section{padding:22px 0 35px}
 
 .listing{overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:14px}
 
-.cover{height:150px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#50141f,#161d2b);position:relative;overflow:hidden}
+.cover{height:180px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#50141f,#161d2b);position:relative;overflow:hidden}
 
 .cover img{width:100%;height:100%;object-fit:cover}
 
 .cover .level{position:absolute;right:10px;bottom:10px;background:#000b;padding:7px;border-radius:6px}
+
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+
+.gallery img{width:100%;height:105px;object-fit:cover;border-radius:8px;border:1px solid var(--line);cursor:pointer}
+
+.gallery img:first-child{grid-column:span 2;grid-row:span 2;height:218px}
 
 .listing-body{padding:14px}
 
@@ -140,27 +146,33 @@ th{color:var(--orange)}
 
 .status.rejected,.status.cancelled{color:#ffadb4}
 
+.image-preview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}
+
+.preview-item{position:relative;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#0e131c}
+
+.preview-item img{width:100%;height:100px;object-fit:cover;display:block}
+
+.preview-item button{position:absolute;top:5px;right:5px;border:0;border-radius:50%;width:27px;height:27px;background:#ff3948;color:white;font-weight:bold}
+
+.preview-item span{display:block;padding:5px;font-size:10px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.upload-status{font-size:12px;color:var(--muted);line-height:1.7;margin-top:8px}
+
 footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var(--muted);font-size:12px}
 
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 @media(max-width:520px){
 
-  .grid{grid-template-columns:1fr}
+.grid{grid-template-columns:1fr}
 
-  .stats{gap:6px}
+.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:18px}
 
-  .stat{padding:10px}
+.brand{font-size:16px}.hero{padding-top:35px}
 
-  .stat strong{font-size:18px}
+.actions{gap:6px}.actions .btn{padding:9px 10px;font-size:12px}
 
-  .brand{font-size:16px}
-
-  .hero{padding-top:35px}
-
-  .actions{gap:6px}
-
-  .actions .btn{padding:9px 10px;font-size:12px}
+.gallery img{height:85px}.gallery img:first-child{height:178px}
 
 }
 
@@ -178,9 +190,9 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
     <div class="actions">
 
-      <button class="btn secondary" id="languageBtn" onclick="toggleLanguage()" type="button">English</button>
+      <button class="btn secondary" id="languageBtn" onclick="toggleLanguage()">English</button>
 
-      <span id="userLabel" style="font-size:12px;color:#a4aec0">Not logged in</span>
+      <span id="userLabel" style="font-size:12px;color:#a4aec0">লগইন করা নেই</span>
 
       <button class="btn secondary" id="authBtn" onclick="openAuth()">Login / Register</button>
 
@@ -204,25 +216,21 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
     <h1>FREE FIRE<br><span>BUY & SELL MARKETPLACE</span></h1>
 
-    <p data-i18n="heroDescription">
+    <p data-i18n="heroDescription">ANSU YT BUY SELL-এ স্বাগতম। অ্যাকাউন্ট বিক্রি করতে, অ্যাকাউন্ট দেখতে এবং অর্ডার করতে লগইন করো।</p>
 
-      Welcome to ANSU YT BUY SELL. Login to publish listings, browse accounts and create orders. Manual bKash/Nagad payment is verified by admin.
+    <button class="btn" onclick="openSell()" data-i18n="sellAccount">+ অ্যাকাউন্ট বিক্রি</button>
 
-    </p>
-
-    <button class="btn" onclick="openSell()" data-i18n="sellAccount">+ Sell Account</button>
-
-    <button class="btn secondary" onclick="$('market').scrollIntoView({behavior:'smooth'})" data-i18n="browseAccounts">Browse Accounts</button>
+    <button class="btn secondary" onclick="$('market').scrollIntoView({behavior:'smooth'})" data-i18n="browseAccounts">অ্যাকাউন্ট দেখো</button>
 
   </div>
 
   <div class="stats">
 
-    <div class="stat"><strong id="listingCount">0</strong><span data-i18n="availableListings">Available Listings</span></div>
+    <div class="stat"><strong id="listingCount">0</strong><span data-i18n="availableListings">উপলভ্য বিজ্ঞাপন</span></div>
 
-    <div class="stat"><strong>2</strong><span data-i18n="paymentChoices">Payment Choices</span></div>
+    <div class="stat"><strong>2</strong><span data-i18n="paymentChoices">পেমেন্টের মাধ্যম</span></div>
 
-    <div class="stat"><strong>24/7</strong><span data-i18n="browseMarketplace">Browse Marketplace</span></div>
+    <div class="stat"><strong>24/7</strong><span data-i18n="browseMarketplace">মার্কেটপ্লেস দেখো</span></div>
 
   </div>
 
@@ -232,41 +240,39 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
       <div>
 
-        <h2 data-i18n="availableAccounts">🔥 Available Accounts</h2>
+        <h2 data-i18n="availableAccounts">🔥 উপলভ্য অ্যাকাউন্ট</h2>
 
-        <p style="color:#a4aec0;font-size:13px" data-i18n="liveListings">Live listings from Supabase</p>
+        <p style="color:#a4aec0;font-size:13px" data-i18n="liveListings">Supabase থেকে লাইভ বিজ্ঞাপন</p>
 
       </div>
 
-      <button class="btn secondary" onclick="loadListings()" data-i18n="refresh">Refresh</button>
+      <button class="btn secondary" onclick="loadListings()" data-i18n="refresh">রিফ্রেশ</button>
 
     </div>
 
     <div class="filters">
 
-      <input class="field" id="search" placeholder="Search account..." data-i18n-placeholder="searchAccount" oninput="renderListings()">
+      <input class="field" id="search" placeholder="অ্যাকাউন্ট খুঁজো..." oninput="renderListings()">
 
       <select class="field" id="sort" onchange="renderListings()">
 
-        <option value="new" data-i18n="newestFirst">Newest first</option>
+        <option value="new">নতুন আগে</option>
 
-        <option value="low" data-i18n="priceLowHigh">Price: Low to High</option>
+        <option value="low">দাম: কম থেকে বেশি</option>
 
-        <option value="high" data-i18n="priceHighLow">Price: High to Low</option>
+        <option value="high">দাম: বেশি থেকে কম</option>
 
       </select>
 
     </div>
 
-    <div class="grid" id="listingGrid"><div class="panel" data-i18n="loadingListings">Loading listings...</div></div>
+    <div class="grid" id="listingGrid"><div class="panel">অ্যাকাউন্ট লোড হচ্ছে...</div></div>
 
     <div class="notice">
 
-      <span data-i18n="paymentWarning">⚠️ টাকা পাঠানোর পর সঠিক Transaction ID জমা দাও। Admin যাচাই না করা পর্যন্ত Payment Pending থাকবে।</span>
+      <span data-i18n="paymentWarning">⚠️ টাকা পাঠানোর পর সঠিক Transaction ID জমা দাও। Admin যাচাই না করা পর্যন্ত Payment Pending থাকবে।</span><br>
 
-      <br>
-
-      <span data-i18n="neverShareCodes">কখনো password, OTP বা recovery code শেয়ার করবে না।</span>
+      <span data-i18n="neverShareCodes">কখনো Password, OTP বা Recovery Code শেয়ার করবে না।</span>
 
     </div>
 
@@ -274,13 +280,7 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
   <section id="ordersSection" class="hidden">
 
-    <div class="section-title">
-
-      <h2 data-i18n="myOrdersBuyer">📦 My Orders — Buyer</h2>
-
-      <button class="btn secondary" onclick="loadOrders()" data-i18n="refresh">Refresh</button>
-
-    </div>
+    <div class="section-title"><h2>📦 আমার অর্ডার — ক্রেতা</h2><button class="btn secondary" onclick="loadOrders()">রিফ্রেশ</button></div>
 
     <div class="panel" id="ordersContent"></div>
 
@@ -288,13 +288,7 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
   <section id="sellerSection" class="hidden">
 
-    <div class="section-title">
-
-      <h2 data-i18n="sellerOrders">🛍️ Seller Orders</h2>
-
-      <button class="btn secondary" onclick="loadSellerOrders()" data-i18n="refresh">Refresh</button>
-
-    </div>
+    <div class="section-title"><h2>🛍️ বিক্রেতার অর্ডার</h2><button class="btn secondary" onclick="loadSellerOrders()">রিফ্রেশ</button></div>
 
     <div class="panel" id="sellerContent"></div>
 
@@ -302,13 +296,7 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
   <section id="adminSection" class="hidden">
 
-    <div class="section-title">
-
-      <h2 data-i18n="adminPanel">👑 Admin Panel</h2>
-
-      <button class="btn secondary" onclick="loadAdmin()" data-i18n="refresh">Refresh</button>
-
-    </div>
+    <div class="section-title"><h2>👑 অ্যাডমিন প্যানেল</h2><button class="btn secondary" onclick="loadAdmin()">রিফ্রেশ</button></div>
 
     <div class="panel" id="adminContent"></div>
 
@@ -316,11 +304,7 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
 </main>
 
-<footer>
-
-  <div class="container" data-i18n="footerText">© 2026 ANSU YT BUY SELL · Community Marketplace</div>
-
-</footer>
+<footer><div class="container">© 2026 ANSU YT BUY SELL · Community Marketplace</div></footer>
 
 <!-- LOGIN / REGISTER -->
 
@@ -328,45 +312,21 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
   <div class="modal-box">
 
-    <div class="modal-head">
-
-      <h2 data-i18n="loginRegister">🔐 Login / Register</h2>
-
-      <button class="close" onclick="closeModal('authModal')">✕</button>
-
-    </div>
+    <div class="modal-head"><h2>🔐 Login / Register</h2><button class="close" onclick="closeModal('authModal')">✕</button></div>
 
     <form class="form" id="loginForm">
 
-      <div>
+      <div><label>পুরো নাম (রেজিস্ট্রেশনের জন্য)</label><input class="field" id="fullName" maxlength="80" placeholder="তোমার নাম"></div>
 
-        <label data-i18n="fullNameRegister">Full Name (Register)</label>
+      <div><label>ইমেইল</label><input class="field" id="email" type="email" required autocomplete="email"></div>
 
-        <input class="field" id="fullName" maxlength="80" placeholder="Your name" data-i18n-placeholder="yourName">
+      <div><label>পাসওয়ার্ড (কমপক্ষে ৮ অক্ষর)</label><input class="field" id="password" type="password" minlength="8" required autocomplete="current-password"></div>
 
-      </div>
+      <button class="btn" type="submit">লগইন</button>
 
-      <div>
+      <button class="btn secondary" type="button" onclick="registerUser()">অ্যাকাউন্ট তৈরি / রেজিস্টার</button>
 
-        <label data-i18n="email">Email</label>
-
-        <input class="field" id="email" type="email" required autocomplete="email">
-
-      </div>
-
-      <div>
-
-        <label data-i18n="passwordMinimum">Password (minimum 8 characters)</label>
-
-        <input class="field" id="password" type="password" minlength="8" required autocomplete="current-password">
-
-      </div>
-
-      <button class="btn" type="submit" data-i18n="login">Login</button>
-
-      <button class="btn secondary" type="button" onclick="registerUser()" data-i18n="createAccount">Create Account / Register</button>
-
-      <button class="btn secondary" type="button" onclick="resetPassword()" data-i18n="forgotPassword">Forgot Password?</button>
+      <button class="btn secondary" type="button" onclick="resetPassword()">পাসওয়ার্ড ভুলে গেছ?</button>
 
     </form>
 
@@ -376,95 +336,53 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
 </div>
 
-<!-- CREATE LISTING -->
+<!-- CREATE LISTING WITH MULTIPLE IMAGES -->
 
 <div class="modal" id="sellModal">
 
   <div class="modal-box">
 
-    <div class="modal-head">
-
-      <h2 data-i18n="sellFreeFireAccount">🎮 Sell Free Fire Account</h2>
-
-      <button class="close" onclick="closeModal('sellModal')">✕</button>
-
-    </div>
+    <div class="modal-head"><h2>🎮 Free Fire অ্যাকাউন্ট বিক্রি</h2><button class="close" onclick="closeModal('sellModal')">✕</button></div>
 
     <form class="form" id="sellForm">
 
+      <div><label>অ্যাকাউন্টের শিরোনাম</label><input class="field" id="sellTitle" required maxlength="70" placeholder="Rare bundles and skins"></div>
+
+      <div><label>দাম (টাকা)</label><input class="field" id="sellPrice" type="number" min="1" max="10000000" required></div>
+
+      <div><label>অ্যাকাউন্ট লেভেল</label><input class="field" id="sellLevel" type="number" min="1" max="100" required></div>
+
+      <div><label>অ্যাকাউন্টের ধরন</label><select class="field" id="sellType"><option>Starter</option><option>Rare Skins</option><option>Collector</option></select></div>
+
+      <div><label>রিজিয়ন</label><select class="field" id="sellRegion"><option>Bangladesh</option><option>Global</option><option>Other</option></select></div>
+
+      <div><label>বিবরণ</label><textarea class="field" id="sellDescription" rows="3" maxlength="1000" placeholder="Skin, Bundle, Emote ইত্যাদি সম্পর্কে লেখো..."></textarea></div>
+
       <div>
 
-        <label data-i18n="accountTitle">Account Title</label>
+        <label for="sellImages">📸 একসঙ্গে একাধিক ছবি বেছে নাও (সর্বোচ্চ ৬টি)</label>
 
-        <input class="field" id="sellTitle" required maxlength="70" placeholder="Rare bundles and skins" data-i18n-placeholder="rareBundles">
+        <input class="field" id="sellImages" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+
+        <div class="small-note">JPEG, PNG, WEBP অথবা GIF। প্রতিটি ছবির সর্বোচ্চ সাইজ ৫ MB। আপলোডের আগে Preview দেখা ও ছবি সরানো যাবে।</div>
+
+        <div id="imagePreview" class="image-preview-grid"></div>
+
+        <div id="uploadStatus" class="upload-status"></div>
 
       </div>
 
       <div>
 
-        <label data-i18n="priceBDT">Price (BDT)</label>
-
-        <input class="field" id="sellPrice" type="number" min="1" max="10000000" required>
-
-      </div>
-
-      <div>
-
-        <label data-i18n="accountLevel">Account Level</label>
-
-        <input class="field" id="sellLevel" type="number" min="1" max="100" required>
-
-      </div>
-
-      <div>
-
-        <label data-i18n="accountType">Account Type</label>
-
-        <select class="field" id="sellType">
-
-          <option>Starter</option>
-
-          <option>Rare Skins</option>
-
-          <option>Collector</option>
-
-        </select>
-
-      </div>
-
-      <div>
-
-        <label data-i18n="region">Region</label>
-
-        <select class="field" id="sellRegion">
-
-          <option>Bangladesh</option>
-
-          <option>Global</option>
-
-          <option>Other</option>
-
-        </select>
-
-      </div>
-
-      <div>
-
-        <label data-i18n="description">Description</label>
-
-        <textarea class="field" id="sellDescription" rows="3" maxlength="1000" placeholder="Describe skins, bundles, emotes..." data-i18n-placeholder="describeAccount"></textarea>
-
-      </div>
-
-      <div>
-
-        <label data-i18n="imageUrlOptional">Account Image URL (optional)</label>
+        <label>অথবা একটি পুরোনো Image URL (ঐচ্ছিক)</label>
 
         <input class="field" id="sellImage" type="url" maxlength="500" placeholder="https://example.com/image.jpg">
 
+        <div class="small-note">একাধিক ফাইল আপলোড করলে এই URL-এর পরিবর্তে আপলোড করা ছবিগুলো ব্যবহার হবে।</div>
+
       </div>
 
-      <button class="btn" type="submit" data-i18n="publishListing">Publish Listing</button>
+      <button class="btn" id="publishButton" type="submit">বিজ্ঞাপন প্রকাশ করো</button>
 
     </form>
 
@@ -480,13 +398,7 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
   <div class="modal-box">
 
-    <div class="modal-head">
-
-      <h2 id="detailsTitle">Account Details</h2>
-
-      <button class="close" onclick="closeModal('detailsModal')">✕</button>
-
-    </div>
+    <div class="modal-head"><h2 id="detailsTitle">অ্যাকাউন্টের বিবরণ</h2><button class="close" onclick="closeModal('detailsModal')">✕</button></div>
 
     <div id="detailsContent"></div>
 
@@ -500,73 +412,27 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
   <div class="modal-box">
 
-    <div class="modal-head">
-
-      <h2 data-i18n="orderManualPayment">📦 Order & Manual Payment</h2>
-
-      <button class="close" onclick="closeModal('checkoutModal')">✕</button>
-
-    </div>
+    <div class="modal-head"><h2>📦 অর্ডার ও ম্যানুয়াল পেমেন্ট</h2><button class="close" onclick="closeModal('checkoutModal')">✕</button></div>
 
     <div id="checkoutAccount"></div>
 
     <form class="form" id="checkoutForm">
 
-      <div>
+      <div><label>তোমার নাম</label><input class="field" id="buyerName" maxlength="80" required></div>
 
-        <label data-i18n="yourName">Your Name</label>
+      <div><label>যোগাযোগের ইমেইল বা ফোন</label><input class="field" id="buyerContact" maxlength="120" required></div>
 
-        <input class="field" id="buyerName" maxlength="80" required>
-
-      </div>
-
-      <div>
-
-        <label data-i18n="contactEmailPhone">Contact Email or Phone</label>
-
-        <input class="field" id="buyerContact" maxlength="120" required>
-
-      </div>
-
-      <div>
-
-        <label data-i18n="paymentMethod">Payment Method</label>
-
-        <select class="field" id="paymentMethod" onchange="showPaymentInstructions()">
-
-          <option value="bkash">bKash</option>
-
-          <option value="nagad">Nagad</option>
-
-        </select>
-
-      </div>
+      <div><label>পেমেন্টের মাধ্যম</label><select class="field" id="paymentMethod" onchange="showPaymentInstructions()"><option value="bkash">bKash</option><option value="nagad">Nagad</option></select></div>
 
       <div class="notice" id="paymentInstructions" style="margin:0"></div>
 
-      <div>
+      <div><label>Transaction ID</label><input class="field" id="transactionId" maxlength="120" required placeholder="Payment Transaction ID"></div>
 
-        <label data-i18n="transactionIdLabel">Transaction ID (টাকা পাঠানোর পর লিখবে)</label>
+      <div><label>যে নম্বর থেকে টাকা পাঠিয়েছ</label><input class="field" id="paymentNumber" maxlength="30" required placeholder="01XXXXXXXXX"></div>
 
-        <input class="field" id="transactionId" maxlength="120" required placeholder="Payment Transaction ID" data-i18n-placeholder="paymentTransactionId">
+      <p class="small-note">টাকা পাঠিয়ে তারপর ফর্ম জমা দাও। Transaction ID জমা দিলেই পেমেন্ট Approved হবে না; Admin যাচাই করবে।</p>
 
-      </div>
-
-      <div>
-
-        <label data-i18n="senderNumberLabel">যে নম্বর থেকে টাকা পাঠিয়েছ</label>
-
-        <input class="field" id="paymentNumber" maxlength="30" required placeholder="01XXXXXXXXX">
-
-      </div>
-
-      <p class="small-note" data-i18n="paymentImportantNote">
-
-        সঠিক নম্বরে টাকা পাঠিয়ে তারপর ফর্ম জমা দাও। ওয়েবসাইট নিজে টাকা ট্রান্সফার করে না। Transaction ID জমা দিলেই Payment Approved হবে না; Admin যাচাই করবে।
-
-      </p>
-
-      <button class="btn" type="submit" data-i18n="submitOrderPayment">Submit Order & Payment Details</button>
+      <button class="btn" type="submit">অর্ডার ও পেমেন্টের তথ্য জমা দাও</button>
 
     </form>
 
@@ -582,675 +448,37 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding:25px 0;color:var
 
 /* =========================
 
-   LANGUAGE SYSTEM
-
-   Bangla / English
+   CONFIGURATION
 
 ========================= */
 
-const TRANSLATIONS = {
-
-  en: {
-
-    "heroDescription":"Welcome to ANSU YT BUY SELL. Login to publish listings, browse accounts and create orders. Manual bKash/Nagad payment is verified by admin.",
-
-    "sellAccount":"+ Sell Account",
-
-    "browseAccounts":"Browse Accounts",
-
-    "availableListings":"Available Listings",
-
-    "paymentChoices":"Payment Choices",
-
-    "browseMarketplace":"Browse Marketplace",
-
-    "availableAccounts":"🔥 Available Accounts",
-
-    "liveListings":"Live listings from Supabase",
-
-    "refresh":"Refresh",
-
-    "searchAccount":"Search account...",
-
-    "newestFirst":"Newest first",
-
-    "priceLowHigh":"Price: Low to High",
-
-    "priceHighLow":"Price: High to Low",
-
-    "loadingListings":"Loading listings...",
-
-    "paymentWarning":"⚠️ Submit the correct Transaction ID after sending the money. Payment will remain Pending until the admin verifies it.",
-
-    "neverShareCodes":"Never share your password, OTP or recovery code.",
-
-    "myOrdersBuyer":"📦 My Orders — Buyer",
-
-    "sellerOrders":"🛍️ Seller Orders",
-
-    "adminPanel":"👑 Admin Panel",
-
-    "footerText":"© 2026 ANSU YT BUY SELL · Community Marketplace",
-
-    "loginRegister":"🔐 Login / Register",
-
-    "fullNameRegister":"Full Name (Register)",
-
-    "yourName":"Your name",
-
-    "email":"Email",
-
-    "passwordMinimum":"Password (minimum 8 characters)",
-
-    "login":"Login",
-
-    "createAccount":"Create Account / Register",
-
-    "forgotPassword":"Forgot Password?",
-
-    "sellFreeFireAccount":"🎮 Sell Free Fire Account",
-
-    "accountTitle":"Account Title",
-
-    "rareBundles":"Rare bundles and skins",
-
-    "priceBDT":"Price (BDT)",
-
-    "accountLevel":"Account Level",
-
-    "accountType":"Account Type",
-
-    "region":"Region",
-
-    "description":"Description",
-
-    "describeAccount":"Describe skins, bundles, emotes...",
-
-    "imageUrlOptional":"Account Image URL (optional)",
-
-    "publishListing":"Publish Listing",
-
-    "accountDetails":"Account Details",
-
-    "orderManualPayment":"📦 Order & Manual Payment",
-
-    "contactEmailPhone":"Contact Email or Phone",
-
-    "paymentMethod":"Payment Method",
-
-    "transactionIdLabel":"Transaction ID (enter after sending the money)",
-
-    "paymentTransactionId":"Payment Transaction ID",
-
-    "senderNumberLabel":"Number used to send the payment",
-
-    "paymentImportantNote":"Send the money to the correct number before submitting the form. The website does not transfer money automatically. Submitting a Transaction ID does not mean payment is approved; the admin must verify it.",
-
-    "submitOrderPayment":"Submit Order & Payment Details",
-
-    "notLoggedIn":"Not logged in",
-
-    "supabaseNotConfigured":"Supabase URL or Key has not been configured correctly.",
-
-    "registerNameRequired":"Enter your full name before registering.",
-
-    "passwordTooShort":"Password must contain at least 8 characters.",
-
-    "registrationSuccess":"Registration request successful. If email confirmation is required, check your inbox.",
-
-    "emailResetSent":"If this email is registered, a Password Reset Email will be sent.",
-
-    "enterEmailFirst":"Enter your email first.",
-
-    "noListings":"No listings found.",
-
-    "typeLabel":"Type:",
-
-    "regionLabel":"Region:",
-
-    "levelLabel":"Level:",
-
-    "details":"Details",
-
-    "noDescription":"No description provided.",
-
-    "buyAccount":"Buy Account",
-
-    "ownListing":"You cannot buy your own listing.",
-
-    "fillCorrectInfo":"Please fill in all information correctly.",
-
-    "listingPublished":"Listing published successfully!",
-
-    "amountToSend":"Amount to send:",
-
-    "stepOne":"1. Send the displayed amount to the number above.",
-
-    "stepTwo":"2. Enter the Transaction ID and the number you sent the money from below.",
-
-    "stepThree":"3. The payment status will be updated after admin verification.",
-
-    "orderOwnListing":"You cannot place an order for your own listing.",
-
-    "fillTransaction":"Enter both the Transaction ID and payment sender number.",
-
-    "submitting":"Submitting...",
-
-    "orderCreateFailed":"Order could not be created: ",
-
-    "orderSubmitted":"Order submitted successfully.",
-
-    "orderId":"Order ID:",
-
-    "paymentStatus":"Payment Status:",
-
-    "pending":"Pending",
-
-    "adminWillVerify":"The admin will update the status after verifying the Transaction ID.",
-
-    "noOrders":"There are no orders yet.",
-
-    "order":"Order",
-
-    "amount":"Amount",
-
-    "paymentDetails":"Payment Details",
-
-    "status":"Status",
-
-    "date":"Date",
-
-    "adminNote":"Admin Note",
-
-    "txn":"Txn:",
-
-    "from":"From:",
-
-    "loadingSellerOrders":"Loading seller orders...",
-
-    "sellerOrdersFailed":"Could not load seller orders:",
-
-    "sellerOrdersHelp":"Supabase must have a foreign key from orders.listing_id to listings.id and an enabled SELECT policy for seller orders.",
-
-    "noSellerOrders":"There are no orders for your listings yet.",
-
-    "account":"Account",
-
-    "buyer":"Buyer",
-
-    "payment":"Payment",
-
-    "orderStatus":"Order Status",
-
-    "paymentStatusAdmin":"Payment Status",
-
-    "save":"Save",
-
-    "optionalNote":"Optional note",
-
-    "paymentVerification":"Payment verification:",
-
-    "paymentVerificationWarning":"Only set Payment Status to “Approved” after personally verifying the payment in your bKash/Nagad account. Receiving a Transaction ID does not confirm that money was received.",
-
-    "adminAccessRequired":"Admin access required.",
-
-    "confirmPayment":"Have you really received and verified this payment in bKash/Nagad?",
-
-    "updateFailed":"Update failed: ",
-
-    "orderPaymentUpdated":"Order and Payment Status updated.",
-
-    "restore":"Restore",
-
-    "remove":"Remove",
-
-    "noOrdersYet":"No orders yet.",
-
-    "noListingsAdmin":"No listings.",
-
-    "listings":"🎮 Listings",
-
-    "title":"Title",
-
-    "action":"Action",
-
-    "loadingAdmin":"Loading admin data...",
-
-    "databaseError":"Database Error: ",
-
-    "registrationFailed":"Registration failed: ",
-
-    "accountStarter":"Starter",
-
-    "accountRareSkins":"Rare Skins",
-
-    "accountCollector":"Collector",
-
-    "regionBangladesh":"Bangladesh",
-
-    "regionGlobal":"Global",
-
-    "regionOther":"Other",
-
-    "paymentMethodBkash":"bKash Payment",
-
-    "paymentMethodNagad":"Nagad Payment",
-
-    "listingLoadError":"Could not load listings: ",
-
-    "profileError":"Profile error: ",
-
-    "updateListingError":"Could not update listing: ",
-
-    "paymentPending":"Pending",
-
-    "paymentApproved":"Approved",
-
-    "paymentRejected":"Rejected",
-
-    "orderConfirmed":"Confirmed",
-
-    "orderCompleted":"Completed",
-
-    "orderCancelled":"Cancelled"
-
-  },
-
-  bn: {
-
-    "heroDescription":"ANSU YT BUY SELL-এ স্বাগতম। অ্যাকাউন্ট বিক্রির বিজ্ঞাপন দিতে, অ্যাকাউন্ট দেখতে এবং অর্ডার করতে লগইন করো। bKash/Nagad-এর মাধ্যমে পাঠানো টাকা Admin যাচাই করবেন।",
-
-    "sellAccount":"+ অ্যাকাউন্ট বিক্রি",
-
-    "browseAccounts":"অ্যাকাউন্ট দেখো",
-
-    "availableListings":"উপলভ্য বিজ্ঞাপন",
-
-    "paymentChoices":"পেমেন্টের মাধ্যম",
-
-    "browseMarketplace":"মার্কেটপ্লেস দেখো",
-
-    "availableAccounts":"🔥 উপলভ্য অ্যাকাউন্ট",
-
-    "liveListings":"Supabase থেকে লাইভ বিজ্ঞাপন",
-
-    "refresh":"রিফ্রেশ",
-
-    "searchAccount":"অ্যাকাউন্ট খুঁজো...",
-
-    "newestFirst":"নতুন আগে",
-
-    "priceLowHigh":"দাম: কম থেকে বেশি",
-
-    "priceHighLow":"দাম: বেশি থেকে কম",
-
-    "loadingListings":"অ্যাকাউন্ট লোড হচ্ছে...",
-
-    "paymentWarning":"⚠️ টাকা পাঠানোর পর সঠিক Transaction ID জমা দাও। Admin যাচাই না করা পর্যন্ত Payment Pending থাকবে।",
-
-    "neverShareCodes":"কখনো Password, OTP বা Recovery Code শেয়ার করবে না।",
-
-    "myOrdersBuyer":"📦 আমার অর্ডার — ক্রেতা",
-
-    "sellerOrders":"🛍️ বিক্রেতার অর্ডার",
-
-    "adminPanel":"👑 অ্যাডমিন প্যানেল",
-
-    "footerText":"© 2026 ANSU YT BUY SELL · কমিউনিটি মার্কেটপ্লেস",
-
-    "loginRegister":"🔐 লগইন / রেজিস্টার",
-
-    "fullNameRegister":"পুরো নাম (রেজিস্ট্রেশনের জন্য)",
-
-    "yourName":"তোমার নাম",
-
-    "email":"ইমেইল",
-
-    "passwordMinimum":"পাসওয়ার্ড (কমপক্ষে ৮ অক্ষর)",
-
-    "login":"লগইন",
-
-    "createAccount":"অ্যাকাউন্ট তৈরি / রেজিস্টার",
-
-    "forgotPassword":"পাসওয়ার্ড ভুলে গেছ?",
-
-    "sellFreeFireAccount":"🎮 Free Fire অ্যাকাউন্ট বিক্রি",
-
-    "accountTitle":"অ্যাকাউন্টের শিরোনাম",
-
-    "rareBundles":"Rare Bundle এবং Skin",
-
-    "priceBDT":"দাম (টাকা)",
-
-    "accountLevel":"অ্যাকাউন্ট লেভেল",
-
-    "accountType":"অ্যাকাউন্টের ধরন",
-
-    "region":"রিজিয়ন",
-
-    "description":"বিবরণ",
-
-    "describeAccount":"Skin, Bundle, Emote ইত্যাদি সম্পর্কে লেখো...",
-
-    "imageUrlOptional":"অ্যাকাউন্টের ছবির URL (ঐচ্ছিক)",
-
-    "publishListing":"বিজ্ঞাপন প্রকাশ করো",
-
-    "accountDetails":"অ্যাকাউন্টের বিবরণ",
-
-    "orderManualPayment":"📦 অর্ডার ও ম্যানুয়াল পেমেন্ট",
-
-    "contactEmailPhone":"যোগাযোগের ইমেইল বা ফোন",
-
-    "paymentMethod":"পেমেন্টের মাধ্যম",
-
-    "transactionIdLabel":"Transaction ID (টাকা পাঠানোর পর লিখবে)",
-
-    "paymentTransactionId":"পেমেন্টের Transaction ID",
-
-    "senderNumberLabel":"যে নম্বর থেকে টাকা পাঠিয়েছ",
-
-    "paymentImportantNote":"সঠিক নম্বরে টাকা পাঠিয়ে তারপর ফর্ম জমা দাও। ওয়েবসাইট নিজে টাকা ট্রান্সফার করে না। Transaction ID জমা দিলেই Payment Approved হবে না; Admin যাচাই করবে।",
-
-    "submitOrderPayment":"অর্ডার ও পেমেন্টের তথ্য জমা দাও",
-
-    "notLoggedIn":"লগইন করা নেই",
-
-    "supabaseNotConfigured":"Supabase URL ও Key সঠিকভাবে সেট করা হয়নি।",
-
-    "registerNameRequired":"রেজিস্ট্রেশনের আগে তোমার পুরো নাম লেখো।",
-
-    "passwordTooShort":"পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।",
-
-    "registrationSuccess":"রেজিস্ট্রেশনের অনুরোধ সফল হয়েছে। ইমেইল নিশ্চিত করতে বললে Inbox চেক করো।",
-
-    "emailResetSent":"এই ইমেইলটি নিবন্ধিত থাকলে পাসওয়ার্ড রিসেটের ইমেইল পাঠানো হবে।",
-
-    "enterEmailFirst":"আগে তোমার ইমেইল লেখো।",
-
-    "noListings":"কোনো বিজ্ঞাপন পাওয়া যায়নি।",
-
-    "typeLabel":"ধরন:",
-
-    "regionLabel":"রিজিয়ন:",
-
-    "levelLabel":"লেভেল:",
-
-    "details":"বিস্তারিত",
-
-    "noDescription":"কোনো বিবরণ দেওয়া হয়নি।",
-
-    "buyAccount":"অ্যাকাউন্ট কিনো",
-
-    "ownListing":"নিজের বিজ্ঞাপন নিজে কিনতে পারবে না।",
-
-    "fillCorrectInfo":"সব তথ্য সঠিকভাবে পূরণ করো।",
-
-    "listingPublished":"বিজ্ঞাপন সফলভাবে প্রকাশ হয়েছে!",
-
-    "amountToSend":"পাঠানোর পরিমাণ:",
-
-    "stepOne":"১. উপরে দেওয়া নম্বরে দেখানো পরিমাণ টাকা পাঠাও।",
-
-    "stepTwo":"২. নিচে Transaction ID এবং যে নম্বর থেকে টাকা পাঠিয়েছ তা লেখো।",
-
-    "stepThree":"৩. Admin যাচাই করার পর পেমেন্টের Status আপডেট হবে।",
-
-    "orderOwnListing":"নিজের বিজ্ঞাপনের জন্য অর্ডার করা যাবে না।",
-
-    "fillTransaction":"Transaction ID ও টাকা পাঠানোর নম্বর—দুটিই পূরণ করো।",
-
-    "submitting":"জমা হচ্ছে...",
-
-    "orderCreateFailed":"অর্ডার তৈরি হয়নি: ",
-
-    "orderSubmitted":"অর্ডার সফলভাবে জমা হয়েছে।",
-
-    "orderId":"অর্ডার ID:",
-
-    "paymentStatus":"পেমেন্টের Status:",
-
-    "pending":"অপেক্ষমাণ",
-
-    "adminWillVerify":"Admin Transaction ID যাচাই করার পর Status আপডেট করবেন।",
-
-    "noOrders":"এখনো কোনো অর্ডার নেই।",
-
-    "order":"অর্ডার",
-
-    "amount":"পরিমাণ",
-
-    "paymentDetails":"পেমেন্টের বিবরণ",
-
-    "status":"অবস্থা",
-
-    "date":"তারিখ",
-
-    "adminNote":"Admin-এর নোট",
-
-    "txn":"Txn:",
-
-    "from":"প্রেরক:",
-
-    "loadingSellerOrders":"বিক্রেতার অর্ডার লোড হচ্ছে...",
-
-    "sellerOrdersFailed":"বিক্রেতার অর্ডার লোড হয়নি:",
-
-    "sellerOrdersHelp":"Supabase-এ orders.listing_id থেকে listings.id-এর Foreign Key এবং বিক্রেতার অর্ডার দেখার SELECT Policy চালু থাকতে হবে।",
-
-    "noSellerOrders":"তোমার বিজ্ঞাপনের জন্য এখনো কোনো অর্ডার নেই।",
-
-    "account":"অ্যাকাউন্ট",
-
-    "buyer":"ক্রেতা",
-
-    "payment":"পেমেন্ট",
-
-    "orderStatus":"অর্ডারের অবস্থা",
-
-    "paymentStatusAdmin":"পেমেন্টের অবস্থা",
-
-    "save":"সংরক্ষণ",
-
-    "optionalNote":"ঐচ্ছিক নোট",
-
-    "paymentVerification":"পেমেন্ট যাচাই:",
-
-    "paymentVerificationWarning":"নিজের bKash/Nagad অ্যাকাউন্টে টাকা পাওয়া ও যাচাই করার পরেই Payment Status “Approved” করো। শুধু Transaction ID জমা পড়েছে বলে টাকা পাওয়া নিশ্চিত নয়।",
-
-    "adminAccessRequired":"শুধু Admin এই কাজটি করতে পারবেন।",
-
-    "confirmPayment":"তুমি কি bKash/Nagad-এ এই টাকা সত্যিই পেয়েছ এবং যাচাই করেছ?",
-
-    "updateFailed":"আপডেট ব্যর্থ হয়েছে: ",
-
-    "orderPaymentUpdated":"অর্ডার ও পেমেন্টের Status আপডেট হয়েছে।",
-
-    "restore":"ফিরিয়ে আনো",
-
-    "remove":"সরিয়ে দাও",
-
-    "noOrdersYet":"এখনো কোনো অর্ডার নেই।",
-
-    "noListingsAdmin":"কোনো বিজ্ঞাপন নেই।",
-
-    "listings":"🎮 বিজ্ঞাপনসমূহ",
-
-    "title":"শিরোনাম",
-
-    "action":"কাজ",
-
-    "loadingAdmin":"Admin-এর তথ্য লোড হচ্ছে...",
-
-    "databaseError":"Database Error: ",
-
-    "registrationFailed":"রেজিস্ট্রেশন ব্যর্থ হয়েছে: ",
-
-    "accountStarter":"Starter",
-
-    "accountRareSkins":"Rare Skins",
-
-    "accountCollector":"Collector",
-
-    "regionBangladesh":"বাংলাদেশ",
-
-    "regionGlobal":"গ্লোবাল",
-
-    "regionOther":"অন্যান্য",
-
-    "paymentMethodBkash":"bKash পেমেন্ট",
-
-    "paymentMethodNagad":"Nagad পেমেন্ট",
-
-    "listingLoadError":"বিজ্ঞাপন লোড হয়নি: ",
-
-    "profileError":"প্রোফাইলের সমস্যা: ",
-
-    "updateListingError":"বিজ্ঞাপন আপডেট হয়নি: ",
-
-    "paymentPending":"অপেক্ষমাণ",
-
-    "paymentApproved":"অনুমোদিত",
-
-    "paymentRejected":"প্রত্যাখ্যাত",
-
-    "orderConfirmed":"নিশ্চিত",
-
-    "orderCompleted":"সম্পন্ন",
-
-    "orderCancelled":"বাতিল"
-
-  }
-
-};
-
-let currentLanguage = localStorage.getItem("ansu_language") || "bn";
-
-function tr(key) {
-
-  return TRANSLATIONS[currentLanguage]?.[key] ??
-
-         TRANSLATIONS.bn[key] ??
-
-         key;
-
-}
-
-function toggleLanguage() {
-
-  currentLanguage = currentLanguage === "bn" ? "en" : "bn";
-
-  localStorage.setItem("ansu_language", currentLanguage);
-
-  document.documentElement.lang = currentLanguage;
-
-  applyLanguage();
-
-  refreshTranslatedContent();
-
-}
-
-function applyLanguage() {
-
-  document.documentElement.lang = currentLanguage;
-
-  $("languageBtn").textContent = currentLanguage === "bn" ? "English" : "বাংলা";
-
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-
-    const key = el.getAttribute("data-i18n");
-
-    if (TRANSLATIONS[currentLanguage][key] !== undefined) {
-
-      el.textContent = tr(key);
-
-    }
-
-  });
-
-  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-
-    const key = el.getAttribute("data-i18n-placeholder");
-
-    if (TRANSLATIONS[currentLanguage][key] !== undefined) {
-
-      el.placeholder = tr(key);
-
-    }
-
-  });
-
-  document.querySelectorAll("[data-i18n-title]").forEach(el => {
-
-    const key = el.getAttribute("data-i18n-title");
-
-    if (TRANSLATIONS[currentLanguage][key] !== undefined) {
-
-      el.title = tr(key);
-
-    }
-
-  });
-
-}
-
-function refreshTranslatedContent() {
-
-  renderListings();
-
-  if (!$("ordersSection").classList.contains("hidden")) {
-
-    loadOrders();
-
-  }
-
-  if (!$("sellerSection").classList.contains("hidden")) {
-
-    loadSellerOrders();
-
-  }
-
-  if (!$("adminSection").classList.contains("hidden")) {
-
-    loadAdmin();
-
-  }
-
-  if ($("checkoutModal").classList.contains("open")) {
-
-    showPaymentInstructions();
-
-  }
-
-}
-
-/* SUPABASE CONFIG */
-
 const SUPABASE_URL = "https://qpcmfmhrigfdmvdtezli.supabase.co";
 
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwY21mbWhyaWdmZG12ZHRlemxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3Njc5OTUsImV4cCI6MjEwODM0Mzk5NX0.0ToYY8IHVByxRZksJzd-O4_ztxVivKrgSYHU6Uzz0Y4";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6InFwY21mbWhyaWdmZG12ZHRlemxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3Njc5OTUsImV4cCI6MjEwODM0Mzk5NX0.0ToYY8IHVByxRZksJzd-O4_ztxVivKrgSYHU6Uzz0Y4";
+
+const STORAGE_BUCKET = "product-images";
+
+const MAX_IMAGES = 6;
+
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 const PAYMENT_NUMBERS = {
 
-  bkash: "8801726270731",
+  bkash:"8801726270731",
 
-  nagad: "8801344875536"
+  nagad:"8801344875536"
 
 };
 
-const configured =
-
-  SUPABASE_URL.startsWith("https://") &&
+const configured = SUPABASE_URL.startsWith("https://") &&
 
   !SUPABASE_URL.includes("YOUR_SUPABASE") &&
 
   !SUPABASE_KEY.includes("YOUR_SUPABASE");
 
-const sb = configured
+const sb = configured ? window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY) : null;
 
-  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-
-  : null;
+const $ = id => document.getElementById(id);
 
 let currentUser = null;
 
@@ -1260,97 +488,559 @@ let listings = [];
 
 let selectedListing = null;
 
-const $ = id => document.getElementById(id);
+let currentLanguage = localStorage.getItem("ansu_language") || "bn";
 
-function esc(value) {
+let selectedFiles = [];
 
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
+let previewUrls = [];
 
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+/* =========================
 
-  })[char]);
+   LANGUAGE
 
-}
+========================= */
 
-function money(value) {
+const TRANSLATIONS = {
 
-  return "৳" + Number(value || 0).toLocaleString("en-BD");
+  bn:{
 
-}
+    heroDescription:"ANSU YT BUY SELL-এ স্বাগতম। অ্যাকাউন্ট বিক্রি করতে, অ্যাকাউন্ট দেখতে এবং অর্ডার করতে লগইন করো।",
 
-function message(id, text, success = false) {
+    sellAccount:"+ অ্যাকাউন্ট বিক্রি",browseAccounts:"অ্যাকাউন্ট দেখো",
 
-  const el = $(id);
+    availableListings:"উপলভ্য বিজ্ঞাপন",paymentChoices:"পেমেন্টের মাধ্যম",
 
-  el.className = "message " + (success ? "success" : "error");
+    browseMarketplace:"মার্কেটপ্লেস দেখো",availableAccounts:"🔥 উপলভ্য অ্যাকাউন্ট",
 
-  el.textContent = text;
+    liveListings:"Supabase থেকে লাইভ বিজ্ঞাপন",refresh:"রিফ্রেশ",
 
-}
+    paymentWarning:"⚠️ টাকা পাঠানোর পর সঠিক Transaction ID জমা দাও। Admin যাচাই না করা পর্যন্ত Payment Pending থাকবে।",
 
-function openModal(id) {
+    neverShareCodes:"কখনো Password, OTP বা Recovery Code শেয়ার করবে না.",
 
-  $(id).classList.add("open");
+    noListings:"কোনো বিজ্ঞাপন পাওয়া যায়নি।",typeLabel:"ধরন:",
 
-}
+    regionLabel:"রিজিয়ন:",levelLabel:"লেভেল:",details:"বিস্তারিত",
 
-function closeModal(id) {
+    noDescription:"কোনো বিবরণ দেওয়া হয়নি।",buyAccount:"অ্যাকাউন্ট কিনো",
 
-  $(id).classList.remove("open");
+    ownListing:"নিজের বিজ্ঞাপন নিজে কিনতে পারবে না।",
 
-}
+    fillCorrectInfo:"সব তথ্য সঠিকভাবে পূরণ করো।",
 
-function openAuth() {
+    listingPublished:"বিজ্ঞাপন সফলভাবে প্রকাশ হয়েছে!",
 
-  openModal("authModal");
+    amountToSend:"পাঠানোর পরিমাণ:",stepOne:"১. উপরে দেওয়া নম্বরে দেখানো পরিমাণ টাকা পাঠাও।",
 
-}
+    stepTwo:"২. Transaction ID ও যে নম্বর থেকে টাকা পাঠিয়েছ তা লেখো।",
 
-function requireLogin() {
+    stepThree:"৩. Admin যাচাই করার পর পেমেন্টের Status আপডেট হবে।",
 
-  if (!currentUser) {
+    orderOwnListing:"নিজের বিজ্ঞাপনের জন্য অর্ডার করা যাবে না।",
 
-    openAuth();
+    fillTransaction:"Transaction ID ও টাকা পাঠানোর নম্বর—দুটিই পূরণ করো।",
 
-    return false;
+    submitting:"জমা হচ্ছে...",orderCreateFailed:"অর্ডার তৈরি হয়নি: ",
+
+    orderSubmitted:"অর্ডার সফলভাবে জমা হয়েছে।",orderId:"অর্ডার ID:",
+
+    paymentStatus:"পেমেন্টের অবস্থা:",pending:"অপেক্ষমাণ",
+
+    adminWillVerify:"Admin Transaction ID যাচাই করার পর Status আপডেট করবেন।",
+
+    noOrders:"এখনো কোনো অর্ডার নেই।",order:"অর্ডার",amount:"পরিমাণ",
+
+    paymentDetails:"পেমেন্টের বিবরণ",status:"অবস্থা",date:"তারিখ",
+
+    adminNote:"Admin-এর নোট",txn:"Txn:",from:"প্রেরক:",
+
+    loadingSellerOrders:"বিক্রেতার অর্ডার লোড হচ্ছে...",
+
+    sellerOrdersFailed:"বিক্রেতার অর্ডার লোড হয়নি:",
+
+    sellerOrdersHelp:"Supabase-এ orders.listing_id থেকে listings.id-এর Foreign Key এবং seller SELECT policy থাকতে হবে।",
+
+    noSellerOrders:"তোমার বিজ্ঞাপনের জন্য এখনো কোনো অর্ডার নেই।",
+
+    account:"অ্যাকাউন্ট",buyer:"ক্রেতা",payment:"পেমেন্ট",
+
+    orderStatus:"অর্ডারের অবস্থা",paymentStatusAdmin:"পেমেন্টের অবস্থা",
+
+    save:"সংরক্ষণ",optionalNote:"ঐচ্ছিক নোট",
+
+    paymentVerification:"পেমেন্ট যাচাই:",
+
+    paymentVerificationWarning:"নিজের bKash/Nagad অ্যাকাউন্টে টাকা পাওয়া যাচাই করার পরেই Payment Status Approved করো।",
+
+    adminAccessRequired:"শুধু Admin এই কাজটি করতে পারবেন।",
+
+    confirmPayment:"তুমি কি bKash/Nagad-এ এই টাকা সত্যিই পেয়েছ এবং যাচাই করেছ?",
+
+    updateFailed:"আপডেট ব্যর্থ হয়েছে: ",orderPaymentUpdated:"অর্ডার ও পেমেন্টের Status আপডেট হয়েছে।",
+
+    restore:"ফিরিয়ে আনো",remove:"সরিয়ে দাও",noOrdersYet:"এখনো কোনো অর্ডার নেই।",
+
+    noListingsAdmin:"কোনো বিজ্ঞাপন নেই।",listings:"🎮 বিজ্ঞাপনসমূহ",
+
+    title:"শিরোনাম",action:"কাজ",loadingAdmin:"Admin-এর তথ্য লোড হচ্ছে...",
+
+    databaseError:"Database Error: ",registrationFailed:"রেজিস্ট্রেশন ব্যর্থ হয়েছে: ",
+
+    accountStarter:"Starter",accountRareSkins:"Rare Skins",accountCollector:"Collector",
+
+    regionBangladesh:"বাংলাদেশ",regionGlobal:"গ্লোবাল",regionOther:"অন্যান্য",
+
+    paymentMethodBkash:"bKash পেমেন্ট",paymentMethodNagad:"Nagad পেমেন্ট",
+
+    listingLoadError:"বিজ্ঞাপন লোড হয়নি: ",profileError:"প্রোফাইলের সমস্যা: ",
+
+    updateListingError:"বিজ্ঞাপন আপডেট হয়নি: ",paymentPending:"অপেক্ষমাণ",
+
+    paymentApproved:"অনুমোদিত",paymentRejected:"প্রত্যাখ্যাত",
+
+    orderConfirmed:"নিশ্চিত",orderCompleted:"সম্পন্ন",orderCancelled:"বাতিল",
+
+    imagesSelected:"টি ছবি বেছে নেওয়া হয়েছে।",uploading:"ছবি আপলোড হচ্ছে...",
+
+    imageLimit:"সর্বোচ্চ ৬টি ছবি বেছে নিতে পারবে।",
+
+    imageTooLarge:"প্রতিটি ছবির সাইজ ৫ MB বা তার কম হতে হবে।",
+
+    invalidImage:"শুধু JPEG, PNG, WEBP বা GIF ছবি আপলোড করা যাবে।",
+
+    uploadFailed:"ছবি আপলোড ব্যর্থ হয়েছে: ",removeImage:"ছবি সরাও",
+
+    imageUploadError:"ছবি আপলোড করা যায়নি। বিজ্ঞাপন প্রকাশ করা হয়নি।"
+
+  },
+
+  en:{
+
+    heroDescription:"Welcome to ANSU YT BUY SELL. Log in to publish listings, browse accounts and create orders.",
+
+    sellAccount:"+ Sell Account",browseAccounts:"Browse Accounts",
+
+    availableListings:"Available Listings",paymentChoices:"Payment Choices",
+
+    browseMarketplace:"Browse Marketplace",availableAccounts:"🔥 Available Accounts",
+
+    liveListings:"Live listings from Supabase",refresh:"Refresh",
+
+    paymentWarning:"⚠️ Submit the correct Transaction ID after sending money. Payment remains pending until admin verification.",
+
+    neverShareCodes:"Never share your password, OTP or recovery code.",
+
+    noListings:"No listings found.",typeLabel:"Type:",regionLabel:"Region:",
+
+    levelLabel:"Level:",details:"Details",noDescription:"No description provided.",
+
+    buyAccount:"Buy Account",ownListing:"You cannot buy your own listing.",
+
+    fillCorrectInfo:"Please fill in all information correctly.",
+
+    listingPublished:"Listing published successfully!",amountToSend:"Amount to send:",
+
+    stepOne:"1. Send the displayed amount to the number above.",
+
+    stepTwo:"2. Enter the Transaction ID and sender number below.",
+
+    stepThree:"3. Payment status will update after admin verification.",
+
+    orderOwnListing:"You cannot place an order for your own listing.",
+
+    fillTransaction:"Enter both the Transaction ID and payment sender number.",
+
+    submitting:"Submitting...",orderCreateFailed:"Order could not be created: ",
+
+    orderSubmitted:"Order submitted successfully.",orderId:"Order ID:",
+
+    paymentStatus:"Payment Status:",pending:"Pending",
+
+    adminWillVerify:"The admin will update the status after verifying the Transaction ID.",
+
+    noOrders:"There are no orders yet.",order:"Order",amount:"Amount",
+
+    paymentDetails:"Payment Details",status:"Status",date:"Date",adminNote:"Admin Note",
+
+    txn:"Txn:",from:"From:",loadingSellerOrders:"Loading seller orders...",
+
+    sellerOrdersFailed:"Could not load seller orders:",
+
+    sellerOrdersHelp:"A foreign key and seller SELECT policy must be configured in Supabase.",
+
+    noSellerOrders:"There are no orders for your listings yet.",account:"Account",
+
+    buyer:"Buyer",payment:"Payment",orderStatus:"Order Status",
+
+    paymentStatusAdmin:"Payment Status",save:"Save",optionalNote:"Optional note",
+
+    paymentVerification:"Payment verification:",
+
+    paymentVerificationWarning:"Only approve payment after verifying receipt in your bKash/Nagad account.",
+
+    adminAccessRequired:"Admin access required.",
+
+    confirmPayment:"Have you received and verified this payment?",
+
+    updateFailed:"Update failed: ",orderPaymentUpdated:"Order and payment status updated.",
+
+    restore:"Restore",remove:"Remove",noOrdersYet:"No orders yet.",
+
+    noListingsAdmin:"No listings.",listings:"🎮 Listings",title:"Title",action:"Action",
+
+    loadingAdmin:"Loading admin data...",databaseError:"Database Error: ",
+
+    registrationFailed:"Registration failed: ",accountStarter:"Starter",
+
+    accountRareSkins:"Rare Skins",accountCollector:"Collector",
+
+    regionBangladesh:"Bangladesh",regionGlobal:"Global",regionOther:"Other",
+
+    paymentMethodBkash:"bKash Payment",paymentMethodNagad:"Nagad Payment",
+
+    listingLoadError:"Could not load listings: ",profileError:"Profile error: ",
+
+    updateListingError:"Could not update listing: ",paymentPending:"Pending",
+
+    paymentApproved:"Approved",paymentRejected:"Rejected",orderConfirmed:"Confirmed",
+
+    orderCompleted:"Completed",orderCancelled:"Cancelled",
+
+    imagesSelected:" image(s) selected.",uploading:"Uploading images...",
+
+    imageLimit:"You can select up to 6 images.",
+
+    imageTooLarge:"Each image must be 5 MB or smaller.",
+
+    invalidImage:"Only JPEG, PNG, WEBP or GIF images are supported.",
+
+    uploadFailed:"Image upload failed: ",removeImage:"Remove image",
+
+    imageUploadError:"Images could not be uploaded. Listing was not published."
 
   }
 
-  return true;
+};
+
+function tr(key){return TRANSLATIONS[currentLanguage]?.[key] ?? TRANSLATIONS.bn[key] ?? key}
+
+function toggleLanguage(){
+
+  currentLanguage=currentLanguage==="bn"?"en":"bn";
+
+  localStorage.setItem("ansu_language",currentLanguage);
+
+  applyLanguage();
+
+  renderListings();
+
+  if(!$("ordersSection").classList.contains("hidden"))loadOrders();
+
+  if(!$("sellerSection").classList.contains("hidden"))loadSellerOrders();
+
+  if(!$("adminSection").classList.contains("hidden"))loadAdmin();
+
+  if($("checkoutModal").classList.contains("open"))showPaymentInstructions();
 
 }
 
-function hideAllSections() {
+function applyLanguage(){
 
-  ["ordersSection","sellerSection","adminSection"].forEach(id => {
+  document.documentElement.lang=currentLanguage;
 
-    $(id).classList.add("hidden");
+  $("languageBtn").textContent=currentLanguage==="bn"?"English":"বাংলা";
+
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+
+    const key=el.dataset.i18n;
+
+    if(TRANSLATIONS[currentLanguage][key])el.textContent=tr(key);
 
   });
 
 }
 
-/* INITIALIZE */
+/* =========================
 
-async function init() {
+   GENERAL HELPERS
+
+========================= */
+
+function esc(value){
+
+  return String(value??"").replace(/[&<>"']/g,c=>({
+
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+
+  })[c]);
+
+}
+
+function money(value){return "৳"+Number(value||0).toLocaleString("en-BD")}
+
+function message(id,text,success=false){
+
+  const el=$(id);
+
+  el.className="message "+(success?"success":"error");
+
+  el.textContent=text;
+
+}
+
+function openModal(id){$(id).classList.add("open")}
+
+function closeModal(id){$(id).classList.remove("open")}
+
+function openAuth(){openModal("authModal")}
+
+function requireLogin(){
+
+  if(!currentUser){openAuth();return false}
+
+  return true;
+
+}
+
+function hideAllSections(){
+
+  ["ordersSection","sellerSection","adminSection"].forEach(id=>$(id).classList.add("hidden"));
+
+}
+
+/* =========================
+
+   MULTIPLE IMAGE SELECTION
+
+========================= */
+
+function clearPreviewUrls(){
+
+  previewUrls.forEach(url=>URL.revokeObjectURL(url));
+
+  previewUrls=[];
+
+}
+
+function renderImagePreview(){
+
+  clearPreviewUrls();
+
+  const container=$("imagePreview");
+
+  container.innerHTML="";
+
+  selectedFiles.forEach((file,index)=>{
+
+    const url=URL.createObjectURL(file);
+
+    previewUrls.push(url);
+
+    const item=document.createElement("div");
+
+    item.className="preview-item";
+
+    const img=document.createElement("img");
+
+    img.src=url;
+
+    img.alt=file.name;
+
+    const remove=document.createElement("button");
+
+    remove.type="button";
+
+    remove.textContent="×";
+
+    remove.title=tr("removeImage");
+
+    remove.setAttribute("aria-label",tr("removeImage"));
+
+    remove.addEventListener("click",()=>{
+
+      selectedFiles.splice(index,1);
+
+      syncFileInput();
+
+      renderImagePreview();
+
+    });
+
+    const name=document.createElement("span");
+
+    name.textContent=file.name;
+
+    item.append(img,remove,name);
+
+    container.appendChild(item);
+
+  });
+
+  $("uploadStatus").textContent=selectedFiles.length
+
+    ? selectedFiles.length+tr("imagesSelected")
+
+    :"";
+
+}
+
+function syncFileInput(){
+
+  const dt=new DataTransfer();
+
+  selectedFiles.forEach(file=>dt.items.add(file));
+
+  $("sellImages").files=dt.files;
+
+}
+
+$("sellImages").addEventListener("change",event=>{
+
+  const incoming=Array.from(event.target.files||[]);
+
+  const combined=[...selectedFiles];
+
+  for(const file of incoming){
+
+    if(combined.length>=MAX_IMAGES){
+
+      alert(tr("imageLimit"));
+
+      break;
+
+    }
+
+    if(!file.type.startsWith("image/")||
+
+       !["image/jpeg","image/png","image/webp","image/gif"].includes(file.type)){
+
+      alert(tr("invalidImage"));
+
+      continue;
+
+    }
+
+    if(file.size>MAX_IMAGE_SIZE){
+
+      alert(tr("imageTooLarge"));
+
+      continue;
+
+    }
+
+    combined.push(file);
+
+  }
+
+  selectedFiles=combined;
+
+  syncFileInput();
+
+  renderImagePreview();
+
+});
+
+/* =========================
+
+   SUPABASE STORAGE UPLOAD
+
+========================= */
+
+function safeFileName(name){
+
+  return name.normalize("NFKD")
+
+    .replace(/[^a-zA-Z0-9._-]/g,"_")
+
+    .slice(-100);
+
+}
+
+async function uploadListingImages(files){
+
+  const urls=[];
+
+  for(const file of files){
+
+    const path=currentUser.id+"/"+Date.now()+"_"+crypto.randomUUID()+"_"+safeFileName(file.name);
+
+    const {data,error}=await sb.storage
+
+      .from(STORAGE_BUCKET)
+
+      .upload(path,file,{
+
+        cacheControl:"3600",
+
+        upsert:false,
+
+        contentType:file.type
+
+      });
+
+    if(error){
+
+      // Avoid leaving newly uploaded partial files behind.
+
+      if(urls.length){
+
+        const paths=urls.map(url=>{
+
+          const marker="/object/public/"+STORAGE_BUCKET+"/";
+
+          const i=url.indexOf(marker);
+
+          return i>=0?decodeURIComponent(url.slice(i+marker.length)):null;
+
+        }).filter(Boolean);
+
+        if(paths.length)await sb.storage.from(STORAGE_BUCKET).remove(paths);
+
+      }
+
+      throw error;
+
+    }
+
+    const {data:publicData}=sb.storage
+
+      .from(STORAGE_BUCKET)
+
+      .getPublicUrl(data.path);
+
+    if(!publicData?.publicUrl)throw new Error("Could not generate image URL.");
+
+    urls.push(publicData.publicUrl);
+
+  }
+
+  return urls;
+
+}
+
+/* =========================
+
+   INITIALIZE
+
+========================= */
+
+async function init(){
 
   applyLanguage();
 
-  if (!configured || !sb) {
+  if(!configured||!sb){
 
-    $("listingGrid").innerHTML =
-
-      '<div class="panel">' + esc(tr("supabaseNotConfigured")) + '</div>';
+    $("listingGrid").innerHTML='<div class="panel">'+esc("Supabase URL or Key is not configured.")+'</div>';
 
     return;
 
   }
 
-  const { data, error } = await sb.auth.getSession();
+  const {data,error}=await sb.auth.getSession();
 
-  if (error) console.error(error);
+  if(error)console.error(error);
 
-  currentUser = data?.session?.user || null;
+  currentUser=data?.session?.user||null;
 
   await loadProfile();
 
@@ -1358,11 +1048,11 @@ async function init() {
 
   await loadListings();
 
-  sb.auth.onAuthStateChange((_event, session) => {
+  sb.auth.onAuthStateChange((_event,session)=>{
 
-    currentUser = session?.user || null;
+    currentUser=session?.user||null;
 
-    setTimeout(async () => {
+    setTimeout(async()=>{
 
       await loadProfile();
 
@@ -1370,111 +1060,87 @@ async function init() {
 
       await loadListings();
 
-    }, 0);
+    },0);
 
   });
 
 }
 
-/* PROFILE */
+/* =========================
 
-async function loadProfile() {
+   PROFILE
 
-  currentProfile = null;
+========================= */
 
-  if (!sb || !currentUser) return;
+async function loadProfile(){
 
-  const { data, error } = await sb
+  currentProfile=null;
 
-    .from("profiles")
+  if(!sb||!currentUser)return;
+
+  const {data,error}=await sb.from("profiles")
 
     .select("id,full_name,role,avatar_url")
 
-    .eq("id", currentUser.id)
+    .eq("id",currentUser.id).maybeSingle();
 
-    .maybeSingle();
+  if(error){console.error("Profile error:",error.message);return}
 
-  if (error) {
-
-    console.error("Profile error:", error.message);
-
-    return;
-
-  }
-
-  currentProfile = data;
+  currentProfile=data;
 
 }
 
-function updateUI() {
+function updateUI(){
 
-  $("userLabel").textContent = currentUser
+  $("userLabel").textContent=currentUser
 
-    ? (currentProfile?.full_name || currentUser.email)
+    ?(currentProfile?.full_name||currentUser.email)
 
-    : tr("notLoggedIn");
+    :tr("notLoggedIn");
 
-  $("authBtn").classList.toggle("hidden", !!currentUser);
+  $("authBtn").classList.toggle("hidden",!!currentUser);
 
-  $("logoutBtn").classList.toggle("hidden", !currentUser);
+  $("logoutBtn").classList.toggle("hidden",!currentUser);
 
-  $("ordersBtn").classList.toggle("hidden", !currentUser);
+  $("ordersBtn").classList.toggle("hidden",!currentUser);
 
-  $("sellerBtn").classList.toggle("hidden", !currentUser);
+  $("sellerBtn").classList.toggle("hidden",!currentUser);
 
-  $("adminBtn").classList.toggle("hidden", currentProfile?.role !== "admin");
+  $("adminBtn").classList.toggle("hidden",currentProfile?.role!=="admin");
 
 }
 
-/* REGISTER */
+/* =========================
 
-async function registerUser() {
+   REGISTER / LOGIN
 
-  if (!sb) return;
+========================= */
 
-  const name = $("fullName").value.trim();
+async function registerUser(){
 
-  const email = $("email").value.trim();
+  if(!sb)return;
 
-  const password = $("password").value;
+  const name=$("fullName").value.trim();
 
-  if (!name) {
+  const email=$("email").value.trim();
 
-    message("authMessage", tr("registerNameRequired"));
+  const password=$("password").value;
 
-    return;
+  if(!name){message("authMessage","রেজিস্ট্রেশনের আগে তোমার পুরো নাম লেখো।");return}
 
-  }
+  if(password.length<8){message("authMessage","পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।");return}
 
-  if (password.length < 8) {
+  const {data,error}=await sb.auth.signUp({
 
-    message("authMessage", tr("passwordTooShort"));
-
-    return;
-
-  }
-
-  const { data, error } = await sb.auth.signUp({
-
-    email,
-
-    password,
-
-    options: { data: { full_name: name } }
+    email,password,options:{data:{full_name:name}}
 
   });
 
-  if (error) {
+  if(error){message("authMessage",error.message);return}
 
-    message("authMessage", error.message);
+  if(data.session){
 
-    return;
-
-  }
-
-  if (data.session) {
-
-    currentUser = data.user;
+    currentUser=data.user;
 
     await loadProfile();
 
@@ -1484,39 +1150,31 @@ async function registerUser() {
 
     closeModal("authModal");
 
-  } else {
+  }else{
 
-    message("authMessage", tr("registrationSuccess"), true);
+    message("authMessage","রেজিস্ট্রেশনের অনুরোধ সফল হয়েছে। ইমেইল নিশ্চিত করতে বললে Inbox চেক করো।",true);
 
   }
 
 }
 
-/* LOGIN */
-
-$("loginForm").addEventListener("submit", async event => {
+$("loginForm").addEventListener("submit",async event=>{
 
   event.preventDefault();
 
-  if (!sb) return;
+  if(!sb)return;
 
-  const { data, error } = await sb.auth.signInWithPassword({
+  const {data,error}=await sb.auth.signInWithPassword({
 
-    email: $("email").value.trim(),
+    email:$("email").value.trim(),
 
-    password: $("password").value
+    password:$("password").value
 
   });
 
-  if (error) {
+  if(error){message("authMessage",error.message);return}
 
-    message("authMessage", error.message);
-
-    return;
-
-  }
-
-  currentUser = data.user;
+  currentUser=data.user;
 
   await loadProfile();
 
@@ -1528,55 +1186,33 @@ $("loginForm").addEventListener("submit", async event => {
 
 });
 
-/* FORGOT PASSWORD */
+async function resetPassword(){
 
-async function resetPassword() {
+  if(!sb)return;
 
-  if (!sb) return;
+  const email=$("email").value.trim();
 
-  const email = $("email").value.trim();
+  if(!email){message("authMessage","আগে তোমার ইমেইল লেখো।");return}
 
-  if (!email) {
+  const {error}=await sb.auth.resetPasswordForEmail(email);
 
-    message("authMessage", tr("enterEmailFirst"));
+  if(error)message("authMessage",error.message);
 
-    return;
-
-  }
-
-  const { error } = await sb.auth.resetPasswordForEmail(email);
-
-  if (error) {
-
-    message("authMessage", error.message);
-
-  } else {
-
-    message("authMessage", tr("emailResetSent"), true);
-
-  }
+  else message("authMessage","এই ইমেইলটি নিবন্ধিত থাকলে পাসওয়ার্ড রিসেটের ইমেইল পাঠানো হবে।",true);
 
 }
 
-/* LOGOUT */
+async function logout(){
 
-async function logout() {
+  if(!sb)return;
 
-  if (!sb) return;
+  const {error}=await sb.auth.signOut();
 
-  const { error } = await sb.auth.signOut();
+  if(error){alert(error.message);return}
 
-  if (error) {
+  currentUser=null;
 
-    alert(error.message);
-
-    return;
-
-  }
-
-  currentUser = null;
-
-  currentProfile = null;
+  currentProfile=null;
 
   hideAllSections();
 
@@ -1586,63 +1222,91 @@ async function logout() {
 
 }
 
-/* LOAD LISTINGS */
+/* =========================
 
-async function loadListings() {
+   IMAGE URL COMPATIBILITY
 
-  if (!sb) return;
+   Supports existing single image URL
 
-  $("listingGrid").innerHTML =
+   and JSON arrays saved in account_image.
 
-    '<div class="panel">' + esc(tr("loadingListings")) + '</div>';
+========================= */
 
-  const { data, error } = await sb
+function getListingImages(item){
 
-    .from("listings")
+  const raw=item?.account_images??item?.account_image;
+
+  if(!raw)return [];
+
+  if(Array.isArray(raw))return raw.filter(x=>typeof x==="string"&&x.trim());
+
+  if(typeof raw!=="string")return [];
+
+  const value=raw.trim();
+
+  if(!value)return [];
+
+  try{
+
+    const parsed=JSON.parse(value);
+
+    if(Array.isArray(parsed))return parsed.filter(x=>typeof x==="string"&&x.trim());
+
+    if(typeof parsed==="string"&&parsed.startsWith("http"))return [parsed];
+
+  }catch(_){}
+
+  return value.startsWith("http")?[value]:[];
+
+}
+
+/* =========================
+
+   LOAD LISTINGS
+
+========================= */
+
+async function loadListings(){
+
+  if(!sb)return;
+
+  $("listingGrid").innerHTML='<div class="panel">'+esc(currentLanguage==="bn"?"অ্যাকাউন্ট লোড হচ্ছে...":"Loading listings...")+'</div>';
+
+  const {data,error}=await sb.from("listings")
 
     .select("*")
 
-    .eq("status", "available")
+    .eq("status","available")
 
-    .order("created_at", { ascending: false })
+    .order("created_at",{ascending:false})
 
     .limit(200);
 
-  if (error) {
+  if(error){
 
-    $("listingGrid").innerHTML =
-
-      '<div class="panel">' + esc(tr("databaseError")) + ' ' +
-
-      esc(error.message) + '</div>';
+    $("listingGrid").innerHTML='<div class="panel">'+esc(tr("databaseError"))+" "+esc(error.message)+'</div>';
 
     return;
 
   }
 
-  listings = (data || []).map(row => {
+  listings=(data||[]).map(row=>{
 
-    let extra = {};
+    let extra={};
 
-    try {
+    try{extra=JSON.parse(row.description||"{}")}
 
-      extra = JSON.parse(row.description || "{}");
-
-    } catch (_) {
-
-      extra = { features: row.description || "" };
-
-    }
+    catch(_){extra={features:row.description||""}}
 
     return {
 
       ...row,
 
-      type: row.account_type || extra.type || "Starter",
+      type:row.account_type||extra.type||"Starter",
 
-      region: row.region || extra.region || "Bangladesh",
+      region:row.region||extra.region||"Bangladesh",
 
-      features: extra.features || row.description || ""
+      features:extra.features||row.description||""
 
     };
 
@@ -1652,17 +1316,23 @@ async function loadListings() {
 
 }
 
-/* RENDER LISTINGS */
+/* =========================
 
-function renderListings() {
+   RENDER LISTINGS
 
-  const query = $("search").value.toLowerCase().trim();
+========================= */
 
-  const sort = $("sort").value;
+function renderListings(){
 
-  let items = listings.filter(item => {
+  if(!$("search")||!$("sort"))return;
 
-    const text = [
+  const query=$("search").value.toLowerCase().trim();
+
+  const sort=$("sort").value;
+
+  let items=listings.filter(item=>{
+
+    const text=[
 
       item.title,item.description,item.features,item.level,
 
@@ -1674,37 +1344,29 @@ function renderListings() {
 
   });
 
-  if (sort === "low") {
+  if(sort==="low")items.sort((a,b)=>Number(a.price)-Number(b.price));
 
-    items.sort((a,b) => Number(a.price) - Number(b.price));
+  if(sort==="high")items.sort((a,b)=>Number(b.price)-Number(a.price));
 
-  }
+  $("listingCount").textContent=items.length;
 
-  if (sort === "high") {
+  if(!items.length){
 
-    items.sort((a,b) => Number(b.price) - Number(a.price));
-
-  }
-
-  $("listingCount").textContent = items.length;
-
-  if (!items.length) {
-
-    $("listingGrid").innerHTML =
-
-      '<div class="panel">' + esc(tr("noListings")) + '</div>';
+    $("listingGrid").innerHTML='<div class="panel">'+esc(tr("noListings"))+'</div>';
 
     return;
 
   }
 
-  $("listingGrid").innerHTML = items.map(item => {
+  $("listingGrid").innerHTML=items.map(item=>{
 
-    const image = item.account_image
+    const images=getListingImages(item);
 
-      ? `<img src="${esc(item.account_image)}" alt="Account image" onerror="this.style.display='none'">`
+    const cover=images.length
 
-      : `<span style="font-size:45px">🎮</span>`;
+      ?`<img src="${esc(images[0])}" alt="Account image" loading="lazy" onerror="this.style.display='none'">`
+
+      :'<span style="font-size:45px">🎮</span>';
 
     return `
 
@@ -1712,9 +1374,9 @@ function renderListings() {
 
         <div class="cover">
 
-          ${image}
+          ${cover}
 
-          <span class="level">${esc(currentLanguage === "bn" ? "লেভেল" : "Level")} ${esc(item.level ?? "—")}</span>
+          <span class="level">${esc(currentLanguage==="bn"?"লেভেল":"Level")} ${esc(item.level??"—")}</span>
 
         </div>
 
@@ -1724,11 +1386,13 @@ function renderListings() {
 
           <div class="meta">
 
-            ${esc(tr("typeLabel"))} ${esc(item.account_type || "Starter")}<br>
+            ${esc(tr("typeLabel"))} ${esc(item.account_type||"Starter")}<br>
 
-            ${esc(tr("regionLabel"))} ${esc(item.region || "Bangladesh")}<br>
+            ${esc(tr("regionLabel"))} ${esc(item.region||"Bangladesh")}<br>
 
-            ${esc(tr("levelLabel"))} ${esc(item.level ?? "—")}
+            ${esc(tr("levelLabel"))} ${esc(item.level??"—")}<br>
+
+            ${images.length?esc(images.length+" "+(currentLanguage==="bn"?"টি ছবি":"image(s)")):""}
 
           </div>
 
@@ -1748,43 +1412,51 @@ function renderListings() {
 
 }
 
-/* LISTING DETAILS */
+/* =========================
 
-function showDetails(id) {
+   LISTING DETAILS / GALLERY
 
-  const item = listings.find(x => String(x.id) === String(id));
+========================= */
 
-  if (!item) return;
+function showDetails(id){
 
-  selectedListing = item;
+  const item=listings.find(x=>String(x.id)===String(id));
 
-  $("detailsTitle").textContent = item.title;
+  if(!item)return;
 
-  $("detailsContent").innerHTML = `
+  selectedListing=item;
+
+  $("detailsTitle").textContent=item.title;
+
+  const images=getListingImages(item);
+
+  const gallery=images.length
+
+    ?`<div class="gallery">${images.map((url,index)=>`
+
+       <img src="${esc(url)}" alt="Account image ${index+1}" loading="lazy"
+
+        onclick="openFullImage('${esc(url)}')" onerror="this.style.display='none'">
+
+      `).join("")}</div>`
+
+    :'<div style="font-size:45px;text-align:center">🎮</div>';
+
+  $("detailsContent").innerHTML=`
 
     <div class="panel">
 
-      ${item.account_image
-
-        ? `<img src="${esc(item.account_image)}" alt="Account image"
-
-             style="width:100%;max-height:220px;object-fit:cover;border-radius:8px">`
-
-        : ""}
+      ${gallery}
 
       <h3>${esc(item.title)}</h3>
 
-      <p style="color:#a4aec0;line-height:1.7">
+      <p style="color:#a4aec0;line-height:1.7;white-space:pre-wrap">${esc(item.features||tr("noDescription"))}</p>
 
-        ${esc(item.features || tr("noDescription"))}
+      <p>${esc(tr("levelLabel"))} ${esc(item.level??"—")}</p>
 
-      </p>
+      <p>${esc(tr("typeLabel"))} ${esc(item.account_type||"Starter")}</p>
 
-      <p>${esc(tr("levelLabel"))} ${esc(item.level ?? "—")}</p>
-
-      <p>${esc(tr("typeLabel"))} ${esc(item.account_type || "Starter")}</p>
-
-      <p>${esc(tr("regionLabel"))} ${esc(item.region || "Bangladesh")}</p>
+      <p>${esc(tr("regionLabel"))} ${esc(item.region||"Bangladesh")}</p>
 
       <div class="price">${money(item.price)}</div><br>
 
@@ -1796,99 +1468,209 @@ function showDetails(id) {
 
 }
 
-/* CREATE LISTING */
+function openFullImage(url){
 
-function openSell() {
+  const win=window.open("","_blank");
 
-  if (!requireLogin()) return;
+  if(!win){alert(url);return}
 
-  $("sellMessage").textContent = "";
+  const img=win.document.createElement("img");
+
+  img.src=url;
+
+  img.alt="Account image";
+
+  img.style.cssText="max-width:100%;height:auto;display:block;margin:auto";
+
+  win.document.body.style.cssText="margin:0;background:#090b10;text-align:center";
+
+  win.document.body.appendChild(img);
+
+}
+
+/* =========================
+
+   CREATE LISTING + UPLOAD IMAGES
+
+========================= */
+
+function openSell(){
+
+  if(!requireLogin())return;
+
+  $("sellMessage").textContent="";
+
+  $("uploadStatus").textContent="";
 
   openModal("sellModal");
 
 }
 
-$("sellForm").addEventListener("submit", async event => {
+$("sellForm").addEventListener("submit",async event=>{
 
   event.preventDefault();
 
-  if (!requireLogin() || !sb) return;
+  if(!requireLogin()||!sb)return;
 
-  const title = $("sellTitle").value.trim();
+  const title=$("sellTitle").value.trim();
 
-  const price = Number($("sellPrice").value);
+  const price=Number($("sellPrice").value);
 
-  const level = Number($("sellLevel").value);
+  const level=Number($("sellLevel").value);
 
-  const type = $("sellType").value;
+  const type=$("sellType").value;
 
-  const region = $("sellRegion").value;
+  const region=$("sellRegion").value;
 
-  const features = $("sellDescription").value.trim();
+  const features=$("sellDescription").value.trim();
 
-  const image = $("sellImage").value.trim();
+  const imageUrl=$("sellImage").value.trim();
 
-  if (!title || price <= 0 || level < 1) {
+  if(!title||price<=0||level<1){
 
-    message("sellMessage", tr("fillCorrectInfo"));
-
-    return;
-
-  }
-
-  const payload = {
-
-    seller_id: currentUser.id,
-
-    title,
-
-    description: JSON.stringify({features,type,region}),
-
-    price,
-
-    level,
-
-    account_image: image || null,
-
-    account_type: type,
-
-    region,
-
-    status: "available"
-
-  };
-
-  const { error } = await sb.from("listings").insert(payload);
-
-  if (error) {
-
-    message("sellMessage", error.message);
+    message("sellMessage",tr("fillCorrectInfo"));
 
     return;
 
   }
 
-  $("sellForm").reset();
+  if(selectedFiles.length>MAX_IMAGES){
 
-  message("sellMessage", tr("listingPublished"), true);
+    message("sellMessage",tr("imageLimit"));
 
-  await loadListings();
+    return;
+
+  }
+
+  for(const file of selectedFiles){
+
+    if(!["image/jpeg","image/png","image/webp","image/gif"].includes(file.type)){
+
+      message("sellMessage",tr("invalidImage"));
+
+      return;
+
+    }
+
+    if(file.size>MAX_IMAGE_SIZE){
+
+      message("sellMessage",tr("imageTooLarge"));
+
+      return;
+
+    }
+
+  }
+
+  const button=$("publishButton");
+
+  button.disabled=true;
+
+  button.textContent=tr("uploading");
+
+  $("uploadStatus").textContent=tr("uploading");
+
+  let uploadedUrls=[];
+
+  try{
+
+    if(selectedFiles.length){
+
+      uploadedUrls=await uploadListingImages(selectedFiles);
+
+    }
+
+    if(!uploadedUrls.length&&imageUrl){
+
+      uploadedUrls=[imageUrl];
+
+    }
+
+    // The current database has account_image (single URL).
+
+    // To avoid requiring a new column, multiple URLs are stored
+
+    // as a JSON array inside account_image.
+
+    const payload={
+
+      seller_id:currentUser.id,
+
+      title,
+
+      description:JSON.stringify({features,type,region}),
+
+      price,
+
+      level,
+
+      account_image:uploadedUrls.length?JSON.stringify(uploadedUrls):null,
+
+      account_type:type,
+
+      region,
+
+      status:"available"
+
+    };
+
+    const {error}=await sb.from("listings").insert(payload);
+
+    if(error){
+
+      message("sellMessage",error.message);
+
+      return;
+
+    }
+
+    $("sellForm").reset();
+
+    selectedFiles=[];
+
+    clearPreviewUrls();
+
+    $("imagePreview").innerHTML="";
+
+    $("uploadStatus").textContent="";
+
+    message("sellMessage",tr("listingPublished"),true);
+
+    await loadListings();
+
+  }catch(error){
+
+    console.error("Image upload error:",error);
+
+    message("sellMessage",tr("uploadFailed")+(error?.message||tr("imageUploadError")));
+
+  }finally{
+
+    button.disabled=false;
+
+    button.textContent="বিজ্ঞাপন প্রকাশ করো";
+
+  }
 
 });
 
-/* PAYMENT INSTRUCTIONS */
+/* =========================
 
-function showPaymentInstructions() {
+   PAYMENT INSTRUCTIONS
 
-  const method = $("paymentMethod").value;
+========================= */
 
-  const number = PAYMENT_NUMBERS[method];
+function showPaymentInstructions(){
 
-  $("paymentInstructions").innerHTML = `
+  const method=$("paymentMethod").value;
 
-    <b>${method === "bkash" ? tr("paymentMethodBkash") : tr("paymentMethodNagad")}</b><br>
+  const number=PAYMENT_NUMBERS[method];
 
-    ${currentLanguage === "bn" ? "টাকা পাঠানোর নম্বর:" : "Payment number:"}
+  $("paymentInstructions").innerHTML=`
+
+    <b>${method==="bkash"?tr("paymentMethodBkash"):tr("paymentMethodNagad")}</b><br>
+
+    ${currentLanguage==="bn"?"টাকা পাঠানোর নম্বর:":"Payment number:"}
 
     <strong style="font-size:17px">${esc(number)}</strong><br>
 
@@ -1904,15 +1686,17 @@ function showPaymentInstructions() {
 
 }
 
-/* CREATE ORDER */
+/* =========================
 
-function startCheckout() {
+   CREATE ORDER
 
-  if (!requireLogin()) return;
+========================= */
 
-  if (!selectedListing) return;
+function startCheckout(){
 
-  if (selectedListing.seller_id === currentUser.id) {
+  if(!requireLogin()||!selectedListing)return;
+
+  if(selectedListing.seller_id===currentUser.id){
 
     alert(tr("ownListing"));
 
@@ -1920,19 +1704,15 @@ function startCheckout() {
 
   }
 
-  $("checkoutAccount").innerHTML = `
+  $("checkoutAccount").innerHTML=`
 
-    <div class="panel">
+    <div class="panel"><b>${esc(selectedListing.title)}</b>
 
-      <b>${esc(selectedListing.title)}</b>
-
-      <div class="price">${money(selectedListing.price)}</div>
-
-    </div><br>`;
+    <div class="price">${money(selectedListing.price)}</div></div><br>`;
 
   $("checkoutForm").reset();
 
-  $("checkoutMessage").textContent = "";
+  $("checkoutMessage").textContent="";
 
   showPaymentInstructions();
 
@@ -1942,111 +1722,93 @@ function startCheckout() {
 
 }
 
-$("checkoutForm").addEventListener("submit", async event => {
+$("checkoutForm").addEventListener("submit",async event=>{
 
   event.preventDefault();
 
-  if (!requireLogin() || !selectedListing || !sb) return;
+  if(!requireLogin()||!selectedListing||!sb)return;
 
-  if (selectedListing.seller_id === currentUser.id) {
+  if(selectedListing.seller_id===currentUser.id){
 
-    message("checkoutMessage", tr("orderOwnListing"));
-
-    return;
-
-  }
-
-  const transactionId = $("transactionId").value.trim();
-
-  const paymentNumber = $("paymentNumber").value.trim();
-
-  if (!transactionId || !paymentNumber) {
-
-    message("checkoutMessage", tr("fillTransaction"));
+    message("checkoutMessage",tr("orderOwnListing"));
 
     return;
 
   }
 
-  const submitButton = $("checkoutForm").querySelector('button[type="submit"]');
+  const transactionId=$("transactionId").value.trim();
 
-  submitButton.disabled = true;
+  const paymentNumber=$("paymentNumber").value.trim();
 
-  submitButton.textContent = tr("submitting");
+  if(!transactionId||!paymentNumber){
 
-  const payload = {
+    message("checkoutMessage",tr("fillTransaction"));
 
-    buyer_id: currentUser.id,
+    return;
 
-    listing_id: selectedListing.id,
+  }
 
-    amount: Number(selectedListing.price),
+  const button=$("checkoutForm").querySelector('button[type="submit"]');
 
-    payment_method: $("paymentMethod").value,
+  button.disabled=true;
 
-    transaction_id: transactionId,
+  button.textContent=tr("submitting");
 
-    payment_number: paymentNumber,
+  const payload={
 
-    payment_reference: transactionId,
+    buyer_id:currentUser.id,
 
-    payment_status: "pending",
+    listing_id:selectedListing.id,
 
-    order_status: "pending",
+    amount:Number(selectedListing.price),
 
-    buyer_name: $("buyerName").value.trim(),
+    payment_method:$("paymentMethod").value,
 
-    buyer_contact: $("buyerContact").value.trim()
+    transaction_id:transactionId,
+
+    payment_number:paymentNumber,
+
+    payment_reference:transactionId,
+
+    payment_status:"pending",
+
+    order_status:"pending",
+
+    buyer_name:$("buyerName").value.trim(),
+
+    buyer_contact:$("buyerContact").value.trim()
 
   };
 
-  const { data, error } = await sb
+  const {data,error}=await sb.from("orders").insert(payload).select("id").single();
 
-    .from("orders")
+  button.disabled=false;
 
-    .insert(payload)
+  button.textContent="অর্ডার ও পেমেন্টের তথ্য জমা দাও";
 
-    .select("id")
+  if(error){message("checkoutMessage",tr("orderCreateFailed")+error.message);return}
 
-    .single();
+  message("checkoutMessage",
 
-  submitButton.disabled = false;
+    tr("orderSubmitted")+"\n"+tr("orderId")+" "+data.id+
 
-  submitButton.textContent = tr("submitOrderPayment");
+    "\n"+tr("paymentStatus")+" "+tr("pending")+
 
-  if (error) {
-
-    message("checkoutMessage", tr("orderCreateFailed") + error.message);
-
-    return;
-
-  }
-
-  message(
-
-    "checkoutMessage",
-
-    tr("orderSubmitted") + "\n" +
-
-    tr("orderId") + " " + data.id +
-
-    "\n" + tr("paymentStatus") + " " + tr("pending") +
-
-    "\n" + tr("adminWillVerify"),
-
-    true
-
-  );
+    "\n"+tr("adminWillVerify"),true);
 
   $("checkoutForm").reset();
 
 });
 
-/* BUYER ORDERS */
+/* =========================
 
-async function showOrders() {
+   BUYER ORDERS
 
-  if (!requireLogin()) return;
+========================= */
+
+async function showOrders(){
+
+  if(!requireLogin())return;
 
   hideAllSections();
 
@@ -2058,83 +1820,47 @@ async function showOrders() {
 
 }
 
-function translateStatus(status) {
+function translateStatus(status){
 
-  const keyMap = {
+  const map={
 
-    pending:"paymentPending",
+    pending:"paymentPending",approved:"paymentApproved",rejected:"paymentRejected",
 
-    approved:"paymentApproved",
-
-    rejected:"paymentRejected",
-
-    confirmed:"orderConfirmed",
-
-    completed:"orderCompleted",
-
-    cancelled:"orderCancelled"
+    confirmed:"orderConfirmed",completed:"orderCompleted",cancelled:"orderCancelled"
 
   };
 
-  return tr(keyMap[String(status || "").toLowerCase()]) || status || "—";
+  return tr(map[String(status||"").toLowerCase()])||status||"—";
 
 }
 
-async function loadOrders() {
+async function loadOrders(){
 
-  if (!sb || !currentUser) return;
+  if(!sb||!currentUser)return;
 
-  const { data, error } = await sb
-
-    .from("orders")
+  const {data,error}=await sb.from("orders")
 
     .select("id,listing_id,amount,payment_method,payment_status,order_status,created_at,transaction_id,payment_number,admin_note")
 
-    .eq("buyer_id", currentUser.id)
+    .eq("buyer_id",currentUser.id)
 
-    .order("created_at", {ascending:false})
+    .order("created_at",{ascending:false}).limit(100);
 
-    .limit(100);
+  if(error){$("ordersContent").textContent=error.message;return}
 
-  if (error) {
+  if(!data?.length){$("ordersContent").textContent=tr("noOrders");return}
 
-    $("ordersContent").textContent = error.message;
-
-    return;
-
-  }
-
-  if (!data || !data.length) {
-
-    $("ordersContent").textContent = tr("noOrders");
-
-    return;
-
-  }
-
-  $("ordersContent").innerHTML = `
+  $("ordersContent").innerHTML=`
 
     <div class="table-wrap"><table>
 
-      <thead><tr>
+      <thead><tr><th>${esc(tr("order"))}</th><th>${esc(tr("amount"))}</th>
 
-        <th>${esc(tr("order"))}</th>
+      <th>${esc(tr("paymentDetails"))}</th><th>${esc(tr("status"))}</th>
 
-        <th>${esc(tr("amount"))}</th>
+      <th>${esc(tr("date"))}</th><th>${esc(tr("adminNote"))}</th></tr></thead>
 
-        <th>${esc(tr("paymentDetails"))}</th>
-
-        <th>${esc(tr("status"))}</th>
-
-        <th>${esc(tr("date"))}</th>
-
-        <th>${esc(tr("adminNote"))}</th>
-
-      </tr></thead>
-
-      <tbody>
-
-      ${data.map(order => `
+      <tbody>${data.map(order=>`
 
         <tr>
 
@@ -2142,43 +1868,35 @@ async function loadOrders() {
 
           <td>${money(order.amount)}</td>
 
-          <td>
+          <td>${esc(order.payment_method)}<br>${esc(tr("txn"))} ${esc(order.transaction_id||"—")}<br>
 
-            ${esc(order.payment_method)}<br>
+          ${esc(tr("from"))} ${esc(order.payment_number||"—")}<br>
 
-            ${esc(tr("txn"))} ${esc(order.transaction_id || "—")}<br>
+          ${esc(tr("paymentStatus"))}
 
-            ${esc(tr("from"))} ${esc(order.payment_number || "—")}<br>
+          <span class="status ${esc(order.payment_status)}">${esc(translateStatus(order.payment_status))}</span></td>
 
-            ${esc(tr("paymentStatus"))}
+          <td><span class="status ${esc(order.order_status)}">${esc(translateStatus(order.order_status))}</span></td>
 
-            <span class="status ${esc(order.payment_status)}">${esc(translateStatus(order.payment_status))}</span>
+          <td>${esc(new Date(order.created_at).toLocaleDateString(currentLanguage==="bn"?"bn-BD":"en-GB"))}</td>
 
-          </td>
+          <td>${esc(order.admin_note||"—")}</td>
 
-          <td>
-
-            <span class="status ${esc(order.order_status)}">${esc(translateStatus(order.order_status))}</span>
-
-          </td>
-
-          <td>${esc(new Date(order.created_at).toLocaleDateString(currentLanguage === "bn" ? "bn-BD" : "en-GB"))}</td>
-
-          <td>${esc(order.admin_note || "—")}</td>
-
-        </tr>`).join("")}
-
-      </tbody>
+        </tr>`).join("")}</tbody>
 
     </table></div>`;
 
 }
 
-/* SELLER ORDERS */
+/* =========================
 
-async function showSellerOrders() {
+   SELLER ORDERS
 
-  if (!requireLogin()) return;
+========================= */
+
+async function showSellerOrders(){
+
+  if(!requireLogin())return;
 
   hideAllSections();
 
@@ -2190,123 +1908,79 @@ async function showSellerOrders() {
 
 }
 
-async function loadSellerOrders() {
+async function loadSellerOrders(){
 
-  if (!sb || !currentUser) return;
+  if(!sb||!currentUser)return;
 
-  $("sellerContent").textContent = tr("loadingSellerOrders");
+  $("sellerContent").textContent=tr("loadingSellerOrders");
 
-  const { data, error } = await sb
-
-    .from("orders")
+  const {data,error}=await sb.from("orders")
 
     .select("id,listing_id,amount,payment_method,payment_status,order_status,created_at,buyer_name,buyer_contact,transaction_id,payment_number,admin_note,listings!inner(title,seller_id)")
 
-    .eq("listings.seller_id", currentUser.id)
+    .eq("listings.seller_id",currentUser.id)
 
-    .order("created_at", {ascending:false})
+    .order("created_at",{ascending:false}).limit(100);
 
-    .limit(100);
+  if(error){
 
-  if (error) {
-
-    $("sellerContent").innerHTML =
-
-      '<p>' + esc(tr("sellerOrdersFailed")) + ' ' + esc(error.message) +
-
-      '</p><p class="small-note">' + esc(tr("sellerOrdersHelp")) + '</p>';
+    $("sellerContent").innerHTML='<p>'+esc(tr("sellerOrdersFailed"))+' '+esc(error.message)+'</p><p class="small-note">'+esc(tr("sellerOrdersHelp"))+'</p>';
 
     return;
 
   }
 
-  if (!data || !data.length) {
+  if(!data?.length){$("sellerContent").textContent=tr("noSellerOrders");return}
 
-    $("sellerContent").textContent = tr("noSellerOrders");
-
-    return;
-
-  }
-
-  $("sellerContent").innerHTML = `
+  $("sellerContent").innerHTML=`
 
     <div class="table-wrap"><table>
 
-      <thead><tr>
+      <thead><tr><th>${esc(tr("account"))}</th><th>${esc(tr("buyer"))}</th>
 
-        <th>${esc(tr("account"))}</th>
+      <th>${esc(tr("amount"))}</th><th>${esc(tr("payment"))}</th>
 
-        <th>${esc(tr("buyer"))}</th>
+      <th>${esc(tr("orderStatus"))}</th><th>${esc(tr("date"))}</th></tr></thead>
 
-        <th>${esc(tr("amount"))}</th>
+      <tbody>${data.map(order=>{
 
-        <th>${esc(tr("payment"))}</th>
-
-        <th>${esc(tr("orderStatus"))}</th>
-
-        <th>${esc(tr("date"))}</th>
-
-      </tr></thead>
-
-      <tbody>
-
-      ${data.map(order => {
-
-        const listing = Array.isArray(order.listings) ? order.listings[0] : order.listings;
+        const listing=Array.isArray(order.listings)?order.listings[0]:order.listings;
 
         return `<tr>
 
-          <td>${esc(listing?.title || order.listing_id)}</td>
+          <td>${esc(listing?.title||order.listing_id)}</td>
 
-          <td>${esc(order.buyer_name || tr("buyer"))}<br><small>${esc(order.buyer_contact || "")}</small></td>
+          <td>${esc(order.buyer_name||tr("buyer"))}<br><small>${esc(order.buyer_contact||"")}</small></td>
 
           <td>${money(order.amount)}</td>
 
-          <td>
+          <td>${esc(order.payment_method)}<br>${esc(tr("txn"))} ${esc(order.transaction_id||"—")}<br>
 
-            ${esc(order.payment_method)}<br>
-
-            ${esc(tr("txn"))} ${esc(order.transaction_id || "—")}<br>
-
-            <span class="status ${esc(order.payment_status)}">${esc(translateStatus(order.payment_status))}</span>
-
-          </td>
+          <span class="status ${esc(order.payment_status)}">${esc(translateStatus(order.payment_status))}</span></td>
 
           <td><span class="status ${esc(order.order_status)}">${esc(translateStatus(order.order_status))}</span></td>
 
-          <td>${esc(new Date(order.created_at).toLocaleDateString(currentLanguage === "bn" ? "bn-BD" : "en-GB"))}</td>
+          <td>${esc(new Date(order.created_at).toLocaleDateString(currentLanguage==="bn"?"bn-BD":"en-GB"))}</td>
 
         </tr>`;
 
-      }).join("")}
-
-      </tbody>
+      }).join("")}</tbody>
 
     </table></div>
 
-    <p class="small-note">
-
-      ${currentLanguage === "bn"
-
-        ? "পেমেন্ট ও অর্ডারের Status কেবল Admin যাচাই করে পরিবর্তন করতে পারবেন।"
-
-        : "Only the admin can verify and change payment and order statuses."}
-
-    </p>`;
+    <p class="small-note">${currentLanguage==="bn"?"পেমেন্ট ও অর্ডারের Status কেবল Admin যাচাই করে পরিবর্তন করতে পারবেন.":"Only the admin can verify and change payment and order statuses."}</p>`;
 
 }
 
-/* ADMIN PANEL */
+/* =========================
 
-async function showAdmin() {
+   ADMIN PANEL
 
-  if (currentProfile?.role !== "admin") {
+========================= */
 
-    alert(tr("adminAccessRequired"));
+async function showAdmin(){
 
-    return;
-
-  }
+  if(currentProfile?.role!=="admin"){alert(tr("adminAccessRequired"));return}
 
   hideAllSections();
 
@@ -2318,269 +1992,155 @@ async function showAdmin() {
 
 }
 
-async function loadAdmin() {
+async function loadAdmin(){
 
-  if (!sb || currentProfile?.role !== "admin") return;
+  if(!sb||currentProfile?.role!=="admin")return;
 
-  $("adminContent").textContent = tr("loadingAdmin");
+  $("adminContent").textContent=tr("loadingAdmin");
 
-  const [ordersResult, listingsResult] = await Promise.all([
+  const [ordersResult,listingsResult]=await Promise.all([
 
     sb.from("orders")
 
       .select("id,buyer_id,listing_id,buyer_name,buyer_contact,amount,payment_method,payment_status,order_status,created_at,transaction_id,payment_number,admin_note")
 
-      .order("created_at",{ascending:false})
+      .order("created_at",{ascending:false}).limit(100),
 
-      .limit(100),
+    sb.from("listings").select("id,title,price,status")
 
-    sb.from("listings")
-
-      .select("id,title,price,status")
-
-      .order("created_at",{ascending:false})
-
-      .limit(100)
+      .order("created_at",{ascending:false}).limit(100)
 
   ]);
 
-  if (ordersResult.error || listingsResult.error) {
+  if(ordersResult.error||listingsResult.error){
 
-    $("adminContent").textContent =
-
-      ordersResult.error?.message || listingsResult.error?.message;
+    $("adminContent").textContent=ordersResult.error?.message||listingsResult.error?.message;
 
     return;
 
   }
 
-  let html = "<h3>📦 " +
+  let html="<h3>📦 "+(currentLanguage==="bn"?"অর্ডার ও পেমেন্ট যাচাই":"Orders & Payment Verification")+"</h3>";
 
-    (currentLanguage === "bn" ? "অর্ডার ও পেমেন্ট যাচাই" : "Orders & Payment Verification") +
+  if(!ordersResult.data.length){
 
-    "</h3>";
+    html+="<p>"+esc(tr("noOrdersYet"))+"</p>";
 
-  if (!ordersResult.data.length) {
+  }else{
 
-    html += "<p>" + esc(tr("noOrdersYet")) + "</p>";
+    html+=`<div class="table-wrap"><table>
 
-  } else {
+      <thead><tr><th>${esc(tr("buyer"))}</th><th>${esc(tr("amount"))}</th>
 
-    html += `<div class="table-wrap"><table>
+      <th>${esc(tr("paymentDetails"))}</th><th>${esc(tr("paymentStatusAdmin"))}</th>
 
-      <thead><tr>
+      <th>${esc(tr("orderStatus"))}</th><th>${esc(tr("adminNote"))}</th><th>${esc(tr("save"))}</th></tr></thead><tbody>`;
 
-        <th>${esc(tr("buyer"))}</th>
+    for(const order of ordersResult.data){
 
-        <th>${esc(tr("amount"))}</th>
+      html+=`<tr>
 
-        <th>${esc(tr("paymentDetails"))}</th>
-
-        <th>${esc(tr("paymentStatusAdmin"))}</th>
-
-        <th>${esc(tr("orderStatus"))}</th>
-
-        <th>${esc(tr("adminNote"))}</th>
-
-        <th>${esc(tr("save"))}</th>
-
-      </tr></thead><tbody>`;
-
-    for (const order of ordersResult.data) {
-
-      html += `<tr>
-
-        <td>
-
-          ${esc(order.buyer_name || tr("buyer"))}<br>
-
-          <small>${esc(order.buyer_contact || "")}</small><br>
-
-          <small>ID: ${esc(String(order.id).slice(0,8))}</small>
-
-        </td>
+        <td>${esc(order.buyer_name||tr("buyer"))}<br><small>${esc(order.buyer_contact||"")}</small><br><small>ID: ${esc(String(order.id).slice(0,8))}</small></td>
 
         <td>${money(order.amount)}<br>${esc(order.payment_method)}</td>
 
-        <td>
+        <td>Txn ID:<br><strong>${esc(order.transaction_id||"—")}</strong><br>Sender:<br>${esc(order.payment_number||"—")}</td>
 
-          ${currentLanguage === "bn" ? "Txn ID:" : "Txn ID:"}<br>
+        <td><select class="field" id="payment-${esc(order.id)}">
 
-          <strong>${esc(order.transaction_id || "—")}</strong><br>
+          <option value="pending" ${order.payment_status==="pending"?"selected":""}>${esc(tr("paymentPending"))}</option>
 
-          ${currentLanguage === "bn" ? "প্রেরক:" : "Sender:"}<br>
+          <option value="approved" ${order.payment_status==="approved"?"selected":""}>${esc(tr("paymentApproved"))}</option>
 
-          ${esc(order.payment_number || "—")}
+          <option value="rejected" ${order.payment_status==="rejected"?"selected":""}>${esc(tr("paymentRejected"))}</option>
 
-        </td>
+        </select></td>
 
-        <td>
+        <td><select class="field" id="order-${esc(order.id)}">
 
-          <select class="field" id="payment-${esc(order.id)}">
+          <option value="pending" ${order.order_status==="pending"?"selected":""}>${esc(tr("pending"))}</option>
 
-            <option value="pending" ${order.payment_status==="pending"?"selected":""}>${esc(tr("paymentPending"))}</option>
+          <option value="confirmed" ${order.order_status==="confirmed"?"selected":""}>${esc(tr("orderConfirmed"))}</option>
 
-            <option value="approved" ${order.payment_status==="approved"?"selected":""}>${esc(tr("paymentApproved"))}</option>
+          <option value="completed" ${order.order_status==="completed"?"selected":""}>${esc(tr("orderCompleted"))}</option>
 
-            <option value="rejected" ${order.payment_status==="rejected"?"selected":""}>${esc(tr("paymentRejected"))}</option>
+          <option value="cancelled" ${order.order_status==="cancelled"?"selected":""}>${esc(tr("orderCancelled"))}</option>
 
-          </select>
+        </select></td>
 
-        </td>
+        <td><input class="field" id="note-${esc(order.id)}" maxlength="500" value="${esc(order.admin_note||"")}" placeholder="${esc(tr("optionalNote"))}"></td>
 
-        <td>
-
-          <select class="field" id="order-${esc(order.id)}">
-
-            <option value="pending" ${order.order_status==="pending"?"selected":""}>${esc(tr("pending"))}</option>
-
-            <option value="confirmed" ${order.order_status==="confirmed"?"selected":""}>${esc(tr("orderConfirmed"))}</option>
-
-            <option value="completed" ${order.order_status==="completed"?"selected":""}>${esc(tr("orderCompleted"))}</option>
-
-            <option value="cancelled" ${order.order_status==="cancelled"?"selected":""}>${esc(tr("orderCancelled"))}</option>
-
-          </select>
-
-        </td>
-
-        <td>
-
-          <input class="field" id="note-${esc(order.id)}" maxlength="500"
-
-            value="${esc(order.admin_note || "")}"
-
-            placeholder="${esc(tr("optionalNote"))}">
-
-        </td>
-
-        <td>
-
-          <button class="btn" onclick="updateOrder('${esc(order.id)}')">${esc(tr("save"))}</button>
-
-        </td>
+        <td><button class="btn" onclick="updateOrder('${esc(order.id)}')">${esc(tr("save"))}</button></td>
 
       </tr>`;
 
     }
 
-    html += "</tbody></table></div>";
+    html+="</tbody></table></div>";
 
   }
 
-  html += "<h3 style='margin-top:25px'>" + esc(tr("listings")) + "</h3>";
+  html+="<h3 style='margin-top:25px'>"+esc(tr("listings"))+"</h3>";
 
-  if (!listingsResult.data.length) {
+  if(!listingsResult.data.length){
 
-    html += "<p>" + esc(tr("noListingsAdmin")) + "</p>";
+    html+="<p>"+esc(tr("noListingsAdmin"))+"</p>";
 
-  } else {
+  }else{
 
-    html += `<div class="table-wrap"><table>
+    html+=`<div class="table-wrap"><table><thead><tr>
 
-      <thead><tr>
+      <th>${esc(tr("title"))}</th><th>${esc(tr("priceBDT"))}</th>
 
-        <th>${esc(tr("title"))}</th>
+      <th>${esc(tr("status"))}</th><th>${esc(tr("action"))}</th></tr></thead><tbody>`;
 
-        <th>${esc(tr("priceBDT"))}</th>
+    for(const item of listingsResult.data){
 
-        <th>${esc(tr("status"))}</th>
+      const nextStatus=item.status==="removed"?"available":"removed";
 
-        <th>${esc(tr("action"))}</th>
+      html+=`<tr><td>${esc(item.title)}</td><td>${money(item.price)}</td>
 
-      </tr></thead><tbody>`;
+        <td>${esc(item.status)}</td><td>
 
-    for (const item of listingsResult.data) {
+        <button class="btn secondary" onclick="toggleListing('${esc(item.id)}','${nextStatus}')">${esc(nextStatus==="available"?tr("restore"):tr("remove"))}</button>
 
-      const nextStatus = item.status === "removed" ? "available" : "removed";
-
-      html += `<tr>
-
-        <td>${esc(item.title)}</td>
-
-        <td>${money(item.price)}</td>
-
-        <td>${esc(item.status)}</td>
-
-        <td>
-
-          <button class="btn secondary" onclick="toggleListing('${esc(item.id)}','${nextStatus}')">
-
-            ${esc(nextStatus==="available" ? tr("restore") : tr("remove"))}
-
-          </button>
-
-        </td>
-
-      </tr>`;
+        </td></tr>`;
 
     }
 
-    html += "</tbody></table></div>";
+    html+="</tbody></table></div>";
 
   }
 
-  html += `<div class="notice">
+  html+=`<div class="notice"><b>${esc(tr("paymentVerification"))}</b> ${esc(tr("paymentVerificationWarning"))}</div>`;
 
-    <b>${esc(tr("paymentVerification"))}</b>
-
-    ${esc(tr("paymentVerificationWarning"))}
-
-  </div>`;
-
-  $("adminContent").innerHTML = html;
+  $("adminContent").innerHTML=html;
 
 }
 
-/* ADMIN: UPDATE PAYMENT + ORDER STATUS */
+async function updateOrder(id){
 
-async function updateOrder(id) {
+  if(!sb||currentProfile?.role!=="admin"){alert(tr("adminAccessRequired"));return}
 
-  if (!sb || currentProfile?.role !== "admin") {
+  const paymentStatus=$("payment-"+id).value;
 
-    alert(tr("adminAccessRequired"));
+  const orderStatus=$("order-"+id).value;
 
-    return;
+  const adminNote=$("note-"+id).value.trim();
 
-  }
+  if(paymentStatus==="approved"&&!confirm(tr("confirmPayment")))return;
 
-  const paymentStatus = $("payment-" + id).value;
+  const {error}=await sb.from("orders").update({
 
-  const orderStatus = $("order-" + id).value;
+    payment_status:paymentStatus,
 
-  const adminNote = $("note-" + id).value.trim();
+    order_status:orderStatus,
 
-  if (paymentStatus === "approved" &&
+    admin_note:adminNote
 
-      !confirm(tr("confirmPayment"))) {
+  }).eq("id",id);
 
-    return;
-
-  }
-
-  const { error } = await sb
-
-    .from("orders")
-
-    .update({
-
-      payment_status: paymentStatus,
-
-      order_status: orderStatus,
-
-      admin_note: adminNote
-
-    })
-
-    .eq("id", id);
-
-  if (error) {
-
-    alert(tr("updateFailed") + error.message);
-
-    return;
-
-  }
+  if(error){alert(tr("updateFailed")+error.message);return}
 
   alert(tr("orderPaymentUpdated"));
 
@@ -2588,27 +2148,13 @@ async function updateOrder(id) {
 
 }
 
-/* ADMIN: REMOVE / RESTORE LISTING */
+async function toggleListing(id,status){
 
-async function toggleListing(id,status) {
+  if(!sb||currentProfile?.role!=="admin")return;
 
-  if (!sb || currentProfile?.role !== "admin") return;
+  const {error}=await sb.from("listings").update({status}).eq("id",id);
 
-  const { error } = await sb
-
-    .from("listings")
-
-    .update({status})
-
-    .eq("id",id);
-
-  if (error) {
-
-    alert(error.message);
-
-    return;
-
-  }
+  if(error){alert(error.message);return}
 
   await loadAdmin();
 
@@ -2616,31 +2162,35 @@ async function toggleListing(id,status) {
 
 }
 
-/* MODAL CONTROLS */
+/* =========================
 
-document.querySelectorAll(".modal").forEach(modal => {
+   MODAL CONTROLS
 
-  modal.addEventListener("click", event => {
+========================= */
 
-    if (event.target === modal) closeModal(modal.id);
+document.querySelectorAll(".modal").forEach(modal=>{
+
+  modal.addEventListener("click",event=>{
+
+    if(event.target===modal)closeModal(modal.id);
 
   });
 
 });
 
-document.addEventListener("keydown", event => {
+document.addEventListener("keydown",event=>{
 
-  if (event.key === "Escape") {
+  if(event.key==="Escape"){
 
-    document.querySelectorAll(".modal.open").forEach(modal => closeModal(modal.id));
+    document.querySelectorAll(".modal.open").forEach(modal=>closeModal(modal.id));
 
   }
 
 });
 
-window.onerror = function(error, source, line) {
+window.onerror=function(error,source,line){
 
-  console.error("JavaScript Error:", error, "Line:", line);
+  console.error("JavaScript Error:",error,"Line:",line);
 
 };
 
