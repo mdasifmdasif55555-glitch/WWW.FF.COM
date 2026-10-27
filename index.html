@@ -358,6 +358,52 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(-
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
+/* ===== NEW FEATURES CSS (Group 1 + Group 2) ===== */
+.toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{padding:14px 18px;border-radius:12px;background:#14251b;border:1px solid #e8c87960;color:#f5f7f1;font-size:13px;font-weight:600;box-shadow:0 10px 30px #0006;animation:toastIn .3s ease;pointer-events:auto;max-width:320px;line-height:1.5}
+.toast.success{border-color:#1bc78b80;background:#0d2418}
+.toast.error{border-color:#ff657480;background:#2a1216}
+.toast.info{border-color:#e8c87960}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
+
+.skeleton{background:linear-gradient(90deg,#14251b 25%,#1a3024 50%,#14251b 75%);background-size:200% 100%;animation:skeleton 1.4s ease infinite;border-radius:10px}
+@keyframes skeleton{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skeleton-card{height:280px;border-radius:var(--radius)}
+.skeleton-line{height:14px;margin:8px 0}
+
+.verified-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(110deg,#1bc78b,#0d9b6a);color:#fff;font-size:10px;font-weight:900;padding:3px 8px;border-radius:6px;margin-left:6px}
+.verified-badge.small{font-size:9px;padding:2px 6px}
+
+.star-rating{display:inline-flex;gap:2px;color:#e8c879;font-size:14px}
+.star-rating .empty{color:#365340}
+.review-box{background:#0b1711;border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0}
+.review-form textarea{min-height:80px}
+
+.wishlist-btn{position:absolute;top:9px;right:9px;width:36px;height:36px;border-radius:50%;border:1px solid #e8c87960;background:#07100de8;color:#e8c879;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:2;transition:.2s}
+.wishlist-btn:hover,.wishlist-btn.active{background:#e8c879;color:#172017;transform:scale(1.1)}
+.wishlist-btn.active{animation:heartPop .3s ease}
+
+.advanced-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px;padding:14px;background:#0b1711;border:1px solid var(--line);border-radius:12px}
+.advanced-filters label{font-size:12px;color:var(--muted);margin-bottom:4px;display:block}
+.range-row{display:flex;gap:8px;align-items:center}
+.range-row input{flex:1}
+
+.recently-viewed{margin:20px 0}
+.recent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.recent-card{background:#0b1711;border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;transition:.2s}
+.recent-card:hover{border-color:#e8c87980}
+.recent-card img{width:100%;height:100px;object-fit:cover}
+.recent-card .info{padding:10px;font-size:12px}
+.recent-card .price{color:var(--gold);font-weight:800}
+
+.escrow-badge{display:inline-block;padding:4px 9px;border-radius:6px;font-size:11px;font-weight:700}
+.escrow-badge.holding{background:#2a2410;color:#f5dfaa;border:1px solid #8c7135}
+.escrow-badge.released{background:#0d2418;color:#8ef0bf;border:1px solid #1bc78b50}
+.escrow-badge.refunded{background:#2a1216;color:#ffadb4;border:1px solid #ff657450}
+
+.dispute-btn{font-size:11px;padding:7px 10px}
+
 </style>
 
 </head>
@@ -367,6 +413,8 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(-
 <div class="bg-effects" aria-hidden="true"></div>
 
 <div class="particle-field" id="particleField" aria-hidden="true"></div>
+
+<div class="toast-container" id="toastContainer"></div>
 
 <header>
 
@@ -387,7 +435,7 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(-
   <button class="btn secondary hidden" id="profileBtn" onclick="openProfile()">👤 Profile</button>
 
   <button class="btn secondary hidden" id="ordersBtn" onclick="showOrders()">My Orders</button>
-
+  <button class="btn secondary hidden" id="wishlistBtn" onclick="showWishlist()">❤️ Wishlist</button>
   <button class="btn secondary hidden" id="sellerBtn" onclick="showSellerOrders()">Seller Orders</button>
 
   <button class="btn secondary hidden" id="adminBtn" type="button" onclick="showAdmin()">👑 Admin</button>
@@ -469,22 +517,47 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:24px 0;color:var(-
  <div class="section-title"><div><h2>✦ উপলভ্য অ্যাকাউন্ট</h2><p class="small-note">নতুন Free Fire অ্যাকাউন্ট দেখুন।</p></div><button class="btn secondary" onclick="loadListings()">রিফ্রেশ</button></div>
 
  <div class="filters">
-
   <input class="field" id="search" placeholder="অ্যাকাউন্ট খুঁজুন..." oninput="renderListings()">
-
   <select class="field" id="sort" onchange="renderListings()"><option value="new">নতুন আগে</option><option value="low">দাম: কম থেকে বেশি</option><option value="high">দাম: বেশি থেকে কম</option></select>
-
   <select class="field" id="typeFilter" onchange="renderListings()"><option value="">সব ধরনের অ্যাকাউন্ট</option><option>Starter</option><option>Rare Skins</option><option>Collector</option><option>Premium</option></select>
+ </div>
 
+ <div class="advanced-filters">
+  <div>
+   <label>মিন প্রাইস (৳)</label>
+   <input class="field" type="number" id="minPrice" min="0" placeholder="0" oninput="renderListings()">
+  </div>
+  <div>
+   <label>ম্যাক্স প্রাইস (৳)</label>
+   <input class="field" type="number" id="maxPrice" min="0" placeholder="যেকোনো" oninput="renderListings()">
+  </div>
+  <div>
+   <label>মিন লেভেল</label>
+   <input class="field" type="number" id="minLevel" min="1" max="100" placeholder="1" oninput="renderListings()">
+  </div>
+  <div>
+   <label>ম্যাক্স লেভেল</label>
+   <input class="field" type="number" id="maxLevel" min="1" max="100" placeholder="100" oninput="renderListings()">
+  </div>
+  <div style="display:flex;align-items:flex-end">
+   <button class="btn secondary" type="button" onclick="clearAdvancedFilters()" style="width:100%">ফিল্টার ক্লিয়ার</button>
+  </div>
  </div>
 
  <div class="grid" id="listingGrid"><div class="panel">অ্যাকাউন্ট লোড হচ্ছে...</div></div>
 
- <div class="notice">⚠️ টাকা পাঠানোর আগে অর্ডারের তথ্য যাচাই করুন। Admin যাচাই না করা পর্যন্ত পেমেন্ট Pending থাকবে। কখনো Password, OTP বা Recovery Code শেয়ার করবেন না।</div>
+ <div class="recently-viewed" id="recentlyViewedSection" style="display:none">
+  <div class="section-title"><h2>🕒 Recently Viewed</h2></div>
+  <div class="recent-grid" id="recentGrid"></div>
+ </div>
+
+ <div class="notice">⚠️ টাকা পাঠানোর আগে অর্ডারের তথ্য যাচাই করুন। Admin যাচাই না করা পর্যন্ত পেমেন্ট Pending থাকবে। কখনো Password, OTP বা Recovery Code শেয়ার করবেন না। Escrow সিস্টেম চালু আছে — টাকা Admin-এর কাছে থাকবে যতক্ষণ না অ্যাকাউন্ট হস্তান্তর সম্পন্ন হয়।</div>
 
 </section>
 
 <section id="ordersSection" class="hidden"><div class="section-title"><h2>📦 আমার অর্ডার</h2><button class="btn secondary" onclick="loadOrders()">রিফ্রেশ</button></div><div class="panel" id="ordersContent"></div></section>
+
+<section id="wishlistSection" class="hidden"><div class="section-title"><h2>❤️ আমার Wishlist</h2><button class="btn secondary" onclick="loadWishlist()">রিফ্রেশ</button></div><div class="grid" id="wishlistGrid"><div class="panel">Wishlist লোড হচ্ছে...</div></div></section>
 
 <section id="sellerSection" class="hidden"><div class="section-title"><h2>🛍️ বিক্রেতার অর্ডার</h2><button class="btn secondary" onclick="loadSellerOrders()">রিফ্রেশ</button></div><div class="panel" id="sellerContent"></div></section>
 
@@ -668,11 +741,54 @@ let adminLoading=false;
 
 let authListenerRegistered=false;
 
+let userWishlist=new Set();
+let sellerRatings={};
+
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
 function money(v){return "৳"+Number(v||0).toLocaleString("en-BD")}
 
 function msg(id,text,ok=false){const e=$(id);if(!e)return;e.className="message "+(ok?"success":"error");e.textContent=text}
+
+/* ===== Toast Notification ===== */
+function showToast(text,type="info",duration=3500){
+  const container=$("toastContainer");
+  if(!container)return;
+  const t=document.createElement("div");
+  t.className="toast "+type;
+  t.textContent=text;
+  container.appendChild(t);
+  setTimeout(()=>{
+    t.style.animation="toastOut .3s ease forwards";
+    setTimeout(()=>t.remove(),300);
+  },duration);
+}
+
+function clearAdvancedFilters(){
+  ["minPrice","maxPrice","minLevel","maxLevel"].forEach(id=>{if($(id))$(id).value=""});
+  renderListings();
+}
+
+/* ===== Recently Viewed (localStorage) ===== */
+function getRecentlyViewed(){
+  try{return JSON.parse(localStorage.getItem("ansu_recent")||"[]")}catch(_){return []}
+}
+function addToRecentlyViewed(item){
+  if(!item||!item.id)return;
+  let list=getRecentlyViewed().filter(x=>String(x.id)!==String(item.id));
+  list.unshift({id:item.id,title:item.title,price:item.price,image:(getImages(item)[0]||""),level:item.level});
+  if(list.length>8)list=list.slice(0,8);
+  localStorage.setItem("ansu_recent",JSON.stringify(list));
+  renderRecentlyViewed();
+}
+function renderRecentlyViewed(){
+  const section=$("recentlyViewedSection"),grid=$("recentGrid");
+  if(!section||!grid)return;
+  const list=getRecentlyViewed();
+  if(!list.length){section.style.display="none";return}
+  section.style.display="block";
+  grid.innerHTML=list.map(item=>`<div class="recent-card" onclick="showDetails('${esc(item.id)}')"><img src="${esc(item.image||'https://placehold.co/160x100/14251e/ffffff?text=FF')}" alt="" loading="lazy"><div class="info"><div>${esc(item.title||"")}</div><div class="price">${money(item.price)}</div></div></div>`).join("");
+}
 
 function openModal(id){$(id)?.classList.add("open")}
 
@@ -684,7 +800,7 @@ function tr(bn,en){return currentLanguage==="bn"?bn:en}
 
 function toggleLanguage(){currentLanguage=currentLanguage==="bn"?"en":"bn";localStorage.setItem("ansu_language",currentLanguage);$("languageBtn").textContent=currentLanguage==="bn"?"English":"বাংলা";renderListings();renderPosts()}
 
-function hideSections(){["ordersSection","sellerSection","adminSection"].forEach(id=>$(id)?.classList.add("hidden"))}
+function hideSections(){["ordersSection","sellerSection","adminSection","wishlistSection"].forEach(id=>$(id)?.classList.add("hidden"))}
 
 function requireLogin(){if(!currentUser){openModal("authModal");return false}return true}
 
@@ -820,9 +936,10 @@ async function init(){
 
   updateUI();
 
-  await Promise.allSettled([loadListings(),loadPublicStats(),loadPublicNotice(),loadSiteAds(),loadPosts()]);
+  await Promise.allSettled([loadListings(),loadPublicStats(),loadPublicNotice(),loadSiteAds(),loadPosts(),loadSellerRatings()]);
 
-  if(currentUser)await loadNotifications();
+  if(currentUser){await loadNotifications();await loadUserWishlist();renderListings();}
+  renderRecentlyViewed();
 
   if(!authListenerRegistered){
 
@@ -838,16 +955,19 @@ async function init(){
 
      updateUI();
 
-     await Promise.allSettled([loadListings(),loadPublicStats(),loadSiteAds(),loadPosts()]);
+     await Promise.allSettled([loadListings(),loadPublicStats(),loadSiteAds(),loadPosts(),loadSellerRatings()]);
 
      if(currentUser){
 
       await loadNotifications();
+      await loadUserWishlist();
+      renderListings();
 
       if($("profileModal").classList.contains("open"))await openProfile();
 
      }else{
 
+      userWishlist=new Set();
       const nb=$("notificationButton");if(nb)nb.remove();
 
       hideSections();
@@ -892,17 +1012,18 @@ function updateUI(){
 
  const name=profileName(currentProfile,currentUser);
 
+ const verified=currentProfile?.is_verified?'<span class="verified-badge small">✓ Verified</span>':"";
  const badge=isAdmin()?'<span class="admin-badge">👑 VERIFIED ADMIN</span>':(isPremium()?'<span class="vip-text">✦ PREMIUM</span>':"");
 
  if(currentUser){
 
-  $("userLabel").innerHTML=(currentProfile?.avatar_url?`<img class="avatar-small ${isAdmin()?"admin-user-avatar":""}" src="${esc(currentProfile.avatar_url)}" alt=""> `:"")+`<span class="${isAdmin()?"admin-user-name":""}">${esc(name)}</span> ${badge}`;
+  $("userLabel").innerHTML=(currentProfile?.avatar_url?`<img class="avatar-small ${isAdmin()?"admin-user-avatar":""}" src="${esc(currentProfile.avatar_url)}" alt=""> `:"")+`<span class="${isAdmin()?"admin-user-name":""}">${esc(name)}</span> ${badge}${verified}`;
 
  }else{$("userLabel").textContent="লগইন করা নেই"}
 
  $("authBtn").classList.toggle("hidden",!!currentUser);
 
- ["profileBtn","ordersBtn","sellerBtn","logoutBtn"].forEach(id=>$(id).classList.toggle("hidden",!currentUser));
+ ["profileBtn","ordersBtn","sellerBtn","logoutBtn","wishlistBtn"].forEach(id=>$(id)?.classList.toggle("hidden",!currentUser));
 
  $("adminBtn").classList.toggle("hidden",!isAdmin());
 
@@ -1052,7 +1173,7 @@ async function loadListings(){
 
  if(!sb)return;
 
- $("listingGrid").innerHTML='<div class="panel">অ্যাকাউন্ট লোড হচ্ছে...</div>';
+ $("listingGrid").innerHTML=Array(6).fill(0).map(()=>'<div class="skeleton skeleton-card"></div>').join("");
 
  const {data,error}=await sb.from("listings").select("*").eq("status","available").order("created_at",{ascending:false}).limit(200);
 
@@ -1073,11 +1194,20 @@ async function loadListings(){
 function renderListings(){
 
  const query=$("search").value.toLowerCase().trim(),sort=$("sort").value,type=$("typeFilter").value;
+ const minP=Number($("minPrice")?.value)||0;
+ const maxP=Number($("maxPrice")?.value)||Infinity;
+ const minL=Number($("minLevel")?.value)||0;
+ const maxL=Number($("maxLevel")?.value)||999;
 
- let items=listings.filter(x=>[x.title,x.description,x.features,x.level,x.region,x.account_type].join(" ").toLowerCase().includes(query)&&(!type||x.account_type===type));
+ let items=listings.filter(x=>{
+  const textMatch=[x.title,x.description,x.features,x.level,x.region,x.account_type].join(" ").toLowerCase().includes(query);
+  const typeMatch=!type||x.account_type===type;
+  const priceMatch=Number(x.price)>=minP && Number(x.price)<=maxP;
+  const levelMatch=Number(x.level||0)>=minL && Number(x.level||0)<=maxL;
+  return textMatch && typeMatch && priceMatch && levelMatch;
+ });
 
  if(sort==="low")items.sort((a,b)=>Number(a.price)-Number(b.price));
-
  if(sort==="high")items.sort((a,b)=>Number(b.price)-Number(a.price));
 
  $("listingCount").textContent=items.length;
@@ -1085,29 +1215,51 @@ function renderListings(){
  if(!items.length){$("listingGrid").innerHTML='<div class="panel">কোনো বিজ্ঞাপন পাওয়া যায়নি।</div>';return}
 
  $("listingGrid").innerHTML=items.map(item=>{
-
   const imgs=getImages(item),video=getVideo(item),cover=imgs[0]||"";
+  const inWish=userWishlist.has(String(item.id));
+  const rating=sellerRatings[item.seller_id];
+  const ratingHtml=rating?`<div class="star-rating" title="${rating.avg.toFixed(1)} (${rating.count} reviews)">${"★".repeat(Math.round(rating.avg))}${"☆".repeat(5-Math.round(rating.avg))} <small>${rating.avg.toFixed(1)}</small></div>`:"";
 
-  return `<article class="listing ${item.is_premium?"vip-card":""}"><div class="cover">${cover?`<img src="${esc(cover)}" alt="Account image" loading="lazy">`:(video?`<video src="${esc(video)}" muted playsinline preload="metadata"></video>`:'<span style="font-size:48px">🎮</span>')}<span class="level">Level ${esc(item.level??"—")}</span>${item.is_premium?'<span class="badge">👑 PREMIUM</span>':""}</div><div class="listing-body"><h3>${esc(item.title)}</h3><div class="meta">ধরন: ${esc(item.account_type||"Starter")}<br>রিজিয়ন: ${esc(item.region||"Bangladesh")}<br>লেভেল: ${esc(item.level??"—")}<br>📸 ${imgs.length} ছবি ${video?" · 🎬 ভিডিও":""}</div><div class="price-row"><span class="price">${money(item.price)}</span><button class="btn" onclick="showDetails('${esc(item.id)}')">Details / Buy Now</button></div></div></article>`;
-
+  return `<article class="listing ${item.is_premium?"vip-card":""}">
+    <div class="cover">
+      ${cover?`<img src="${esc(cover)}" alt="Account image" loading="lazy">`:(video?`<video src="${esc(video)}" muted playsinline preload="metadata"></video>`:'<span style="font-size:48px">🎮</span>')}
+      <button class="wishlist-btn ${inWish?"active":""}" onclick="event.stopPropagation();toggleWishlist('${esc(item.id)}')" title="Wishlist">${inWish?"❤️":"🤍"}</button>
+      <span class="level">Level ${esc(item.level??"—")}</span>
+      ${item.is_premium?'<span class="badge">👑 PREMIUM</span>':""}
+    </div>
+    <div class="listing-body">
+      <h3>${esc(item.title)}</h3>
+      ${ratingHtml}
+      <div class="meta">ধরন: ${esc(item.account_type||"Starter")}<br>রিজিয়ন: ${esc(item.region||"Bangladesh")}<br>লেভেল: ${esc(item.level??"—")}<br>📸 ${imgs.length} ছবি ${video?" · 🎬 ভিডিও":""}</div>
+      <div class="price-row"><span class="price">${money(item.price)}</span><button class="btn" onclick="showDetails('${esc(item.id)}')">Details / Buy Now</button></div>
+    </div>
+  </article>`;
  }).join("");
-
 }
 
 function showDetails(id){
-
  const item=listings.find(x=>String(x.id)===String(id));if(!item)return;
-
  selectedListing=item;$("detailsTitle").textContent=item.title;
+ addToRecentlyViewed(item);
 
  const imgs=getImages(item),video=getVideo(item);
-
  const media=[...imgs.map((u,i)=>`<img src="${esc(u)}" alt="Account image ${i+1}" onclick="openFullImage('${esc(u)}')">`),...(video?[`<video src="${esc(video)}" controls playsinline></video>`]:[])].join("");
+ const inWish=userWishlist.has(String(item.id));
+ const rating=sellerRatings[item.seller_id];
+ const ratingHtml=rating?`<div class="star-rating">${"★".repeat(Math.round(rating.avg))}${"☆".repeat(5-Math.round(rating.avg))} ${rating.avg.toFixed(1)} (${rating.count} reviews)</div>`:"<div class='small-note'>এখনো কোনো রিভিউ নেই</div>";
 
- $("detailsContent").innerHTML=`<div class="panel ${item.is_premium?"vip-card":""}"><div class="gallery">${media||"🎮"}</div><h3>${esc(item.title)} ${item.is_premium?'<span class="vip-text">👑 PREMIUM</span>':""}</h3><p style="color:var(--muted);line-height:1.7;white-space:pre-wrap">${esc(item.features||"কোনো বিবরণ নেই।")}</p><p>লেভেল: ${esc(item.level??"—")} · ${esc(item.account_type||"Starter")} · ${esc(item.region||"Bangladesh")}</p><div class="price">${money(item.price)}</div><br><button class="btn" onclick="startCheckout()">🛒 Buy Now</button></div>`;
+ $("detailsContent").innerHTML=`<div class="panel ${item.is_premium?"vip-card":""}">
+   <div class="gallery">${media||"🎮"}</div>
+   <h3>${esc(item.title)} ${item.is_premium?'<span class="vip-text">👑 PREMIUM</span>':""}</h3>
+   ${ratingHtml}
+   <p style="color:var(--muted);line-height:1.7;white-space:pre-wrap">${esc(item.features||"কোনো বিবরণ নেই।")}</p>
+   <p>লেভেল: ${esc(item.level??"—")} · ${esc(item.account_type||"Starter")} · ${esc(item.region||"Bangladesh")}</p>
+   <div class="price">${money(item.price)}</div><br>
+   <button class="btn" onclick="startCheckout()">🛒 Buy Now</button>
+   <button class="btn secondary" onclick="toggleWishlist('${esc(item.id)}')">${inWish?"❤️ Wishlist থেকে সরান":"🤍 Wishlist-এ যোগ করুন"}</button>
+ </div>`;
 
  openModal("detailsModal");
-
 }
 
 function openFullImage(url){
@@ -1266,7 +1418,7 @@ $("checkoutForm").addEventListener("submit",async e=>{
 
  try{
 
-  const payload={buyer_id:currentUser.id,listing_id:selectedListing.id,amount:Number(selectedListing.price),payment_method:$("paymentMethod").value,transaction_id:$("transactionId").value.trim(),payment_number:$("paymentNumber").value.trim(),payment_reference:$("transactionId").value.trim(),payment_status:"pending",order_status:"pending",buyer_name:$("buyerName").value.trim(),buyer_contact:$("buyerContact").value.trim()};
+  const payload={buyer_id:currentUser.id,listing_id:selectedListing.id,amount:Number(selectedListing.price),payment_method:$("paymentMethod").value,transaction_id:$("transactionId").value.trim(),payment_number:$("paymentNumber").value.trim(),payment_reference:$("transactionId").value.trim(),payment_status:"pending",order_status:"pending",escrow_status:"holding",buyer_name:$("buyerName").value.trim(),buyer_contact:$("buyerContact").value.trim()};
 
   const {data,error}=await sb.from("orders").insert(payload).select("id").single();if(error)throw error;
 
@@ -1292,7 +1444,7 @@ async function loadOrders(){
 
  if(!sb||!currentUser)return;
 
- const {data,error}=await sb.from("orders").select("id,listing_id,amount,payment_method,payment_status,order_status,created_at,transaction_id,payment_number,admin_note").eq("buyer_id",currentUser.id).order("created_at",{ascending:false}).limit(100);
+ const {data,error}=await sb.from("orders").select("id,listing_id,amount,payment_method,payment_status,order_status,escrow_status,created_at,transaction_id,payment_number,admin_note,listings(seller_id,title)").eq("buyer_id",currentUser.id).order("created_at",{ascending:false}).limit(100);
 
  if(error){$("ordersContent").textContent="অর্ডার লোড করা যায়নি।";console.warn(error);return}
 
@@ -1300,7 +1452,37 @@ async function loadOrders(){
 
  if(!data?.length){$("ordersContent").textContent="এখনো কোনো অর্ডার নেই।";return}
 
- $("ordersContent").innerHTML=`<div class="table-wrap"><table><thead><tr><th>Order</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th><th>Note</th></tr></thead><tbody>${data.map(o=>`<tr><td>${esc(String(o.id).slice(0,8))}</td><td>${money(o.amount)}</td><td>${esc(o.payment_method)}<br>Txn: ${esc(o.transaction_id||"—")}<br>Sender: ${esc(o.payment_number||"—")}</td><td><span class="status ${esc(o.payment_status)}">${esc(o.payment_status)}</span><br><span class="status ${esc(o.order_status)}">${esc(o.order_status)}</span></td><td>${esc(new Date(o.created_at).toLocaleDateString())}</td><td>${esc(o.admin_note||"—")}</td></tr>`).join("")}</tbody></table></div>`;
+ // Check which orders already have reviews
+ const orderIds=data.map(o=>o.id);
+ const {data:existingReviews}=await sb.from("reviews").select("order_id").in("order_id",orderIds);
+ const reviewed=new Set((existingReviews||[]).map(r=>String(r.order_id)));
+
+ $("ordersContent").innerHTML=`<div class="table-wrap"><table><thead><tr><th>Order</th><th>Amount</th><th>Payment</th><th>Status / Escrow</th><th>Date</th><th>Actions</th></tr></thead><tbody>${data.map(o=>{
+  const listing=Array.isArray(o.listings)?o.listings[0]:o.listings;
+  const sellerId=listing?.seller_id||"";
+  const canReview=o.order_status==="completed"&&!reviewed.has(String(o.id));
+  const canDispute=["pending","confirmed"].includes(o.order_status);
+  return `<tr>
+    <td>${esc(String(o.id).slice(0,8))}<br><small>${esc(listing?.title||"")}</small></td>
+    <td>${money(o.amount)}</td>
+    <td>${esc(o.payment_method)}<br>Txn: ${esc(o.transaction_id||"—")}<br>Sender: ${esc(o.payment_number||"—")}</td>
+    <td>
+      <span class="status ${esc(o.payment_status)}">${esc(o.payment_status)}</span><br>
+      <span class="status ${esc(o.order_status)}">${esc(o.order_status)}</span><br>
+      ${escrowBadge(o.escrow_status)}
+    </td>
+    <td>${esc(new Date(o.created_at).toLocaleDateString())}</td>
+    <td>
+      ${canReview?`<div class="review-box">
+        <select class="field" id="reviewRating-${esc(o.id)}"><option value="">Rating</option><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option><option value="2">⭐⭐</option><option value="1">⭐</option></select>
+        <textarea class="field" id="reviewComment-${esc(o.id)}" placeholder="মন্তব্য (ঐচ্ছিক)" maxlength="500" style="margin-top:6px"></textarea>
+        <button class="btn" style="margin-top:6px;width:100%" onclick="submitReview('${esc(o.id)}','${esc(sellerId)}')">রিভিউ দিন</button>
+      </div>`:reviewed.has(String(o.id))?"<small>✓ রিভিউ দেওয়া হয়েছে</small>":""}
+      ${canDispute?`<button class="btn secondary dispute-btn" style="margin-top:6px" onclick="openDispute('${esc(o.id)}')">⚠️ ডিসপিউট</button>`:""}
+      ${o.admin_note?`<div class="small-note" style="margin-top:6px">Note: ${esc(o.admin_note)}</div>`:""}
+    </td>
+  </tr>`;
+ }).join("")}</tbody></table></div>`;
 
 }
 
@@ -1666,7 +1848,7 @@ async function loadAdmin(){
 
    sb.from("listings").select("*").order("created_at",{ascending:false}).limit(100),
 
-   sb.from("profiles").select("id,full_name,role,is_premium,avatar_url,created_at").order("created_at",{ascending:false}).limit(100),
+   sb.from("profiles").select("id,full_name,role,is_premium,is_verified,avatar_url,created_at").order("created_at",{ascending:false}).limit(100),
 
    sb.from("site_ads").select("*").order("sort_order",{ascending:true}).limit(100)
 
@@ -1704,7 +1886,7 @@ async function loadAdmin(){
 
   html+=`</div>`;
 
-  html+=`<div class="admin-content-section hidden" id="adminTab-members"><h3>👑 Member Management</h3><div class="table-wrap"><table><thead><tr><th>Member</th><th>User ID</th><th>Role</th><th>Premium</th><th>Save</th></tr></thead><tbody>${profiles.map(p=>`<tr><td>${esc(p.full_name||"Member")}</td><td>${esc(p.id.slice(0,8).toUpperCase())}</td><td><select class="field" id="role-${esc(p.id)}"><option value="user" ${p.role!=="admin"?"selected":""}>user</option><option value="admin" ${p.role==="admin"?"selected":""}>admin</option></select></td><td><input type="checkbox" id="vip-${esc(p.id)}" ${p.is_premium?"checked":""}></td><td><button class="btn" onclick="updateMember('${esc(p.id)}')">Save</button></td></tr>`).join("")}</tbody></table></div></div>`;
+  html+=`<div class="admin-content-section hidden" id="adminTab-members"><h3>👑 Member Management</h3><div class="table-wrap"><table><thead><tr><th>Member</th><th>User ID</th><th>Role</th><th>Premium</th><th>Verified</th><th>Save</th></tr></thead><tbody>${profiles.map(p=>`<tr><td>${esc(p.full_name||"Member")}</td><td>${esc(p.id.slice(0,8).toUpperCase())}</td><td><select class="field" id="role-${esc(p.id)}"><option value="user" ${p.role!=="admin"?"selected":""}>user</option><option value="admin" ${p.role==="admin"?"selected":""}>admin</option></select></td><td><input type="checkbox" id="vip-${esc(p.id)}" ${p.is_premium?"checked":""}></td><td><input type="checkbox" id="ver-${esc(p.id)}" ${p.is_verified?"checked":""}></td><td><button class="btn" onclick="updateMember('${esc(p.id)}')">Save</button></td></tr>`).join("")}</tbody></table></div></div>`;
 
   html+=`<div class="admin-content-section hidden" id="adminTab-stats"><h3>📊 Member Trading Summary</h3><button class="btn secondary" onclick="loadAdminMemberStats()">Member Stats রিফ্রেশ</button><div id="adminMemberStats" class="panel">Stats লোড করতে উপরের বাটনে চাপ দিন।</div></div>`;
 
@@ -1793,6 +1975,7 @@ async function updateMember(id){
  if(!isAdmin())return;
 
  const role=$("role-"+id)?.value,is_premium=$("vip-"+id)?.checked;
+ const is_verified=$("ver-"+id)?.checked;
 
  if(!role||typeof is_premium!=="boolean")return;
 
@@ -1800,7 +1983,9 @@ async function updateMember(id){
 
  if(!confirm("এই সদস্যের role/premium পরিবর্তন করবেন?"))return;
 
- const {error}=await sb.from("profiles").update({role,is_premium}).eq("id",id);
+ const updateData={role,is_premium,is_verified};
+ if(is_verified)updateData.verified_at=new Date().toISOString();
+ const {error}=await sb.from("profiles").update(updateData).eq("id",id);
 
  if(error){alert("সদস্য আপডেট করা যায়নি: "+adminError(error));console.warn(error);return}
 
@@ -1955,6 +2140,109 @@ $("profileForm").addEventListener("submit",async e=>{
  }catch(error){msg("profileMessage",error.message==="JPEG, PNG বা WEBP ছবি সর্বোচ্চ ৩ MB হতে হবে।"||error.message==="নতুন নাম বা ছবি বেছে নিন।"?error.message:publicError(error));console.warn("Profile update:",adminError(error))}
 
 });
+
+/* ===== WISHLIST ===== */
+async function loadUserWishlist(){
+  userWishlist=new Set();
+  if(!sb||!currentUser)return;
+  const {data,error}=await sb.from("wishlists").select("listing_id").eq("user_id",currentUser.id);
+  if(error){console.warn("Wishlist load:",adminError(error));return}
+  (data||[]).forEach(w=>userWishlist.add(String(w.listing_id)));
+}
+
+async function toggleWishlist(listingId){
+  if(!requireLogin())return;
+  const id=String(listingId);
+  try{
+    if(userWishlist.has(id)){
+      const {error}=await sb.from("wishlists").delete().eq("user_id",currentUser.id).eq("listing_id",listingId);
+      if(error)throw error;
+      userWishlist.delete(id);
+      showToast("Wishlist থেকে সরানো হয়েছে","info");
+    }else{
+      const {error}=await sb.from("wishlists").insert({user_id:currentUser.id,listing_id:listingId});
+      if(error)throw error;
+      userWishlist.add(id);
+      showToast("Wishlist-এ যোগ করা হয়েছে ❤️","success");
+    }
+    renderListings();
+    if($("wishlistSection")&&!$("wishlistSection").classList.contains("hidden"))await loadWishlist();
+  }catch(error){showToast(publicError(error),"error");console.warn(error)}
+}
+
+async function showWishlist(){
+  if(!requireLogin())return;
+  hideSections();
+  $("wishlistSection").classList.remove("hidden");
+  $("wishlistSection").scrollIntoView({behavior:"smooth"});
+  await loadWishlist();
+}
+
+async function loadWishlist(){
+  if(!sb||!currentUser)return;
+  $("wishlistGrid").innerHTML='<div class="panel">Wishlist লোড হচ্ছে...</div>';
+  const {data,error}=await sb.from("wishlists").select("listing_id,listings(*)").eq("user_id",currentUser.id).order("created_at",{ascending:false});
+  if(error){$("wishlistGrid").innerHTML='<div class="panel">Wishlist লোড করা যায়নি।</div>';return}
+  const items=(data||[]).map(w=>w.listings).filter(Boolean);
+  if(!items.length){$("wishlistGrid").innerHTML='<div class="panel">এখনো কোনো অ্যাকাউন্ট Wishlist-এ নেই।</div>';return}
+  $("wishlistGrid").innerHTML=items.map(item=>{
+    const imgs=getImages(item),cover=imgs[0]||"";
+    return `<article class="listing"><div class="cover">${cover?`<img src="${esc(cover)}" alt="" loading="lazy">`:'<span style="font-size:48px">🎮</span>'}<span class="level">Level ${esc(item.level??"—")}</span></div><div class="listing-body"><h3>${esc(item.title)}</h3><div class="price-row"><span class="price">${money(item.price)}</span><button class="btn" onclick="showDetails('${esc(item.id)}')">Details</button> <button class="btn secondary" onclick="toggleWishlist('${esc(item.id)}')">❤️ সরান</button></div></div></article>`;
+  }).join("");
+}
+
+/* ===== SELLER RATINGS ===== */
+async function loadSellerRatings(){
+  sellerRatings={};
+  if(!sb)return;
+  const {data,error}=await sb.from("reviews").select("seller_id,rating");
+  if(error){console.warn("Ratings:",adminError(error));return}
+  const map={};
+  (data||[]).forEach(r=>{
+    if(!map[r.seller_id])map[r.seller_id]={sum:0,count:0};
+    map[r.seller_id].sum+=Number(r.rating);
+    map[r.seller_id].count++;
+  });
+  Object.keys(map).forEach(sid=>{
+    sellerRatings[sid]={avg:map[sid].sum/map[sid].count,count:map[sid].count};
+  });
+}
+
+/* ===== REVIEW SYSTEM ===== */
+async function submitReview(orderId,sellerId){
+  if(!requireLogin())return;
+  const rating=Number($("reviewRating-"+orderId)?.value);
+  const comment=($("reviewComment-"+orderId)?.value||"").trim();
+  if(!rating||rating<1||rating>5){showToast("১ থেকে ৫ স্টার সিলেক্ট করুন","error");return}
+  try{
+    const {error}=await sb.from("reviews").insert({order_id:orderId,reviewer_id:currentUser.id,seller_id:sellerId,rating,comment});
+    if(error)throw error;
+    showToast("রিভিউ সফলভাবে জমা হয়েছে! ধন্যবাদ ⭐","success");
+    await loadOrders();
+    await loadSellerRatings();
+  }catch(error){showToast(publicError(error),"error");console.warn(error)}
+}
+
+/* ===== DISPUTE SYSTEM ===== */
+async function openDispute(orderId){
+  if(!requireLogin())return;
+  const reason=prompt("ডিসপিউটের কারণ লিখুন (সংক্ষেপে):");
+  if(!reason||!reason.trim())return;
+  try{
+    const {error}=await sb.from("disputes").insert({order_id:orderId,opened_by:currentUser.id,reason:reason.trim(),status:"open"});
+    if(error)throw error;
+    showToast("ডিসপিউট খোলা হয়েছে। Admin শীঘ্রই দেখবে।","success");
+    await loadOrders();
+  }catch(error){showToast(publicError(error),"error");console.warn(error)}
+}
+
+/* ===== ESCROW HELPERS ===== */
+function escrowBadge(status){
+  if(!status||status==="none")return "";
+  const map={holding:"holding",released:"released",refunded:"refunded"};
+  const label={holding:"🔒 Escrow Holding",released:"✅ Released",refunded:"↩️ Refunded"};
+  return `<span class="escrow-badge ${map[status]||""}">${label[status]||status}</span>`;
+}
 
 /* Notifications */
 
