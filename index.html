@@ -277,6 +277,57 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
 .safety-strip strong{color:var(--gold2)}
 @media(max-width:800px){.how-works{grid-template-columns:repeat(2,1fr)}.testimonial-grid{grid-template-columns:1fr}}
 @media(max-width:520px){.how-works{grid-template-columns:1fr}}
+
+/* ===== PUBLIC PROFILE + EXCLUSIVE ADMIN CARD ===== */
+.public-profile-modal .modal-box{width:min(520px,100%);padding:0;overflow:hidden;border:none;background:transparent}
+.profile-card-base{border-radius:20px;overflow:hidden;position:relative}
+.profile-card-member{background:linear-gradient(160deg,#14251b,#0b1510);border:1px solid #b99a5040;padding:28px 22px 22px;text-align:center}
+.profile-card-premium{background:linear-gradient(160deg,#2a2410,#121a12 60%,#1a2518);border:1px solid #e8c87980;padding:28px 22px 22px;text-align:center;box-shadow:0 0 40px #e8c87915}
+.profile-card-admin{
+  background:radial-gradient(ellipse at 50% 0%,#e8c87935,transparent 55%),radial-gradient(ellipse at 80% 80%,#b88b3c20,transparent 50%),linear-gradient(165deg,#1a1508 0%,#0d120c 40%,#1f1a0a 100%);
+  border:2px solid #e8c87990;padding:32px 24px 24px;text-align:center;position:relative;overflow:hidden;
+  animation:adminCardPulse 4s ease-in-out infinite;border-radius:20px;
+}
+@keyframes adminCardPulse{0%,100%{box-shadow:0 0 30px #e8c87930,0 0 60px #e8c87910,inset 0 0 40px #e8c87908}50%{box-shadow:0 0 50px #e8c87950,0 0 90px #e8c87920,inset 0 0 60px #e8c87912}}
+.profile-card-admin .admin-bg-anim{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.profile-card-admin .admin-bg-anim::before{content:"";position:absolute;width:200%;height:200%;top:-50%;left:-50%;background:conic-gradient(from 0deg,transparent 0deg,#e8c87915 60deg,transparent 120deg,#fff0b810 180deg,transparent 240deg,#c69b4912 300deg,transparent 360deg);animation:adminRotate 12s linear infinite}
+.profile-card-admin .admin-bg-anim::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,#fff0b818,transparent 40%),radial-gradient(circle at 70% 80%,#e8c87912,transparent 45%);animation:adminShimmer 6s ease-in-out infinite alternate}
+@keyframes adminRotate{to{transform:rotate(360deg)}}
+.profile-card-admin .profile-content{position:relative;z-index:2}
+.profile-avatar-wrap{position:relative;display:inline-block;margin-bottom:16px}
+.profile-avatar-lg{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid #e8c879;background:#0d1912}
+.profile-card-admin .profile-avatar-lg{width:120px;height:120px;border:4px solid #fff0b8;box-shadow:0 0 0 4px #e8c87940,0 0 30px #e8c87950,0 0 60px #e8c87920;animation:adminAvatarGlow 3s ease-in-out infinite}
+@keyframes adminAvatarGlow{0%,100%{box-shadow:0 0 0 4px #e8c87940,0 0 25px #e8c87950,0 0 50px #e8c87920}50%{box-shadow:0 0 0 6px #fff0b860,0 0 40px #e8c87970,0 0 80px #e8c87930}}
+.profile-avatar-ring{position:absolute;inset:-8px;border-radius:50%;border:2px dashed #e8c87960;animation:adminRingSpin 10s linear infinite}
+@keyframes adminRingSpin{to{transform:rotate(360deg)}}
+.profile-name{font-size:22px;font-weight:900;margin:0 0 6px;overflow-wrap:anywhere}
+.profile-card-admin .profile-name{background:linear-gradient(90deg,#fff0b8,#e8c879,#fff0b8,#c69b49,#fff0b8);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:adminShimmer 4s linear infinite;font-size:24px}
+.profile-role-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:30px;font-size:11px;font-weight:900;letter-spacing:1px;margin:8px 0}
+.badge-member{background:#1a3024;border:1px solid #365340;color:#a4b5aa}
+.badge-premium{background:linear-gradient(110deg,#2a2410,#1a3024);border:1px solid #e8c87980;color:#fff0b8}
+.badge-admin{background:linear-gradient(110deg,#fff0b8,#e8c879,#c69b49);color:#1a1508;border:none;box-shadow:0 0 20px #e8c87940;animation:adminBadgePulse 2.5s ease-in-out infinite}
+@keyframes adminBadgePulse{0%,100%{box-shadow:0 0 15px #e8c87940;transform:scale(1)}50%{box-shadow:0 0 28px #e8c87970;transform:scale(1.04)}}
+.profile-userid{font-size:12px;color:#7f9688;margin:6px 0 14px}
+.profile-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 10px}
+.profile-stat{background:#0b1711aa;border:1px solid #294536;border-radius:12px;padding:12px 8px}
+.profile-stat strong{display:block;font-size:18px;color:var(--gold);margin-bottom:3px}
+.profile-stat span{font-size:11px;color:var(--muted)}
+.profile-card-admin .profile-stat{background:#1a1508aa;border-color:#e8c87940}
+.profile-trust{margin:14px 0;padding:12px;background:#0b1711;border-radius:12px;border:1px solid #365340}
+.profile-trust-bar{height:8px;background:#24372b;border-radius:99px;overflow:hidden;margin-top:8px}
+.profile-trust-bar span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#1bc78b,#e8c879)}
+.profile-bio{font-size:13px;color:var(--muted);line-height:1.7;margin:12px 0;min-height:20px}
+.profile-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.profile-close-btn{position:absolute;top:12px;right:12px;z-index:5;background:#0008;border:1px solid #e8c87950;color:#fff;border-radius:8px;padding:6px 10px;font-size:14px}
+.profile-card-admin .profile-close-btn{background:#1a1508cc;border-color:#e8c87980}
+.clickable-profile{cursor:pointer;transition:.15s}
+.clickable-profile:hover{opacity:.85;filter:brightness(1.15)}
+.compare-bar{position:fixed;bottom:0;left:0;right:0;z-index:25;background:#0d1912ee;border-top:1px solid #e8c87950;padding:12px 16px;display:none;align-items:center;justify-content:center;gap:12px;backdrop-filter:blur(12px);flex-wrap:wrap}
+.compare-bar.show{display:flex}
+.compare-item{background:#14251b;border:1px solid #e8c87940;border-radius:10px;padding:6px 12px;font-size:12px;display:flex;align-items:center;gap:8px}
+.compare-item button{background:none;border:none;color:#ff6574;font-size:16px;padding:0 4px}
+.share-btn{font-size:12px;padding:7px 12px}
+.guarantee-badge{display:inline-flex;align-items:center;gap:5px;background:#0d2418;border:1px solid #1bc78b60;color:#8ef0bf;font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px}
 </style>
 </head>
 <body>
@@ -288,6 +339,14 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
 <div class="sticky-help">
   <a href="https://wa.me/8801726270731" target="_blank" rel="noopener" class="wa" title="WhatsApp Support">💬</a>
   <a href="https://t.me/ansu_elite" target="_blank" rel="noopener" class="tg" title="Telegram Support">✈️</a>
+</div>
+
+<!-- Compare Bar -->
+<div class="compare-bar" id="compareBar">
+  <span style="font-size:13px;color:var(--gold2)">Compare:</span>
+  <div id="compareItems"></div>
+  <button class="btn" onclick="openCompareModal()">তুলনা করুন</button>
+  <button class="btn secondary" onclick="clearCompare()">ক্লিয়ার</button>
 </div>
 
 <header>
@@ -622,6 +681,19 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
  <div class="modal-head"><h2>🔔 Notifications</h2><button class="close" onclick="closeModal('notificationsModal')">✕</button></div><div id="notificationsContent" class="panel">নোটিফিকেশন লোড হচ্ছে...</div>
 </div></div>
 
+<!-- Public Profile Modal (Everyone can see) -->
+<div class="modal public-profile-modal" id="publicProfileModal">
+  <div class="modal-box" id="publicProfileContent"></div>
+</div>
+
+<!-- Compare Modal -->
+<div class="modal" id="compareModal">
+  <div class="modal-box" style="width:min(900px,100%)">
+    <div class="modal-head"><h2>⚖️ অ্যাকাউন্ট তুলনা</h2><button class="close" onclick="closeModal('compareModal')">✕</button></div>
+    <div id="compareContent" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))"></div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
@@ -940,7 +1012,13 @@ function renderListings(){
       <div style="margin-bottom:6px"><span class="protection-badge">🛡️ Escrow Protected</span> ${verified}</div>
       ${ratingHtml}
       <div class="meta">ধরন: ${esc(item.account_type||"Starter")}<br>রিজিয়ন: ${esc(item.region||"Bangladesh")}<br>লেভেল: ${esc(item.level??"—")}<br>📸 ${imgs.length} ছবি ${video?" · 🎬 ভিডিও":""}</div>
-      <div class="price-row"><span class="price">${money(item.price)}</span><button class="btn" onclick="showDetails('${esc(item.id)}')">Details / Buy Now</button></div>
+      <div class="price-row"><span class="price">${money(item.price)}</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn" onclick="showDetails('${esc(item.id)}')">Details</button>
+          <button class="btn secondary" style="padding:8px 10px;font-size:12px" onclick="event.stopPropagation();addToCompare('${esc(item.id)}')" title="Compare">⚖️</button>
+          <button class="btn secondary share-btn" onclick="event.stopPropagation();shareListing('${esc(item.id)}')" title="Share">📤</button>
+        </div>
+      </div>
     </div>
   </article>`;
  }).join("");
@@ -963,9 +1041,12 @@ function showDetails(id){
    <p style="color:var(--muted);line-height:1.7;white-space:pre-wrap">${esc(item.features||"কোনো বিবরণ নেই।")}</p>
    <p>লেভেল: ${esc(item.level??"—")} · ${esc(item.account_type||"Starter")} · ${esc(item.region||"Bangladesh")}</p>
    <div class="price">${money(item.price)}</div><br>
+   <div style="margin:10px 0"><span class="guarantee-badge">⏱️ Guaranteed Delivery · Escrow Protected</span></div>
    <button class="btn" onclick="startCheckout()">🛒 Buy Now</button>
    <button class="btn secondary" onclick="toggleWishlist('${esc(item.id)}')">${inWish?"❤️ Wishlist থেকে সরান":"🤍 Wishlist-এ যোগ করুন"}</button>
-   <button class="report-btn" style="margin-left:8px" onclick="reportListing('${esc(item.id)}')">⚠️ রিপোর্ট</button>
+   <button class="btn secondary" onclick="addToCompare('${esc(item.id)}')">⚖️ Compare</button>
+   <button class="btn secondary share-btn" onclick="shareListing('${esc(item.id)}')">📤 Share</button>
+   <button class="report-btn" onclick="reportListing('${esc(item.id)}')">⚠️ রিপোর্ট</button>
  </div>`;
  openModal("detailsModal");
 }
@@ -1228,7 +1309,8 @@ function renderPosts(){
   const id=String(post.id),profile=postProfiles[post.user_id]||{},name=profileName(profile,{id:post.user_id}),admin=profile.role==="admin",image=profileAvatar(profile);
   const likeCount=reactionCount(id,"like"),heartCount=reactionCount(id,"heart"),liked=userReaction(id,"like"),hearted=userReaction(id,"heart");
   const own=currentUser&&currentUser.id===post.user_id,canDelete=own||isAdmin(),postImage=post.image_url||post.image||"";
-  return `<article class="post-card"><div class="post-author"><img class="avatar ${admin?"admin-user-avatar":""}" src="${esc(image)}" alt="Profile picture" loading="lazy"><div class="post-author-info"><div class="post-author-name ${admin?"admin-user-name":""}">${esc(name)}${admin?'<span class="post-author-badge">👑 ADMIN</span>':(profile.is_premium?'<span class="post-author-badge">✦ PREMIUM</span>':"")}</div><div class="post-user-id">User ID: ${esc(post.user_id||"—")}</div><div class="post-time">${esc(formatPostDate(post.created_at))}</div></div></div><div class="post-body">${esc(post.content||"")}</div>${postImage?`<img class="post-photo" src="${esc(postImage)}" alt="Community post image" loading="lazy">`:""}<div class="post-stats"><span class="reaction-summary">${likeCount?`👍 ${likeCount}`:""}${likeCount&&heartCount?" · ":""}${heartCount?`❤️ ${heartCount}`:""}${!likeCount&&!heartCount?"এখনো কোনো Reaction নেই":""}</span><span>${likeCount+heartCount} reactions</span></div><div class="reaction-buttons"><button class="reaction-btn ${liked?"active-like":""}" onclick="toggleReaction('${esc(id)}','like')" ${!currentUser||!reactionTableAvailable?'disabled title="লগইন করুন অথবা Community চালু করুন"':""}><span class="emoji">👍</span> Like <span>${likeCount}</span></button><button class="reaction-btn ${hearted?"active-heart":""}" onclick="toggleReaction('${esc(id)}','heart')" ${!currentUser||!reactionTableAvailable?'disabled title="লগইন করুন অথবা Community চালু করুন"':""}><span class="emoji">❤️</span> Heart <span>${heartCount}</span></button></div>${canDelete?`<div class="post-admin-controls"><button class="btn secondary" onclick="deletePost('${esc(id)}')">🗑️ পোস্ট মুছুন</button></div>`:""}</article>`;
+  const uid=post.user_id||"";
+  return `<article class="post-card"><div class="post-author clickable-profile" onclick="showPublicProfile('${esc(uid)}')" title="প্রোফাইল দেখুন"><img class="avatar ${admin?"admin-user-avatar":""}" src="${esc(image)}" alt="Profile picture" loading="lazy"><div class="post-author-info"><div class="post-author-name ${admin?"admin-user-name":""}">${esc(name)}${admin?'<span class="post-author-badge">👑 ADMIN</span>':(profile.is_premium?'<span class="post-author-badge">✦ PREMIUM</span>':"")}</div><div class="post-user-id">User ID: ${esc(uid||"—")}</div><div class="post-time">${esc(formatPostDate(post.created_at))}</div></div></div><div class="post-body">${esc(post.content||"")}</div>${postImage?`<img class="post-photo" src="${esc(postImage)}" alt="Community post image" loading="lazy">`:""}<div class="post-stats"><span class="reaction-summary">${likeCount?`👍 ${likeCount}`:""}${likeCount&&heartCount?" · ":""}${heartCount?`❤️ ${heartCount}`:""}${!likeCount&&!heartCount?"এখনো কোনো Reaction নেই":""}</span><span>${likeCount+heartCount} reactions</span></div><div class="reaction-buttons"><button class="reaction-btn ${liked?"active-like":""}" onclick="toggleReaction('${esc(id)}','like')" ${!currentUser||!reactionTableAvailable?'disabled title="লগইন করুন অথবা Community চালু করুন"':""}><span class="emoji">👍</span> Like <span>${likeCount}</span></button><button class="reaction-btn ${hearted?"active-heart":""}" onclick="toggleReaction('${esc(id)}','heart')" ${!currentUser||!reactionTableAvailable?'disabled title="লগইন করুন অথবা Community চালু করুন"':""}><span class="emoji">❤️</span> Heart <span>${heartCount}</span></button></div>${canDelete?`<div class="post-admin-controls"><button class="btn secondary" onclick="deletePost('${esc(id)}')">🗑️ পোস্ট মুছুন</button></div>`:""}</article>`;
  }).join("");
 }
 async function toggleReaction(postId,reaction){
@@ -1534,6 +1616,145 @@ function escrowBadge(status){
   const map={holding:"holding",released:"released",refunded:"refunded"};
   const label={holding:"🔒 Escrow Holding",released:"✅ Released",refunded:"↩️ Refunded"};
   return `<span class="escrow-badge ${map[status]||""}">${label[status]||status}</span>`;
+}
+
+/* ===== PUBLIC PROFILE CARD (Everyone can view) ===== */
+async function showPublicProfile(userId){
+  if(!sb||!userId)return;
+  const box=$("publicProfileContent");
+  if(!box)return;
+  box.innerHTML='<div class="profile-card-member" style="padding:40px;text-align:center"><div class="skeleton" style="width:100px;height:100px;border-radius:50%;margin:0 auto 16px"></div><div class="skeleton skeleton-line" style="width:60%;margin:0 auto"></div></div>';
+  openModal("publicProfileModal");
+
+  const {data:profile,error}=await sb.from("profiles").select("*").eq("id",userId).maybeSingle();
+  if(error||!profile){
+    box.innerHTML='<div class="profile-card-member"><p>প্রোফাইল লোড করা যায়নি।</p><button class="btn secondary" onclick="closeModal(\'publicProfileModal\')">বন্ধ</button></div>';
+    return;
+  }
+
+  // Stats
+  let listingCount=0,soldCount=0,boughtCount=0,totalTrade=0;
+  try{
+    const [lr,sr,br]=await Promise.all([
+      sb.from("listings").select("id",{count:"exact",head:true}).eq("seller_id",userId),
+      sb.from("orders").select("id,amount,order_status,payment_status,listings!inner(seller_id)").eq("listings.seller_id",userId).eq("order_status","completed").limit(500),
+      sb.from("orders").select("id,amount,order_status,payment_status").eq("buyer_id",userId).eq("order_status","completed").limit(500)
+    ]);
+    listingCount=lr.count||0;
+    const sold=sr.data||[];
+    const bought=br.data||[];
+    soldCount=sold.length;
+    boughtCount=bought.length;
+    totalTrade=sold.reduce((s,o)=>s+Number(o.amount||0),0)+bought.reduce((s,o)=>s+Number(o.amount||0),0);
+  }catch(_){}
+
+  const isAdm=profile.role==="admin";
+  const isPrem=profile.is_premium===true||isAdm;
+  const name=profile.full_name||"Member";
+  const avatar=profile.avatar_url||"https://placehold.co/120x120/14251e/ffffff?text=User";
+  const short=userId.slice(0,8).toUpperCase();
+
+  // Trust Score (simple formula)
+  const trustScore=Math.min(100,Math.round(40 + (soldCount*8) + (boughtCount*3) + (profile.is_verified?15:0) + (isAdm?30:0) + (isPrem?10:0)));
+  const rank=rankForAmount(totalTrade);
+
+  let cardClass="profile-card-member";
+  let roleBadge='<span class="profile-role-badge badge-member">MEMBER</span>';
+  if(isAdm){
+    cardClass="profile-card-admin";
+    roleBadge='<span class="profile-role-badge badge-admin">👑 VERIFIED OWNER · ADMIN</span>';
+  }else if(isPrem){
+    cardClass="profile-card-premium";
+    roleBadge='<span class="profile-role-badge badge-premium">✦ PREMIUM MEMBER</span>';
+  }
+  if(profile.is_verified&&!isAdm) roleBadge+=` <span class="verified-badge">✓ Verified</span>`;
+
+  const adminBg=isAdm?'<div class="admin-bg-anim"></div>':"";
+  const avatarRing=isAdm?'<div class="profile-avatar-ring"></div>':"";
+
+  box.innerHTML=`
+  <div class="profile-card-base ${cardClass}">
+    ${adminBg}
+    <button class="profile-close-btn" onclick="closeModal('publicProfileModal')">✕</button>
+    <div class="profile-content">
+      <div class="profile-avatar-wrap">
+        ${avatarRing}
+        <img class="profile-avatar-lg ${isAdm?'admin-user-avatar':''}" src="${esc(avatar)}" alt="Profile">
+      </div>
+      <h2 class="profile-name ${isAdm?'admin-user-name':''}">${esc(name)}</h2>
+      ${roleBadge}
+      <div class="profile-userid">User ID: ${esc(short)}</div>
+      <div class="profile-stats-row">
+        <div class="profile-stat"><strong>${listingCount}</strong><span>Listings</span></div>
+        <div class="profile-stat"><strong>${soldCount}</strong><span>Sold</span></div>
+        <div class="profile-stat"><strong>${boughtCount}</strong><span>Bought</span></div>
+      </div>
+      <div class="profile-trust">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>Trust Score</span><strong style="color:var(--gold)">${trustScore}/100</strong></div>
+        <div class="profile-trust-bar"><span style="width:${trustScore}%"></span></div>
+      </div>
+      <div style="margin-top:10px"><span class="rank-badge" style="font-size:12px">${rank.icon} ${esc(rank.name)}</span></div>
+      <div class="profile-bio">${isAdm?"ANSU ELITE Marketplace-এর Official Admin ও Owner। সকল লেনদেন তদারকি ও Escrow পরিচালনা করেন।":(isPrem?"Premium Member · Priority Support":"Community Member")}</div>
+      <div class="profile-actions">
+        <button class="btn secondary" onclick="closeModal('publicProfileModal')">বন্ধ করুন</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ===== COMPARE SYSTEM ===== */
+let compareList=[];
+function addToCompare(id){
+  const item=listings.find(x=>String(x.id)===String(id));
+  if(!item)return;
+  if(compareList.some(x=>String(x.id)===String(id))){showToast("ইতিমধ্যে Compare-এ আছে","info");return}
+  if(compareList.length>=3){showToast("সর্বোচ্চ ৩টি অ্যাকাউন্ট Compare করা যাবে","error");return}
+  compareList.push(item);
+  renderCompareBar();
+  showToast("Compare-এ যোগ করা হয়েছে","success");
+}
+function removeFromCompare(id){
+  compareList=compareList.filter(x=>String(x.id)!==String(id));
+  renderCompareBar();
+}
+function clearCompare(){
+  compareList=[];
+  renderCompareBar();
+}
+function renderCompareBar(){
+  const bar=$("compareBar"),items=$("compareItems");
+  if(!bar||!items)return;
+  if(!compareList.length){bar.classList.remove("show");return}
+  bar.classList.add("show");
+  items.innerHTML=compareList.map(i=>`<div class="compare-item">${esc(i.title.slice(0,18))}... <button onclick="removeFromCompare('${esc(i.id)}')">×</button></div>`).join("");
+}
+function openCompareModal(){
+  if(compareList.length<2){showToast("কমপক্ষে ২টি অ্যাকাউন্ট সিলেক্ট করুন","error");return}
+  const content=$("compareContent");
+  content.innerHTML=compareList.map(item=>{
+    const imgs=getImages(item);
+    return `<div class="panel">
+      <img src="${esc(imgs[0]||'https://placehold.co/300x160/14251e/ffffff?text=FF')}" style="width:100%;height:140px;object-fit:cover;border-radius:10px;margin-bottom:10px" alt="">
+      <h3 style="margin:0 0 8px;font-size:15px">${esc(item.title)}</h3>
+      <div class="price">${money(item.price)}</div>
+      <div class="meta" style="margin-top:8px">Level: ${esc(item.level??"—")}<br>Type: ${esc(item.account_type||"—")}<br>Region: ${esc(item.region||"—")}</div>
+      <button class="btn" style="width:100%;margin-top:10px" onclick="showDetails('${esc(item.id)}');closeModal('compareModal')">Details</button>
+    </div>`;
+  }).join("");
+  openModal("compareModal");
+}
+
+/* ===== SHARE LISTING ===== */
+function shareListing(id){
+  const item=listings.find(x=>String(x.id)===String(id));
+  if(!item)return;
+  const text=`🎮 ${item.title}\n💰 দাম: ${money(item.price)}\n📊 Level: ${item.level||"—"} · ${item.account_type||""}\n🛡️ Escrow Protected · ANSU ELITE\n\nঅ্যাকাউন্ট দেখুন: ${window.location.href.split('#')[0]}#market`;
+  if(navigator.share){
+    navigator.share({title:item.title,text}).catch(()=>{});
+  }else{
+    navigator.clipboard.writeText(text).then(()=>showToast("শেয়ার টেক্সট কপি হয়েছে! WhatsApp-এ পেস্ট করুন","success"))
+      .catch(()=>prompt("কপি করুন:",text));
+  }
 }
 
 async function loadNotifications(){
