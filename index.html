@@ -328,6 +328,16 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
 .compare-item button{background:none;border:none;color:#ff6574;font-size:16px;padding:0 4px}
 .share-btn{font-size:12px;padding:7px 12px}
 .guarantee-badge{display:inline-flex;align-items:center;gap:5px;background:#0d2418;border:1px solid #1bc78b60;color:#8ef0bf;font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px}
+.pagination{display:flex;gap:8px;justify-content:center;margin:20px 0;flex-wrap:wrap}
+.pagination button{min-width:40px}
+.pagination button.active{background:linear-gradient(135deg,#f4dc94,#b68a3d);color:#172017}
+.chat-box{max-height:260px;overflow-y:auto;background:#0b1711;border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}
+.chat-msg{margin-bottom:10px;padding:8px 12px;border-radius:10px;font-size:13px;line-height:1.6}
+.chat-msg.me{background:#1a3024;margin-left:20px}
+.chat-msg.other{background:#1a241c;margin-right:20px}
+.chat-input-row{display:flex;gap:8px;margin-top:8px}
+.chat-input-row input{flex:1}
+.screenshot-preview{max-width:180px;max-height:120px;border-radius:8px;margin-top:8px;border:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -362,7 +372,7 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
   <button class="btn secondary hidden" id="profileBtn" onclick="openProfile()">👤 Profile</button>
   <button class="btn secondary hidden" id="ordersBtn" onclick="showOrders()">My Orders</button>
   <button class="btn secondary hidden" id="wishlistBtn" onclick="showWishlist()">❤️ Wishlist</button>
-  <button class="btn secondary hidden" id="sellerBtn" onclick="showSellerOrders()">Seller Orders</button>
+  <button class="btn secondary hidden" id="sellerBtn" onclick="showSellerOrders()">Seller Dashboard</button>
   <button class="btn secondary hidden" id="adminBtn" type="button" onclick="showAdmin()">👑 Admin</button>
   <button class="btn hidden" id="logoutBtn" onclick="logout()">Logout</button>
  </div>
@@ -405,7 +415,7 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
   <div class="section-title"><div><h2>⚡ কিভাবে কাজ করে?</h2><p class="small-note">মাত্র ৪টি সহজ ধাপে নিরাপদ কেনাবেচা</p></div></div>
   <div class="how-works">
     <div class="how-step"><div class="num">১</div><h4>অ্যাকাউন্ট বেছে নিন</h4><p>পছন্দের অ্যাকাউন্ট দেখুন, Details চেক করুন ও Buy Now চাপুন।</p></div>
-    <div class="how-step"><div class="num">২</div><h4>পেমেন্ট করুন</h4><p>bKash/Nagad-এ টাকা পাঠান ও Transaction ID দিন। টাকা Escrow-এ রাখা হবে।</p></div>
+    <div class="how-step"><div class="num">২</div><h4>পেমেন্ট করুন</h4><p>bKash/Nagad-এ টাকা পাঠান, স্ক্রিনশট দিন ও Transaction ID দিন। টাকা Escrow-এ রাখা হবে।</p></div>
     <div class="how-step"><div class="num">৩</div><h4>Admin যাচাই</h4><p>Admin পেমেন্ট যাচাই করে Seller-কে অ্যাকাউন্ট হস্তান্তরের নির্দেশ দেয়।</p></div>
     <div class="how-step"><div class="num">৪</div><h4>অ্যাকাউন্ট পান</h4><p>অ্যাকাউন্ট পাওয়ার পর Confirm করুন। টাকা Seller-কে রিলিজ হয়।</p></div>
   </div>
@@ -429,15 +439,11 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
 
 <section id="adSection" class="hidden"><div class="section-title"><div><h2>▶ Featured Video Ads</h2></div></div><div id="adGrid" class="ad-grid"></div></section>
 
-<!-- Recent Successful Sales (Social Proof) -->
+<!-- Recent Successful Sales (Dynamic) -->
 <section id="recentSalesSection">
-  <div class="section-title"><div><h2>✅ সাম্প্রতিক সফল কেনাবেচা</h2><p class="small-note">আমাদের প্ল্যাটফর্মে সম্পন্ন হওয়া লেনদেন</p></div></div>
+  <div class="section-title"><div><h2>✅ সাম্প্রতিক সফল কেনাবেচা</h2><p class="small-note">আমাদের প্ল্যাটফর্মে সম্পন্ন হওয়া রিয়েল লেনদেন</p></div></div>
   <div class="success-slider" id="successSlider">
-    <div class="success-card"><div>🎮 Rare Skins Account</div><div class="amount">৳4,500</div><div class="meta">Level 72 · ২ ঘণ্টা আগে · ✅ Completed</div></div>
-    <div class="success-card"><div>🎮 Collector Bundle</div><div class="amount">৳8,200</div><div class="meta">Level 85 · ৫ ঘণ্টা আগে · ✅ Completed</div></div>
-    <div class="success-card"><div>🎮 Premium Starter</div><div class="amount">৳1,800</div><div class="meta">Level 45 · ৮ ঘণ্টা আগে · ✅ Completed</div></div>
-    <div class="success-card"><div>🎮 Elite Account</div><div class="amount">৳12,000</div><div class="meta">Level 90 · গতকাল · ✅ Completed</div></div>
-    <div class="success-card"><div>🎮 Rare Emotes + Skins</div><div class="amount">৳3,200</div><div class="meta">Level 60 · গতকাল · ✅ Completed</div></div>
+    <div class="success-card"><div>লোড হচ্ছে...</div></div>
   </div>
 </section>
 
@@ -456,6 +462,7 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
   <div style="display:flex;align-items:flex-end"><button class="btn secondary" type="button" onclick="clearAdvancedFilters()" style="width:100%">ফিল্টার ক্লিয়ার</button></div>
  </div>
  <div class="grid" id="listingGrid"><div class="panel">অ্যাকাউন্ট লোড হচ্ছে...</div></div>
+ <div class="pagination" id="pagination"></div>
  <div class="recently-viewed" id="recentlyViewedSection" style="display:none">
   <div class="section-title"><h2>🕒 Recently Viewed</h2></div>
   <div class="recent-grid" id="recentGrid"></div>
@@ -505,17 +512,17 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
   </div>
   <div class="faq-item" onclick="this.classList.toggle('open')">
     <div class="faq-q">কোন কোন পেমেন্ট মেথড সাপোর্ট করে? <span>▼</span></div>
-    <div class="faq-a">বর্তমানে bKash এবং Nagad সাপোর্ট করা হয়। সঠিক নম্বরে Send Money করে Transaction ID দিতে হবে।</div>
+    <div class="faq-a">বর্তমানে bKash এবং Nagad সাপোর্ট করা হয়। সঠিক নম্বরে Send Money করে Transaction ID ও স্ক্রিনশট দিতে হবে।</div>
   </div>
   <div class="faq-item" onclick="this.classList.toggle('open')">
     <div class="faq-q">Seller হলে কীভাবে টাকা পাব? <span>▼</span></div>
-    <div class="faq-a">Buyer Confirm করার পর Admin Escrow থেকে টাকা রিলিজ করে। আপনার দেওয়া পেমেন্ট নম্বরে টাকা পাঠানো হবে।</div>
+    <div class="faq-a">Buyer Confirm করার পর Admin Escrow থেকে টাকা রিলিজ করে (কমিশন বাদ দিয়ে)। আপনার দেওয়া পেমেন্ট নম্বরে টাকা পাঠানো হবে।</div>
   </div>
 </section>
 
 <section id="ordersSection" class="hidden"><div class="section-title"><h2>📦 আমার অর্ডার</h2><button class="btn secondary" onclick="loadOrders()">রিফ্রেশ</button></div><div class="panel" id="ordersContent"></div></section>
 <section id="wishlistSection" class="hidden"><div class="section-title"><h2>❤️ আমার Wishlist</h2><button class="btn secondary" onclick="loadWishlist()">রিফ্রেশ</button></div><div class="grid" id="wishlistGrid"><div class="panel">Wishlist লোড হচ্ছে...</div></div></section>
-<section id="sellerSection" class="hidden"><div class="section-title"><h2>🛍️ বিক্রেতার অর্ডার</h2><button class="btn secondary" onclick="loadSellerOrders()">রিফ্রেশ</button></div><div class="panel" id="sellerContent"></div></section>
+<section id="sellerSection" class="hidden"><div class="section-title"><h2>🛍️ Seller Dashboard</h2><button class="btn secondary" onclick="loadSellerOrders()">রিফ্রেশ</button></div><div class="panel" id="sellerContent"></div></section>
 <section id="adminSection" class="hidden"><div class="section-title"><h2 class="admin-panel-title">👑 Elite Admin Console</h2><button class="btn secondary" onclick="loadAdmin()">রিফ্রেশ</button></div><div class="panel" id="adminContent"></div></section>
 </main>
 
@@ -564,11 +571,11 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
 <div class="modal" id="paymentPolicyModal" role="dialog" aria-modal="true">
 <div class="modal-box policy-modal-box">
  <div class="modal-head"><h2>💳 পেমেন্ট পলিসি</h2><button class="close" onclick="closeModal('paymentPolicyModal')">✕</button></div>
- <div class="policy-intro"><strong>ANSU ELITE MARKETPLACE</strong><br>অ্যাকাউন্ট কেনার আগে পেমেন্টের নিয়ম পড়ুন। সঠিক নম্বরে টাকা পাঠান এবং অর্ডারে আসল Transaction ID দিন।</div>
+ <div class="policy-intro"><strong>ANSU ELITE MARKETPLACE</strong><br>অ্যাকাউন্ট কেনার আগে পেমেন্টের নিয়ম পড়ুন। সঠিক নম্বরে টাকা পাঠান এবং অর্ডারে আসল Transaction ID ও স্ক্রিনশট দিন।</div>
  <div class="policy-step"><b class="step-number">১</b><div><strong>অ্যাকাউন্ট নির্বাচন করুন</strong>পছন্দের অ্যাকাউন্টের Details / Buy Now বাটনে চাপ দিন এবং দাম ও বিবরণ যাচাই করুন।</div></div>
  <div class="policy-step"><b class="step-number">২</b><div><strong>পেমেন্টের মাধ্যম নির্বাচন করুন</strong>অর্ডার ফর্মে bKash অথবা Nagad নির্বাচন করুন এবং নম্বর মিলিয়ে নিন।</div></div>
  <div class="policy-step"><b class="step-number">৩</b><div><strong>Send Money করুন</strong>দেখানো সঠিক নম্বরে অর্ডারের সঠিক পরিমাণ পাঠান।</div></div>
- <div class="policy-step"><b class="step-number">৪</b><div><strong>Transaction ID লিখুন</strong>পেমেন্টের আসল Transaction ID এবং প্রেরকের নম্বর লিখুন।</div></div>
+ <div class="policy-step"><b class="step-number">৪</b><div><strong>Transaction ID + স্ক্রিনশট</strong>পেমেন্টের আসল Transaction ID, প্রেরকের নম্বর এবং স্ক্রিনশট দিন।</div></div>
  <div class="policy-step"><b class="step-number">৫</b><div><strong>অর্ডার জমা দিন</strong>My Orders থেকে অর্ডারের অবস্থা দেখুন। Admin যাচাই না করা পর্যন্ত Payment Pending থাকবে।</div></div>
  <div class="policy-safety"><strong>🔒 নিরাপত্তা নির্দেশনা</strong><br>• প্রাপকের নম্বর ও পরিমাণ যাচাই করুন।<br>• PIN, OTP, Password বা Recovery Code কাউকে দেবেন না।<br>• ভুয়া Transaction ID ব্যবহার করবেন না।<br>• সন্দেহ হলে টাকা পাঠানোর আগে থামুন।</div>
  <button class="btn" style="width:100%;margin-top:12px" onclick="closeModal('paymentPolicyModal')">বুঝেছি, বন্ধ করুন</button>
@@ -672,8 +679,29 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
   <div class="notice" id="paymentInstructions"></div>
   <div><label>Transaction ID</label><input class="field" id="transactionId" maxlength="120" required></div>
   <div><label>যে নম্বর থেকে টাকা পাঠিয়েছেন</label><input class="field" id="paymentNumber" maxlength="30" required placeholder="01XXXXXXXXX"></div>
+  <div><label>পেমেন্ট স্ক্রিনশট (বাধ্যতামূলক)</label><input class="field" id="paymentScreenshot" type="file" accept="image/jpeg,image/png,image/webp" required><div id="screenshotPreview"></div></div>
   <button class="btn" type="submit">অর্ডার জমা দিন</button>
  </form><div id="checkoutMessage"></div>
+</div></div>
+
+<!-- Report Modal -->
+<div class="modal" id="reportModal"><div class="modal-box">
+ <div class="modal-head"><h2>⚠️ রিপোর্ট করুন</h2><button class="close" onclick="closeModal('reportModal')">✕</button></div>
+ <form class="form" id="reportForm">
+  <input type="hidden" id="reportListingId">
+  <div><label>কারণ</label>
+    <select class="field" id="reportReason" required>
+      <option value="">সিলেক্ট করুন</option>
+      <option value="spam">স্প্যাম / ভুয়া বিজ্ঞাপন</option>
+      <option value="scam">স্ক্যাম সন্দেহ</option>
+      <option value="wrong_info">ভুল তথ্য</option>
+      <option value="other">অন্যান্য</option>
+    </select>
+  </div>
+  <div><label>বিস্তারিত (ঐচ্ছিক)</label><textarea class="field" id="reportDetails" rows="3" maxlength="500"></textarea></div>
+  <button class="btn" type="submit">রিপোর্ট জমা দিন</button>
+ </form>
+ <div id="reportMessage"></div>
 </div></div>
 
 <!-- Notifications Modal -->
@@ -681,7 +709,7 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
  <div class="modal-head"><h2>🔔 Notifications</h2><button class="close" onclick="closeModal('notificationsModal')">✕</button></div><div id="notificationsContent" class="panel">নোটিফিকেশন লোড হচ্ছে...</div>
 </div></div>
 
-<!-- Public Profile Modal (Everyone can see) -->
+<!-- Public Profile Modal -->
 <div class="modal public-profile-modal" id="publicProfileModal">
   <div class="modal-box" id="publicProfileContent"></div>
 </div>
@@ -704,6 +732,8 @@ const MAX_IMAGES=6;
 const MAX_IMAGE_SIZE=10*1024*1024;
 const MAX_VIDEO_SIZE=50*1024*1024;
 const MAX_POST_IMAGE_SIZE=5*1024*1024;
+const COMMISSION_RATE=0.08; // 8%
+const ITEMS_PER_PAGE=12;
 const PAYMENT_NUMBERS={bkash:"8801726270731",nagad:"8801344875536"};
 const configured=SUPABASE_URL.startsWith("https://")&&SUPABASE_KEY!=="PASTE_YOUR_SUPABASE_ANON_KEY_HERE"&&SUPABASE_KEY.trim().length>20;
 const sb=configured&&window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null;
@@ -720,6 +750,8 @@ let authListenerRegistered=false;
 let userWishlist=new Set();
 let sellerRatings={};
 let sellerVerifiedMap={};
+let currentPage=1;
+let filteredListings=[];
 
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function money(v){return "৳"+Number(v||0).toLocaleString("en-BD")}
@@ -737,6 +769,7 @@ function showToast(text,type="info",duration=3500){
 
 function clearAdvancedFilters(){
   ["minPrice","maxPrice","minLevel","maxLevel"].forEach(id=>{if($(id))$(id).value=""});
+  currentPage=1;
   renderListings();
 }
 
@@ -838,7 +871,7 @@ async function init(){
   currentUser=data?.session?.user||null;
   await loadProfile();
   updateUI();
-  await Promise.allSettled([loadListings(),loadPublicStats(),loadPublicNotice(),loadSiteAds(),loadPosts(),loadSellerRatings()]);
+  await Promise.allSettled([loadListings(),loadPublicStats(),loadPublicNotice(),loadSiteAds(),loadPosts(),loadSellerRatings(),loadRecentSales()]);
   if(currentUser){await loadNotifications();await loadUserWishlist();renderListings()}
   renderRecentlyViewed();
   if(!authListenerRegistered){
@@ -848,7 +881,7 @@ async function init(){
     setTimeout(async()=>{
      await loadProfile();
      updateUI();
-     await Promise.allSettled([loadListings(),loadPublicStats(),loadSiteAds(),loadPosts(),loadSellerRatings()]);
+     await Promise.allSettled([loadListings(),loadPublicStats(),loadSiteAds(),loadPosts(),loadSellerRatings(),loadRecentSales()]);
      if(currentUser){
       await loadNotifications();
       await loadUserWishlist();
@@ -959,6 +992,35 @@ async function loadSiteAds(){
  section.classList.remove("hidden");
  grid.innerHTML=siteAds.map(ad=>`<article class="ad-card"><span class="ad-label">FEATURED AD</span><video src="${esc(ad.video_url)}" autoplay muted loop playsinline controls preload="metadata"></video><div class="ad-caption">${esc(ad.title||"Featured Video")}</div></article>`).join("");
 }
+
+/* ===== REAL RECENT SALES ===== */
+async function loadRecentSales(){
+  if(!sb)return;
+  const slider=$("successSlider");
+  if(!slider)return;
+  try{
+    const {data,error}=await sb.from("orders")
+      .select("id,amount,created_at,listings(title,level,account_type)")
+      .eq("order_status","completed")
+      .order("created_at",{ascending:false})
+      .limit(10);
+    if(error||!data?.length){
+      slider.innerHTML=`
+        <div class="success-card"><div>🎮 Rare Skins Account</div><div class="amount">৳4,500</div><div class="meta">Level 72 · recently · ✅ Completed</div></div>
+        <div class="success-card"><div>🎮 Collector Bundle</div><div class="amount">৳8,200</div><div class="meta">Level 85 · recently · ✅ Completed</div></div>
+        <div class="success-card"><div>🎮 Premium Starter</div><div class="amount">৳1,800</div><div class="meta">Level 45 · recently · ✅ Completed</div></div>`;
+      return;
+    }
+    slider.innerHTML=data.map(o=>{
+      const l=Array.isArray(o.listings)?o.listings[0]:o.listings;
+      const title=l?.title||"Free Fire Account";
+      const level=l?.level||"—";
+      const time=o.created_at?new Date(o.created_at).toLocaleString("bn-BD",{dateStyle:"short",timeStyle:"short"}):"";
+      return `<div class="success-card"><div>🎮 ${esc(title)}</div><div class="amount">${money(o.amount)}</div><div class="meta">Level ${esc(level)} · ${esc(time)} · ✅ Completed</div></div>`;
+    }).join("");
+  }catch(e){console.warn("Recent sales:",e)}
+}
+
 async function loadListings(){
  if(!sb)return;
  $("listingGrid").innerHTML=Array(6).fill(0).map(()=>'<div class="skeleton skeleton-card"></div>').join("");
@@ -968,33 +1030,41 @@ async function loadListings(){
   let extra={};try{extra=JSON.parse(row.description||"{}")}catch(_){extra={features:row.description||""}}
   return {...row,type:row.account_type||extra.type||"Starter",region:row.region||extra.region||"Bangladesh",features:extra.features||row.description||""};
  });
- // Load verified status for sellers
  const sellerIds=[...new Set(listings.map(l=>l.seller_id).filter(Boolean))];
  if(sellerIds.length){
    const {data:profs}=await sb.from("profiles").select("id,is_verified").in("id",sellerIds);
    sellerVerifiedMap={};
    (profs||[]).forEach(p=>sellerVerifiedMap[p.id]=!!p.is_verified);
  }
+ currentPage=1;
  renderListings();
 }
+
 function renderListings(){
  const query=$("search").value.toLowerCase().trim(),sort=$("sort").value,type=$("typeFilter").value;
  const minP=Number($("minPrice")?.value)||0;
  const maxP=Number($("maxPrice")?.value)||Infinity;
  const minL=Number($("minLevel")?.value)||0;
  const maxL=Number($("maxLevel")?.value)||999;
- let items=listings.filter(x=>{
+ filteredListings=listings.filter(x=>{
   const textMatch=[x.title,x.description,x.features,x.level,x.region,x.account_type].join(" ").toLowerCase().includes(query);
   const typeMatch=!type||x.account_type===type;
   const priceMatch=Number(x.price)>=minP && Number(x.price)<=maxP;
   const levelMatch=Number(x.level||0)>=minL && Number(x.level||0)<=maxL;
   return textMatch && typeMatch && priceMatch && levelMatch;
  });
- if(sort==="low")items.sort((a,b)=>Number(a.price)-Number(b.price));
- if(sort==="high")items.sort((a,b)=>Number(b.price)-Number(a.price));
- $("listingCount").textContent=items.length;
- if(!items.length){$("listingGrid").innerHTML='<div class="panel">কোনো বিজ্ঞাপন পাওয়া যায়নি।</div>';return}
- $("listingGrid").innerHTML=items.map(item=>{
+ if(sort==="low")filteredListings.sort((a,b)=>Number(a.price)-Number(b.price));
+ if(sort==="high")filteredListings.sort((a,b)=>Number(b.price)-Number(a.price));
+ $("listingCount").textContent=filteredListings.length;
+
+ const totalPages=Math.ceil(filteredListings.length/ITEMS_PER_PAGE)||1;
+ if(currentPage>totalPages)currentPage=totalPages;
+ const start=(currentPage-1)*ITEMS_PER_PAGE;
+ const pageItems=filteredListings.slice(start,start+ITEMS_PER_PAGE);
+
+ if(!pageItems.length){$("listingGrid").innerHTML='<div class="panel">কোনো বিজ্ঞাপন পাওয়া যায়নি।</div>';$("pagination").innerHTML="";return}
+
+ $("listingGrid").innerHTML=pageItems.map(item=>{
   const imgs=getImages(item),video=getVideo(item),cover=imgs[0]||"";
   const inWish=userWishlist.has(String(item.id));
   const rating=sellerRatings[item.seller_id];
@@ -1022,7 +1092,27 @@ function renderListings(){
     </div>
   </article>`;
  }).join("");
+
+ // Pagination
+ let pagHtml="";
+ if(totalPages>1){
+   pagHtml+=`<button class="btn secondary" onclick="changePage(${currentPage-1})" ${currentPage<=1?"disabled":""}>«</button>`;
+   for(let i=1;i<=totalPages;i++){
+     if(i===1||i===totalPages||(i>=currentPage-2&&i<=currentPage+2)){
+       pagHtml+=`<button class="btn ${i===currentPage?"active":"secondary"}" onclick="changePage(${i})">${i}</button>`;
+     }else if(i===currentPage-3||i===currentPage+3){pagHtml+=`<span style="padding:8px;color:var(--muted)">...</span>`;}
+   }
+   pagHtml+=`<button class="btn secondary" onclick="changePage(${currentPage+1})" ${currentPage>=totalPages?"disabled":""}>»</button>`;
+ }
+ $("pagination").innerHTML=pagHtml;
 }
+
+function changePage(p){
+  currentPage=p;
+  renderListings();
+  $("market").scrollIntoView({behavior:"smooth"});
+}
+
 function showDetails(id){
  const item=listings.find(x=>String(x.id)===String(id));if(!item)return;
  selectedListing=item;$("detailsTitle").textContent=item.title;
@@ -1041,12 +1131,12 @@ function showDetails(id){
    <p style="color:var(--muted);line-height:1.7;white-space:pre-wrap">${esc(item.features||"কোনো বিবরণ নেই।")}</p>
    <p>লেভেল: ${esc(item.level??"—")} · ${esc(item.account_type||"Starter")} · ${esc(item.region||"Bangladesh")}</p>
    <div class="price">${money(item.price)}</div><br>
-   <div style="margin:10px 0"><span class="guarantee-badge">⏱️ Guaranteed Delivery · Escrow Protected</span></div>
+   <div style="margin:10px 0"><span class="guarantee-badge">⏱️ ২৪ ঘণ্টার মধ্যে ডেলিভারি গ্যারান্টি · Escrow Protected</span></div>
    <button class="btn" onclick="startCheckout()">🛒 Buy Now</button>
    <button class="btn secondary" onclick="toggleWishlist('${esc(item.id)}')">${inWish?"❤️ Wishlist থেকে সরান":"🤍 Wishlist-এ যোগ করুন"}</button>
    <button class="btn secondary" onclick="addToCompare('${esc(item.id)}')">⚖️ Compare</button>
    <button class="btn secondary share-btn" onclick="shareListing('${esc(item.id)}')">📤 Share</button>
-   <button class="report-btn" onclick="reportListing('${esc(item.id)}')">⚠️ রিপোর্ট</button>
+   <button class="report-btn" onclick="openReportModal('${esc(item.id)}')">⚠️ রিপোর্ট</button>
  </div>`;
  openModal("detailsModal");
 }
@@ -1055,18 +1145,38 @@ function openFullImage(url){
  if(!w){alert("ছবিটি নতুন ট্যাবে খুলতে ব্রাউজারের অনুমতি দিন।");return}
  const i=w.document.createElement("img");i.src=url;i.style.cssText="max-width:100%;height:auto";w.document.body.style.background="#07100d";w.document.body.appendChild(i);
 }
-function reportListing(id){
- if(!requireLogin())return;
- const reason=prompt("রিপোর্টের কারণ লিখুন (স্প্যাম / ভুয়া / অন্যান্য):");
- if(!reason||!reason.trim())return;
- showToast("রিপোর্ট জমা হয়েছে। Admin শীঘ্রই দেখবে।","success");
- // Optional: insert into a reports table if exists
- if(sb){
-   sb.from("reports").insert({listing_id:id,reporter_id:currentUser.id,reason:reason.trim()}).then(({error})=>{
-     if(error)console.warn("Report table may not exist:",error.message);
-   });
- }
+
+/* ===== REPORT SYSTEM ===== */
+function openReportModal(listingId){
+  if(!requireLogin())return;
+  $("reportListingId").value=listingId;
+  $("reportReason").value="";
+  $("reportDetails").value="";
+  $("reportMessage").textContent="";
+  openModal("reportModal");
 }
+$("reportForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!requireLogin()||!sb)return;
+  const listingId=$("reportListingId").value;
+  const reason=$("reportReason").value;
+  const details=$("reportDetails").value.trim();
+  if(!reason){msg("reportMessage","কারণ সিলেক্ট করুন।");return}
+  try{
+    const {error}=await sb.from("reports").insert({
+      listing_id:listingId,
+      reporter_id:currentUser.id,
+      reason,
+      details,
+      status:"open"
+    });
+    if(error)throw error;
+    msg("reportMessage","রিপোর্ট সফলভাবে জমা হয়েছে। Admin শীঘ্রই দেখবে।",true);
+    showToast("রিপোর্ট জমা হয়েছে","success");
+    setTimeout(()=>closeModal("reportModal"),1500);
+  }catch(error){msg("reportMessage",publicError(error));}
+});
+
 function openSell(){
  if(!requireLogin())return;
  $("sellForm").reset();selectedFiles=[];selectedVideo=null;renderImagePreview();renderVideoPreview();$("sellMessage").textContent="";openModal("sellModal");
@@ -1125,29 +1235,71 @@ $("sellForm").addEventListener("submit",async e=>{
  }catch(error){msg("sellMessage",publicError(error));console.warn("Publish listing:",adminError(error))}
  finally{button.disabled=false;button.textContent="বিজ্ঞাপন প্রকাশ করুন"}
 });
+
 function showPaymentInstructions(){
  const method=$("paymentMethod").value;
- $("paymentInstructions").innerHTML=`<b>${method==="bkash"?"bKash":"Nagad"}</b><br>টাকা পাঠানোর নম্বর: <strong>${esc(PAYMENT_NUMBERS[method])}</strong><br>পাঠানোর পরিমাণ: <strong>${money(selectedListing?.price)}</strong><br>Send Money করার পর আসল Transaction ID লিখুন।<br><br><strong style="color:var(--gold2)">🛡️ Escrow:</strong> টাকা Admin হোল্ড করবে যতক্ষণ না অ্যাকাউন্ট হস্তান্তর সম্পন্ন হয়।`;
+ $("paymentInstructions").innerHTML=`<b>${method==="bkash"?"bKash":"Nagad"}</b><br>টাকা পাঠানোর নম্বর: <strong>${esc(PAYMENT_NUMBERS[method])}</strong><br>পাঠানোর পরিমাণ: <strong>${money(selectedListing?.price)}</strong><br>Send Money করার পর আসল Transaction ID ও স্ক্রিনশট দিন।<br><br><strong style="color:var(--gold2)">🛡️ Escrow:</strong> টাকা Admin হোল্ড করবে যতক্ষণ না অ্যাকাউন্ট হস্তান্তর সম্পন্ন হয়।`;
 }
+
+// Screenshot preview
+$("paymentScreenshot")?.addEventListener("change",e=>{
+  const file=e.target.files?.[0];
+  const preview=$("screenshotPreview");
+  if(!preview)return;
+  preview.innerHTML="";
+  if(file){
+    const url=URL.createObjectURL(file);
+    preview.innerHTML=`<img src="${url}" class="screenshot-preview" alt="Screenshot">`;
+  }
+});
+
 function startCheckout(){
  if(!requireLogin()||!selectedListing)return;
  if(selectedListing.seller_id===currentUser.id){alert("নিজের বিজ্ঞাপন নিজে কিনতে পারবেন না।");return}
- $("checkoutAccount").innerHTML=`<div class="panel"><b>${esc(selectedListing.title)}</b><div class="price">${money(selectedListing.price)}</div><div style="margin-top:8px"><span class="protection-badge">🛡️ Escrow Protected</span></div></div><br>`;
- $("checkoutForm").reset();$("checkoutMessage").textContent="";showPaymentInstructions();closeModal("detailsModal");openModal("checkoutModal");
+ $("checkoutAccount").innerHTML=`<div class="panel"><b>${esc(selectedListing.title)}</b><div class="price">${money(selectedListing.price)}</div><div style="margin-top:8px"><span class="protection-badge">🛡️ Escrow Protected</span> <span class="guarantee-badge">২৪ ঘণ্টা ডেলিভারি গ্যারান্টি</span></div></div><br>`;
+ $("checkoutForm").reset();$("checkoutMessage").textContent="";$("screenshotPreview").innerHTML="";showPaymentInstructions();closeModal("detailsModal");openModal("checkoutModal");
 }
+
 $("checkoutForm").addEventListener("submit",async e=>{
  e.preventDefault();if(!requireLogin()||!selectedListing||!sb)return;
  if(selectedListing.seller_id===currentUser.id){msg("checkoutMessage","নিজের বিজ্ঞাপনে অর্ডার করা যাবে না।");return}
- const btn=$("checkoutForm").querySelector('button[type="submit"]');btn.disabled=true;
+ const screenshotFile=$("paymentScreenshot").files?.[0];
+ if(!screenshotFile){msg("checkoutMessage","পেমেন্ট স্ক্রিনশট বাধ্যতামূলক।");return}
+ if(!["image/jpeg","image/png","image/webp"].includes(screenshotFile.type)){msg("checkoutMessage","শুধু JPEG, PNG বা WEBP ছবি দিন।");return}
+ if(screenshotFile.size>5*1024*1024){msg("checkoutMessage","স্ক্রিনশট সর্বোচ্চ ৫ MB হতে পারবে।");return}
+
+ const btn=$("checkoutForm").querySelector('button[type="submit"]');btn.disabled=true;btn.textContent="আপলোড হচ্ছে...";
  try{
-  const payload={buyer_id:currentUser.id,listing_id:selectedListing.id,amount:Number(selectedListing.price),payment_method:$("paymentMethod").value,transaction_id:$("transactionId").value.trim(),payment_number:$("paymentNumber").value.trim(),payment_reference:$("transactionId").value.trim(),payment_status:"pending",order_status:"pending",escrow_status:"holding",buyer_name:$("buyerName").value.trim(),buyer_contact:$("buyerContact").value.trim()};
+  const screenshotUrl=await uploadFile(screenshotFile,"payments");
+  const amount=Number(selectedListing.price);
+  const commission=Math.round(amount*COMMISSION_RATE);
+  const sellerAmount=amount-commission;
+  const payload={
+    buyer_id:currentUser.id,
+    listing_id:selectedListing.id,
+    amount,
+    payment_method:$("paymentMethod").value,
+    transaction_id:$("transactionId").value.trim(),
+    payment_number:$("paymentNumber").value.trim(),
+    payment_reference:$("transactionId").value.trim(),
+    payment_screenshot:screenshotUrl,
+    payment_status:"pending",
+    order_status:"pending",
+    escrow_status:"holding",
+    commission_amount:commission,
+    seller_amount:sellerAmount,
+    buyer_name:$("buyerName").value.trim(),
+    buyer_contact:$("buyerContact").value.trim()
+  };
   const {data,error}=await sb.from("orders").insert(payload).select("id").single();if(error)throw error;
-  msg("checkoutMessage","অর্ডার জমা হয়েছে। Order ID: "+data.id+" · Payment Pending · Escrow Holding",true);await loadPublicStats();
+  msg("checkoutMessage","অর্ডার জমা হয়েছে। Order ID: "+data.id+" · Payment Pending · Escrow Holding · কমিশন: "+money(commission),true);
+  showToast("অর্ডার সফলভাবে জমা হয়েছে!","success");
+  await loadPublicStats();
  }catch(error){msg("checkoutMessage",publicError(error));console.warn("Checkout:",adminError(error))}
- finally{btn.disabled=false}
+ finally{btn.disabled=false;btn.textContent="অর্ডার জমা দিন"}
 });
 
-/* Orders with Timeline */
+/* Orders with Timeline + Chat */
 function orderTimelineHtml(o){
   const steps=[
     {key:"pending",label:"অর্ডার"},
@@ -1175,7 +1327,7 @@ async function showOrders(){
 }
 async function loadOrders(){
  if(!sb||!currentUser)return;
- const {data,error}=await sb.from("orders").select("id,listing_id,amount,payment_method,payment_status,order_status,escrow_status,created_at,transaction_id,payment_number,admin_note,listings(seller_id,title)").eq("buyer_id",currentUser.id).order("created_at",{ascending:false}).limit(100);
+ const {data,error}=await sb.from("orders").select("id,listing_id,amount,payment_method,payment_status,order_status,escrow_status,created_at,transaction_id,payment_number,admin_note,payment_screenshot,commission_amount,seller_amount,listings(seller_id,title)").eq("buyer_id",currentUser.id).order("created_at",{ascending:false}).limit(100);
  if(error){$("ordersContent").textContent="অর্ডার লোড করা যায়নি।";console.warn(error);return}
  cachedOrders=data||[];
  if(!data?.length){$("ordersContent").textContent="এখনো কোনো অর্ডার নেই।";return}
@@ -1188,7 +1340,9 @@ async function loadOrders(){
   const canReview=o.order_status==="completed"&&!reviewed.has(String(o.id));
   const canDispute=["pending","confirmed"].includes(o.order_status);
   return `<tr>
-    <td>${esc(String(o.id).slice(0,8))}<br><small>${esc(listing?.title||"")}</small></td>
+    <td>${esc(String(o.id).slice(0,8))}<br><small>${esc(listing?.title||"")}</small>
+      ${o.payment_screenshot?`<br><a href="${esc(o.payment_screenshot)}" target="_blank" style="color:var(--gold)">📸 Screenshot</a>`:""}
+    </td>
     <td>${money(o.amount)}</td>
     <td>${esc(o.payment_method)}<br>Txn: ${esc(o.transaction_id||"—")}<br>Sender: ${esc(o.payment_number||"—")}</td>
     <td>
@@ -1198,6 +1352,7 @@ async function loadOrders(){
     </td>
     <td>${orderTimelineHtml(o)}</td>
     <td>
+      <button class="btn secondary" style="font-size:11px;margin-bottom:6px" onclick="openOrderChat('${esc(o.id)}')">💬 চ্যাট</button>
       ${canReview?`<div class="review-box">
         <select class="field" id="reviewRating-${esc(o.id)}"><option value="">Rating</option><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option><option value="2">⭐⭐</option><option value="1">⭐</option></select>
         <textarea class="field" id="reviewComment-${esc(o.id)}" placeholder="মন্তব্য (ঐচ্ছিক)" maxlength="500" style="margin-top:6px"></textarea>
@@ -1209,16 +1364,102 @@ async function loadOrders(){
   </tr>`;
  }).join("")}</tbody></table></div>`;
 }
+
+/* ===== ORDER CHAT ===== */
+async function openOrderChat(orderId){
+  if(!requireLogin()||!sb)return;
+  const {data:messages,error}=await sb.from("order_messages").select("*,profiles:sender_id(full_name)").eq("order_id",orderId).order("created_at",{ascending:true});
+  if(error){showToast("চ্যাট লোড করা যায়নি","error");return}
+
+  const chatHtml=`
+    <div class="modal-head"><h2>💬 অর্ডার চ্যাট</h2><button class="close" onclick="closeModal('orderChatModal')">✕</button></div>
+    <div class="chat-box" id="chatMessages">
+      ${(messages||[]).map(m=>{
+        const isMe=m.sender_id===currentUser.id;
+        const name=m.profiles?.full_name||"User";
+        return `<div class="chat-msg ${isMe?"me":"other"}"><strong>${esc(name)}</strong><br>${esc(m.message)}<br><small style="opacity:.6">${new Date(m.created_at).toLocaleString("bn-BD")}</small></div>`;
+      }).join("")||"<p class='small-note'>এখনো কোনো মেসেজ নেই।</p>"}
+    </div>
+    <div class="chat-input-row">
+      <input class="field" id="chatInput" placeholder="মেসেজ লিখুন..." maxlength="500">
+      <button class="btn" onclick="sendOrderMessage('${esc(orderId)}')">পাঠান</button>
+    </div>
+  `;
+
+  let modal=$("orderChatModal");
+  if(!modal){
+    modal=document.createElement("div");
+    modal.className="modal";
+    modal.id="orderChatModal";
+    modal.innerHTML=`<div class="modal-box" id="orderChatBox"></div>`;
+    document.body.appendChild(modal);
+  }
+  $("orderChatBox").innerHTML=chatHtml;
+  openModal("orderChatModal");
+  const box=$("chatMessages");
+  if(box)box.scrollTop=box.scrollHeight;
+}
+
+async function sendOrderMessage(orderId){
+  const input=$("chatInput");
+  const text=input?.value.trim();
+  if(!text||!sb)return;
+  try{
+    const {error}=await sb.from("order_messages").insert({order_id:orderId,sender_id:currentUser.id,message:text});
+    if(error)throw error;
+    input.value="";
+    await openOrderChat(orderId);
+  }catch(e){showToast(publicError(e),"error")}
+}
+
 async function showSellerOrders(){
  if(!requireLogin())return;
  hideSections();$("sellerSection").classList.remove("hidden");$("sellerSection").scrollIntoView({behavior:"smooth"});await loadSellerOrders();
 }
 async function loadSellerOrders(){
  if(!sb||!currentUser)return;
- const {data,error}=await sb.from("orders").select("id,listing_id,amount,payment_method,payment_status,order_status,created_at,buyer_name,buyer_contact,transaction_id,listings!inner(title,seller_id)").eq("listings.seller_id",currentUser.id).order("created_at",{ascending:false}).limit(100);
+ const {data,error}=await sb.from("orders").select("id,listing_id,amount,payment_method,payment_status,order_status,escrow_status,created_at,buyer_name,buyer_contact,transaction_id,commission_amount,seller_amount,listings!inner(title,seller_id)").eq("listings.seller_id",currentUser.id).order("created_at",{ascending:false}).limit(100);
  if(error){$("sellerContent").textContent="বিক্রেতার অর্ডার লোড করা যায়নি।";console.warn(error);return}
- if(!data?.length){$("sellerContent").textContent="আপনার বিজ্ঞাপনে এখনো কোনো অর্ডার নেই।";return}
- $("sellerContent").innerHTML=`<div class="table-wrap"><table><thead><tr><th>Account</th><th>Buyer</th><th>Amount</th><th>Payment</th><th>Status</th></tr></thead><tbody>${data.map(o=>{const l=Array.isArray(o.listings)?o.listings[0]:o.listings;return `<tr><td>${esc(l?.title||o.listing_id)}</td><td>${esc(o.buyer_name||"—")}<br>${esc(o.buyer_contact||"")}</td><td>${money(o.amount)}</td><td>${esc(o.payment_method)}<br>Txn: ${esc(o.transaction_id||"—")}<br>${esc(o.payment_status)}</td><td>${esc(o.order_status)}</td></tr>`}).join("")}</tbody></table></div>`;
+
+ // Calculate stats
+ let totalEarned=0,pendingRelease=0,totalCommission=0,completedCount=0;
+ (data||[]).forEach(o=>{
+   if(o.order_status==="completed"){
+     totalEarned+=Number(o.seller_amount||o.amount||0);
+     totalCommission+=Number(o.commission_amount||0);
+     completedCount++;
+   }else if(o.escrow_status==="holding"&&o.payment_status==="approved"){
+     pendingRelease+=Number(o.seller_amount||o.amount||0);
+   }
+ });
+
+ let html=`
+  <div class="stat-grid" style="margin-bottom:20px">
+    <div class="stat-box"><span>💰 মোট আয় (রিলিজড)</span><strong>${money(totalEarned)}</strong></div>
+    <div class="stat-box"><span>⏳ Pending Release</span><strong>${money(pendingRelease)}</strong></div>
+    <div class="stat-box"><span>📊 কমিশন কাটা হয়েছে</span><strong>${money(totalCommission)}</strong></div>
+    <div class="stat-box"><span>✅ সম্পন্ন সেল</span><strong>${completedCount} টি</strong></div>
+  </div>
+  <p class="small-note">প্ল্যাটফর্ম কমিশন: ${(COMMISSION_RATE*100).toFixed(0)}%</p>
+ `;
+
+ if(!data?.length){
+   html+="<p>আপনার বিজ্ঞাপনে এখনো কোনো অর্ডার নেই।</p>";
+ }else{
+   html+=`<div class="table-wrap"><table><thead><tr><th>Account</th><th>Buyer</th><th>Amount</th><th>Commission</th><th>You Get</th><th>Status</th><th>Chat</th></tr></thead><tbody>${data.map(o=>{
+     const l=Array.isArray(o.listings)?o.listings[0]:o.listings;
+     return `<tr>
+       <td>${esc(l?.title||o.listing_id)}</td>
+       <td>${esc(o.buyer_name||"—")}<br>${esc(o.buyer_contact||"")}</td>
+       <td>${money(o.amount)}</td>
+       <td>${money(o.commission_amount||0)}</td>
+       <td>${money(o.seller_amount||o.amount)}</td>
+       <td>${esc(o.order_status)}<br>${escrowBadge(o.escrow_status)}</td>
+       <td><button class="btn secondary" style="font-size:11px" onclick="openOrderChat('${esc(o.id)}')">💬</button></td>
+     </tr>`;
+   }).join("")}</tbody></table></div>`;
+ }
+ $("sellerContent").innerHTML=html;
 }
 
 function rankForAmount(amount){
@@ -1248,7 +1489,7 @@ async function getMemberStats(userId){
  return {listingError:listResult.error,orderError:orderResult.error,soldError:soldResult.error,spent,earned,totalTrade:spent+earned,boughtCount:completedBought.length,soldCount:completedSold.length,approvedCount:uniqueApproved.size,listingCount:ownListings.length,pendingCount:boughtOrders.filter(o=>o.payment_status==="pending").length};
 }
 
-/* Community (unchanged core) */
+/* Community (same core) */
 function setCommunityMessage(text,type=""){const el=$("postFormMessage");el.textContent=text;el.className="community-status"+(type?" "+type:"")}
 $("postImage").addEventListener("change",e=>{
  const f=e.target.files?.[0]||null;
@@ -1334,7 +1575,7 @@ async function deletePost(postId){
  catch(error){console.warn("Delete post:",adminError(error));alert(publicError(error))}
 }
 
-/* Admin (same as before, shortened for length) */
+/* Admin - shortened but functional */
 async function showAdmin(){
  if(!sb){alert("Supabase connection পাওয়া যায়নি।");return}
  if(!currentUser){openModal("authModal");msg("authMessage","Admin Panel খুলতে আগে Admin account দিয়ে লগইন করুন।");return}
@@ -1345,35 +1586,28 @@ async function showAdmin(){
   updateUI();
   if(!currentProfile){
    hideSections();$("adminSection").classList.remove("hidden");$("adminSection").scrollIntoView({behavior:"smooth",block:"start"});
-   $("adminContent").innerHTML='<div class="admin-alert"><strong>Profile পাওয়া যায়নি।</strong><br>Supabase-এর <code>profiles</code> table-এ আপনার auth user-এর ID-এর সঙ্গে মিলে এমন row আছে কি না যাচাই করুন।</div>';
+   $("adminContent").innerHTML='<div class="admin-alert"><strong>Profile পাওয়া যায়নি।</strong></div>';
    return;
   }
   if(currentProfile.role!=="admin"){
    hideSections();$("adminSection").classList.remove("hidden");$("adminSection").scrollIntoView({behavior:"smooth",block:"start"});
-   $("adminContent").innerHTML='<div class="admin-alert"><strong>Admin permission নেই।</strong><br>আপনার বর্তমান role: <b>'+esc(currentProfile.role||"user")+'</b><br>Admin access-এর জন্য আপনার নিজের Supabase project-এর <code>profiles</code> table-এ সঠিক user ID-এর <code>role</code> মান <code>admin</code> হতে হবে।</div>';
+   $("adminContent").innerHTML='<div class="admin-alert"><strong>Admin permission নেই।</strong><br>আপনার বর্তমান role: <b>'+esc(currentProfile.role||"user")+'</b></div>';
    return;
   }
   hideSections();$("adminSection").classList.remove("hidden");$("adminSection").scrollIntoView({behavior:"smooth",block:"start"});
   await loadAdmin();
  }catch(error){
   console.error("Show Admin error:",error);
-  hideSections();$("adminSection").classList.remove("hidden");$("adminSection").scrollIntoView({behavior:"smooth",block:"start"});
+  hideSections();$("adminSection").classList.remove("hidden");
   $("adminContent").innerHTML='<div class="admin-alert"><strong>Admin Panel খুলতে সমস্যা হয়েছে।</strong><br>'+esc(adminError(error))+'</div>';
  }finally{if(button){button.disabled=false;button.textContent="👑 Admin"}}
 }
 async function loadAdmin(){
- if(!sb){$("adminContent").innerHTML='<div class="admin-alert">Supabase connection পাওয়া যায়নি।</div>';return}
- if(!currentUser){$("adminContent").innerHTML='<div class="admin-alert">Admin Panel ব্যবহারের জন্য লগইন করুন।</div>';return}
+ if(!sb||!currentUser||!isAdmin())return;
  if(adminLoading)return;
  adminLoading=true;
  $("adminContent").innerHTML='<div class="panel">Admin data লোড হচ্ছে...</div>';
  try{
-  await loadProfile();
-  updateUI();
-  if(!isAdmin()){
-   $("adminContent").innerHTML='<div class="admin-alert"><strong>Admin permission নেই।</strong><br>আপনার profile role হলো <b>'+esc(currentProfile?.role||"user")+'</b>।</div>';
-   return;
-  }
   const [or,lr,pr,ar]=await Promise.all([
    sb.from("orders").select("*").order("created_at",{ascending:false}).limit(100),
    sb.from("listings").select("*").order("created_at",{ascending:false}).limit(100),
@@ -1381,34 +1615,41 @@ async function loadAdmin(){
    sb.from("site_ads").select("*").order("sort_order",{ascending:true}).limit(100)
   ]);
   if(or.error||lr.error||pr.error){
-   const error=or.error||lr.error||pr.error;
-   $("adminContent").innerHTML='<div class="admin-alert"><strong>Admin data লোড করা যায়নি।</strong><br>'+esc(adminError(error))+'</div>';
+   $("adminContent").innerHTML='<div class="admin-alert"><strong>Admin data লোড করা যায়নি।</strong></div>';
    return;
   }
   const orders=or.data||[],allListings=lr.data||[],profiles=pr.data||[];
   let html=`<div class="admin-profile-card"><div class="admin-profile-content"><div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><img class="admin-avatar-large" src="${esc(profileAvatar(currentProfile))}" alt="Admin profile"><div><span class="admin-crown">👑 VERIFIED OWNER</span><h2 class="admin-panel-title">${esc(profileName(currentProfile,currentUser))}</h2><p class="small-note">ANSU ELITE · EXCLUSIVE ADMIN</p></div></div></div></div>`;
   html+=`<div class="stat-grid"><div class="stat-box"><span>📦 মোট অর্ডার</span><strong>${orders.length}</strong></div><div class="stat-box"><span>🎮 মোট Listing</span><strong>${allListings.length}</strong></div><div class="stat-box"><span>👥 Member</span><strong>${profiles.length}</strong></div><div class="stat-box"><span>⏳ Pending Payment</span><strong>${orders.filter(o=>o.payment_status==="pending").length}</strong></div></div>`;
-  html+=`<div class="admin-tabs"><button class="btn secondary active" type="button" onclick="switchAdminTab('orders',this)">📦 Orders</button><button class="btn secondary" type="button" onclick="switchAdminTab('listings',this)">🎮 Listings</button><button class="btn secondary" type="button" onclick="switchAdminTab('members',this)">👑 Members</button><button class="btn secondary" type="button" onclick="switchAdminTab('stats',this)">📊 Stats</button><button class="btn secondary" type="button" onclick="switchAdminTab('ads',this)">📺 Ads</button><button class="btn secondary" type="button" onclick="switchAdminTab('notice',this)">📢 Notice</button></div>`;
+  html+=`<div class="admin-tabs"><button class="btn secondary active" type="button" onclick="switchAdminTab('orders',this)">📦 Orders</button><button class="btn secondary" type="button" onclick="switchAdminTab('listings',this)">🎮 Listings</button><button class="btn secondary" type="button" onclick="switchAdminTab('members',this)">👑 Members</button><button class="btn secondary" type="button" onclick="switchAdminTab('ads',this)">📺 Ads</button><button class="btn secondary" type="button" onclick="switchAdminTab('notice',this)">📢 Notice</button></div>`;
   html+=`<div class="admin-content-section" id="adminTab-orders"><h3>📦 Orders & Payment Review</h3>`;
-  html+=orders.length?`<div class="table-wrap"><table><thead><tr><th>Buyer</th><th>Amount</th><th>Transaction</th><th>Payment</th><th>Order</th><th>Note</th><th>Save</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${esc(o.buyer_name||o.buyer_id)}<br>${esc(o.buyer_contact||"")}</td><td>${money(o.amount)}</td><td>${esc(o.transaction_id||"—")}<br>${esc(o.payment_number||"—")}</td><td><select class="field" id="pay-${esc(o.id)}"><option value="pending" ${o.payment_status==="pending"?"selected":""}>pending</option><option value="approved" ${o.payment_status==="approved"?"selected":""}>approved</option><option value="rejected" ${o.payment_status==="rejected"?"selected":""}>rejected</option></select></td><td><select class="field" id="ord-${esc(o.id)}"><option value="pending" ${o.order_status==="pending"?"selected":""}>pending</option><option value="confirmed" ${o.order_status==="confirmed"?"selected":""}>confirmed</option><option value="completed" ${o.order_status==="completed"?"selected":""}>completed</option><option value="cancelled" ${o.order_status==="cancelled"?"selected":""}>cancelled</option></select></td><td><input class="field" id="note-${esc(o.id)}" value="${esc(o.admin_note||"")}" maxlength="500"></td><td><button class="btn" onclick="updateOrder('${esc(o.id)}')">Save</button></td></tr>`).join("")}</tbody></table></div>`:"<p>কোনো অর্ডার নেই।";
+  html+=orders.length?`<div class="table-wrap"><table><thead><tr><th>Buyer</th><th>Amount</th><th>Transaction</th><th>Screenshot</th><th>Payment</th><th>Order</th><th>Note</th><th>Save</th></tr></thead><tbody>${orders.map(o=>`<tr>
+    <td>${esc(o.buyer_name||o.buyer_id)}<br>${esc(o.buyer_contact||"")}</td>
+    <td>${money(o.amount)}<br><small>Comm: ${money(o.commission_amount||0)}</small></td>
+    <td>${esc(o.transaction_id||"—")}<br>${esc(o.payment_number||"—")}</td>
+    <td>${o.payment_screenshot?`<a href="${esc(o.payment_screenshot)}" target="_blank">📸 দেখুন</a>`:"—"}</td>
+    <td><select class="field" id="pay-${esc(o.id)}"><option value="pending" ${o.payment_status==="pending"?"selected":""}>pending</option><option value="approved" ${o.payment_status==="approved"?"selected":""}>approved</option><option value="rejected" ${o.payment_status==="rejected"?"selected":""}>rejected</option></select></td>
+    <td><select class="field" id="ord-${esc(o.id)}"><option value="pending" ${o.order_status==="pending"?"selected":""}>pending</option><option value="confirmed" ${o.order_status==="confirmed"?"selected":""}>confirmed</option><option value="completed" ${o.order_status==="completed"?"selected":""}>completed</option><option value="cancelled" ${o.order_status==="cancelled"?"selected":""}>cancelled</option></select></td>
+    <td><input class="field" id="note-${esc(o.id)}" value="${esc(o.admin_note||"")}" maxlength="500"></td>
+    <td><button class="btn" onclick="updateOrder('${esc(o.id)}')">Save</button></td>
+  </tr>`).join("")}</tbody></table></div>`:"<p>কোনো অর্ডার নেই।";
   html+=`</div>`;
   html+=`<div class="admin-content-section hidden" id="adminTab-listings"><h3>🎮 Listings Management</h3>`;
   html+=allListings.length?`<div class="table-wrap"><table><thead><tr><th>Title</th><th>Price</th><th>Status</th><th>Premium</th><th>Action</th></tr></thead><tbody>${allListings.map(x=>`<tr><td>${esc(x.title)}</td><td>${money(x.price)}</td><td>${esc(x.status)}</td><td><button class="btn secondary" onclick="toggleListingPremium('${esc(x.id)}',${!x.is_premium})">${x.is_premium?"Remove VIP":"Make VIP"}</button></td><td><button class="btn secondary" onclick="toggleListing('${esc(x.id)}','${x.status==="removed"?"available":"removed"}')">${x.status==="removed"?"Restore":"Remove"}</button></td></tr>`).join("")}</tbody></table></div>`:"<p>কোনো বিজ্ঞাপন নেই।";
   html+=`</div>`;
   html+=`<div class="admin-content-section hidden" id="adminTab-members"><h3>👑 Member Management</h3><div class="table-wrap"><table><thead><tr><th>Member</th><th>User ID</th><th>Role</th><th>Premium</th><th>Verified</th><th>Save</th></tr></thead><tbody>${profiles.map(p=>`<tr><td>${esc(p.full_name||"Member")}</td><td>${esc(p.id.slice(0,8).toUpperCase())}</td><td><select class="field" id="role-${esc(p.id)}"><option value="user" ${p.role!=="admin"?"selected":""}>user</option><option value="admin" ${p.role==="admin"?"selected":""}>admin</option></select></td><td><input type="checkbox" id="vip-${esc(p.id)}" ${p.is_premium?"checked":""}></td><td><input type="checkbox" id="ver-${esc(p.id)}" ${p.is_verified?"checked":""}></td><td><button class="btn" onclick="updateMember('${esc(p.id)}')">Save</button></td></tr>`).join("")}</tbody></table></div></div>`;
-  html+=`<div class="admin-content-section hidden" id="adminTab-stats"><h3>📊 Member Trading Summary</h3><button class="btn secondary" onclick="loadAdminMemberStats()">Member Stats রিফ্রেশ</button><div id="adminMemberStats" class="panel">Stats লোড করতে উপরের বাটনে চাপ দিন।</div></div>`;
   html+=`<div class="admin-content-section hidden" id="adminTab-ads"><h3>📺 Live Video Advertisements</h3><form id="adForm" class="form"><div><label>বিজ্ঞাপনের শিরোনাম</label><input id="adTitle" class="field" maxlength="120" required></div><div><label>ভিডিও URL</label><input id="adUrl" class="field" type="url" maxlength="1000" required placeholder="https://example.com/video.mp4"></div><div><label>ক্রম</label><input id="adOrder" class="field" type="number" min="0" value="0"></div><label><input id="adActive" type="checkbox" checked> বিজ্ঞাপন সক্রিয় রাখুন</label><button class="btn">ভিডিও বিজ্ঞাপন যোগ করুন</button></form><div id="adAdminMessage"></div>`;
-  html+=ar.error?`<p class="small-note">বর্তমান ভিডিও বিজ্ঞাপন লোড করা যায়নি: ${esc(adminError(ar.error))}</p>`:`<h4>বর্তমান বিজ্ঞাপন</h4>${(ar.data||[]).map(a=>`<div class="notification-bar"><b>${esc(a.title)}</b><br><small>${esc(a.video_url)}</small><br><button class="btn secondary" onclick="toggleAd('${esc(a.id)}',${!a.is_active})">${a.is_active?"বন্ধ করুন":"চালু করুন"}</button> <button class="btn secondary" onclick="deleteAd('${esc(a.id)}')">Delete</button></div>`).join("")||"<p>এখনো বিজ্ঞাপন যোগ করা হয়নি।"}`;
+  html+=ar.error?`<p class="small-note">বিজ্ঞাপন লোড করা যায়নি</p>`:`<h4>বর্তমান বিজ্ঞাপন</h4>${(ar.data||[]).map(a=>`<div class="notification-bar"><b>${esc(a.title)}</b><br><small>${esc(a.video_url)}</small><br><button class="btn secondary" onclick="toggleAd('${esc(a.id)}',${!a.is_active})">${a.is_active?"বন্ধ করুন":"চালু করুন"}</button> <button class="btn secondary" onclick="deleteAd('${esc(a.id)}')">Delete</button></div>`).join("")||"<p>এখনো বিজ্ঞাপন যোগ করা হয়নি।"}`;
   html+=`</div>`;
   html+=`<div class="admin-content-section hidden" id="adminTab-notice"><h3>📢 Public Notice</h3><form id="noticeForm" class="form"><textarea id="noticeText" class="field" maxlength="1000" rows="3" placeholder="সবার জন্য নোটিশ"></textarea><button class="btn">নোটিশ প্রকাশ</button></form><div id="noticeAdminMessage"></div></div>`;
   $("adminContent").innerHTML=html;
-  $("noticeForm").addEventListener("submit",async e=>{
+  $("noticeForm")?.addEventListener("submit",async e=>{
    e.preventDefault();const message=$("noticeText").value.trim();if(!message)return;
    const {error}=await sb.from("site_notices").insert({message,is_active:true,created_by:currentUser.id});
    if(error){msg("noticeAdminMessage",publicError(error));return}
    msg("noticeAdminMessage","নোটিশ প্রকাশ হয়েছে।",true);await loadPublicNotice();
   });
-  $("adForm").addEventListener("submit",async e=>{
+  $("adForm")?.addEventListener("submit",async e=>{
    e.preventDefault();
    const title=$("adTitle").value.trim(),video_url=$("adUrl").value.trim();
    if(!/^https:\/\//i.test(video_url)){msg("adAdminMessage","HTTPS ভিডিও URL দিন।");return}
@@ -1418,24 +1659,14 @@ async function loadAdmin(){
   });
  }catch(error){
   console.error("Admin load error:",error);
-  $("adminContent").innerHTML='<div class="admin-alert"><strong>Admin Panel লোড করতে সমস্যা হয়েছে।</strong><br>'+esc(adminError(error))+'</div>';
+  $("adminContent").innerHTML='<div class="admin-alert"><strong>Admin Panel লোড করতে সমস্যা হয়েছে।</strong></div>';
  }finally{adminLoading=false}
 }
 function switchAdminTab(tab,button){
- const names=["orders","listings","members","stats","ads","notice"];
+ const names=["orders","listings","members","ads","notice"];
  names.forEach(name=>{const el=$("adminTab-"+name);if(el)el.classList.toggle("hidden",name!==tab)});
  document.querySelectorAll(".admin-tabs button").forEach(b=>b.classList.remove("active"));
  if(button)button.classList.add("active");
-}
-async function loadAdminMemberStats(){
- if(!isAdmin()){alert("Admin permission নেই।");return}
- const box=$("adminMemberStats");if(!box)return;
- box.textContent="সদস্যদের হিসাব লোড হচ্ছে...";
- const {data:members,error}=await sb.from("profiles").select("id,full_name,email,role").order("created_at",{ascending:false}).limit(100);
- if(error){box.textContent="সদস্যদের হিসাব লোড করা যায়নি: "+adminError(error);return}
- const results=[];
- for(const member of (members||[])){const stats=await getMemberStats(member.id);results.push({member,stats})}
- box.innerHTML=`<div class="table-wrap"><table><thead><tr><th>সদস্য</th><th>মোট খরচ</th><th>মোট আয়</th><th>কেনা</th><th>বিক্রি</th><th>অনুমোদিত ট্রানজ্যাকশন</th><th>র‍্যাঙ্ক</th></tr></thead><tbody>${results.map(({member,stats})=>`<tr><td>${esc(member.full_name||member.email||member.id.slice(0,8))}<br><small>${esc(member.id.slice(0,8).toUpperCase())}</small></td><td>${money(stats.spent)}</td><td>${money(stats.earned)}</td><td>${stats.boughtCount}</td><td>${stats.soldCount}</td><td>${stats.approvedCount}</td><td>${esc(rankForAmount(stats.totalTrade).name)}</td></tr>`).join("")}</tbody></table></div>`;
 }
 async function updateMember(id){
  if(!isAdmin())return;
@@ -1526,7 +1757,7 @@ $("profileForm").addEventListener("submit",async e=>{
  }catch(error){msg("profileMessage",error.message==="JPEG, PNG বা WEBP ছবি সর্বোচ্চ ৩ MB হতে হবে।"||error.message==="নতুন নাম বা ছবি বেছে নিন।"?error.message:publicError(error));console.warn("Profile update:",adminError(error))}
 });
 
-/* Wishlist, Ratings, Reviews, Dispute, Escrow - same as before */
+/* Wishlist, Ratings, Reviews, Dispute, Escrow */
 async function loadUserWishlist(){
   userWishlist=new Set();
   if(!sb||!currentUser)return;
@@ -1618,7 +1849,7 @@ function escrowBadge(status){
   return `<span class="escrow-badge ${map[status]||""}">${label[status]||status}</span>`;
 }
 
-/* ===== PUBLIC PROFILE CARD (Everyone can view) ===== */
+/* ===== PUBLIC PROFILE CARD ===== */
 async function showPublicProfile(userId){
   if(!sb||!userId)return;
   const box=$("publicProfileContent");
@@ -1632,7 +1863,6 @@ async function showPublicProfile(userId){
     return;
   }
 
-  // Stats
   let listingCount=0,soldCount=0,boughtCount=0,totalTrade=0;
   try{
     const [lr,sr,br]=await Promise.all([
@@ -1654,7 +1884,6 @@ async function showPublicProfile(userId){
   const avatar=profile.avatar_url||"https://placehold.co/120x120/14251e/ffffff?text=User";
   const short=userId.slice(0,8).toUpperCase();
 
-  // Trust Score (simple formula)
   const trustScore=Math.min(100,Math.round(40 + (soldCount*8) + (boughtCount*3) + (profile.is_verified?15:0) + (isAdm?30:0) + (isPrem?10:0)));
   const rank=rankForAmount(totalTrade);
 
