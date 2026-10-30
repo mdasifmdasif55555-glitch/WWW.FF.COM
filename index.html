@@ -962,27 +962,48 @@ function updateUI(){
 }
 
 async function registerUser(){
- if(!sb){msg("authMessage","সাইটটি এখন সংযোগ করতে পারছে না।");return}
- const name=$("fullName").value.trim(),email=$("email").value.trim(),password=$("password").value;
- if(!name){msg("authMessage","রেজিস্ট্রেশনের আগে নাম লিখুন।");return}
- if(password.length<8){msg("authMessage","পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।");return}
- const warning=authRedirectWarning();if(warning){msg("authMessage",warning);return}
- const options=getAuthRedirectOptions();
- const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name},...options}});
- if(error){msg("authMessage",publicError(error));console.warn(error);return}
- if(data.session){
-  currentUser=data.user;await loadProfile();updateUI();await loadListings();await loadPosts();closeModal("authModal");
- }else{msg("authMessage","রেজিস্ট্রেশন হয়েছে। আপনার ইমেইলে পাঠানো কনফার্মেশন লিংকটি খুলুন।",true)}
+  if(!sb){msg("authMessage","সাইটটি এখন সংযোগ করতে পারছে না।");return}
+
+  const name = $("fullName").value.trim();
+  const email = $("email").value.trim();
+  const password = $("password").value;
+
+  if(!name){msg("authMessage","নাম লিখুন।");return}
+  if(password.length < 6){msg("authMessage","পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।");return}
+
+  try {
+    const { data, error } = await sb.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: name }
+      }
+    });
+
+    if(error) throw error;
+
+    if(data.session){
+      currentUser = data.user;
+      await loadProfile();
+
+      // নাম সেভ করা
+      await sb.from("profiles").update({ full_name: name }).eq("id", currentUser.id);
+      await loadProfile();
+
+      updateUI();
+      closeModal("authModal");
+      showToast("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!", "success");
+
+      setTimeout(() => {
+        showToast("চাইলে প্রোফাইল থেকে NID বা জন্মনিবন্ধন আপলোড করে Verified হতে পারেন", "info", 6000);
+      }, 1200);
+    } else {
+      msg("authMessage", "অ্যাকাউন্ট তৈরি হয়েছে। এখন Login করুন।", true);
+    }
+  } catch (error) {
+    msg("authMessage", publicError(error));
+  }
 }
-$("loginForm").addEventListener("submit",async e=>{
- e.preventDefault();
- if(!sb){msg("authMessage","সাইটটি এখন সংযোগ করতে পারছে না।");return}
- const {data,error}=await sb.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});
- if(error){msg("authMessage","লগইন করা যায়নি। ইমেইল ও পাসওয়ার্ড যাচাই করুন।");console.warn(error);return}
- currentUser=data.user;
- await loadProfile();updateUI();await loadListings();await loadNotifications();await loadPosts();
- closeModal("authModal");
-});
 async function resetPassword(){
  if(!sb){msg("authMessage","সাইটটি এখন সংযোগ করতে পারছে না।");return}
  const email=$("email").value.trim();
