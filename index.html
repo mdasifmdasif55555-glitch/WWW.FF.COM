@@ -2905,8 +2905,303 @@ window.deletePost = async function (postId) {
   setView("home");
   setTimeout(function () { setView(current); }, 800); // পরে যোগ হওয়া সেকশনের জন্য
 })();
+</script><!-- ================= ANSU ELITE: CHAT UPGRADE (Block / Report / Safety / Admin badge / Order card) =================
+     আগে chat_upgrade.sql চালান। তারপর এই পুরো ব্লকটি </body>-এর ঠিক আগে, সব add-on-এর পরে (সবার শেষে) পেস্ট করুন। -->
+<style>
+  .axc-warn { background:#241e10; border:1px solid #8c7135; color:#f5dfaa; border-radius:11px; padding:10px 12px; font-size:12px; line-height:1.8; margin-bottom:10px; }
+  .axc-warn strong { color:var(--gold2); }
+  .axc-peer { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px; border:1px solid var(--line); border-radius:12px; background:#0b1711; margin-bottom:10px; }
+  .axc-peer .info { flex:1; min-width:140px; }
+  .axc-peer .avatar { width:40px; height:40px; }
+  .axc-actions { display:flex; gap:6px; }
+  .axc-actions .btn { padding:5px 9px !important; font-size:11px !important; }
+  .axc-admin-tag { display:inline-flex; align-items:center; gap:4px; background:linear-gradient(110deg,#fff0b8,#b68a3d); color:#19150b; border-radius:999px; padding:3px 9px; font-size:10px; font-weight:900; margin-left:6px; }
+  .axc-order { display:flex; gap:10px; align-items:center; padding:9px; border:1px solid #e8c87955; border-radius:12px; background:linear-gradient(135deg,#292512,#11231a); margin-bottom:10px; cursor:pointer; }
+  .axc-order img { width:58px; height:58px; object-fit:cover; border-radius:9px; border:1px solid var(--line); background:#0b1711; }
+  .axc-order .t { font-size:13px; font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .axc-order .p { color:var(--gold); font-weight:900; font-size:14px; }
+  .axc-order small { color:var(--muted); display:block; }
+  .axc-blocknote { padding:10px; border:1px solid #8b3943; background:#2a1216; color:#ffc4ca; border-radius:10px; font-size:12px; line-height:1.7; margin-bottom:10px; }
+  .axc-report { border:1px solid var(--line); border-radius:14px; background:linear-gradient(145deg,#14231c,#0b1510); padding:13px; margin-bottom:10px; }
+  .axc-report .row { display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; font-size:12px; color:var(--muted); }
+  .axc-report .reason { color:var(--gold2); font-weight:800; margin:6px 0; }
+  .axc-report details { margin:8px 0; font-size:12px; }
+  .axc-report summary { cursor:pointer; color:var(--gold); }
+  .axc-ev { max-height:200px; overflow:auto; background:#0b1711; border:1px solid var(--line); border-radius:8px; padding:8px; margin-top:6px; }
+  .axc-ev div { margin-bottom:6px; overflow-wrap:anywhere; }
+</style>
+
+<!-- Report modal -->
+<div class="modal" id="axcReportModal">
+  <div class="modal-box">
+    <div class="modal-head"><h2>🚩 ব্যবহারকারীকে রিপোর্ট করুন</h2><button class="close" onclick="closeModal('axcReportModal')">✕</button></div>
+    <p class="small-note" id="axcReportWho"></p>
+    <form class="form" id="axcReportForm">
+      <div>
+        <label>কারণ</label>
+        <select class="field" id="axcReason" required>
+          <option value="">সিলেক্ট করুন</option>
+          <option value="spam">স্প্যাম / বিরক্ত করছে</option>
+          <option value="threat">হুমকি বা গালিগালাজ</option>
+          <option value="scam">স্ক্যাম (সাইটের বাইরে টাকা / Password / OTP চাইছে)</option>
+          <option value="fake_admin">নকল Admin সেজে কথা বলছে</option>
+          <option value="other">অন্যান্য</option>
+        </select>
+      </div>
+      <div><label>বিস্তারিত (ঐচ্ছিক)</label><textarea class="field" id="axcDetails" rows="3" maxlength="500"></textarea></div>
+      <p class="small-note">রিপোর্টের সঙ্গে আপনাদের শেষ কয়েকটি মেসেজ প্রমাণ হিসেবে Admin-এর কাছে যাবে।</p>
+      <button class="btn" type="submit">রিপোর্ট জমা দিন</button>
+    </form>
+    <div id="axcReportMsg"></div>
+  </div>
+</div>
+
+<!-- Admin: reports -->
+<div class="modal" id="axcAdminReportsModal">
+  <div class="modal-box ax-wide">
+    <div class="modal-head"><h2>🚩 Chat Reports</h2><button class="close" onclick="closeModal('axcAdminReportsModal')">✕</button></div>
+    <div id="axcAdminReportsList"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  if (typeof sb === "undefined" || !sb) return;
+
+  let peerId = null;                 // এখন যার সঙ্গে চ্যাট খোলা
+  const AV = "https://placehold.co/100x100/14251e/ffffff?text=User";
+  const REASONS = { spam: "স্প্যাম", threat: "হুমকি / গালিগালাজ", scam: "স্ক্যাম সন্দেহ", fake_admin: "নকল Admin", other: "অন্যান্য" };
+
+  /* ---------- চ্যাটের মাথার অংশ ---------- */
+  function topBox() {
+    let box = document.getElementById("axcTop");
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "axcTop";
+      const chat = document.getElementById("axChatBox");
+      chat.parentNode.insertBefore(box, chat);
+    }
+    return box;
+  }
+
+  function setComposerDisabled(off) {
+    document.querySelectorAll("#axText, #axChatView .ax-bar button").forEach(function (el) { el.disabled = off; });
+  }
+
+  async function renderTop(pid) {
+    if (!currentUser || !pid) return;
+    const box = topBox();
+    box.innerHTML = '<div class="axc-warn">লোড হচ্ছে...</div>';
+
+    const [pr, st, ctx] = await Promise.all([
+      sb.from("profiles").select("id,full_name,avatar_url,role,is_verified").eq("id", pid).maybeSingle(),
+      sb.rpc("ax_block_state", { peer: pid }),
+      sb.from("chat_messages").select("listing_id,created_at")
+        .or("and(sender_id.eq." + currentUser.id + ",receiver_id.eq." + pid + "),and(sender_id.eq." + pid + ",receiver_id.eq." + currentUser.id + ")")
+        .not("listing_id", "is", null).order("created_at", { ascending: false }).limit(1)
+    ]);
+    if (peerId !== pid) return; // মাঝখানে অন্য চ্যাট খোলা হয়েছে
+
+    const p = pr.data || {};
+    const state = st.error ? "none" : (st.data || "none");
+    const peerIsAdmin = p.role === "admin";
+
+    let html = '<div class="axc-warn"><strong>⚠️ সতর্কতা:</strong> কাউকে Password, OTP বা Recovery Code দেবেন না। সাইটের বাইরে টাকা পাঠাতে বললে রাজি হবেন না। সব লেনদেন Escrow-এর মাধ্যমে করুন।</div>';
+
+    html += '<div class="axc-peer">' +
+      '<img class="avatar ' + (peerIsAdmin ? "admin-user-avatar" : "") + '" src="' + esc(p.avatar_url || AV) + '" alt="">' +
+      '<div class="info"><strong class="' + (peerIsAdmin ? "admin-user-name" : "") + '">' + esc(p.full_name || "Member") + '</strong>' +
+      (peerIsAdmin ? '<span class="axc-admin-tag">👑 Verified Admin</span>' : (p.is_verified ? '<span class="verified-badge small">✓ Verified</span>' : "")) + '</div>' +
+      '<div class="axc-actions">' +
+      (peerIsAdmin ? "" : (state === "i_blocked"
+        ? '<button class="btn secondary" onclick="axcUnblock()">🔓 Unblock</button>'
+        : '<button class="btn danger" onclick="axcBlock()">🚫 Block</button>')) +
+      '<button class="btn secondary" onclick="axcOpenReport()">🚩 Report</button>' +
+      '</div></div>';
+
+    if (state === "i_blocked") html += '<div class="axc-blocknote">🚫 আপনি এই ব্যবহারকারীকে ব্লক করেছেন। Unblock না করলে মেসেজ পাঠানো যাবে না।</div>';
+    if (state === "blocked_me") html += '<div class="axc-blocknote">এই ব্যবহারকারীকে এখন মেসেজ পাঠানো যাচ্ছে না।</div>';
+
+    const lid = ctx.data && ctx.data[0] && ctx.data[0].listing_id;
+    if (lid) {
+      const { data: l } = await sb.from("listings").select("id,title,price,level,status,account_image").eq("id", lid).maybeSingle();
+      if (peerId !== pid) return;
+      if (l) {
+        const img = (typeof getImages === "function" ? getImages(l)[0] : "") || "";
+        const known = (typeof listings !== "undefined") && listings.some(function (x) { return String(x.id) === String(l.id); });
+        html += '<div class="axc-order" ' + (known ? 'onclick="closeModal(\'axInboxModal\');showDetails(\'' + esc(l.id) + '\')"' : "") + '>' +
+          (img ? '<img src="' + esc(img) + '" alt="">' : '<div style="font-size:30px">🎮</div>') +
+          '<div style="min-width:0"><div class="t">' + esc(l.title) + '</div><div class="p">' + money(l.price) + '</div>' +
+          '<small>Level ' + esc(l.level == null ? "—" : l.level) + (l.status !== "available" ? " · এখন উপলভ্য নয়" : " · 🛡️ Escrow Protected") + '</small></div></div>';
+      }
+    }
+
+    box.innerHTML = html;
+    setComposerDisabled(state !== "none");
+    const input = document.getElementById("axText");
+    if (input) input.placeholder = state === "none" ? "মেসেজ লিখুন..." : "মেসেজ পাঠানো যাবে না";
+  }
+
+  // চ্যাট খোলার পর মাথার অংশ যোগ
+  const origOpenChat = window.axOpenChat;
+  window.axOpenChat = async function (pid) {
+    peerId = pid;
+    await origOpenChat(pid);
+    if (currentUser && pid !== currentUser.id) await renderTop(pid);
+  };
+  // তালিকায় ফিরলে রিসেট
+  const origShowList = window.axShowList;
+  window.axShowList = async function () {
+    peerId = null;
+    const box = document.getElementById("axcTop");
+    if (box) box.innerHTML = "";
+    setComposerDisabled(false);
+    return origShowList();
+  };
+  const origClose = window.axCloseInbox;
+  window.axCloseInbox = function () { peerId = null; return origClose(); };
+
+  /* ---------- Block / Unblock ---------- */
+  window.axcBlock = async function () {
+    if (!requireLogin() || !peerId) return;
+    if (!confirm("এই ব্যবহারকারীকে ব্লক করবেন? দুজনের কেউই আর মেসেজ পাঠাতে পারবেন না।")) return;
+    const { error } = await sb.from("user_blocks").insert({ blocker_id: currentUser.id, blocked_id: peerId });
+    if (error && !/duplicate/i.test(error.message || "")) { showToast(publicError(error), "error"); return; }
+    showToast("ব্লক করা হয়েছে", "success");
+    await renderTop(peerId);
+  };
+  window.axcUnblock = async function () {
+    if (!requireLogin() || !peerId) return;
+    const { error } = await sb.from("user_blocks").delete().eq("blocker_id", currentUser.id).eq("blocked_id", peerId);
+    if (error) { showToast(publicError(error), "error"); return; }
+    showToast("Unblock করা হয়েছে", "success");
+    await renderTop(peerId);
+  };
+
+  /* ---------- Report ---------- */
+  window.axcOpenReport = async function () {
+    if (!requireLogin() || !peerId) return;
+    const { data } = await sb.from("profiles").select("full_name").eq("id", peerId).maybeSingle();
+    document.getElementById("axcReportWho").textContent = "রিপোর্ট করা হচ্ছে: " + (data && data.full_name || "Member");
+    document.getElementById("axcReason").value = "";
+    document.getElementById("axcDetails").value = "";
+    document.getElementById("axcReportMsg").textContent = "";
+    openModal("axcReportModal");
+  };
+  document.getElementById("axcReportForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    if (!requireLogin() || !peerId) return;
+    const reason = document.getElementById("axcReason").value;
+    if (!reason) { msg("axcReportMsg", "কারণ সিলেক্ট করুন।"); return; }
+    const me = currentUser.id, peer = peerId;
+    try {
+      const { data: recent } = await sb.from("chat_messages")
+        .select("sender_id,msg_type,body,media_url,created_at")
+        .or("and(sender_id.eq." + me + ",receiver_id.eq." + peer + "),and(sender_id.eq." + peer + ",receiver_id.eq." + me + ")")
+        .order("created_at", { ascending: false }).limit(15);
+      const evidence = (recent || []).reverse().map(function (m) {
+        return { from: m.sender_id === me ? "reporter" : "reported", type: m.msg_type, body: (m.body || "").slice(0, 500), media_url: m.media_url || null, at: m.created_at };
+      });
+      const { error } = await sb.from("chat_reports").insert({
+        reporter_id: me, reported_id: peer, reason: reason,
+        details: document.getElementById("axcDetails").value.trim() || null, evidence: evidence
+      });
+      if (error) throw error;
+      msg("axcReportMsg", "রিপোর্ট জমা হয়েছে। Admin দেখবে।", true);
+      showToast("রিপোর্ট জমা হয়েছে", "success");
+      setTimeout(function () { closeModal("axcReportModal"); }, 1300);
+    } catch (err) { msg("axcReportMsg", publicError(err)); }
+  });
+
+  /* ---------- Details মডালে "Seller-কে মেসেজ" বাটন ---------- */
+  window.axcMessageSeller = async function () {
+    if (!requireLogin() || !selectedListing) return;
+    const seller = selectedListing.seller_id;
+    if (seller === currentUser.id) { showToast("এটি আপনার নিজের বিজ্ঞাপন", "error"); return; }
+    const st = await sb.rpc("ax_block_state", { peer: seller });
+    if (!st.error && st.data && st.data !== "none") { showToast("এই বিক্রেতাকে এখন মেসেজ করা যাবে না", "error"); return; }
+
+    // একই অ্যাকাউন্ট নিয়ে আগে মেসেজ করলে আবার অটো-মেসেজ নয়
+    const { data: prior } = await sb.from("chat_messages").select("id")
+      .eq("sender_id", currentUser.id).eq("receiver_id", seller).eq("listing_id", selectedListing.id).limit(1);
+    if (!prior || !prior.length) {
+      const { error } = await sb.from("chat_messages").insert({
+        sender_id: currentUser.id, receiver_id: seller, msg_type: "text",
+        body: "📌 আমি এই অ্যাকাউন্ট সম্পর্কে জানতে চাই: " + selectedListing.title + " (" + money(selectedListing.price) + ")",
+        listing_id: selectedListing.id
+      });
+      if (error) { showToast(publicError(error), "error"); return; }
+    }
+    closeModal("detailsModal");
+    window.axOpenChat(seller);
+  };
+
+  const detailsBox = document.getElementById("detailsContent");
+  if (detailsBox) {
+    new MutationObserver(function () {
+      if (detailsBox.querySelector(".axc-msg-btn")) return;
+      const buy = detailsBox.querySelector('button[onclick="startCheckout()"]');
+      if (buy) buy.insertAdjacentHTML("afterend", ' <button class="btn secondary axc-msg-btn" onclick="axcMessageSeller()">💬 Seller-কে মেসেজ</button>');
+    }).observe(detailsBox, { childList: true });
+  }
+
+  /* ---------- Admin: Reports ---------- */
+  window.axcOpenAdminReports = async function () {
+    if (!isAdmin()) return;
+    openModal("axcAdminReportsModal");
+    const box = document.getElementById("axcAdminReportsList");
+    box.innerHTML = '<div class="panel">লোড হচ্ছে...</div>';
+    const { data, error } = await sb.from("chat_reports").select("*").eq("status", "open").order("created_at", { ascending: false }).limit(100);
+    if (error) { box.innerHTML = '<div class="panel">লোড করা যায়নি। SQL চালানো হয়েছে কিনা দেখুন।</div>'; return; }
+    if (!data.length) { box.innerHTML = '<div class="post-empty">কোনো Open রিপোর্ট নেই।</div>'; return; }
+    const ids = [...new Set(data.flatMap(function (r) { return [r.reporter_id, r.reported_id]; }))];
+    const { data: profs } = await sb.from("profiles").select("id,full_name").in("id", ids);
+    const name = {}; (profs || []).forEach(function (p) { name[p.id] = p.full_name || "Member"; });
+    box.innerHTML = data.map(function (r) {
+      const ev = (r.evidence || []).map(function (m) {
+        const who = m.from === "reported" ? "🔴 " + esc(name[r.reported_id]) : "🟢 " + esc(name[r.reporter_id]);
+        const content = m.type === "text" ? esc(m.body) : "[" + esc(m.type) + "] " + (m.media_url ? '<a href="' + esc(m.media_url) + '" target="_blank" rel="noopener" style="color:var(--gold)">খুলুন</a>' : "");
+        return "<div><b>" + who + ":</b> " + content + "</div>";
+      }).join("") || "<div>কোনো প্রমাণ নেই</div>";
+      return '<div class="axc-report">' +
+        '<div class="row"><span>' + esc(new Date(r.created_at).toLocaleString("bn-BD")) + '</span><span>ID: ' + esc(r.id.slice(0, 8).toUpperCase()) + '</span></div>' +
+        '<div class="reason">' + esc(REASONS[r.reason] || r.reason) + '</div>' +
+        '<div class="small-note">অভিযোগকারী: <b>' + esc(name[r.reporter_id]) + '</b> → অভিযুক্ত: <b>' + esc(name[r.reported_id]) + '</b> (ID: ' + esc(r.reported_id.slice(0, 8).toUpperCase()) + ')</div>' +
+        (r.details ? '<div class="small-note">বিস্তারিত: ' + esc(r.details) + '</div>' : "") +
+        '<details><summary>মেসেজ প্রমাণ (রিপোর্টকারীর পাঠানো স্ন্যাপশট)</summary><div class="axc-ev">' + ev + '</div></details>' +
+        '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
+        '<button class="btn" onclick="axcDecide(\'' + esc(r.id) + '\',\'resolved\')">✓ Resolved</button>' +
+        '<button class="btn secondary" onclick="axcDecide(\'' + esc(r.id) + '\',\'dismissed\')">Dismiss</button>' +
+        '<button class="btn secondary" onclick="closeModal(\'axcAdminReportsModal\');showPublicProfile(\'' + esc(r.reported_id) + '\')">অভিযুক্তের Profile</button>' +
+        '</div></div>';
+    }).join("");
+  };
+  window.axcDecide = async function (id, status) {
+    if (!isAdmin()) return;
+    const { error } = await sb.from("chat_reports").update({ status: status, reviewed_by: currentUser.id, reviewed_at: new Date().toISOString() }).eq("id", id);
+    if (error) { showToast(publicError(error), "error"); return; }
+    showToast("আপডেট হয়েছে", "success");
+    await window.axcOpenAdminReports();
+  };
+
+  /* ---------- Header: 🚩 Reports বাটন (শুধু Admin) ---------- */
+  const actions = document.querySelector(".actions"), anchor = document.getElementById("authBtn");
+  if (actions && anchor) {
+    const b = document.createElement("button");
+    b.id = "axcReportsBtn";
+    b.className = "btn secondary hidden";
+    b.textContent = "🚩 Reports";
+    b.setAttribute("onclick", "axcOpenAdminReports()");
+    actions.insertBefore(b, anchor);
+    setInterval(function () { b.classList.toggle("hidden", !(currentUser && isAdmin())); }, 1000);
+  }
+  ["axcReportModal", "axcAdminReportsModal"].forEach(function (id) {
+    const m = document.getElementById(id);
+    m.addEventListener("click", function (ev) { if (ev.target === m) closeModal(id); });
+  });
+})();
 </script>
-<!-- ================= END LAYOUT UPDATE ================= -->
 
 
 <!-- ================= END VERIFICATION REQUIRED ================= -->
