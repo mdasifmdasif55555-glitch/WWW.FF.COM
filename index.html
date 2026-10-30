@@ -3720,7 +3720,589 @@ window.deletePost = async function (postId) {
     syncBar();
   }
 })();
+</script><!-- ================= ANSU ELITE ADD-ON V5 (</body>-এর ঠিক আগে, সবার শেষে পেস্ট করুন) =================
+     আগে ansu-roles.sql চালান।
+     ১ Video call  ২ Assistant role  ৩ Seller role/badge  ৪ Refer link  ৫ সফল কেনাবেচা auto list
+     ৬ Recently viewed ছোট  ৭ নিরাপত্তা লেখা ছোট  ৮ Admin = Grand Master + Exclusive -->
+<style>
+  /* ---- Recently viewed ছোট ---- */
+  .recently-viewed { margin: 12px 0; }
+  .recently-viewed .section-title h2 { font-size: 14px; }
+  .recent-grid { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)) !important; gap: 7px !important; }
+  .recent-card { border-radius: 9px; }
+  .recent-card img { height: 52px !important; }
+  .recent-card .info { padding: 5px 6px !important; font-size: 10px !important; line-height: 1.3; }
+  .recent-card .info > div:first-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+  /* ---- নিরাপত্তা বার ছোট ---- */
+  .safety-strip { padding: 7px 11px !important; margin: 10px 0 !important; font-size: 11px !important; gap: 6px !important; line-height: 1.6; }
+
+  /* ---- সফল কেনাবেচা ticker ---- */
+  .axv-ticker { height: 210px; overflow: hidden; border: 1px solid #b99a5030; border-radius: 14px; background: #0b1711;
+    -webkit-mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); }
+  .axv-track { display: flex; flex-direction: column; }
+  .axv-track.run { animation: axvScroll var(--dur, 30s) linear infinite; }
+  .axv-ticker:hover .axv-track { animation-play-state: paused; }
+  @keyframes axvScroll { to { transform: translateY(-50%); } }
+  .axv-sale { padding: 11px 14px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 10px; font-size: 12px; flex-wrap: wrap; }
+  .axv-sale b { color: var(--gold); }
+
+  /* ---- Role badges ---- */
+  .axv-seller, .axv-assist { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 900; padding: 3px 7px; border-radius: 6px; margin-left: 5px; color: #fff; }
+  .axv-seller { background: linear-gradient(110deg, #1a3a5c, #2a6bb0); }
+  .axv-assist { background: linear-gradient(110deg, #4a2a6b, #8a4fc9); }
+  .profile-role-badge.axv-role-seller { background: linear-gradient(110deg, #1a3a5c, #2a6bb0); color: #fff; border: none; }
+  .profile-role-badge.axv-role-assist { background: linear-gradient(110deg, #4a2a6b, #8a4fc9); color: #fff; border: none; }
+  .rank-badge.axv-gm { background: linear-gradient(110deg, #3a2c0c, #6b4f12); border-color: #fff0b8; color: #fff0b8; box-shadow: 0 0 18px #e8c87940; }
+  .axv-excl { display: inline-block; margin-left: 6px; padding: 8px 12px; border-radius: 10px; font-weight: 900; font-size: 12px; background: linear-gradient(110deg, #fff0b8, #e8c879, #c69b49); color: #1a1508; animation: adminBadgePulse 2.5s ease-in-out infinite; }
+
+  /* ---- Video call ---- */
+  #axvCall { position: fixed; inset: 0; z-index: 120; background: #050b08; display: flex; flex-direction: column; }
+  #axvCall.hidden { display: none !important; }
+  #axvRemote { flex: 1; width: 100%; min-height: 0; object-fit: cover; background: #000; }
+  #axvLocal { position: absolute; right: 12px; top: 12px; width: 110px; height: 150px; object-fit: cover; border-radius: 12px; border: 2px solid var(--gold); background: #000; transform: scaleX(-1); }
+  #axvCallTitle { position: absolute; left: 0; right: 0; top: 14px; text-align: center; color: #fff; font-weight: 800; text-shadow: 0 2px 8px #000; padding: 0 130px 0 12px; }
+  .axv-ctrls { position: absolute; bottom: 26px; left: 0; right: 0; display: flex; justify-content: center; gap: 16px; }
+  .axv-ctrls button { width: 54px; height: 54px; border-radius: 50%; border: 0; font-size: 22px; background: #14251bdd; color: #fff; }
+  .axv-ctrls button.off { background: #555; }
+  .axv-ctrls .axv-end { background: #d93a4a; }
+  #axvIncoming { position: fixed; inset: 0; z-index: 125; background: #000b; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  #axvIncoming.hidden { display: none !important; }
+  #axvIncoming .box { background: linear-gradient(145deg, #17261e, #0b1510); border: 1px solid #e8c87980; border-radius: 18px; padding: 24px; text-align: center; width: min(340px, 100%); animation: goldPulse 1.4s infinite; }
+  #axvIncoming .box p { font-size: 17px; margin: 0 0 18px; }
+  #axvIncoming .row { display: flex; gap: 10px; }
+  #axvIncoming .row .btn { flex: 1; }
+
+  /* ---- Refer ---- */
+  .axv-share { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .axv-share .btn { text-decoration: none; display: inline-block; font-size: 12px; }
+  .axv-fb { background: linear-gradient(135deg, #1877f2, #0b5cd0); border-color: #1877f2; color: #fff; }
+</style>
+
+<!-- Video call UI -->
+<div id="axvCall" class="hidden">
+  <video id="axvRemote" autoplay playsinline></video>
+  <video id="axvLocal" autoplay playsinline muted></video>
+  <div id="axvCallTitle"></div>
+  <div class="axv-ctrls">
+    <button type="button" id="axvMic" title="Mic">🎤</button>
+    <button type="button" id="axvCam" title="Camera">📷</button>
+    <button type="button" class="axv-end" id="axvEnd" title="শেষ করুন">📞</button>
+  </div>
+</div>
+<div id="axvIncoming" class="hidden">
+  <div class="box">
+    <p>📹 <b id="axvInName">Member</b> ভিডিও কল করছে</p>
+    <div class="row">
+      <button type="button" class="btn danger" id="axvDecline">✕ Decline</button>
+      <button type="button" class="btn" id="axvAccept">✓ Accept</button>
+    </div>
+  </div>
+</div>
+
+<!-- Refer modal -->
+<div class="modal" id="axvRefModal">
+  <div class="modal-box">
+    <div class="modal-head"><h2>🎁 Refer করুন</h2><button class="close" onclick="closeModal('axvRefModal')">✕</button></div>
+    <p class="small-note">আপনার লিংক বন্ধুদের পাঠান। তারা এই লিংক দিয়ে রেজিস্টার করলে আপনার Referral হিসেবে গণ্য হবে।</p>
+    <input class="field" id="axvRefLink" readonly>
+    <div class="axv-share" id="axvShareRow"></div>
+    <div class="notice" style="margin-top:14px">আপনার মাধ্যমে জয়েন করেছে: <b id="axvRefCount">—</b> জন</div>
+  </div>
+</div>
+
+<!-- Assistant panel -->
+<div class="modal" id="axvStaffModal">
+  <div class="modal-box ax-wide">
+    <div class="modal-head"><h2>🛠️ Assistant Panel</h2><button class="close" onclick="closeModal('axvStaffModal')">✕</button></div>
+    <div class="ax-tabs" id="axvStaffTabs">
+      <button class="btn secondary active" data-t="m">👥 Members</button>
+      <button class="btn secondary" data-t="p">📝 Posts</button>
+    </div>
+    <div id="axvStaffBody"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  if (typeof sb === "undefined" || !sb) return;
+
+  /* ===== সেটিংস ===== */
+  const SELLER_ONLY_SELLING = false;   // true করলে শুধু Seller/Admin বিক্রি করতে পারবে
+  const AV = "https://placehold.co/100x100/14251e/ffffff?text=User";
+  const myRole = () => currentProfile && currentProfile.role;
+  const isAssistant = () => myRole() === "assistant";
+  const isSellerRole = () => myRole() === "seller";
+
+  function roleBadge(role) {
+    if (role === "seller") return '<span class="axv-seller">🛍️ SELLER</span>';
+    if (role === "assistant") return '<span class="axv-assist">🛠️ ASSISTANT</span>';
+    return "";
+  }
+
+  /* ================= Seller / Assistant badge (header) ================= */
+  const prevUpdateUI = window.updateUI;
+  window.updateUI = function () {
+    prevUpdateUI();
+    if (currentUser) { const b = roleBadge(myRole()); if (b) $("userLabel").insertAdjacentHTML("beforeend", " " + b); }
+  };
+  window.updateUI();
+
+  /* Community post-এ badge */
+  const prevRenderPosts = window.renderPosts;
+  window.renderPosts = function () {
+    prevRenderPosts();
+    document.querySelectorAll("#postsList .post-author").forEach(function (el) {
+      const m = /showPublicProfile\('([^']+)'\)/.exec(el.getAttribute("onclick") || "");
+      const role = m && postProfiles[m[1]] && postProfiles[m[1]].role;
+      const b = roleBadge(role);
+      if (b) { const n = el.querySelector(".post-author-name"); if (n) n.insertAdjacentHTML("beforeend", b); }
+    });
+  };
+
+  /* Seller-only selling (ঐচ্ছিক) */
+  const prevOpenSell = window.openSell;
+  window.openSell = async function () {
+    if (SELLER_ONLY_SELLING && currentUser && !(isSellerRole() || isAdmin())) {
+      showToast("বিক্রি করতে Seller অ্যাকাউন্ট লাগবে। Admin-কে জানান।", "error", 5000);
+      return;
+    }
+    return prevOpenSell();
+  };
+
+  /* ================= Admin: Grand Master + Exclusive; Seller/Assistant profile ================= */
+  const GM = '<span class="rank-badge axv-gm">👑 Grand Master</span><span class="axv-excl">✦ EXCLUSIVE</span>';
+
+  const prevPublic = window.showPublicProfile;
+  window.showPublicProfile = async function (uid) {
+    await prevPublic(uid);
+    try {
+      const { data: p } = await sb.from("profiles").select("role").eq("id", uid).maybeSingle();
+      if (!p) return;
+      const c = $("publicProfileContent");
+      if (p.role === "admin") {
+        const rb = c.querySelector(".rank-badge");
+        if (rb) rb.outerHTML = GM;
+      } else if (p.role === "seller" || p.role === "assistant") {
+        const rb = c.querySelector(".profile-role-badge");
+        const html = p.role === "seller"
+          ? '<span class="profile-role-badge axv-role-seller">🛍️ SELLER</span>'
+          : '<span class="profile-role-badge axv-role-assist">🛠️ ASSISTANT</span>';
+        if (rb && rb.classList.contains("badge-member")) rb.outerHTML = html;
+        else if (rb) rb.insertAdjacentHTML("afterend", " " + html);
+      }
+    } catch (_) {}
+  };
+
+  const prevOpenProfile = window.openProfile;
+  window.openProfile = async function () {
+    await prevOpenProfile();
+    if (!isAdmin()) return;
+    const s = $("profileSummary"), rb = s && s.querySelector(".rank-badge");
+    if (!rb) return;
+    const card = rb.closest(".feature-card");
+    if (card) {
+      const notes = card.querySelectorAll(".small-note");
+      if (notes.length) notes[notes.length - 1].textContent = "সর্বোচ্চ র‍্যাঙ্ক · Exclusive Admin";
+      const bar = card.querySelector(".rank-progress span");
+      if (bar) bar.style.width = "100%";
+    }
+    rb.outerHTML = GM;
+  };
+
+  /* ================= Admin panel: seller / assistant role দেওয়া ================= */
+  const prevLoadAdmin = window.loadAdmin;
+  window.loadAdmin = async function () {
+    await prevLoadAdmin();
+    if (!isAdmin()) return;
+    const sels = document.querySelectorAll('select[id^="role-"]');
+    if (!sels.length) return;
+    sels.forEach(function (s) {
+      if (!s.querySelector('option[value="seller"]')) s.insertAdjacentHTML("beforeend", '<option value="seller">seller</option><option value="assistant">assistant</option>');
+    });
+    const { data } = await sb.from("profiles").select("id,role").limit(1000);
+    (data || []).forEach(function (p) { const s = $("role-" + p.id); if (s) s.value = p.role || "user"; });
+  };
+
+  /* ================= Assistant Panel (শুধু Members + Posts) ================= */
+  let staffTab = "m";
+  window.axvOpenStaff = function () {
+    if (!(isAssistant() || isAdmin())) return;
+    staffTab = "m";
+    document.querySelectorAll("#axvStaffTabs button").forEach(b => b.classList.toggle("active", b.dataset.t === "m"));
+    openModal("axvStaffModal");
+    staffRender();
+  };
+  $("axvStaffTabs").addEventListener("click", function (e) {
+    const t = e.target.dataset && e.target.dataset.t;
+    if (!t) return;
+    staffTab = t;
+    document.querySelectorAll("#axvStaffTabs button").forEach(b => b.classList.toggle("active", b.dataset.t === t));
+    staffRender();
+  });
+  function staffRender() { return staffTab === "m" ? staffMembers() : staffPosts(); }
+
+  async function staffMembers() {
+    const body = $("axvStaffBody");
+    body.innerHTML = '<div class="panel">লোড হচ্ছে...</div>';
+    const { data, error } = await sb.from("profiles").select("id,full_name,role,avatar_url").order("created_at", { ascending: false }).limit(300);
+    if (error) { body.innerHTML = '<div class="panel">লোড করা যায়নি।</div>'; return; }
+    body.innerHTML = '<input class="field" id="axvStaffSearch" placeholder="নাম বা ID খুঁজুন..." style="margin-bottom:10px"><div id="axvStaffList"></div>';
+    const draw = function () {
+      const q = ($("axvStaffSearch").value || "").toLowerCase().trim();
+      $("axvStaffList").innerHTML = data.filter(p => !q || (p.full_name || "").toLowerCase().includes(q) || p.id.slice(0, 8).toLowerCase().includes(q)).map(function (p) {
+        const locked = p.role === "admin" || p.role === "assistant" || p.id === currentUser.id;
+        return '<div class="ax-member"><img class="avatar" src="' + esc(p.avatar_url || AV) + '" alt="">' +
+          '<div class="info"><strong>' + esc(p.full_name || "Member") + '</strong>' + roleBadge(p.role) + '<br><small class="small-note">ID: ' + esc(p.id.slice(0, 8).toUpperCase()) + ' · ' + esc(p.role || "user") + '</small></div>' +
+          (locked ? '<span class="small-note">🔒</span>' :
+            '<select class="field" style="width:auto" id="axvr-' + esc(p.id) + '"><option value="user"' + (p.role !== "seller" ? " selected" : "") + '>user</option><option value="seller"' + (p.role === "seller" ? " selected" : "") + '>seller</option></select>' +
+            '<button class="btn" onclick="axvSaveRole(\'' + esc(p.id) + '\')">Save</button>') + '</div>';
+      }).join("") || '<div class="post-empty">কেউ পাওয়া যায়নি।</div>';
+    };
+    $("axvStaffSearch").addEventListener("input", draw);
+    draw();
+  }
+  window.axvSaveRole = async function (id) {
+    if (!(isAssistant() || isAdmin())) return;
+    const role = $("axvr-" + id) && $("axvr-" + id).value;
+    if (role !== "user" && role !== "seller") return;
+    const { data, error } = await sb.from("profiles").update({ role: role }).eq("id", id).select("id");
+    if (error || !data || !data.length) { showToast("আপডেট করা যায়নি", "error"); return; }
+    showToast("Role আপডেট হয়েছে", "success");
+    staffMembers();
+  };
+
+  async function staffPosts() {
+    const body = $("axvStaffBody");
+    body.innerHTML = '<div class="panel">লোড হচ্ছে...</div>';
+    const { data, error } = await sb.from("community_posts").select("id,user_id,content,image_url,created_at").order("created_at", { ascending: false }).limit(100);
+    if (error) { body.innerHTML = '<div class="panel">লোড করা যায়নি।</div>'; return; }
+    if (!data.length) { body.innerHTML = '<div class="post-empty">কোনো পোস্ট নেই।</div>'; return; }
+    const ids = [...new Set(data.map(p => p.user_id).filter(Boolean))];
+    const { data: profs } = await sb.from("profiles").select("id,full_name").in("id", ids);
+    const nm = {}; (profs || []).forEach(p => nm[p.id] = p.full_name || "Member");
+    body.innerHTML = data.map(function (p) {
+      return '<div class="ax-member"><div class="info"><strong>' + esc(nm[p.user_id] || "Member") + '</strong> <small class="small-note">' + esc(new Date(p.created_at).toLocaleString("bn-BD")) + '</small><br>' +
+        '<span class="small-note">' + esc((p.content || "").slice(0, 160)) + (p.image_url ? " 📷" : "") + '</span></div>' +
+        '<button class="btn danger" onclick="axvDelPost(\'' + esc(p.id) + '\')">🗑️ মুছুন</button></div>';
+    }).join("");
+  }
+  window.axvDelPost = async function (id) {
+    if (!(isAssistant() || isAdmin())) return;
+    if (!confirm("এই পোস্টটি মুছবেন?")) return;
+    const { data, error } = await sb.from("community_posts").delete().eq("id", id).select("id");
+    if (error || !data || !data.length) { showToast("মোছা যায়নি", "error"); return; }
+    showToast("পোস্ট মুছে ফেলা হয়েছে", "success");
+    staffPosts();
+    if (typeof loadPosts === "function") loadPosts();
+  };
+
+  /* ================= Refer link ================= */
+  (function captureRef() {
+    try {
+      const r = new URLSearchParams(location.search).get("ref");
+      if (r && /^[0-9a-f-]{36}$/i.test(r)) localStorage.setItem("ax_ref", r);
+    } catch (_) {}
+  })();
+  function refLink() { return location.origin + location.pathname + "?ref=" + currentUser.id; }
+  window.axvOpenRef = async function () {
+    if (!requireLogin()) return;
+    const link = refLink();
+    const text = "🎮 ANSU ELITE — Free Fire ID কেনাবেচার নিরাপদ মার্কেটপ্লেস। এই লিংক দিয়ে জয়েন করুন:";
+    $("axvRefLink").value = link;
+    const u = encodeURIComponent(link), t = encodeURIComponent(text);
+    $("axvShareRow").innerHTML =
+      '<a class="btn whatsapp" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(text + " " + link) + '">WhatsApp</a>' +
+      '<a class="btn axv-fb" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + u + '">Facebook</a>' +
+      '<a class="btn telegram" target="_blank" rel="noopener" href="https://t.me/share/url?url=' + u + '&text=' + t + '">Telegram</a>' +
+      '<button class="btn secondary" type="button" id="axvCopy">📋 Copy</button>' +
+      (navigator.share ? '<button class="btn secondary" type="button" id="axvNative">📤 অন্যান্য</button>' : "");
+    $("axvCopy").onclick = function () {
+      navigator.clipboard.writeText(link).then(() => showToast("লিংক কপি হয়েছে", "success"), () => { $("axvRefLink").select(); });
+    };
+    const nb = $("axvNative");
+    if (nb) nb.onclick = () => navigator.share({ title: "ANSU ELITE", text: text, url: link }).catch(() => {});
+    $("axvRefCount").textContent = "—";
+    openModal("axvRefModal");
+    const { count, error } = await sb.from("profiles").select("id", { count: "exact", head: true }).eq("referred_by", currentUser.id);
+    $("axvRefCount").textContent = error ? "—" : String(count || 0);
+  };
+  async function applyRef() {
+    const r = localStorage.getItem("ax_ref");
+    if (!r || !currentUser || !currentProfile) return;
+    localStorage.removeItem("ax_ref");
+    if (r === currentUser.id || currentProfile.referred_by) return;
+    await sb.from("profiles").update({ referred_by: r }).eq("id", currentUser.id);
+    await loadProfile();
+  }
+
+  /* ================= সফল কেনাবেচা (auto list, নাম hide) ================= */
+  (function setupSales() {
+    const sec = $("recentSalesSection");
+    if (!sec) return;
+    const old = $("successSlider");
+    if (old) old.style.display = "none";            // আগের (ডেমো-ডেটা সহ) স্লাইডার লুকানো
+    const note = sec.querySelector(".small-note");
+    if (note) note.textContent = "আমাদের প্ল্যাটফর্মে সম্পন্ন হওয়া কেনাবেচা (ক্রেতা-বিক্রেতার নাম গোপন)";
+    const box = document.createElement("div");
+    box.className = "axv-ticker"; box.id = "axvSales";
+    sec.appendChild(box);
+  })();
+  async function loadSales() {
+    const box = $("axvSales");
+    if (!box) return;
+    const { data, error } = await sb.rpc("ax_recent_sales", { lim: 30 });
+    if (error || !data || !data.length) {
+      box.innerHTML = '<div class="small-note" style="padding:16px">এখনো কোনো সম্পন্ন কেনাবেচা নেই।</div>';
+      return;
+    }
+    const row = r => '<div class="axv-sale"><span>🎮 <b>' + money(r.amount) + '</b>-তে একটি ID বিক্রি হয়েছে</span><span class="small-note">' +
+      esc(new Date(r.sold_at).toLocaleString("bn-BD", { dateStyle: "medium", timeStyle: "short" })) + '</span></div>';
+    const html = data.map(row).join("");
+    if (data.length >= 5) {
+      box.innerHTML = '<div class="axv-track run" style="--dur:' + (data.length * 4) + 's">' + html + html + '</div>';
+    } else {
+      box.innerHTML = '<div class="axv-track">' + html + '</div>';
+    }
+  }
+  window.loadRecentSales = loadSales;
+  loadSales();
+  setInterval(loadSales, 120000);
+
+  /* ================= নিরাপত্তা বার ================= */
+  (function safety() {
+    const s = document.querySelector(".safety-strip");
+    if (s) s.innerHTML = '<strong>🛡️ নিরাপত্তা:</strong> <span>এই সাইট বাংলাদেশের প্রচলিত আইন ও ধারা অনুযায়ী পরিচালিত ও সুরক্ষিত। সব লেনদেন Escrow-এর মাধ্যমে।</span>';
+  })();
+
+  /* ================= Video call (WebRTC, signaling = Supabase Realtime broadcast) ================= */
+  const ICE = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }, { urls: "stun:stun1.l.google.com:19302" }] };
+  let call = null, incoming = null, incTimer = null, listener = null, listenUid = null, chatPeer = null;
+  const outCh = new Map();
+
+  function chanFor(uid) {
+    if (!outCh.has(uid)) {
+      const c = sb.channel("ax-call-" + uid);
+      c._ready = new Promise(res => c.subscribe(s => { if (s === "SUBSCRIBED") res(); }));
+      outCh.set(uid, c);
+    }
+    return outCh.get(uid);
+  }
+  async function sendSig(to, event, payload) {
+    if (!currentUser) return;
+    const c = chanFor(to);
+    await c._ready;
+    c.send({ type: "broadcast", event: event, payload: Object.assign({}, payload || {}, { from: currentUser.id }) });
+  }
+  function startListener() {
+    stopListener();
+    listenUid = currentUser.id;
+    listener = sb.channel("ax-call-" + listenUid)
+      .on("broadcast", { event: "invite" }, m => onInvite(m.payload))
+      .on("broadcast", { event: "accept" }, m => onAccept(m.payload))
+      .on("broadcast", { event: "offer" }, m => onOffer(m.payload))
+      .on("broadcast", { event: "answer" }, m => onAnswer(m.payload))
+      .on("broadcast", { event: "ice" }, m => onIce(m.payload))
+      .on("broadcast", { event: "hangup" }, m => onHangup(m.payload))
+      .on("broadcast", { event: "reject" }, m => onHangup(m.payload, "কল রিসিভ করা হয়নি"))
+      .on("broadcast", { event: "busy" }, m => onHangup(m.payload, "ব্যবহারকারী অন্য কলে ব্যস্ত"))
+      .subscribe();
+  }
+  function stopListener() {
+    if (listener) { sb.removeChannel(listener); listener = null; }
+    outCh.forEach(c => sb.removeChannel(c)); outCh.clear();
+    listenUid = null;
+  }
+
+  function showCallUI(title) { $("axvCallTitle").textContent = title; $("axvCall").classList.remove("hidden"); }
+  function cleanup() {
+    if (call) {
+      clearTimeout(call.timer);
+      if (call.stream) call.stream.getTracks().forEach(t => t.stop());
+      try { if (call.pc) call.pc.close(); } catch (_) {}
+      call = null;
+    }
+    $("axvRemote").srcObject = null; $("axvLocal").srcObject = null;
+    $("axvCall").classList.add("hidden");
+    $("axvMic").classList.remove("off"); $("axvCam").classList.remove("off");
+  }
+  async function endCall(notify, text) {
+    const peer = call && call.peer;
+    if (notify && peer) sendSig(peer, "hangup", {});
+    cleanup();
+    if (text) showToast(text, "info");
+  }
+  function getMedia() { return navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: true }); }
+  function makePc(peer, stream) {
+    const pc = new RTCPeerConnection(ICE);
+    stream.getTracks().forEach(t => pc.addTrack(t, stream));
+    pc.onicecandidate = e => { if (e.candidate) sendSig(peer, "ice", { c: e.candidate }); };
+    pc.ontrack = e => { $("axvRemote").srcObject = e.streams[0]; };
+    pc.onconnectionstatechange = () => {
+      if (!call) return;
+      if (pc.connectionState === "connected") { call.connected = true; clearTimeout(call.timer); $("axvCallTitle").textContent = "📹 সংযুক্ত"; }
+      if (pc.connectionState === "failed") endCall(true, "কল সংযোগ ব্যর্থ হয়েছে");
+    };
+    return pc;
+  }
+  async function blockedWith(peer) {
+    const st = await sb.rpc("ax_block_state", { peer: peer });
+    return !st.error && st.data && st.data !== "none";
+  }
+
+  window.axvStartCall = async function () {
+    if (!requireLogin() || !chatPeer) return;
+    if (call || incoming) { showToast("আপনি আগে থেকেই কলে আছেন", "error"); return; }
+    if (!navigator.mediaDevices || !window.RTCPeerConnection) { showToast("এই ব্রাউজারে ভিডিও কল সাপোর্ট নেই", "error"); return; }
+    const peer = chatPeer;
+    if (await blockedWith(peer)) { showToast("এই ব্যবহারকারীকে এখন কল করা যাবে না", "error"); return; }
+    let stream;
+    try { stream = await getMedia(); } catch (_) { showToast("Camera / Microphone-এর অনুমতি দিন", "error"); return; }
+    call = { peer: peer, stream: stream, role: "caller", pc: null, pending: [], connected: false };
+    $("axvLocal").srcObject = stream;
+    const { data } = await sb.from("profiles").select("full_name").eq("id", peer).maybeSingle();
+    showCallUI("📞 " + ((data && data.full_name) || "Member") + "-কে কল করা হচ্ছে...");
+    call.timer = setTimeout(() => { if (call && !call.connected) endCall(true, "কেউ উত্তর দেয়নি"); }, 35000);
+    sendSig(peer, "invite", {});
+  };
+
+  async function onInvite(p) {
+    if (!p || !p.from || !currentUser || p.from === currentUser.id) return;
+    if (call || incoming) { sendSig(p.from, "busy", {}); return; }
+    if (await blockedWith(p.from)) { sendSig(p.from, "reject", {}); return; }
+    const { data } = await sb.from("profiles").select("full_name").eq("id", p.from).maybeSingle();
+    if (call || incoming) { sendSig(p.from, "busy", {}); return; }
+    incoming = { from: p.from };
+    $("axvInName").textContent = (data && data.full_name) || "Member";
+    $("axvIncoming").classList.remove("hidden");
+    if (navigator.vibrate) try { navigator.vibrate([300, 150, 300]); } catch (_) {}
+    clearTimeout(incTimer);
+    incTimer = setTimeout(() => dismissIncoming(true), 35000);
+  }
+  function dismissIncoming(reject) {
+    clearTimeout(incTimer);
+    if (incoming && reject) sendSig(incoming.from, "reject", {});
+    incoming = null;
+    $("axvIncoming").classList.add("hidden");
+  }
+  $("axvDecline").addEventListener("click", () => dismissIncoming(true));
+  $("axvAccept").addEventListener("click", async function () {
+    if (!incoming) return;
+    const peer = incoming.from;
+    dismissIncoming(false);
+    let stream;
+    try { stream = await getMedia(); } catch (_) { sendSig(peer, "reject", {}); showToast("Camera / Microphone-এর অনুমতি দিন", "error"); return; }
+    call = { peer: peer, stream: stream, role: "callee", pc: null, pending: [], connected: false };
+    call.pc = makePc(peer, stream);
+    $("axvLocal").srcObject = stream;
+    showCallUI("সংযুক্ত হচ্ছে...");
+    call.timer = setTimeout(() => { if (call && !call.connected) endCall(true, "কল সংযোগ হয়নি"); }, 30000);
+    sendSig(peer, "accept", {});
+  });
+
+  async function onAccept(p) {
+    if (!call || call.role !== "caller" || p.from !== call.peer || call.pc) return;
+    call.pc = makePc(call.peer, call.stream);
+    $("axvCallTitle").textContent = "সংযুক্ত হচ্ছে...";
+    const offer = await call.pc.createOffer();
+    await call.pc.setLocalDescription(offer);
+    sendSig(call.peer, "offer", { sdp: call.pc.localDescription });
+  }
+  async function flush() {
+    while (call && call.pending.length) { try { await call.pc.addIceCandidate(call.pending.shift()); } catch (_) {} }
+  }
+  async function onOffer(p) {
+    if (!call || call.role !== "callee" || p.from !== call.peer || !call.pc || !p.sdp) return;
+    await call.pc.setRemoteDescription(p.sdp);
+    await flush();
+    const ans = await call.pc.createAnswer();
+    await call.pc.setLocalDescription(ans);
+    sendSig(call.peer, "answer", { sdp: call.pc.localDescription });
+  }
+  async function onAnswer(p) {
+    if (!call || call.role !== "caller" || p.from !== call.peer || !call.pc || !p.sdp) return;
+    await call.pc.setRemoteDescription(p.sdp);
+    await flush();
+  }
+  async function onIce(p) {
+    if (!call || p.from !== call.peer || !p.c) return;
+    if (call.pc && call.pc.remoteDescription) { try { await call.pc.addIceCandidate(p.c); } catch (_) {} }
+    else call.pending.push(p.c);
+  }
+  function onHangup(p, text) {
+    if (!p) return;
+    if (incoming && incoming.from === p.from) { dismissIncoming(false); showToast("মিসড কল", "info"); return; }
+    if (call && call.peer === p.from) endCall(false, text || "কল শেষ হয়েছে");
+  }
+
+  $("axvEnd").addEventListener("click", () => endCall(true));
+  $("axvMic").addEventListener("click", function () {
+    if (!call) return;
+    const t = call.stream.getAudioTracks()[0]; if (!t) return;
+    t.enabled = !t.enabled; this.classList.toggle("off", !t.enabled);
+  });
+  $("axvCam").addEventListener("click", function () {
+    if (!call) return;
+    const t = call.stream.getVideoTracks()[0]; if (!t) return;
+    t.enabled = !t.enabled; this.classList.toggle("off", !t.enabled);
+  });
+
+  /* চ্যাটে 📹 বাটন */
+  function ensureCallBtn() {
+    if ($("axvCallBtn")) return;
+    const bars = document.querySelectorAll("#axChatView .ax-bar");
+    const bar = bars[bars.length - 1];
+    if (!bar) return;
+    const b = document.createElement("button");
+    b.id = "axvCallBtn"; b.type = "button"; b.className = "btn secondary"; b.title = "ভিডিও কল"; b.textContent = "📹";
+    b.addEventListener("click", window.axvStartCall);
+    const rec = $("axRecBtn");
+    bar.insertBefore(b, rec ? rec.nextSibling : bar.firstChild);
+  }
+  const prevOpenChat = window.axOpenChat;
+  window.axOpenChat = async function (pid) {
+    chatPeer = pid;
+    await prevOpenChat(pid);
+    ensureCallBtn();
+  };
+  const prevShowList = window.axShowList;
+  window.axShowList = async function () { chatPeer = null; return prevShowList(); };
+  const prevClose = window.axCloseInbox;
+  window.axCloseInbox = function () { chatPeer = null; return prevClose(); };
+
+  /* ================= Header buttons ================= */
+  const box = document.querySelector(".actions"), anchor = $("authBtn");
+  [["axvRefBtn", "🎁 Refer", "axvOpenRef()"], ["axvStaffBtn", "🛠️ Assistant", "axvOpenStaff()"]].forEach(function (d) {
+    const b = document.createElement("button");
+    b.id = d[0]; b.className = "btn secondary hidden"; b.textContent = d[1];
+    b.setAttribute("onclick", d[2]);
+    if (box && anchor) box.insertBefore(b, anchor);
+  });
+
+  /* ================= Sync loop ================= */
+  let lastUid = null;
+  setInterval(function () {
+    $("axvRefBtn") && $("axvRefBtn").classList.toggle("hidden", !currentUser);
+    $("axvStaffBtn") && $("axvStaffBtn").classList.toggle("hidden", !(currentUser && isAssistant()));
+    const uid = currentUser ? currentUser.id : null;
+    if (uid !== lastUid) {
+      lastUid = uid;
+      if (call) endCall(false);
+      if (uid) startListener(); else stopListener();
+    }
+    if (currentUser && currentProfile) applyRef();
+  }, 1000);
+
+  ["axvRefModal", "axvStaffModal"].forEach(function (id) {
+    const m = $(id);
+    m.addEventListener("click", e => { if (e.target === m) closeModal(id); });
+  });
+  window.addEventListener("pagehide", function () { if (call) sendSig(call.peer, "hangup", {}); });
+})();
 </script>
+<!-- ================= END ADD-ON V5 ================= -->
+
 <!-- ================= END VERIFICATION REQUIRED ================= -->
 
 
