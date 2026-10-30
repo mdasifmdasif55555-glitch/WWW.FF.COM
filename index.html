@@ -3644,11 +3644,83 @@ window.deletePost = async function (postId) {
   document.addEventListener("visibilitychange", function () { if (document.hidden) touch(); });
   window.addEventListener("pagehide", touch);
 })();
+</script><!-- ================= ANSU ELITE: ONE-AT-A-TIME VIEW (একটা খুললে বাকিগুলো দেখাবে না) =================
+     এই ব্লক </body>-এর ঠিক আগে, সব ব্লকের পরে, একদম শেষে পেস্ট করুন। -->
+<style>
+  .ax3-hide { display: none !important; }
+</style>
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- ১. Modal: একটা খুললে আগেরটা বন্ধ ---------- */
+  const rawOpen = window.openModal;
+  window.openModal = function (id) {
+    document.querySelectorAll(".modal.open").forEach(function (m) {
+      if (m.id === id) return;
+      m.classList.remove("open");
+      if (m.id === "axInboxModal" && typeof window.axCloseInbox === "function") window.axCloseInbox();
+    });
+    return rawOpen(id);
+  };
+
+  /* ---------- ২. Panel (Orders / Wishlist / Seller / Admin) খুললে খোলা modal বন্ধ ---------- */
+  ["ordersSection", "wishlistSection", "sellerSection", "adminSection"].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    new MutationObserver(function () {
+      if (!el.classList.contains("hidden")) {
+        document.querySelectorAll(".modal.open").forEach(function (m) { m.classList.remove("open"); });
+      }
+    }).observe(el, { attributes: true, attributeFilter: ["class"] });
+  });
+
+  /* ---------- ৩. Section: Law / FAQ / কিভাবে কাজ করে / মতামত — শুধু সেটাই দেখাবে ---------- */
+  const BLOCKS = [".hero", ".trust-banner", ".stats", "#howItWorks", "#testimonials", "#faq", "#lawSection",
+                  "#adSection", "#market", "#community", "#recentSalesSection",
+                  "#ordersSection", "#wishlistSection", "#sellerSection", "#adminSection"];
+  const SOLO = ["howItWorks", "faq", "lawSection", "testimonials"];
+
+  function blocks() {
+    return BLOCKS.map(function (s) { return document.querySelector(s); }).filter(Boolean);
+  }
+  function clearSolo() {
+    document.querySelectorAll(".ax3-hide").forEach(function (n) {
+      if (n.id !== "notificationBar") n.classList.remove("ax3-hide");
+    });
+  }
+
+  const prevScroll = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function (opts) {
+    clearSolo();
+    if (SOLO.indexOf(this.id) >= 0) {
+      const target = this;
+      blocks().forEach(function (b) { if (b !== target) b.classList.add("ax3-hide"); });
+      target.classList.remove("ax-vhide");
+      const r = prevScroll.call(this, opts);
+      window.scrollTo({ top: 0 });
+      return r;
+    }
+    return prevScroll.call(this, opts);
+  };
+
+  // ট্যাব চাপলে Solo মোড বন্ধ
+  const row = document.querySelector(".ax-tabs-row");
+  if (row) row.addEventListener("click", clearSolo);
+
+  /* ---------- ৪. সাইট নোটিশ বার শুধু Home ট্যাবে ---------- */
+  const bar = document.getElementById("notificationBar");
+  function syncBar() {
+    if (!bar) return;
+    const a = document.querySelector(".ax-tab.active");
+    bar.classList.toggle("ax3-hide", !(a && a.dataset.v === "home"));
+  }
+  if (row && bar) {
+    new MutationObserver(syncBar).observe(row, { attributes: true, subtree: true, attributeFilter: ["class"] });
+    syncBar();
+  }
+})();
 </script>
-<!-- ================= END CHAT UPGRADE 2 ================= -->
-
-
-
 <!-- ================= END VERIFICATION REQUIRED ================= -->
 
 
