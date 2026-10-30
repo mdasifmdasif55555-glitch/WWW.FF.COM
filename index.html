@@ -2006,6 +2006,579 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelect
 window.addEventListener("error",e=>console.error("JavaScript Error:",e.message));
 window.addEventListener("unhandledrejection",e=>console.error("Unhandled Promise:",e.reason));
 init();
+</script><!-- ================= ANSU ELITE ADD-ON (</body>-এর ঠিক আগে পেস্ট করুন) ================= -->
+<style>
+  .ax-wide { width: min(760px, 100%); }
+  .ax-list-item { display: flex; align-items: center; gap: 12px; padding: 11px; border: 1px solid var(--line); border-radius: 12px; background: #0b1711; margin-bottom: 8px; cursor: pointer; }
+  .ax-list-item:hover { border-color: #e8c87980; }
+  .ax-list-item .info { flex: 1; min-width: 0; }
+  .ax-list-item .info small { color: var(--muted); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ax-unread { background: var(--gold); color: #172017; border-radius: 99px; font-size: 11px; font-weight: 900; padding: 2px 8px; }
+  .ax-chat { max-height: 52vh; min-height: 220px; overflow-y: auto; background: #0b1711; border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .ax-msg { max-width: 82%; margin-bottom: 10px; padding: 8px 12px; border-radius: 12px; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+  .ax-msg.me { margin-left: auto; background: #1f3a2b; }
+  .ax-msg.other { margin-right: auto; background: #1a241c; }
+  .ax-msg img, .ax-msg video { max-width: 100%; max-height: 240px; border-radius: 8px; display: block; }
+  .ax-msg audio { max-width: 100%; }
+  .ax-msg a { color: var(--gold); }
+  .ax-msg time { display: block; font-size: 10px; opacity: .6; margin-top: 4px; }
+  .ax-bar { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
+  .ax-bar input[type=text] { flex: 1; }
+  .ax-bar .btn { padding: 10px 11px; }
+  .ax-rec { animation: goldPulse 1s infinite; }
+  .ax-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+  .ax-tabs button.active { background: linear-gradient(135deg, #f4dc94, #b68a3d); color: #172017; }
+  .ax-member { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(145deg, #14231c, #0b1510); margin-bottom: 9px; flex-wrap: wrap; }
+  .ax-member .info { flex: 1; min-width: 150px; }
+  .ax-member .avatar { width: 52px; height: 52px; }
+  .ax-vs { display: inline-block; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; margin-left: 5px; }
+  .ax-vs.approved { background: #0d2418; color: #8ef0bf; border: 1px solid #1bc78b70; }
+  .ax-vs.pending { background: #2a2410; color: #f5dfaa; border: 1px solid #8c7135; }
+  .ax-vs.none, .ax-vs.rejected { background: #2a1216; color: #ffadb4; border: 1px solid #ff657450; }
+  .ax-auth-tabs { display: flex; gap: 6px; }
+  .ax-auth-tabs button { flex: 1; }
+  .ax-auth-tabs button.active { background: linear-gradient(135deg, #f4dc94, #b68a3d); color: #172017; }
+</style>
+
+<!-- Inbox -->
+<div class="modal" id="axInboxModal">
+  <div class="modal-box ax-wide">
+    <div class="modal-head">
+      <h2 id="axInboxTitle">💬 Inbox</h2>
+      <div>
+        <button class="close hidden" id="axBackBtn" onclick="axShowList()">← ফিরুন</button>
+        <button class="close" onclick="axCloseInbox()">✕</button>
+      </div>
+    </div>
+    <div id="axConvoList"></div>
+    <div id="axChatView" class="hidden">
+      <div class="ax-chat" id="axChatBox"></div>
+      <div class="ax-bar">
+        <input class="field" type="text" id="axText" maxlength="1000" placeholder="মেসেজ লিখুন...">
+        <button class="btn" onclick="axSendText()">পাঠান</button>
+      </div>
+      <div class="ax-bar">
+        <input type="file" id="axFile" class="hidden">
+        <button class="btn secondary" onclick="$('axFile').click()" title="ছবি/ভিডিও/ফাইল">📎</button>
+        <button class="btn secondary" onclick="axSendLocation()" title="Location">📍</button>
+        <button class="btn secondary" id="axRecBtn" onclick="axToggleRecord()" title="Voice">🎤</button>
+        <span class="small-note" id="axChatStatus"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Members -->
+<div class="modal" id="axMembersModal">
+  <div class="modal-box ax-wide">
+    <div class="modal-head">
+      <h2>👥 Members <span class="post-count-badge" id="axMemberCount">0</span></h2>
+      <button class="close" onclick="closeModal('axMembersModal')">✕</button>
+    </div>
+    <input class="field" id="axMemberSearch" placeholder="নাম বা User ID দিয়ে খুঁজুন..." oninput="axRenderMembers()">
+    <div class="ax-tabs" id="axMemberTabs">
+      <button class="btn secondary active" onclick="axMemberTab('all', this)">সবাই</button>
+      <button class="btn secondary" onclick="axMemberTab('admin', this)">👑 Admin</button>
+      <button class="btn secondary" onclick="axMemberTab('seller', this)">🛍️ Seller</button>
+      <button class="btn secondary" onclick="axMemberTab('user', this)">👤 General</button>
+    </div>
+    <div id="axMemberList"></div>
+  </div>
+</div>
+
+<!-- Verification (user) -->
+<div class="modal" id="axVerifyModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2>🪪 Verification</h2>
+      <button class="close" onclick="closeModal('axVerifyModal')">✕</button>
+    </div>
+    <div class="notice" id="axVerifyStatus"></div>
+    <form class="form" id="axVerifyForm">
+      <div>
+        <label>ডকুমেন্টের ধরন</label>
+        <select class="field" id="axDocType">
+          <option value="nid">NID (জাতীয় পরিচয়পত্র)</option>
+          <option value="birth_certificate">Birth Certificate (জন্মনিবন্ধন)</option>
+        </select>
+      </div>
+      <div>
+        <label>ডকুমেন্টের ছবি / PDF</label>
+        <input class="field" id="axDocFile" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" required>
+      </div>
+      <button class="btn" type="submit">জমা দিন</button>
+      <button class="btn secondary" type="button" onclick="axSkipVerify()">এখন না, Skip করুন</button>
+    </form>
+    <p class="small-note">Verification ছাড়াও আপনি সাইট ব্যবহার করতে পারবেন। ডকুমেন্ট প্রাইভেট থাকে, শুধু Admin দেখতে পারে।</p>
+    <div id="axVerifyMsg"></div>
+  </div>
+</div>
+
+<!-- Verification (admin) -->
+<div class="modal" id="axAdminVerifyModal">
+  <div class="modal-box ax-wide">
+    <div class="modal-head">
+      <h2>🪪 Verification Requests</h2>
+      <button class="close" onclick="closeModal('axAdminVerifyModal')">✕</button>
+    </div>
+    <div id="axAdminVerifyList"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  if (typeof sb === "undefined" || !sb) return;
+
+  const S = { peer: null, channel: null, convos: [], profiles: {}, recorder: null, chunks: [], members: [], sellers: new Set(), tab: "all", authMode: "login", prompted: false };
+  const MAX_CHAT_FILE = 50 * 1024 * 1024;
+  const AVATAR_FALLBACK = "https://placehold.co/100x100/14251e/ffffff?text=User";
+
+  /* ---------- Helpers ---------- */
+  function vBadge(p) {
+    const st = p?.is_verified ? "approved" : (p?.verification_status || "none");
+    const label = { approved: "✓ Verified", pending: "⏳ Pending", rejected: "✕ Rejected", none: "Not Verified" }[st] || "Not Verified";
+    return `<span class="ax-vs ${st}">${label}</span>`;
+  }
+  function timeText(v) {
+    return v ? new Date(v).toLocaleString("bn-BD", { dateStyle: "short", timeStyle: "short" }) : "";
+  }
+  function pName(p) { return p?.full_name || "Member"; }
+  function pAvatar(p) { return p?.avatar_url || AVATAR_FALLBACK; }
+
+  async function fetchProfiles(ids) {
+    const need = ids.filter(id => id && !S.profiles[id]);
+    if (!need.length) return;
+    const { data } = await sb.from("profiles")
+      .select("id,full_name,avatar_url,role,is_verified,verification_status")
+      .in("id", need);
+    (data || []).forEach(p => S.profiles[p.id] = p);
+  }
+
+  /* ---------- Header buttons ---------- */
+  function addHeaderButtons() {
+    const box = document.querySelector(".actions");
+    const anchor = $("authBtn");
+    if (!box || !anchor) return;
+    const defs = [
+      ["axInboxBtn", "💬 Inbox", "axOpenInbox()", true],
+      ["axMembersBtn", "👥 Members", "axOpenMembers()", false],
+      ["axVerifyBtn", "🪪 Verify", "axOpenVerify()", true],
+      ["axReqBtn", "🪪 Requests", "axOpenAdminVerify()", true]
+    ];
+    defs.forEach(([id, label, fn]) => {
+      const b = document.createElement("button");
+      b.id = id;
+      b.className = "btn secondary hidden";
+      b.innerHTML = label;
+      b.setAttribute("onclick", fn);
+      box.insertBefore(b, anchor);
+    });
+  }
+  function syncButtons() {
+    $("axMembersBtn")?.classList.remove("hidden");
+    ["axInboxBtn", "axVerifyBtn"].forEach(id => $(id)?.classList.toggle("hidden", !currentUser));
+    $("axReqBtn")?.classList.toggle("hidden", !(currentUser && isAdmin()));
+  }
+
+  /* ---------- Inbox: list ---------- */
+  window.axOpenInbox = async function () {
+    if (!requireLogin()) return;
+    openModal("axInboxModal");
+    axShowList();
+    await axLoadConvos();
+    axSubscribe();
+  };
+  window.axCloseInbox = function () {
+    closeModal("axInboxModal");
+    S.peer = null;
+  };
+  window.axShowList = async function () {
+    S.peer = null;
+    $("axChatView").classList.add("hidden");
+    $("axConvoList").classList.remove("hidden");
+    $("axBackBtn").classList.add("hidden");
+    $("axInboxTitle").textContent = "💬 Inbox";
+    await axLoadConvos();
+  };
+  async function axLoadConvos() {
+    const me = currentUser.id;
+    const { data, error } = await sb.from("chat_messages").select("*")
+      .or(`sender_id.eq.${me},receiver_id.eq.${me}`)
+      .order("created_at", { ascending: false }).limit(300);
+    if (error) { $("axConvoList").innerHTML = '<div class="panel">Inbox লোড করা যায়নি। SQL চালানো হয়েছে কিনা দেখুন।</div>'; return; }
+    const map = new Map();
+    (data || []).forEach(m => {
+      const other = m.sender_id === me ? m.receiver_id : m.sender_id;
+      if (!map.has(other)) map.set(other, { id: other, last: m, unread: 0 });
+      if (m.receiver_id === me && !m.is_read) map.get(other).unread++;
+    });
+    S.convos = [...map.values()];
+    await fetchProfiles(S.convos.map(c => c.id));
+    const total = S.convos.reduce((s, c) => s + c.unread, 0);
+    const btn = $("axInboxBtn");
+    if (btn) btn.innerHTML = "💬 Inbox" + (total ? ` <span class="ax-unread">${total}</span>` : "");
+    $("axConvoList").innerHTML = S.convos.length ? S.convos.map(c => {
+      const p = S.profiles[c.id];
+      const preview = { text: c.last.body, image: "📷 ছবি", video: "🎬 ভিডিও", audio: "🎤 Voice", file: "📄 ফাইল", location: "📍 Location" }[c.last.msg_type] || "";
+      return `<div class="ax-list-item" onclick="axOpenChat('${esc(c.id)}')">
+        <img class="avatar" src="${esc(pAvatar(p))}" alt="">
+        <div class="info"><strong>${esc(pName(p))}</strong>${vBadge(p)}<small>${esc(preview || "")}</small></div>
+        ${c.unread ? `<span class="ax-unread">${c.unread}</span>` : ""}
+      </div>`;
+    }).join("") : '<div class="post-empty">এখনো কোনো মেসেজ নেই। Members থেকে কাউকে মেসেজ করুন।</div>';
+  }
+
+  /* ---------- Inbox: chat ---------- */
+  window.axOpenChat = async function (peerId) {
+    if (!requireLogin()) return;
+    if (peerId === currentUser.id) { showToast("নিজেকে মেসেজ করা যাবে না", "error"); return; }
+    S.peer = peerId;
+    closeModal("axMembersModal");
+    closeModal("publicProfileModal");
+    openModal("axInboxModal");
+    await fetchProfiles([peerId]);
+    $("axConvoList").classList.add("hidden");
+    $("axChatView").classList.remove("hidden");
+    $("axBackBtn").classList.remove("hidden");
+    $("axInboxTitle").textContent = "💬 " + pName(S.profiles[peerId]);
+    axSubscribe();
+    await axRefreshChat();
+  };
+  async function axRefreshChat() {
+    if (!S.peer) return;
+    const me = currentUser.id, peer = S.peer;
+    const { data, error } = await sb.from("chat_messages").select("*")
+      .or(`and(sender_id.eq.${me},receiver_id.eq.${peer}),and(sender_id.eq.${peer},receiver_id.eq.${me})`)
+      .order("created_at", { ascending: true }).limit(500);
+    if (error) { $("axChatBox").innerHTML = "<p class='small-note'>চ্যাট লোড করা যায়নি।</p>"; return; }
+    $("axChatBox").innerHTML = (data || []).map(axBubble).join("") || "<p class='small-note'>এখনো কোনো মেসেজ নেই। প্রথম মেসেজ পাঠান!</p>";
+    const box = $("axChatBox");
+    box.scrollTop = box.scrollHeight;
+    const unread = (data || []).some(m => m.receiver_id === me && !m.is_read);
+    if (unread) {
+      await sb.from("chat_messages").update({ is_read: true })
+        .eq("receiver_id", me).eq("sender_id", peer).eq("is_read", false);
+    }
+  }
+  function axBubble(m) {
+    const mine = m.sender_id === currentUser.id;
+    let body = "";
+    if (m.msg_type === "image") body = `<img src="${esc(m.media_url)}" alt="" onclick="window.open('${esc(m.media_url)}','_blank')">`;
+    else if (m.msg_type === "video") body = `<video src="${esc(m.media_url)}" controls playsinline></video>`;
+    else if (m.msg_type === "audio") body = `<audio src="${esc(m.media_url)}" controls></audio>`;
+    else if (m.msg_type === "file") body = `<a href="${esc(m.media_url)}" target="_blank" rel="noopener">📄 ${esc(m.file_name || "File")}</a>`;
+    else if (m.msg_type === "location") body = `<a href="https://www.google.com/maps?q=${Number(m.lat)},${Number(m.lng)}" target="_blank" rel="noopener">📍 Location দেখুন</a>`;
+    else body = esc(m.body || "");
+    const ticks = mine ? (m.is_read ? " · ✓✓ Seen" : " · ✓ Sent") : "";
+    return `<div class="ax-msg ${mine ? "me" : "other"}">${body}<time>${esc(timeText(m.created_at))}${ticks}</time></div>`;
+  }
+  async function axInsert(payload) {
+    if (!S.peer) return false;
+    const { error } = await sb.from("chat_messages").insert({ sender_id: currentUser.id, receiver_id: S.peer, ...payload });
+    if (error) { showToast(publicError(error), "error"); return false; }
+    await axRefreshChat();
+    return true;
+  }
+  window.axSendText = async function () {
+    const input = $("axText");
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = "";
+    await axInsert({ msg_type: "text", body: text });
+  };
+  async function axSendFile(file, forcedType) {
+    if (file.size > MAX_CHAT_FILE) { showToast("ফাইল সর্বোচ্চ ৫০ MB হতে পারবে", "error"); return; }
+    const type = forcedType || (file.type.startsWith("image/") ? "image" : file.type.startsWith("video/") ? "video" : file.type.startsWith("audio/") ? "audio" : "file");
+    $("axChatStatus").textContent = "আপলোড হচ্ছে...";
+    try {
+      const url = await uploadFile(file, "chat");
+      await axInsert({ msg_type: type, media_url: url, file_name: file.name });
+    } catch (e) { showToast(publicError(e), "error"); }
+    $("axChatStatus").textContent = "";
+  }
+  window.axSendLocation = function () {
+    if (!navigator.geolocation) { showToast("এই ব্রাউজারে Location নেই", "error"); return; }
+    navigator.geolocation.getCurrentPosition(
+      pos => axInsert({ msg_type: "location", lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => showToast("Location অনুমতি দিন", "error")
+    );
+  };
+  window.axToggleRecord = async function () {
+    const btn = $("axRecBtn");
+    if (S.recorder && S.recorder.state === "recording") { S.recorder.stop(); return; }
+    if (!navigator.mediaDevices || !window.MediaRecorder) { showToast("Voice record সাপোর্ট করে না", "error"); return; }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      S.chunks = [];
+      S.recorder = new MediaRecorder(stream);
+      S.recorder.ondataavailable = e => { if (e.data.size) S.chunks.push(e.data); };
+      S.recorder.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop());
+        btn.classList.remove("ax-rec");
+        btn.textContent = "🎤";
+        const type = S.recorder.mimeType || "audio/webm";
+        const ext = type.includes("mp4") ? "m4a" : "webm";
+        const file = new File(S.chunks, `voice_${Date.now()}.${ext}`, { type });
+        await axSendFile(file, "audio");
+      };
+      S.recorder.start();
+      btn.classList.add("ax-rec");
+      btn.textContent = "⏹";
+    } catch (_) { showToast("Microphone অনুমতি দিন", "error"); }
+  };
+
+  /* ---------- Realtime ---------- */
+  function axSubscribe() {
+    if (S.channel || !currentUser) return;
+    const me = currentUser.id;
+    S.channel = sb.channel("ax-messages-" + me)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages", filter: `receiver_id=eq.${me}` }, async payload => {
+        const m = payload.new;
+        if (S.peer === m.sender_id && $("axInboxModal").classList.contains("open")) await axRefreshChat();
+        else {
+          await fetchProfiles([m.sender_id]);
+          showToast("💬 নতুন মেসেজ: " + pName(S.profiles[m.sender_id]), "info");
+          await axLoadConvos();
+        }
+      })
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "chat_messages", filter: `sender_id=eq.${me}` }, () => {
+        if (S.peer) axRefreshChat();
+      })
+      .subscribe();
+  }
+
+  /* ---------- Members Directory ---------- */
+  window.axOpenMembers = async function () {
+    openModal("axMembersModal");
+    $("axMemberList").innerHTML = '<div class="panel">লোড হচ্ছে...</div>';
+    const [pr, lr] = await Promise.all([
+      sb.from("profiles").select("id,full_name,avatar_url,role,is_verified,verification_status,created_at").order("created_at", { ascending: false }).limit(1000),
+      sb.from("listings").select("seller_id").limit(2000)
+    ]);
+    if (pr.error) { $("axMemberList").innerHTML = '<div class="panel">Members লোড করা যায়নি।</div>'; return; }
+    S.members = pr.data || [];
+    S.sellers = new Set((lr.data || []).map(l => l.seller_id));
+    S.members.forEach(p => S.profiles[p.id] = p);
+    axRenderMembers();
+  };
+  window.axMemberTab = function (tab, btn) {
+    S.tab = tab;
+    document.querySelectorAll("#axMemberTabs button").forEach(b => b.classList.remove("active"));
+    btn?.classList.add("active");
+    axRenderMembers();
+  };
+  function axCategory(p) {
+    if (p.role === "admin") return "admin";
+    return S.sellers.has(p.id) ? "seller" : "user";
+  }
+  window.axRenderMembers = function () {
+    const q = $("axMemberSearch").value.toLowerCase().trim();
+    $("axMemberCount").textContent = S.members.length + " জন";
+    const list = S.members.filter(p => {
+      const matchTab = S.tab === "all" || axCategory(p) === S.tab;
+      const matchText = !q || pName(p).toLowerCase().includes(q) || p.id.slice(0, 8).toLowerCase().includes(q);
+      return matchTab && matchText;
+    });
+    const catLabel = { admin: "👑 Admin", seller: "🛍️ Seller", user: "👤 Member" };
+    $("axMemberList").innerHTML = list.length ? list.map(p => {
+      const cat = axCategory(p);
+      const isMe = currentUser && currentUser.id === p.id;
+      return `<div class="ax-member">
+        <img class="avatar ${cat === "admin" ? "admin-user-avatar" : ""}" src="${esc(pAvatar(p))}" alt="" onclick="showPublicProfile('${esc(p.id)}')">
+        <div class="info">
+          <strong class="${cat === "admin" ? "admin-user-name" : ""}">${esc(pName(p))}</strong> ${vBadge(p)}<br>
+          <small class="small-note">${catLabel[cat]} · ID: ${esc(p.id.slice(0, 8).toUpperCase())}</small>
+        </div>
+        <button class="btn secondary" onclick="showPublicProfile('${esc(p.id)}')">Profile</button>
+        ${isMe ? "" : `<button class="btn" onclick="axOpenChat('${esc(p.id)}')">💬 Message</button>`}
+      </div>`;
+    }).join("") : '<div class="post-empty">কোনো সদস্য পাওয়া যায়নি।</div>';
+  };
+
+  /* ---------- Public profile: DM button + verification status ---------- */
+  const originalPublicProfile = window.showPublicProfile;
+  window.showPublicProfile = async function (userId) {
+    await originalPublicProfile(userId);
+    try {
+      const { data: p } = await sb.from("profiles").select("id,is_verified,verification_status").eq("id", userId).maybeSingle();
+      const idLine = document.querySelector("#publicProfileContent .profile-userid");
+      if (idLine && p) idLine.insertAdjacentHTML("afterend", `<div style="margin:6px 0">${vBadge(p)}</div>`);
+      const actions = document.querySelector("#publicProfileContent .profile-actions");
+      if (actions && currentUser && currentUser.id !== userId) {
+        actions.insertAdjacentHTML("afterbegin", `<button class="btn" onclick="axOpenChat('${esc(userId)}')">💬 Direct Message</button>`);
+      }
+    } catch (_) {}
+  };
+
+  /* ---------- Verification (user) ---------- */
+  window.axOpenVerify = async function () {
+    if (!requireLogin()) return;
+    await loadProfile();
+    const st = currentProfile?.is_verified ? "approved" : (currentProfile?.verification_status || "none");
+    const text = {
+      approved: "✅ আপনার অ্যাকাউন্ট Verified।",
+      pending: "⏳ আপনার ডকুমেন্ট Admin-এর যাচাইয়ের অপেক্ষায় আছে।",
+      rejected: "❌ আগের ডকুমেন্ট গ্রহণ করা হয়নি। নতুন করে জমা দিন।",
+      none: "আপনি এখনো Verify করেননি। চাইলে এখন বা পরে করতে পারবেন।"
+    }[st];
+    $("axVerifyStatus").innerHTML = `<b>Status:</b> ${vBadge({ verification_status: st, is_verified: st === "approved" })}<br>${text}`;
+    $("axVerifyForm").classList.toggle("hidden", st === "approved" || st === "pending");
+    $("axVerifyMsg").textContent = "";
+    openModal("axVerifyModal");
+  };
+  window.axSkipVerify = function () {
+    localStorage.setItem("ax_skip_" + currentUser.id, "1");
+    closeModal("axVerifyModal");
+    showToast("ঠিক আছে, পরে 🪪 Verify বাটন থেকে করতে পারবেন", "info");
+  };
+  $("axVerifyForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!requireLogin()) return;
+    const file = $("axDocFile").files?.[0];
+    if (!file) return;
+    if (file.size > 8 * 1024 * 1024) { msg("axVerifyMsg", "ফাইল সর্বোচ্চ ৮ MB হতে পারবে।"); return; }
+    try {
+      const safe = file.name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]/g, "_").slice(-80);
+      const path = `${currentUser.id}/${Date.now()}_${safe}`;
+      const up = await sb.storage.from("verification-docs").upload(path, file, { contentType: file.type });
+      if (up.error) throw up.error;
+      const { error } = await sb.from("profiles").update({
+        verification_status: "pending",
+        verification_doc_type: $("axDocType").value,
+        verification_doc_path: path
+      }).eq("id", currentUser.id);
+      if (error) throw error;
+      msg("axVerifyMsg", "জমা হয়েছে। Admin যাচাই করবে।", true);
+      await loadProfile();
+      updateUI();
+      setTimeout(() => closeModal("axVerifyModal"), 1400);
+    } catch (err) { msg("axVerifyMsg", publicError(err)); }
+  });
+
+  /* ---------- Verification (admin) ---------- */
+  window.axOpenAdminVerify = async function () {
+    if (!isAdmin()) return;
+    openModal("axAdminVerifyModal");
+    const box = $("axAdminVerifyList");
+    box.innerHTML = '<div class="panel">লোড হচ্ছে...</div>';
+    const { data, error } = await sb.from("profiles")
+      .select("id,full_name,avatar_url,verification_doc_type,verification_doc_path")
+      .eq("verification_status", "pending").limit(100);
+    if (error) { box.innerHTML = '<div class="panel">লোড করা যায়নি।</div>'; return; }
+    if (!data?.length) { box.innerHTML = '<div class="post-empty">কোনো Pending রিকুয়েস্ট নেই।</div>'; return; }
+    const items = await Promise.all(data.map(async p => {
+      let url = "";
+      if (p.verification_doc_path) {
+        const s = await sb.storage.from("verification-docs").createSignedUrl(p.verification_doc_path, 600);
+        url = s.data?.signedUrl || "";
+      }
+      return `<div class="ax-member">
+        <img class="avatar" src="${esc(pAvatar(p))}" alt="">
+        <div class="info"><strong>${esc(pName(p))}</strong><br>
+          <small class="small-note">${esc(p.verification_doc_type === "nid" ? "NID" : "Birth Certificate")} · ID: ${esc(p.id.slice(0, 8).toUpperCase())}</small><br>
+          ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener" style="color:var(--gold)">📄 ডকুমেন্ট দেখুন</a>` : ""}
+        </div>
+        <button class="btn" onclick="axDecide('${esc(p.id)}', true)">✓ Approve</button>
+        <button class="btn danger" onclick="axDecide('${esc(p.id)}', false)">✕ Reject</button>
+      </div>`;
+    }));
+    box.innerHTML = items.join("");
+  };
+  window.axDecide = async function (id, approve) {
+    if (!isAdmin()) return;
+    const update = approve
+      ? { verification_status: "approved", is_verified: true, verified_at: new Date().toISOString() }
+      : { verification_status: "rejected", is_verified: false };
+    const { error } = await sb.from("profiles").update(update).eq("id", id);
+    if (error) { showToast(publicError(error), "error"); return; }
+    showToast(approve ? "Approve করা হয়েছে ✓" : "Reject করা হয়েছে", "success");
+    await axOpenAdminVerify();
+  };
+
+  /* ---------- Login / Register upgrade ---------- */
+  function upgradeAuthModal() {
+    const form = $("loginForm");
+    if (!form) return;
+    const tabs = document.createElement("div");
+    tabs.className = "ax-auth-tabs";
+    tabs.innerHTML = '<button type="button" class="btn secondary active" data-m="login">লগইন</button><button type="button" class="btn secondary" data-m="register">নতুন অ্যাকাউন্ট</button>';
+    form.insertBefore(tabs, form.firstChild);
+    const nameBox = $("fullName").parentElement;
+    const buttons = form.querySelectorAll("button:not([data-m])");
+    const submitBtn = buttons[0], regBtn = buttons[1];
+    regBtn.classList.add("hidden");
+    nameBox.classList.add("hidden");
+    const pwWrap = $("password").parentElement;
+    pwWrap.insertAdjacentHTML("beforeend", '<label style="margin-top:6px;display:block"><input type="checkbox" id="axShowPw"> পাসওয়ার্ড দেখান</label>');
+    $("axShowPw").addEventListener("change", e => { $("password").type = e.target.checked ? "text" : "password"; });
+    tabs.addEventListener("click", e => {
+      const m = e.target.dataset.m;
+      if (!m) return;
+      S.authMode = m;
+      tabs.querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.m === m));
+      nameBox.classList.toggle("hidden", m !== "register");
+      submitBtn.textContent = m === "register" ? "অ্যাকাউন্ট তৈরি করুন" : "লগইন";
+      $("password").autocomplete = m === "register" ? "new-password" : "current-password";
+    });
+    form.addEventListener("submit", e => {
+      if (S.authMode !== "register") return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      window.registerUser();
+    }, true);
+  }
+  const originalRegister = window.registerUser;
+  window.registerUser = async function () {
+    const email = $("email").value.trim(), password = $("password").value;
+    await originalRegister();
+    if (!currentUser && email && password.length >= 8) {
+      const { data } = await sb.auth.signInWithPassword({ email, password });
+      if (data?.session) {
+        currentUser = data.user;
+        await loadProfile();
+        updateUI();
+        closeModal("authModal");
+        showToast("স্বাগতম! অ্যাকাউন্ট তৈরি হয়েছে 🎉", "success");
+      }
+    }
+  };
+
+  /* ---------- Verify prompt after login (skip করা যাবে) ---------- */
+  function maybePromptVerify() {
+    if (!currentUser || !currentProfile || S.prompted) return;
+    S.prompted = true;
+    const st = currentProfile.is_verified ? "approved" : (currentProfile.verification_status || "none");
+    if (st === "none" && !localStorage.getItem("ax_skip_" + currentUser.id)) axOpenVerify();
+  }
+
+  /* ---------- Start ---------- */
+  addHeaderButtons();
+  upgradeAuthModal();
+  $("axText").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); axSendText(); } });
+  $("axFile").addEventListener("change", e => {
+    const f = e.target.files?.[0];
+    if (f) axSendFile(f);
+    e.target.value = "";
+  });
+  document.querySelectorAll("#axInboxModal,#axMembersModal,#axVerifyModal,#axAdminVerifyModal").forEach(m =>
+    m.addEventListener("click", ev => { if (ev.target === m) closeModal(m.id); })
+  );
+  let lastUser = null;
+  setInterval(() => {
+    syncButtons();
+    const uid = currentUser?.id || null;
+    if (uid !== lastUser) {
+      lastUser = uid;
+      S.prompted = false;
+      if (S.channel) { sb.removeChannel(S.channel); S.channel = null; }
+      if (uid) { axSubscribe(); axLoadConvos(); }
+    }
+    maybePromptVerify();
+  }, 1000);
+})();
 </script>
+<!-- ================= END ANSU ELITE ADD-ON ================= -->
+
 </body>
 </html>
