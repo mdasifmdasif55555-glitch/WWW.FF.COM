@@ -2784,7 +2784,130 @@ window.deletePost = async function (postId) {
     alert(publicError(error));
   }
 };
+</script><!-- ================= ANSU ELITE: LAYOUT UPDATE (</body>-এর ঠিক আগে, সবার শেষে পেস্ট করুন) ================= -->
+<style>
+  /* ---------- ছোট হেডার বাটন ---------- */
+  header { padding: 8px 0 0; }
+  header .actions { gap: 5px; }
+  header .actions .btn { padding: 5px 9px !important; font-size: 11px !important; border-radius: 8px; font-weight: 700; }
+  header .header-icon-btn { width: 32px !important; height: 32px !important; flex: 0 0 32px !important; font-size: 15px !important; border-radius: 9px; }
+  header .brand { font-size: 15px; }
+  header #userLabel { font-size: 11px !important; }
+  header .avatar-small { width: 22px; height: 22px; }
+
+  /* ---------- ট্যাব বার ---------- */
+  .ax-tabs-row { display: flex; gap: 6px; overflow-x: auto; padding: 8px 4% 8px; scrollbar-width: none; }
+  .ax-tabs-row::-webkit-scrollbar { display: none; }
+  .ax-tab { flex: 0 0 auto; border: 1px solid #365340; background: #13231a; color: var(--text); border-radius: 20px; padding: 6px 13px; font-size: 12px; font-weight: 700; }
+  .ax-tab.active { background: linear-gradient(135deg, #f4dc94, #b68a3d); color: #172017; border-color: #fff0b8; }
+  .ax-vhide { display: none !important; }
+  .ax-sell-mini { padding: 6px 11px !important; font-size: 12px !important; }
+
+  /* ---------- ছোট ID কার্ড (এক লাইনে ৩-৪টি) ---------- */
+  #listingGrid, #wishlistGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  #listingGrid .listing, #wishlistGrid .listing { border-radius: 12px; }
+  #listingGrid .cover, #wishlistGrid .cover { height: 96px; }
+  #listingGrid .level, #wishlistGrid .level { font-size: 9px; padding: 3px 5px; right: 5px; bottom: 5px; border-radius: 5px; }
+  #listingGrid .badge { font-size: 9px; padding: 3px 5px; left: 5px; bottom: 5px; }
+  #listingGrid .wishlist-btn { width: 26px; height: 26px; font-size: 13px; top: 5px; right: 5px; }
+  #listingGrid .listing-body, #wishlistGrid .listing-body { padding: 8px; }
+  #listingGrid .listing h3, #wishlistGrid .listing h3 { font-size: 12px; margin: 0 0 6px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  #listingGrid .listing-body > div:not(.price-row) { display: none; }
+  #listingGrid .price-row, #wishlistGrid .price-row { flex-direction: column; align-items: stretch; gap: 6px; padding-top: 7px; }
+  #listingGrid .price, #wishlistGrid .price { font-size: 14px; }
+  #listingGrid .price-row > div, #wishlistGrid .price-row > div { display: block; }
+  #listingGrid .price-row .btn, #wishlistGrid .price-row .btn { width: 100%; padding: 5px 6px !important; font-size: 11px !important; }
+  #listingGrid .price-row .btn.secondary { display: none; }
+
+  @media (max-width: 800px) {
+    #listingGrid, #wishlistGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+    #listingGrid .cover, #wishlistGrid .cover { height: 78px; }
+    #listingGrid .listing h3, #wishlistGrid .listing h3 { font-size: 11px; }
+    #listingGrid .price, #wishlistGrid .price { font-size: 12px; }
+  }
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- কোন সেকশন কোন ট্যাবে ---------- */
+  const GROUPS = {
+    home: ["#adSection", "#market"],
+    community: ["#community"],
+    sales: ["#recentSalesSection"],
+    info: [".hero", ".trust-banner", ".stats", "#howItWorks", "#testimonials", "#faq", "#lawSection"]
+  };
+  const PANELS = ["ordersSection", "wishlistSection", "sellerSection", "adminSection"];
+  let current = "home";
+
+  function nodes(view) {
+    return GROUPS[view].map(function (s) { return document.querySelector(s); }).filter(Boolean);
+  }
+  function viewOf(el) {
+    for (const v in GROUPS) {
+      for (const n of nodes(v)) { if (n === el || n.contains(el)) return v; }
+    }
+    return null;
+  }
+  function setView(v) {
+    current = v;
+    Object.keys(GROUPS).forEach(function (k) {
+      nodes(k).forEach(function (n) { n.classList.toggle("ax-vhide", k !== v); });
+    });
+    document.querySelectorAll(".ax-tab").forEach(function (t) {
+      t.classList.toggle("active", t.dataset.v === v);
+    });
+    if (v !== "panel" && typeof hideSections === "function") hideSections();
+  }
+
+  /* অন্য কোড scrollIntoView করলে সঠিক ট্যাবে নিয়ে যাওয়া (Law, FAQ, হিরো বাটন, Orders, Admin ইত্যাদি) */
+  const nativeScroll = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function (opts) {
+    if (PANELS.indexOf(this.id) >= 0) {
+      if (current !== "panel") setView("panel");
+    } else {
+      const v = viewOf(this);
+      if (v && v !== current) setView(v);
+    }
+    return nativeScroll.call(this, opts);
+  };
+
+  /* ---------- ট্যাব বার তৈরি ---------- */
+  const header = document.querySelector("header");
+  if (header) {
+    const row = document.createElement("div");
+    row.className = "ax-tabs-row";
+    row.innerHTML =
+      '<button class="ax-tab active" data-v="home">🏠 Home</button>' +
+      '<button class="ax-tab" data-v="community">🔥 Community</button>' +
+      '<button class="ax-tab" data-v="sales">✅ সফল কেনাবেচা</button>' +
+      '<button class="ax-tab" data-v="info">ℹ️ তথ্য</button>';
+    row.addEventListener("click", function (e) {
+      const v = e.target.dataset && e.target.dataset.v;
+      if (!v) return;
+      setView(v);
+      window.scrollTo({ top: 0 });
+    });
+    header.appendChild(row);
+  }
+
+  /* হিরো লুকানো থাকায় Home-এ বিক্রির ছোট বাটন */
+  const marketTitle = document.querySelector("#market .section-title");
+  if (marketTitle) {
+    const b = document.createElement("button");
+    b.className = "btn ax-sell-mini";
+    b.textContent = "＋ বিক্রি করুন";
+    b.onclick = function () { if (typeof openSell === "function") openSell(); };
+    marketTitle.appendChild(b);
+  }
+
+  setView("home");
+  setTimeout(function () { setView(current); }, 800); // পরে যোগ হওয়া সেকশনের জন্য
+})();
 </script>
+<!-- ================= END LAYOUT UPDATE ================= -->
+
 
 <!-- ================= END VERIFICATION REQUIRED ================= -->
 
