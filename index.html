@@ -2621,7 +2621,7 @@ init();
     <div class="law-card">
       <h4>🪪 NID / জন্মনিবন্ধন যাচাই</h4>
       <ul>
-        <li>Verification <strong>সম্পূর্ণ ঐচ্ছিক</strong>। না করেও সাইট ব্যবহার করা যায়।</li>
+        <li>কেনাবেচার জন্য Verification <strong>বাধ্যতামূলক</strong>। Verify না করলেও সাইট ঘুরে দেখা যায়।</li>
         <li>ডকুমেন্ট শুধু <strong>পরিচয় যাচাইয়ের</strong> জন্য নেওয়া হয় এবং প্রাইভেট স্টোরেজে থাকে, শুধু Admin দেখতে পারে।</li>
         <li>অন্যের NID, জাল বা সম্পাদিত ডকুমেন্ট জমা দেওয়া <strong>জালিয়াতি</strong> এবং আইনত দণ্ডনীয়।</li>
         <li>ব্যক্তিগত তথ্য সুরক্ষায় বাংলাদেশের <strong>ব্যক্তিগত উপাত্ত সুরক্ষা অধ্যাদেশ ২০২৫</strong> ও জাতীয় পরিচয় নিবন্ধন সংক্রান্ত আইন মানা হবে।</li>
@@ -2696,6 +2696,77 @@ init();
   });
 })();
 </script>
+<!-- ================= END LAW SECTION ================= -->
+
+</script><!-- ================= ANSU ELITE: VERIFICATION REQUIRED (</body>-এর ঠিক আগে, আগের add-on ব্লকগুলোর পরে পেস্ট করুন) ================= -->
+<script>
+(function () {
+  "use strict";
+  if (typeof sb === "undefined" || !sb) return;
+
+  function isVerifiedUser() {
+    return !!currentUser && (isAdmin() || currentProfile?.is_verified === true);
+  }
+
+  // কেনাবেচার আগে যাচাই। true হলে এগোনো যাবে।
+  async function ensureVerified(actionText) {
+    if (!requireLogin()) return false;
+    await loadProfile();
+    if (isVerifiedUser()) return true;
+    const st = currentProfile?.verification_status || "none";
+    const text = {
+      pending: "আপনার Verification Admin যাচাই করছে। Approve হলে " + actionText + " করতে পারবেন।",
+      rejected: "আপনার ডকুমেন্ট গ্রহণ করা হয়নি। নতুন করে জমা দিন।",
+      none: actionText + " করতে আগে NID বা জন্মনিবন্ধন দিয়ে Verify করুন।"
+    }[st] || "";
+    showToast(text, "error", 5000);
+    if (st !== "pending" && typeof window.axOpenVerify === "function") window.axOpenVerify();
+    return false;
+  }
+
+  // বিক্রি
+  const originalOpenSell = window.openSell;
+  window.openSell = async function () {
+    if (await ensureVerified("অ্যাকাউন্ট বিক্রি")) originalOpenSell();
+  };
+
+  // কেনা
+  const originalStartCheckout = window.startCheckout;
+  window.startCheckout = async function () {
+    if (await ensureVerified("অ্যাকাউন্ট কেনা")) originalStartCheckout();
+  };
+
+  // ফর্ম সাবমিটেও আটকানো (মডাল আগে থেকে খোলা থাকলে)
+  [["sellForm", "অ্যাকাউন্ট বিক্রি"], ["checkoutForm", "অ্যাকাউন্ট কেনা"]].forEach(function (pair) {
+    const form = $(pair[0]);
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
+      if (isVerifiedUser()) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      ensureVerified(pair[1]);
+    }, true);
+  });
+
+  // Verify মডালের লেখা ঠিক করা
+  const skipBtn = document.querySelector('#axVerifyForm button[onclick="axSkipVerify()"]');
+  if (skipBtn) skipBtn.textContent = "এখন না (শুধু ব্রাউজ করব)";
+  const note = document.querySelector("#axVerifyModal .small-note");
+  if (note) note.textContent = "কেনাবেচার জন্য Verification বাধ্যতামূলক। Verify না করলেও সাইট ঘুরে দেখতে পারবেন। ডকুমেন্ট প্রাইভেট থাকে, শুধু Admin দেখতে পারে।";
+
+  // ডিটেইলস মডালে নোটিশ: Buy Now বাটনের আগে সতর্কবার্তা
+  const detailsBox = $("detailsContent");
+  if (detailsBox) {
+    new MutationObserver(function () {
+      if (isVerifiedUser() || detailsBox.querySelector(".ax-verify-note")) return;
+      const buy = detailsBox.querySelector('button[onclick="startCheckout()"]');
+      if (buy) buy.insertAdjacentHTML("beforebegin", '<div class="ax-verify-note small-note" style="margin:8px 0;color:#f5dfaa">🪪 কেনার জন্য আগে Verify করতে হবে।</div>');
+    }).observe(detailsBox, { childList: true });
+  }
+})();
+</script>
+<!-- ================= END VERIFICATION REQUIRED ================= -->
+
 <!-- ================= END LAW SECTION ================= -->
 
 <!-- ================= END ANSU ELITE ADD-ON ================= -->
