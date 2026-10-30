@@ -625,18 +625,52 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
 </div>
 </div>
 
-<!-- Auth Modal -->
-<div class="modal" id="authModal"><div class="modal-box">
- <div class="modal-head"><h2>🔐 Login / Register</h2><button class="close" onclick="closeModal('authModal')">✕</button></div>
- <form class="form" id="loginForm">
-  <div><label>পুরো নাম (রেজিস্ট্রেশনের সময়)</label><input class="field" id="fullName" maxlength="80" placeholder="আপনার নাম"></div>
-  <div><label>ইমেইল</label><input class="field" id="email" type="email" required autocomplete="email"></div>
-  <div><label>পাসওয়ার্ড (কমপক্ষে ৮ অক্ষর)</label><input class="field" id="password" type="password" minlength="8" required autocomplete="current-password"></div>
-  <button class="btn" type="submit">লগইন</button>
-  <button class="btn secondary" type="button" onclick="registerUser()">অ্যাকাউন্ট তৈরি / রেজিস্টার</button>
-  <button class="btn secondary" type="button" onclick="resetPassword()">পাসওয়ার্ড ভুলে গেছেন?</button>
- </form><div id="authMessage"></div>
-</div></div>
+<!-- Auth Modal - Professional & Easy Login -->
+<div class="modal" id="authModal">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-head">
+      <h2 id="authTitle">🔐 Login</h2>
+      <button class="close" onclick="closeModal('authModal')">✕</button>
+    </div>
+
+    <!-- Login Form -->
+    <form class="form" id="loginForm" style="display:block">
+      <div>
+        <label>ইমেইল</label>
+        <input class="field" id="email" type="email" required placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div>
+        <label>পাসওয়ার্ড</label>
+        <input class="field" id="password" type="password" minlength="6" required placeholder="কমপক্ষে ৬ অক্ষর" autocomplete="current-password">
+      </div>
+      <button class="btn" type="submit" style="width:100%;margin-top:8px">Login করুন</button>
+      <div style="text-align:center;margin:14px 0;color:var(--muted);font-size:13px">অথবা</div>
+      <button class="btn secondary" type="button" onclick="switchToRegister()" style="width:100%">নতুন অ্যাকাউন্ট তৈরি করুন</button>
+      <button class="btn secondary" type="button" onclick="resetPassword()" style="width:100%;margin-top:8px">পাসওয়ার্ড ভুলে গেছেন?</button>
+    </form>
+
+    <!-- Register Form -->
+    <form class="form" id="registerForm" style="display:none">
+      <div>
+        <label>পুরো নাম</label>
+        <input class="field" id="fullName" maxlength="80" required placeholder="আপনার নাম">
+      </div>
+      <div>
+        <label>ইমেইল</label>
+        <input class="field" id="regEmail" type="email" required placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div>
+        <label>পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)</label>
+        <input class="field" id="regPassword" type="password" minlength="6" required placeholder="পাসওয়ার্ড দিন" autocomplete="new-password">
+      </div>
+      <button class="btn" type="submit" style="width:100%;margin-top:8px">অ্যাকাউন্ট তৈরি করুন</button>
+      <div style="text-align:center;margin:14px 0;color:var(--muted);font-size:13px">অথবা</div>
+      <button class="btn secondary" type="button" onclick="switchToLogin()" style="width:100%">আগে থেকে অ্যাকাউন্ট আছে? Login করুন</button>
+    </form>
+
+    <div id="authMessage" style="margin-top:12px"></div>
+  </div>
+</div>
 
 <!-- Profile Modal -->
 <div class="modal" id="profileModal"><div class="modal-box">
