@@ -2764,12 +2764,30 @@ init();
     }).observe(detailsBox, { childList: true });
   }
 })();
+</script><script>
+window.deletePost = async function (postId) {
+  if (!requireLogin() || !sb) return;
+  const post = communityPosts.find(function (p) { return String(p.id) === String(postId); });
+  if (!post) return;
+  if (post.user_id !== currentUser.id && !isAdmin()) { alert("এই পোস্ট মুছতে পারবেন না।"); return; }
+  if (!confirm("এই পোস্টটি মুছে ফেলবেন?")) return;
+  try {
+    const { data, error } = await sb.from("community_posts").delete().eq("id", postId).select("id");
+    if (error) throw error;
+    if (!data || !data.length) {
+      alert("পোস্ট মোছা যায়নি। Supabase-এ delete policy চালু আছে কিনা দেখুন।");
+      return;
+    }
+    showToast("পোস্ট মুছে ফেলা হয়েছে", "success");
+    await loadPosts();
+  } catch (error) {
+    alert(publicError(error));
+  }
+};
 </script>
+
 <!-- ================= END VERIFICATION REQUIRED ================= -->
 
-<!-- ================= END LAW SECTION ================= -->
-
-<!-- ================= END ANSU ELITE ADD-ON ================= -->
 
 </body>
 </html>
