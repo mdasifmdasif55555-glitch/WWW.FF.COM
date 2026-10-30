@@ -960,7 +960,29 @@ function updateUI(){
  $("composerAvatar").classList.toggle("admin-user-avatar",isAdmin());
  $("composerName").classList.toggle("admin-user-name",isAdmin());
 }
+// ====================== LOGIN ======================
+$("loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if(!sb){msg("authMessage","সাইটটি এখন সংযোগ করতে পারছে না।");return}
 
+  const email = $("email").value.trim();
+  const password = $("password").value;
+
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if(error) throw error;
+
+    currentUser = data.user;
+    await loadProfile();
+    updateUI();
+    await Promise.allSettled([loadListings(), loadNotifications(), loadPosts(), loadUserWishlist()]);
+    closeModal("authModal");
+    showToast("সফলভাবে Login হয়েছে!", "success");
+  } catch (error) {
+    msg("authMessage", "লগইন করা যায়নি। ইমেইল বা পাসওয়ার্ড ভুল হতে পারে।");
+  }
+});
+  
 async function registerUser(){
   if(!sb){msg("authMessage","সাইটটি এখন সংযোগ করতে পারছে না।");return}
 
