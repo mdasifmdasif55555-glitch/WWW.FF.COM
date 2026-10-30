@@ -945,20 +945,36 @@ async function loadProfile(){
 function profileName(profile,user){return profile?.full_name||user?.user_metadata?.full_name||user?.email?.split("@")[0]||"Community Member"}
 function profileAvatar(profile){return profile?.avatar_url||"https://placehold.co/100x100/14251e/ffffff?text=User"}
 function updateUI(){
- const name=profileName(currentProfile,currentUser);
- const verified=currentProfile?.is_verified?'<span class="verified-badge small">✓ Verified</span>':"";
- const badge=isAdmin()?'<span class="admin-badge">👑 VERIFIED ADMIN</span>':(isPremium()?'<span class="vip-text">✦ PREMIUM</span>':"");
- if(currentUser){
-  $("userLabel").innerHTML=(currentProfile?.avatar_url?`<img class="avatar-small ${isAdmin()?"admin-user-avatar":""}" src="${esc(currentProfile.avatar_url)}" alt=""> `:"")+`<span class="${isAdmin()?"admin-user-name":""}">${esc(name)}</span> ${badge}${verified}`;
- }else{$("userLabel").textContent="লগইন করা নেই"}
- $("authBtn").classList.toggle("hidden",!!currentUser);
- ["profileBtn","ordersBtn","sellerBtn","logoutBtn","wishlistBtn"].forEach(id=>$(id)?.classList.toggle("hidden",!currentUser));
- $("adminBtn").classList.toggle("hidden",!isAdmin());
- $("composerAvatar").src=profileAvatar(currentProfile);
- $("composerName").textContent=currentUser?name:"Community Member";
- $("composerUserId").textContent=currentUser?"User ID: "+shortId():"লগইন করে পোস্ট করুন";
- $("composerAvatar").classList.toggle("admin-user-avatar",isAdmin());
- $("composerName").classList.toggle("admin-user-name",isAdmin());
+  const name = profileName(currentProfile, currentUser);
+
+  let verified = "";
+  const vStatus = currentProfile?.verification_status || "none";
+  if(vStatus === "approved"){
+    verified = '<span class="verified-badge small">✓ Verified</span>';
+  } else if(vStatus === "pending"){
+    verified = '<span class="verified-badge small" style="background:#5c4a1a;border-color:#c9a84c">⏳ Pending</span>';
+  } else {
+    verified = '<span class="verified-badge small" style="background:#333;border-color:#555">Not Verified</span>';
+  }
+
+  const badge = isAdmin() ? '<span class="admin-badge">👑 VERIFIED ADMIN</span>' : (isPremium() ? '<span class="vip-text">✦ PREMIUM</span>' : "");
+
+  if(currentUser){
+    $("userLabel").innerHTML = (currentProfile?.avatar_url ? `<img class="avatar-small ${isAdmin() ? "admin-user-avatar" : ""}" src="${esc(currentProfile.avatar_url)}" alt=""> ` : "") + 
+      `<span class="${isAdmin() ? "admin-user-name" : ""}">${esc(name)}</span> ${badge}${verified}`;
+  } else {
+    $("userLabel").textContent = "লগইন করা নেই";
+  }
+
+  $("authBtn").classList.toggle("hidden", !!currentUser);
+  ["profileBtn", "ordersBtn", "sellerBtn", "logoutBtn", "wishlistBtn"].forEach(id => $(id)?.classList.toggle("hidden", !currentUser));
+  $("adminBtn").classList.toggle("hidden", !isAdmin());
+
+  if($("composerAvatar")) $("composerAvatar").src = profileAvatar(currentProfile);
+  if($("composerName")) $("composerName").textContent = currentUser ? name : "Community Member";
+  if($("composerUserId")) $("composerUserId").textContent = currentUser ? "User ID: " + shortId() : "লগইন করে পোস্ট করুন";
+  if($("composerAvatar")) $("composerAvatar").classList.toggle("admin-user-avatar", isAdmin());
+  if($("composerName")) $("composerName").classList.toggle("admin-user-name", isAdmin());
 }
 // ====================== LOGIN ======================
 $("loginForm").addEventListener("submit", async e => {
