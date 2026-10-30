@@ -3201,7 +3201,452 @@ window.deletePost = async function (postId) {
     m.addEventListener("click", function (ev) { if (ev.target === m) closeModal(id); });
   });
 })();
+</script><!-- ================= ANSU ELITE: CHAT UPGRADE 2 =================
+     Online/Last seen, Typing, সার্চ, তারিখ বিভাজন, Lightbox, ফাইল সাইজ, Reply, মেসেজ মোছা, Emoji,
+     ব্রাউজার নোটিফিকেশন, ঝুঁকিপূর্ণ ফাইল আটকানো।
+     আগে chat_upgrade_2.sql চালান। এই ব্লক </body>-এর ঠিক আগে, "CHAT UPGRADE" (প্রথম ব্লক)-এর পরে, সবার শেষে পেস্ট করুন। -->
+<style>
+  .axc2-dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+  .axc2-dot.on { background:#25df91; box-shadow:0 0 8px #25df91; }
+  .axc2-dot.off { background:#5b6b61; }
+  #axc2Status { font-size:12px; color:var(--muted); min-height:18px; margin-bottom:6px; }
+  .axc2-typing { color:var(--gold2); }
+  .axc2-day { text-align:center; margin:12px 0 8px; }
+  .axc2-day span { background:#14251b; border:1px solid var(--line); color:var(--muted); font-size:11px; padding:3px 12px; border-radius:99px; }
+  .axc2-quote { border-left:3px solid var(--gold); background:#0007; padding:4px 8px; border-radius:6px; font-size:11px; margin-bottom:6px; cursor:pointer; overflow-wrap:anywhere; }
+  .axc2-acts button { background:none; border:0; color:var(--muted); font-size:12px; padding:0 4px; cursor:pointer; }
+  .axc2-acts button:hover { color:var(--gold); }
+  .axc2-flash { animation:goldPulse 1s; }
+  .ax-msg img[data-lb] { cursor:zoom-in; }
+  .axc2-size { opacity:.7; font-size:11px; }
+  #axc2ReplyBar { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:8px; padding:6px 10px; border-left:3px solid var(--gold); background:#0b1711; border-radius:8px; font-size:12px; color:var(--muted); }
+  #axc2ReplyBar span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #axc2ReplyBar button { background:none; border:0; color:#fff; cursor:pointer; font-size:14px; }
+  #axc2EmojiPanel { display:grid; grid-template-columns:repeat(8,1fr); gap:2px; margin-top:8px; padding:6px; background:#0b1711; border:1px solid var(--line); border-radius:10px; max-height:150px; overflow:auto; }
+  #axc2EmojiPanel button { background:none; border:0; font-size:20px; cursor:pointer; border-radius:6px; padding:3px; }
+  #axc2EmojiPanel button:hover { background:#14251b; }
+  #axc2Lightbox { position:fixed; inset:0; z-index:100; background:#000e; display:none; align-items:center; justify-content:center; flex-direction:column; gap:12px; cursor:zoom-out; padding:14px; }
+  #axc2Lightbox.open { display:flex; }
+  #axc2Lightbox img { max-width:95vw; max-height:84vh; object-fit:contain; border-radius:10px; }
+  #axc2Lightbox a { color:var(--gold); font-size:13px; }
+</style>
+
+<div id="axc2Lightbox"><img alt=""><a target="_blank" rel="noopener">নতুন ট্যাবে খুলুন ↗</a></div>
+
+<script>
+(function () {
+  "use strict";
+  if (typeof sb === "undefined" || !sb) return;
+
+  /* ---------- State ---------- */
+  let peerId = null, replyTo = null, msgMap = new Map();
+  let onlineSet = new Set(), typingUntil = 0, peerSeen = null, typingSentAt = 0;
+  let presenceCh = null, dbCh = null, lastUid = null;
+  let renderSeq = 0, rendering = false, renderTimer = null, decorating = false;
+  const sizeCache = new Map();
+  const BLOCKED_EXT = new Set(["exe","bat","cmd","msi","scr","com","vbs","vbe","js","jse","jar","apk","ps1","sh","dll","lnk","hta","reg","pif","cpl","wsf"]);
+  const EMOJIS = ["😀","😁","😂","🤣","😊","😍","😘","😎","🤔","😅","😢","😭","😡","👍","👎","🙏","👏","🙌","💪","🔥","✨","🎉","❤️","💔","💯","✅","❌","⚠️","🎮","🏆","💰","📌","📷","😴","🤝","😇","🙄","😬","🤩","🥳","😜","🤗","🙂","👋","🤞","👀","🚫","⭐"];
+
+  /* ---------- Helpers ---------- */
+  const bn = n => Number(n).toLocaleString("bn-BD");
+  function rel(iso) {
+    if (!iso) return "";
+    const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+    if (s < 60) return "এইমাত্র";
+    const m = Math.floor(s / 60);
+    if (m < 60) return bn(m) + " মিনিট আগে";
+    const h = Math.floor(m / 60);
+    if (h < 24) return bn(h) + " ঘণ্টা আগে";
+    return bn(Math.floor(h / 24)) + " দিন আগে";
+  }
+  function dayLabel(d) {
+    const t = new Date(), y = new Date();
+    y.setDate(t.getDate() - 1);
+    if (d.toDateString() === t.toDateString()) return "আজ";
+    if (d.toDateString() === y.toDateString()) return "গতকাল";
+    return d.toLocaleDateString("bn-BD", { day: "numeric", month: "long", year: "numeric" });
+  }
+  function timeText(v) { return v ? new Date(v).toLocaleString("bn-BD", { hour: "numeric", minute: "2-digit" }) : ""; }
+  function fmtSize(b) { return b < 1024 ? b + " B" : b < 1048576 ? Math.round(b / 1024) + " KB" : (b / 1048576).toFixed(1) + " MB"; }
+  function preview(m) {
+    if (m.is_deleted) return "🚫 মুছে ফেলা মেসেজ";
+    return { text: (m.body || "").slice(0, 60), image: "📷 ছবি", video: "🎬 ভিডিও", audio: "🎤 Voice", file: "📄 " + (m.file_name || "ফাইল"), location: "📍 Location" }[m.msg_type] || "";
+  }
+
+  /* ---------- Status line (online / last seen / typing) ---------- */
+  function statusEl() {
+    let el = $("axc2Status");
+    if (!el) {
+      const box = $("axChatBox");
+      if (!box) return null;
+      el = document.createElement("div");
+      el.id = "axc2Status";
+      box.parentNode.insertBefore(el, box);
+    }
+    return el;
+  }
+  function updateStatus() {
+    const el = statusEl();
+    if (!el || !peerId) return;
+    let html = "";
+    if (Date.now() < typingUntil) html = '<span class="axc2-typing">✍️ লিখছে...</span>';
+    else if (onlineSet.has(peerId)) html = '<span class="axc2-dot on"></span>অনলাইন';
+    else if (peerSeen) html = '<span class="axc2-dot off"></span>' + esc(rel(peerSeen)) + " ছিল";
+    el.innerHTML = html;
+  }
+  async function fetchSeen() {
+    if (!peerId) return;
+    const pid = peerId;
+    const { data, error } = await sb.from("profiles").select("last_seen_at").eq("id", pid).maybeSingle();
+    if (pid !== peerId) return;
+    peerSeen = error ? null : ((data && data.last_seen_at) || null);
+    updateStatus();
+  }
+  async function touch() {
+    if (!currentUser) return;
+    await sb.from("profiles").update({ last_seen_at: new Date().toISOString() }).eq("id", currentUser.id);
+  }
+
+  /* ---------- Realtime: presence, typing, DB events ---------- */
+  function setupRealtime() {
+    const me = currentUser.id;
+    presenceCh = sb.channel("ax-presence", { config: { presence: { key: me } } });
+    presenceCh
+      .on("presence", { event: "sync" }, function () {
+        onlineSet = new Set(Object.keys(presenceCh.presenceState()));
+        updateStatus();
+        decorateAll();
+      })
+      .on("broadcast", { event: "typing" }, function (msg) {
+        const p = msg && msg.payload;
+        if (p && p.to === me && p.from === peerId) {
+          typingUntil = Date.now() + 3000;
+          updateStatus();
+          setTimeout(updateStatus, 3100);
+        }
+      })
+      .subscribe(async function (status) {
+        if (status === "SUBSCRIBED") await presenceCh.track({ at: Date.now() });
+      });
+
+    dbCh = sb.channel("axc2-db-" + me)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages", filter: "receiver_id=eq." + me }, onInsert)
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "chat_messages", filter: "receiver_id=eq." + me }, function (p) {
+        if (peerId && p.new && p.new.sender_id === peerId) renderChat();
+      })
+      .subscribe();
+    touch();
+  }
+  function teardown() {
+    if (presenceCh) { sb.removeChannel(presenceCh); presenceCh = null; }
+    if (dbCh) { sb.removeChannel(dbCh); dbCh = null; }
+    onlineSet = new Set();
+  }
+  async function onInsert(p) {
+    const m = p.new;
+    if (!m) return;
+    if (peerId === m.sender_id) { typingUntil = 0; updateStatus(); renderChat(); }
+    // ব্রাউজার নোটিফিকেশন (ট্যাব/অ্যাপ খোলা কিন্তু ব্যাকগ্রাউন্ডে থাকলে)
+    if (document.hidden && "Notification" in window && Notification.permission === "granted") {
+      const { data } = await sb.from("profiles").select("full_name").eq("id", m.sender_id).maybeSingle();
+      const body = m.msg_type === "text" ? (m.body || "").slice(0, 80) : "নতুন মেসেজ";
+      try { new Notification("💬 " + ((data && data.full_name) || "Member"), { body: body }); } catch (_) {}
+    }
+  }
+  const input = $("axText");
+  if (input) input.addEventListener("input", function () {
+    if (!presenceCh || !peerId || !currentUser) return;
+    const now = Date.now();
+    if (now - typingSentAt < 2000) return;
+    typingSentAt = now;
+    presenceCh.send({ type: "broadcast", event: "typing", payload: { from: currentUser.id, to: peerId } });
+  });
+
+  /* ---------- Chat rendering (তারিখ বিভাজন, Reply, Delete, Lightbox, ফাইল সাইজ) ---------- */
+  const chatBox = $("axChatBox");
+  const obs = new MutationObserver(function () {
+    if (rendering) return;
+    clearTimeout(renderTimer);
+    renderTimer = setTimeout(renderChat, 40);   // আগের কোডের রেন্ডারের পর আমাদেরটা বসে
+  });
+  obs.observe(chatBox, { childList: true });
+
+  function bubble(m, me) {
+    const mine = m.sender_id === me;
+    let body = "";
+    if (m.is_deleted) body = '<i style="opacity:.65">🚫 মেসেজটি মুছে ফেলা হয়েছে</i>';
+    else if (m.msg_type === "image") body = '<img src="' + esc(m.media_url) + '" alt="" data-lb="' + esc(m.media_url) + '">';
+    else if (m.msg_type === "video") body = '<video src="' + esc(m.media_url) + '" controls playsinline></video><small class="axc2-size" data-size-url="' + esc(m.media_url) + '"></small>';
+    else if (m.msg_type === "audio") body = '<audio src="' + esc(m.media_url) + '" controls></audio>';
+    else if (m.msg_type === "file") body = '<a href="' + esc(m.media_url) + '" target="_blank" rel="noopener">📄 ' + esc(m.file_name || "File") + '</a><small class="axc2-size" data-size-url="' + esc(m.media_url) + '"></small>';
+    else if (m.msg_type === "location") body = '<a href="https://www.google.com/maps?q=' + Number(m.lat) + "," + Number(m.lng) + '" target="_blank" rel="noopener">📍 Location দেখুন</a>';
+    else body = esc(m.body || "");
+
+    let quote = "";
+    if (m.reply_to && !m.is_deleted) {
+      const r = msgMap.get(m.reply_to);
+      quote = '<div class="axc2-quote" data-goto="' + esc(m.reply_to) + '"><b>' + (r ? (r.sender_id === me ? "আপনি" : "অন্য পক্ষ") : "") + "</b> " + esc(r ? preview(r) : "মূল মেসেজ পাওয়া যায়নি") + "</div>";
+    }
+    const ticks = mine ? (m.is_read ? " · ✓✓ Seen" : " · ✓ Sent") : "";
+    const acts = m.is_deleted ? "" :
+      '<span class="axc2-acts"><button type="button" data-act="reply" data-id="' + esc(m.id) + '" title="Reply">↩</button>' +
+      (mine ? '<button type="button" data-act="del" data-id="' + esc(m.id) + '" title="মুছুন">🗑</button>' : "") + "</span>";
+    return '<div class="ax-msg ' + (mine ? "me" : "other") + '" data-id="' + esc(m.id) + '">' + quote + body +
+      "<time>" + esc(timeText(m.created_at)) + ticks + " " + acts + "</time></div>";
+  }
+
+  async function renderChat() {
+    if (!currentUser || !peerId) return;
+    const me = currentUser.id, peer = peerId, seq = ++renderSeq;
+    const { data, error } = await sb.from("chat_messages").select("*")
+      .or("and(sender_id.eq." + me + ",receiver_id.eq." + peer + "),and(sender_id.eq." + peer + ",receiver_id.eq." + me + ")")
+      .order("created_at", { ascending: true }).limit(500);
+    if (seq !== renderSeq || peer !== peerId || error) return;
+    msgMap = new Map(data.map(function (m) { return [m.id, m]; }));
+    let html = "", lastDay = "";
+    data.forEach(function (m) {
+      const d = new Date(m.created_at), key = d.toDateString();
+      if (key !== lastDay) { lastDay = key; html += '<div class="axc2-day"><span>' + esc(dayLabel(d)) + "</span></div>"; }
+      html += bubble(m, me);
+    });
+    if (!data.length) html = "<p class='small-note'>এখনো কোনো মেসেজ নেই। প্রথম মেসেজ পাঠান!</p>";
+    rendering = true;
+    chatBox.innerHTML = html;
+    obs.takeRecords();
+    rendering = false;
+    chatBox.scrollTop = chatBox.scrollHeight;
+    fillSizes(chatBox);
+  }
+
+  function fillSizes(root) {
+    root.querySelectorAll("[data-size-url]").forEach(async function (el) {
+      const u = el.dataset.sizeUrl;
+      let s = sizeCache.get(u);
+      if (s === undefined) {
+        try {
+          const r = await fetch(u, { method: "HEAD" });
+          const l = r.headers.get("content-length");
+          s = l ? Number(l) : null;
+        } catch (_) { s = null; }
+        sizeCache.set(u, s);
+      }
+      if (s) el.textContent = " (" + fmtSize(s) + ")";
+    });
+  }
+
+  // মেসেজের ক্লিক: Reply / Delete / Lightbox / মূল মেসেজে যাওয়া
+  chatBox.addEventListener("click", function (e) {
+    const act = e.target.closest("[data-act]");
+    if (act) {
+      const id = act.dataset.id;
+      if (act.dataset.act === "reply") startReply(id);
+      if (act.dataset.act === "del") deleteMsg(id);
+      return;
+    }
+    const lb = e.target.closest("[data-lb]");
+    if (lb) { openLightbox(lb.dataset.lb); return; }
+    const go = e.target.closest("[data-goto]");
+    if (go) {
+      const el = chatBox.querySelector('.ax-msg[data-id="' + go.dataset.goto + '"]');
+      if (el) { el.scrollIntoView({ block: "center", behavior: "smooth" }); el.classList.add("axc2-flash"); setTimeout(function () { el.classList.remove("axc2-flash"); }, 1100); }
+    }
+  });
+
+  /* ---------- Lightbox ---------- */
+  const lbox = $("axc2Lightbox");
+  function openLightbox(url) {
+    lbox.querySelector("img").src = url;
+    lbox.querySelector("a").href = url;
+    lbox.classList.add("open");
+  }
+  lbox.addEventListener("click", function () { lbox.classList.remove("open"); });
+  lbox.querySelector("a").addEventListener("click", function (e) { e.stopPropagation(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") lbox.classList.remove("open"); });
+
+  /* ---------- Reply ---------- */
+  function startReply(id) {
+    const m = msgMap.get(id);
+    if (!m || m.is_deleted) return;
+    replyTo = { id: id, preview: preview(m) };
+    renderReplyBar();
+    const inp = $("axText"); if (inp) inp.focus();
+  }
+  function renderReplyBar() {
+    const rb = $("axc2ReplyBar");
+    if (!rb) return;
+    if (!replyTo) { rb.classList.add("hidden"); rb.innerHTML = ""; return; }
+    rb.classList.remove("hidden");
+    rb.innerHTML = "<span>↩ জবাব: " + esc(replyTo.preview) + '</span><button type="button" data-cancel title="বাতিল">✕</button>';
+  }
+
+  // Reply সহ টেক্সট পাঠানো (আগের axSendText বদলে যায়; Enter ও পাঠান বাটন দুটোই এটা ডাকে)
+  window.axSendText = async function () {
+    if (!currentUser || !peerId) return;
+    const inp = $("axText");
+    if (!inp || inp.disabled) return;
+    const text = inp.value.trim();
+    if (!text) return;
+    inp.value = "";
+    const payload = { sender_id: currentUser.id, receiver_id: peerId, msg_type: "text", body: text };
+    if (replyTo) payload.reply_to = replyTo.id;
+    const { error } = await sb.from("chat_messages").insert(payload);
+    if (error) { inp.value = text; showToast(publicError(error), "error"); return; }
+    replyTo = null;
+    renderReplyBar();
+    renderChat();
+  };
+
+  /* ---------- Delete ---------- */
+  async function deleteMsg(id) {
+    if (!confirm("মেসেজটি মুছে ফেলবেন? দুই পক্ষের জন্যই মুছে যাবে।")) return;
+    const { data, error } = await sb.from("chat_messages")
+      .update({ is_deleted: true, deleted_at: new Date().toISOString(), body: "", media_url: null, file_name: null, lat: null, lng: null })
+      .eq("id", id).eq("sender_id", currentUser.id).select("id");
+    if (error) { showToast(publicError(error), "error"); return; }
+    if (!data || !data.length) { showToast("মেসেজটি মোছা যায়নি", "error"); return; }
+    if (replyTo && replyTo.id === id) { replyTo = null; renderReplyBar(); }
+    renderChat();
+  }
+
+  /* ---------- চ্যাটের নিচের UI: Emoji বাটন, Reply বার ---------- */
+  function setupChatUI() {
+    if ($("axc2Emoji")) { renderReplyBar(); return; }
+    const view = $("axChatView");
+    const bar1 = view.querySelector(".ax-bar");
+    const sendBtn = bar1.querySelector("button");
+
+    const eb = document.createElement("button");
+    eb.id = "axc2Emoji"; eb.type = "button"; eb.className = "btn secondary"; eb.textContent = "😊"; eb.title = "Emoji";
+    eb.disabled = !!($("axText") && $("axText").disabled);
+    eb.addEventListener("click", function () { $("axc2EmojiPanel").classList.toggle("hidden"); });
+    bar1.insertBefore(eb, sendBtn);
+
+    const rb = document.createElement("div");
+    rb.id = "axc2ReplyBar"; rb.className = "hidden";
+    rb.addEventListener("click", function (e) { if (e.target.closest("[data-cancel]")) { replyTo = null; renderReplyBar(); } });
+    view.insertBefore(rb, bar1);
+
+    const panel = document.createElement("div");
+    panel.id = "axc2EmojiPanel"; panel.className = "hidden";
+    panel.innerHTML = EMOJIS.map(function (em) { return '<button type="button" data-e="' + em + '">' + em + "</button>"; }).join("");
+    panel.addEventListener("click", function (e) {
+      const b = e.target.closest("[data-e]");
+      if (!b) return;
+      const inp = $("axText"), em = b.dataset.e;
+      const s = inp.selectionStart == null ? inp.value.length : inp.selectionStart;
+      const en = inp.selectionEnd == null ? s : inp.selectionEnd;
+      inp.value = inp.value.slice(0, s) + em + inp.value.slice(en);
+      inp.focus();
+      inp.setSelectionRange(s + em.length, s + em.length);
+    });
+    view.insertBefore(panel, bar1);
+  }
+
+  /* ---------- Inbox: সার্চ + অনলাইন ডট ---------- */
+  function injectSearch() {
+    if ($("axc2Search")) return;
+    const list = $("axConvoList");
+    const s = document.createElement("input");
+    s.id = "axc2Search"; s.className = "field"; s.placeholder = "🔎 নাম বা মেসেজ দিয়ে খুঁজুন...";
+    s.style.marginBottom = "10px";
+    s.addEventListener("input", applyConvoFilter);
+    list.parentNode.insertBefore(s, list);
+  }
+  function showSearch(show) { const s = $("axc2Search"); if (s) s.classList.toggle("hidden", !show); }
+  function applyConvoFilter() {
+    const s = $("axc2Search");
+    const q = ((s && s.value) || "").toLowerCase().trim();
+    $("axConvoList").querySelectorAll(".ax-list-item").forEach(function (it) {
+      it.style.display = (!q || it.textContent.toLowerCase().indexOf(q) >= 0) ? "" : "none";
+    });
+  }
+  function decorate(container, sel) {
+    container.querySelectorAll(sel).forEach(function (it) {
+      const info = it.querySelector(".info");
+      if (!info) return;
+      const el = it.hasAttribute("onclick") ? it : it.querySelector("[onclick]");
+      const m = el && /'([0-9a-fA-F-]{36})'/.exec(el.getAttribute("onclick") || "");
+      if (!m) return;
+      let dot = info.querySelector(".axc2-dot");
+      if (!dot) { dot = document.createElement("span"); info.insertBefore(dot, info.firstChild); }
+      const on = onlineSet.has(m[1]);
+      dot.className = "axc2-dot " + (on ? "on" : "off");
+      dot.title = on ? "অনলাইন" : "অফলাইন";
+    });
+  }
+  const lobs = new MutationObserver(function () { if (!decorating) decorateAll(); });
+  function decorateAll() {
+    decorating = true;
+    const a = $("axConvoList"), b = $("axMemberList");
+    if (a) { decorate(a, ".ax-list-item"); applyConvoFilter(); }
+    if (b) decorate(b, ".ax-member");
+    lobs.takeRecords();
+    decorating = false;
+  }
+  ["axConvoList", "axMemberList"].forEach(function (id) {
+    const el = $(id);
+    if (el) lobs.observe(el, { childList: true, subtree: true });
+  });
+
+  /* ---------- আগের ফাংশনগুলো মুড়ে নেওয়া ---------- */
+  const prevOpenChat = window.axOpenChat;
+  window.axOpenChat = async function (pid) {
+    if (!currentUser || pid === currentUser.id) return prevOpenChat(pid);
+    peerId = pid; replyTo = null; peerSeen = null; typingUntil = 0;
+    await prevOpenChat(pid);
+    if (peerId !== pid) return;
+    setupChatUI();
+    showSearch(false);
+    updateStatus();
+    fetchSeen();
+    renderChat();
+  };
+  const prevShowList = window.axShowList;
+  window.axShowList = async function () {
+    peerId = null; replyTo = null;
+    renderReplyBar();
+    showSearch(true);
+    const r = await prevShowList();
+    decorateAll();
+    return r;
+  };
+  const prevOpenInbox = window.axOpenInbox;
+  window.axOpenInbox = async function () {
+    if ("Notification" in window && Notification.permission === "default") { try { Notification.requestPermission(); } catch (_) {} }
+    const r = await prevOpenInbox();
+    showSearch(true);
+    return r;
+  };
+  const prevClose = window.axCloseInbox;
+  window.axCloseInbox = function () { peerId = null; return prevClose(); };
+
+  /* ---------- ঝুঁকিপূর্ণ ফাইল আটকানো (ভাইরাস স্ক্যান নয়, শুধু ধরন দেখে) ---------- */
+  $("axChatView").addEventListener("change", function (e) {
+    if (e.target.id !== "axFile") return;
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const ext = (f.name.split(".").pop() || "").toLowerCase();
+    if (BLOCKED_EXT.has(ext)) {
+      e.stopImmediatePropagation();
+      e.target.value = "";
+      showToast("নিরাপত্তার কারণে ." + ext + " ফাইল পাঠানো যাবে না", "error", 5000);
+    }
+  }, true);
+
+  /* ---------- Start ---------- */
+  injectSearch();
+  setInterval(function () {
+    const uid = currentUser ? currentUser.id : null;
+    if (uid !== lastUid) { teardown(); lastUid = uid; if (uid) setupRealtime(); }
+  }, 1000);
+  setInterval(function () { if (currentUser && !document.hidden) touch(); }, 60000);
+  setInterval(function () { if (peerId) fetchSeen(); }, 30000);
+  document.addEventListener("visibilitychange", function () { if (document.hidden) touch(); });
+  window.addEventListener("pagehide", touch);
+})();
 </script>
+<!-- ================= END CHAT UPGRADE 2 ================= -->
+
 
 
 <!-- ================= END VERIFICATION REQUIRED ================= -->
