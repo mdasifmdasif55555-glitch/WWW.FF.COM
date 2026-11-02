@@ -5590,5 +5590,120 @@ window.deletePost = async function (postId) {
 </script>
 <!-- ================= END MESSENGER CHAT FIX ================= -->
 
+<!-- ================= ADMIN ANALYTICS DASHBOARD ================= -->
+<style>
+.axb1-analytics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+@media (max-width: 600px) { .axb1-analytics { grid-template-columns: 1fr; } }
+.axb1-stat-card { background: linear-gradient(145deg, #14231c, #0b1510); border: 1px solid #b99a5030; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
+body.ax-light .axb1-stat-card { background: #ffffff !important; border-color: #d4ddd6 !important; }
+.axb1-stat-card:hover { transform: translateY(-2px); border-color: #e8c879; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+.axb1-stat-icon { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; flex-shrink: 0; }
+.axb1-stat-card.online .axb1-stat-icon { background: linear-gradient(135deg, #1bc78b, #0f9b6c); color: #fff; }
+.axb1-stat-card.today-orders .axb1-stat-icon { background: linear-gradient(135deg, #3a8ad4, #1a5c9e); color: #fff; }
+.axb1-stat-card.today-members .axb1-stat-icon { background: linear-gradient(135deg, #c95ac9, #8a3a8a); color: #fff; }
+.axb1-stat-card.today-revenue .axb1-stat-icon { background: linear-gradient(135deg, #f4dc94, #b68a3d); color: #172017; }
+.axb1-stat-card.week-orders .axb1-stat-icon { background: linear-gradient(135deg, #ff9a4a, #c96a1a); color: #fff; }
+.axb1-stat-card.week-revenue .axb1-stat-icon { background: linear-gradient(135deg, #e84a6a, #b62c3b); color: #fff; }
+.axb1-stat-card.pending .axb1-stat-icon { background: linear-gradient(135deg, #ffd84a, #c9a81a); color: #172017; }
+.axb1-stat-card.listings .axb1-stat-icon { background: linear-gradient(135deg, #4ac9d4, #1a8a9e); color: #fff; }
+.axb1-stat-info { flex: 1; min-width: 0; }
+.axb1-stat-info span { display: block; font-size: 11px; color: #a4b5aa; margin-bottom: 4px; font-weight: 600; letter-spacing: 0.5px; }
+body.ax-light .axb1-stat-info span { color: #5a6b61 !important; }
+.axb1-stat-info strong { display: block; font-size: 22px; color: #e8c879; font-weight: 900; line-height: 1.1; }
+body.ax-light .axb1-stat-info strong { color: #b68a3d !important; }
+.axb1-analytics-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.axb1-analytics-header h3 { margin: 0; font-size: 16px; color: #e8c879; }
+body.ax-light .axb1-analytics-header h3 { color: #b68a3d !important; }
+.axb1-refresh-btn { font-size: 12px; padding: 6px 12px; background: #14251b; border: 1px solid #294536; border-radius: 8px; color: #f5f7f1; cursor: pointer; font-weight: 700; }
+.axb1-refresh-btn:hover { border-color: #e8c879; }
+body.ax-light .axb1-refresh-btn { background: #f0f4f1 !important; color: #0d1912 !important; border-color: #d4ddd6 !important; }
+</style>
+
+<script>
+(function () {
+  "use strict";
+  
+  async function loadAnalytics() {
+    const adminContent = document.getElementById("adminContent");
+    if (!adminContent || !window.sb) return;
+    
+    // অ্যাডমিন কন্টেন্টের ওপরে ড্যাশবোর্ড বসানোর জন্য একটি জায়গা তৈরি
+    let dash = document.getElementById("axb1-analytics-dash");
+    if (!dash) {
+      dash = document.createElement("div");
+      dash.id = "axb1-analytics-dash";
+      dash.innerHTML = '<div class="panel">অ্যানালিটিক্স লোড হচ্ছে...</div>';
+      adminContent.insertBefore(dash, adminContent.firstChild);
+    }
+
+    try {
+      const { data, error } = await window.sb.rpc("ax_admin_stats");
+      if (error) throw error;
+      if (!data) throw new Error("No data");
+
+      const formatMoney = (val) => "৳" + Number(val || 0).toLocaleString("en-BD");
+
+      dash.innerHTML = `
+        <div class="axb1-analytics-header">
+          <h3>📊 লাইভ অ্যানালিটিক্স</h3>
+          <button class="axb1-refresh-btn" onclick="document.getElementById('axb1-analytics-dash').innerHTML='<div class=\\'panel\\'>রিফ্রেশ হচ্ছে...</div>'; loadAnalytics();">↻ রিফ্রেশ</button>
+        </div>
+        <div class="axb1-analytics">
+          <div class="axb1-stat-card online">
+            <div class="axb1-stat-icon">🟢</div>
+            <div class="axb1-stat-info"><span>এই মুহূর্তে অনলাইন</span><strong>${data.online_now} জন</strong></div>
+          </div>
+          <div class="axb1-stat-card today-revenue">
+            <div class="axb1-stat-icon">💰</div>
+            <div class="axb1-stat-info"><span>আজকের আয়</span><strong>${formatMoney(data.today_revenue)}</strong></div>
+          </div>
+          <div class="axb1-stat-card today-orders">
+            <div class="axb1-stat-icon">📦</div>
+            <div class="axb1-stat-info"><span>আজকের অর্ডার</span><strong>${data.today_orders} টি</strong></div>
+          </div>
+          <div class="axb1-stat-card pending">
+            <div class="axb1-stat-icon">⏳</div>
+            <div class="axb1-stat-info"><span>পেন্ডিং পেমেন্ট</span><strong>${data.pending_orders} টি</strong></div>
+          </div>
+          <div class="axb1-stat-card week-revenue">
+            <div class="axb1-stat-icon">📈</div>
+            <div class="axb1-stat-info"><span>এই সপ্তাহের আয়</span><strong>${formatMoney(data.week_revenue)}</strong></div>
+          </div>
+          <div class="axb1-stat-card week-orders">
+            <div class="axb1-stat-icon">🛒</div>
+            <div class="axb1-stat-info"><span>এই সপ্তাহের অর্ডার</span><strong>${data.week_orders} টি</strong></div>
+          </div>
+          <div class="axb1-stat-card today-members">
+            <div class="axb1-stat-icon">👤</div>
+            <div class="axb1-stat-info"><span>আজকের নতুন সদস্য</span><strong>${data.today_members} জন</strong></div>
+          </div>
+          <div class="axb1-stat-card listings">
+            <div class="axb1-stat-icon">🎮</div>
+            <div class="axb1-stat-info"><span>সক্রিয় বিজ্ঞাপন</span><strong>${data.total_listings} টি</strong></div>
+          </div>
+        </div>
+      `;
+    } catch (err) {
+      dash.innerHTML = '<div class="admin-alert">অ্যানালিটিক্স লোড করা যায়নি। Supabase-এ SQL ফাংশনটি রান করা হয়েছে কিনা দেখুন।</div>';
+      console.warn(err);
+    }
+  }
+
+  // অ্যাডমিন প্যানেল ওপেন হলে ড্যাশবোর্ড লোড করা
+  const prevLoadAdmin = window.loadAdmin;
+  if (typeof prevLoadAdmin === "function") {
+    window.loadAdmin = async function () {
+      await prevLoadAdmin();
+      await loadAnalytics();
+    };
+  }
+  
+  // ড্যাশবোর্ড থেকে রিফ্রেশ বাটনে ক্লিক করলে
+  window.loadAnalytics = loadAnalytics;
+
+})();
+</script>
+<!-- ================= END ADMIN ANALYTICS ================= -->
+
 </body>
 </html>
