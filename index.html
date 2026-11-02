@@ -5705,5 +5705,154 @@ body.ax-light .axb1-refresh-btn { background: #f0f4f1 !important; color: #0d1912
 </script>
 <!-- ================= END ADMIN ANALYTICS ================= -->
 
+<!-- ================= LANGUAGE TOGGLE (BN/EN) ================= -->
+<style>
+/* Header-এ সুন্দর একটি Language বাটন */
+#axb1-lang-btn {
+  background: #13231a; border: 1px solid #365340; color: #f5f7f1;
+  padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+  margin: 0 5px;
+}
+#axb1-lang-btn:hover { background: #1a3024; border-color: #e8c879; }
+body.ax-light #axb1-lang-btn {
+  background: #ffffff; border-color: #d4ddd6; color: #0d1912;
+}
+body.ax-light #axb1-lang-btn:hover { background: #f0f4f1; border-color: #b68a3d; }
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- অনুবাদ ডিকশনারি (Dictionary) ----------
+  const i18n = {
+    bn: {
+      "allMenu": "সব বাটন ও সেকশন",
+      "loginReg": "লগইন / রেজিস্টার",
+      "heroTitle": "FREE FIRE<br><span>BUY & SELL<br>MARKETPLACE</span>",
+      "sellBtn": "＋ অ্যাকাউন্ট বিক্রি",
+      "viewAccBtn": "অ্যাকাউন্ট দেখুন",
+      "commBtn": "💬 Community",
+      "statsList": "উপলভ্য অ্যাকাউন্ট",
+      "statsMember": "মোট সদস্য",
+      "statsSale": "সম্পন্ন কেনাবেচা",
+      "statsEscrow": "Escrow Protected",
+      "secAvailable": "✦ উপলভ্য অ্যাকাউন্ট",
+      "secCommu": "🔥 Elite Community"
+    },
+    en: {
+      "allMenu": "All Buttons & Sections",
+      "loginReg": "Login / Register",
+      "heroTitle": "FREE FIRE<br><span>BUY & SELL<br>MARKETPLACE</span>",
+      "sellBtn": "＋ Sell Account",
+      "viewAccBtn": "View Accounts",
+      "commBtn": "💬 Community",
+      "statsList": "Available Accounts",
+      "statsMember": "Total Members",
+      "statsSale": "Completed Sales",
+      "statsEscrow": "Escrow Protected",
+      "secAvailable": "✦ Available Accounts",
+      "secCommu": "🔥 Elite Community"
+    }
+  };
+
+  let currentLang = localStorage.getItem("axb1_lang") || "bn";
+
+  // ---------- অনুবাদ প্রয়োগ করার ফাংশন ----------
+  function applyLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem("axb1_lang", lang);
+
+    // ১. হেডার ও ট্যাব
+    const menuHint = document.querySelector(".ax-fhint");
+    if (menuHint) menuHint.textContent = i18n[lang].allMenu;
+
+    const authBtn = document.getElementById("authBtn");
+    if (authBtn && !authBtn.classList.contains("hidden")) authBtn.textContent = i18n[lang].loginReg;
+    
+    // পুরোনো languageBtn (যদি থাকে) লুকিয়ে ফেলা
+    const oldLangBtn = document.getElementById("languageBtn");
+    if (oldLangBtn) oldLangBtn.style.display = "none";
+
+    // ২. হিরো সেকশন (Home Tab)
+    const heroH1 = document.querySelector(".hero h1");
+    if (heroH1) heroH1.innerHTML = i18n[lang].heroTitle;
+
+    const heroBtns = document.querySelectorAll(".hero button");
+    if (heroBtns.length >= 2) {
+      heroBtns[0].textContent = i18n[lang].sellBtn;
+      heroBtns[1].textContent = i18n[lang].viewAccBtn;
+    }
+
+    // ৩. স্ট্যাটস (Stats)
+    const statSpans = document.querySelectorAll(".stats .stat span");
+    if (statSpans.length >= 4) {
+      statSpans[0].textContent = i18n[lang].statsList;
+      statSpans[1].textContent = i18n[lang].statsMember;
+      statSpans[2].textContent = i18n[lang].statsSale;
+      statSpans[3].textContent = i18n[lang].statsEscrow;
+    }
+
+    // ৪. সেকশন টাইটেল
+    const secAvail = document.querySelector("#market .section-title h2");
+    if (secAvail) secAvail.textContent = i18n[lang].secAvailable;
+  }
+
+  // ---------- বাটন তৈরি ও ইভেন্ট ----------
+  function initLangToggle() {
+    if (document.getElementById("axb1-lang-btn")) return;
+
+    const btn = document.createElement("button");
+    btn.id = "axb1-lang-btn";
+    
+    // বাটনের লেখা আপডেট
+    const updateBtnText = () => {
+      btn.innerHTML = currentLang === "bn" ? "🌐 English" : "🌐 বাংলা";
+    };
+    updateBtnText();
+
+    // বাটন ক্লিক করলে ভাষা পরিবর্তন
+    btn.addEventListener("click", () => {
+      const next = currentLang === "bn" ? "en" : "bn";
+      applyLanguage(next);
+      updateBtnText();
+      
+      if (typeof window.showToast === "function") {
+        window.showToast(next === "en" ? "Language changed to English" : "ভাষা পরিবর্তন করা হয়েছে", "success", 2000);
+      }
+    });
+
+    // হেডারে বাটনটি বসানো (অন্য বাটনগুলোর পাশে)
+    const actionsBox = document.querySelector(".ax-menu-panel .actions") || document.querySelector(".actions");
+    if (actionsBox) {
+      // সবার আগে বসানো
+      actionsBox.insertBefore(btn, actionsBox.firstChild);
+    }
+  }
+
+  // ---------- শুরু ----------
+  function boot() {
+    initLangToggle();
+    if (currentLang === "en") {
+      applyLanguage("en");
+    }
+  }
+
+  // DOM লোড হওয়ার পর
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+  
+  // সাইটের লোডিং শেষ হলে বাটনটি আবার চেক করা (কিছুক্ষণ পর পর)
+  setInterval(initLangToggle, 2000);
+
+})();
+</script>
+<!-- ================= END LANGUAGE TOGGLE ================= -->
+
+  
 </body>
 </html>
