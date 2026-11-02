@@ -5853,6 +5853,162 @@ body.ax-light #axb1-lang-btn:hover { background: #f0f4f1; border-color: #b68a3d;
 </script>
 <!-- ================= END LANGUAGE TOGGLE ================= -->
 
+<!-- ================= PIN MESSAGE FEATURE ================= -->
+<style>
+/* পিন করা মেসেজের স্টাইল */
+.axb1-pinned-bar {
+  background: #172b20;
+  border-bottom: 1px solid #e8c879;
+  border-left: 4px solid #e8c879;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: #f5dfaa;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+body.ax-light .axb1-pinned-bar {
+  background: #fef4d4;
+  color: #8a6a2a;
+}
+.axb1-pinned-bar:hover { background: #1f3628; }
+body.ax-light .axb1-pinned-bar:hover { background: #f5e5c0; }
+.axb1-pinned-bar-content {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.axb1-pinned-bar b { color: #fff0b8; }
+body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
+.axb1-pinned-bar button {
+  background: none; border: 0; color: inherit; cursor: pointer; font-size: 16px; padding: 0 4px;
+}
+/* পিন বাটন (মেসেজের ভেতরে) */
+.axb1-pin-btn {
+  background: none; border: 0; color: inherit; font-size: 12px; padding: 0 3px; cursor: pointer; opacity: .7;
+}
+.axb1-pin-btn:hover { opacity: 1; transform: scale(1.1); }
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  // পিন করা মেসেজগুলো লোড করা
+  async function loadPinnedMessage() {
+    const chatView = document.getElementById("axChatView");
+    const chatBox = document.getElementById("axChatBox");
+    const top = document.getElementById("axcTop");
+    if (!chatView || !chatBox || !top || !window.currentUser) return;
+    
+    // বর্তমানে কার সাথে চ্যাট খোলা আছে তা বের করা (কিছুটা ট্রিকি, তাই আমরা ওপরে থাকা নাম থেকে ধরবো না, বরং গ্লোবাল ভেরিয়েবল চেক করবো)
+    // যেহেতু আমরা সরাসরি পিয়ার আইডি পাচ্ছি না, তাই আমরা শেষ মেসেজের রিসিভার/সেন্ডার থেকে বের করবো।
+    
+    let peerId = null;
+    const topText = top.textContent;
+    if (topText.includes("💬")) {
+      // অন্য উপায়ে পিয়ার আইডি বের করা
+    }
+
+    // স্ক্রিপ্টের ভেতরের ভেরিয়েবল ব্যবহার করা কঠিন, তাই আমরা সরাসরি DOM থেকে মেসেজ চেক করবো।
+    // সবচেয়ে ভালো উপায় হলো, আমরা এই ফাংশনটি মেসেজ রেন্ডার হওয়ার পর কল করবো।
+  }
+
+  // মেসেজের ভেতরে পিন বাটন যোগ করা
+  function injectPinButtons() {
+    const chatBox = document.getElementById("axChatBox");
+    if (!chatBox) return;
+    
+    const messages = chatBox.querySelectorAll(".ax-msg");
+    messages.forEach(msg => {
+      if (msg.querySelector(".axb1-pin-btn")) return; // আগেই আছে
+      
+      const acts = msg.querySelector(".axc2-acts");
+      if (!acts) return;
+      
+      const msgId = msg.getAttribute("data-id");
+      if (!msgId) return;
+
+      const pinBtn = document.createElement("button");
+      pinBtn.className = "axb1-pin-btn";
+      pinBtn.innerHTML = "📌";
+      pinBtn.title = "পিন করুন";
+      pinBtn.onclick = (e) => {
+        e.stopPropagation();
+        window.axb1TogglePin(msgId, msg);
+      };
+      
+      acts.appendChild(pinBtn);
+    });
+  }
+
+  // পিন টগল করা (পিন করা বা সরানো)
+  window.axb1TogglePin = async function(msgId, msgEl) {
+    if (!window.sb || !window.currentUser) return;
+
+    try {
+      // প্রথমে চেক করি মেসেজটি পিন করা আছে কিনা
+      const { data: msgData, error: fetchErr } = await window.sb
+        .from("chat_messages")
+        .select("is_pinned")
+        .eq("id", msgId)
+        .single();
+        
+      if (fetchErr) throw fetchErr;
+      
+      const newState = !msgData.is_pinned;
+
+      const { error } = await window.sb
+        .from("chat_messages")
+        .update({ is_pinned: newState })
+        .eq("id", msgId);
+
+      if (error) throw error;
+      
+      if (window.showToast) {
+        window.showToast(newState ? "📌 মেসেজ পিন করা হয়েছে" : "পিন সরানো হয়েছে", "success");
+      }
+
+      // রিফ্রেশ করা
+      if (typeof window.axRefreshChat === "function") window.axRefreshChat();
+      else if (typeof window.axOpenChat === "function") {
+        const peerId = msgEl.closest("#axChatView").getAttribute("data-peer");
+        if (peerId) window.axOpenChat(peerId);
+      }
+      
+    } catch (err) {
+      console.error(err);
+      if (window.showToast) window.showToast("পিন করা যায়নি: " + (err.message || "Error"), "error");
+    }
+  };
+
+  // স্ক্রল করার পর DOM আপডেট হলে বাটন যোগ করা
+  const observer = new MutationObserver(() => {
+    injectPinButtons();
+  });
+
+  // চ্যাট বক্স লোড হওয়ার পর অবজারভার চালু করা
+  const checkBox = setInterval(() => {
+    const chatBox = document.getElementById("axChatBox");
+    if (chatBox) {
+      observer.observe(chatBox, { childList: true, subtree: true });
+      injectPinButtons();
+      clearInterval(checkBox);
+    }
+  }, 1000);
+
+})();
+</script>
+<!-- ================= END PIN MESSAGE ================= -->
+
   
 </body>
 </html>
