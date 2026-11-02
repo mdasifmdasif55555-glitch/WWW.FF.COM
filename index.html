@@ -6009,6 +6009,113 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 </script>
 <!-- ================= END PIN MESSAGE ================= -->
 
+<!-- ================= PIN MESSAGE DISPLAY (PART 2) ================= -->
+<script>
+(function () {
+  "use strict";
+
+  // পিন করা মেসেজ চ্যাটের ওপরে দেখানোর ফাংশন
+  async function renderPinnedBar() {
+    const chatBox = document.getElementById("axChatBox");
+    const chatView = document.getElementById("axChatView");
+    if (!chatBox || !chatView || chatView.classList.contains("hidden")) return;
+
+    // চ্যাটে বর্তমানে কার সাথে কথা হচ্ছে তা বের করা
+    const firstMsg = chatBox.querySelector(".ax-msg");
+    if (!firstMsg) return;
+
+    // বর্তমান পিয়ার আইডি বের করার উপায়
+    const top = document.getElementById("axcTop");
+    const peerName = top ? top.textContent.replace("💬", "").trim() : "";
+    if (!peerName || peerName === "Inbox" || peerName === "") return;
+
+    // DOM থেকে পিন করা মেসেজ খোঁজা
+    const pinnedMsgEl = chatBox.querySelector('.ax-msg[data-pinned="true"]');
+    const existingBar = document.getElementById("axb1-pinned-bar");
+
+    if (!pinnedMsgEl) {
+      if (existingBar) existingBar.remove();
+      return;
+    }
+
+    // পিন করা মেসেজের কন্টেন্ট বের করা
+    let previewText = "";
+    const bodyEl = pinnedMsgEl.querySelector("div:not(.axc2-quote):not(time)");
+    if (bodyEl) {
+      previewText = bodyEl.textContent.trim().substring(0, 50);
+    } else {
+      previewText = pinnedMsgEl.textContent.trim().substring(0, 50);
+    }
+    if (previewText.length >= 50) previewText += "...";
+
+    const msgId = pinnedMsgEl.getAttribute("data-id");
+
+    // বার তৈরি বা আপডেট করা
+    if (existingBar) {
+      existingBar.querySelector(".axb1-pinned-bar-content").innerHTML = `<b>📌 পিন করা:</b> ${previewText}`;
+    } else {
+      const bar = document.createElement("div");
+      bar.id = "axb1-pinned-bar";
+      bar.className = "axb1-pinned-bar";
+      bar.innerHTML = `
+        <div class="axb1-pinned-bar-content" onclick="document.querySelector('.ax-msg[data-id=\\'${msgId}\\']').scrollIntoView({behavior:'smooth', block:'center'})">
+          <span>📌</span> <b>পিন করা:</b> ${previewText}
+        </div>
+        <button onclick="document.getElementById('axb1-pinned-bar').remove(); document.querySelector('.ax-msg[data-id=\\'${msgId}\\']').setAttribute('data-pinned', 'false');" title="লুকান">✕</button>
+      `;
+      
+      // স্ট্যাটাস লাইনের (অনলাইন/টাইপিং) ঠিক নিচে বসানো
+      const statusEl = document.getElementById("axc2Status");
+      if (statusEl && statusEl.parentNode) {
+        statusEl.parentNode.insertBefore(bar, statusEl.nextSibling);
+      } else {
+        chatView.insertBefore(bar, chatBox);
+      }
+    }
+  }
+
+  // মেসেজ ডাটাতে is_pinned ফ্ল্যাগ আপডেট করা
+  function updatePinnedFlags() {
+    const chatBox = document.getElementById("axChatBox");
+    if (!chatBox) return;
+    
+    // এই অংশটি window.axRefreshChat ফাংশনকে হুক করে
+    const messages = chatBox.querySelectorAll(".ax-msg");
+    messages.forEach(msg => {
+      // যেহেতু আমরা সরাসরি ডাটা পাচ্ছি না, তাই `msgMap` থেকে চেক করতে হবে (যা স্ক্রিপ্টে গ্লোবালি আছে)
+      const msgId = msg.getAttribute("data-id");
+      if (typeof window.msgMap !== 'undefined' && window.msgMap instanceof Map) {
+        const originalMsg = window.msgMap.get(msgId);
+        if (originalMsg && originalMsg.is_pinned) {
+          msg.setAttribute("data-pinned", "true");
+          msg.style.border = "1px solid #e8c879";
+        } else {
+          msg.removeAttribute("data-pinned");
+          msg.style.border = "";
+        }
+      }
+    });
+    
+    renderPinnedBar();
+  }
+
+  // চ্যাট রেন্ডার হওয়ার পর ফাংশনটি কল করার জন্য MutationObserver
+  const observer = new MutationObserver(() => {
+    setTimeout(updatePinnedFlags, 100);
+  });
+
+  const checkBox = setInterval(() => {
+    const chatBox = document.getElementById("axChatBox");
+    if (chatBox) {
+      observer.observe(chatBox, { childList: true, subtree: true });
+      updatePinnedFlags();
+      clearInterval(checkBox);
+    }
+  }, 1000);
+
+})();
+</script>
+<!-- ================= END PIN MESSAGE DISPLAY ================= -->
   
 </body>
 </html>
