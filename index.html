@@ -5453,24 +5453,18 @@ window.deletePost = async function (postId) {
 
 </style>
 
-</script><id="axm-js">
-/* ============================================================
-   MESSENGER-STYLE CHAT UI - JavaScript Enhancements
-   ============================================================ */
+<!-- ================= START MESSENGER CHAT FIX ================= -->
+<script>
 (function () {
   "use strict";
-  if (typeof window.axOpenChat !== "function") {
-    console.warn("[axm] Chat script not loaded yet");
-    return;
-  }
+  if (typeof window.axOpenChat !== "function") return;
 
-  /* ---------- 1. Find attachment button & replace with menu ---------- */
+  // ১. এটাচমেন্ট মেনু (📎) ঠিক করা
   function installAttachMenu() {
     const chatView = document.getElementById("axChatView");
     if (!chatView || chatView.dataset.axmAttach === "1") return;
     chatView.dataset.axmAttach = "1";
 
-    // Find the paperclip button (📎)
     const buttons = chatView.querySelectorAll(".ax-bar button");
     let attachBtn = null;
     buttons.forEach(b => {
@@ -5478,7 +5472,6 @@ window.deletePost = async function (postId) {
     });
     if (!attachBtn) return;
 
-    // Replace its onclick with our menu
     attachBtn.onclick = (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -5487,276 +5480,115 @@ window.deletePost = async function (postId) {
   }
 
   function showAttachMenu(anchor) {
-    // Remove existing
     document.querySelectorAll(".axm-attach-menu").forEach(m => m.remove());
-
     const rect = anchor.getBoundingClientRect();
     const menu = document.createElement("div");
     menu.className = "axm-attach-menu";
+    menu.style.position = "fixed";
+    menu.style.bottom = (window.innerHeight - rect.top + 10) + "px";
+    menu.style.left = rect.left + "px";
+    menu.style.background = "#14251b";
+    menu.style.border = "1px solid #294536";
+    menu.style.borderRadius = "14px";
+    menu.style.padding = "8px";
+    menu.style.zIndex = "9999";
+    menu.style.display = "flex";
+    menu.style.flexDirection = "column";
+    menu.style.gap = "4px";
+    menu.style.boxShadow = "0 10px 30px rgba(0,0,0,0.5)";
+
     menu.innerHTML = `
-      <button type="button" data-type="image">
-        <span class="axm-emoji" style="background:#1b3a5c">📷</span>
-        <span class="axm-label">ছবি<small>Gallery থেকে</small></span>
+      <button type="button" onclick="document.getElementById('axFile').accept='image/*,video/*';document.getElementById('axFile').click();this.parentElement.remove()" style="background:none;border:0;color:#fff;padding:10px;text-align:left;display:flex;gap:10px;cursor:pointer;font-size:14px;border-radius:8px;">
+        <span style="font-size:20px;">📷</span> ছবি / ভিডিও
       </button>
-      <button type="button" data-type="video">
-        <span class="axm-emoji" style="background:#5c1b3a">🎬</span>
-        <span class="axm-label">ভিডিও<small>Camera বা Gallery</small></span>
+      <button type="button" onclick="document.getElementById('axFile').accept='*/*';document.getElementById('axFile').click();this.parentElement.remove()" style="background:none;border:0;color:#fff;padding:10px;text-align:left;display:flex;gap:10px;cursor:pointer;font-size:14px;border-radius:8px;">
+        <span style="font-size:20px;">📄</span> ফাইল
       </button>
-      <button type="button" data-type="file">
-        <span class="axm-emoji" style="background:#3a3a1b">📄</span>
-        <span class="axm
-
-        <!-- ================= START BATCH 1 (LIGHT MODE + SEARCH + GALLERY) ================= -->
-<style>
-/* ১. লাইট মোড CSS */
-body.ax-light {
-  --bg: #f5f7f1; --card: #ffffff; --line: #d4ddd6; --text: #0d1912; --muted: #5a6b61; --gold: #b68a3d;
-  background: #f5f7f1 !important; color: #0d1912 !important;
-}
-body.ax-light .bg-effects, body.ax-light .particle-field { display: none !important; }
-body.ax-light header, body.ax-light footer, body.ax-light .stat, body.ax-light .panel,
-body.ax-light .listing, body.ax-light .modal-box, body.ax-light .post-card {
-  background: #ffffff !important; border-color: #d4ddd6 !important; color: #0d1912 !important;
-}
-body.ax-light .brand span { color: #0d1912 !important; }
-body.ax-light .brand, body.ax-light .stat strong, body.ax-light .price { color: #b68a3d !important; }
-body.ax-light .btn { background: linear-gradient(135deg, #f4dc94, #c69b49) !important; color: #172017 !important; }
-body.ax-light .field { background: #f5f7f1 !important; color: #0d1912 !important; border-color: #d4ddd6 !important; }
-body.ax-light #axInboxModal .modal-box, body.ax-light #axInboxModal #axChatView,
-body.ax-light #axInboxModal #axChatBox { background: #ffffff !important; }
-body.ax-light #axInboxModal .modal-head, body.ax-light #axInboxModal #axcTop,
-body.ax-light #axInboxModal #axChatView > .ax-bar { background: #f5f7f1 !important; border-color: #d4ddd6 !important; }
-body.ax-light #axInboxModal .ax-msg.other { background: #f0f4f1 !important; color: #0d1912 !important; border-color: #d4ddd6 !important; }
-body.ax-light #axInboxModal #axText { background: #ffffff !important; color: #0d1912 !important; border-color: #d4ddd6 !important; }
-
-/* থিম বাটন */
-#axb1-theme-toggle {
-  position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px;
-  border-radius: 50%; background: linear-gradient(135deg, #f4dc94, #b68a3d);
-  border: 2px solid #fff0b8; color: #172017; font-size: 24px;
-  display: grid; place-items: center; cursor: pointer; z-index: 100;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3); transition: all 0.2s;
-}
-#axb1-theme-toggle:hover { transform: scale(1.1); }
-body.ax-light #axb1-theme-toggle { background: #0d1912; color: #f4dc94; border-color: #0d1912; }
-
-/* ২. সার্চ বক্স CSS */
-.axb1-search-box {
-  display: flex; gap: 6px; padding: 8px 14px;
-  background: #0d1712; border-bottom: 1px solid #294536; align-items: center;
-}
-.axb1-search-input {
-  flex: 1; background: #14251b; border: 1px solid #294536; color: #f5f7f1;
-  border-radius: 22px; padding: 8px 14px; font-size: 13px; outline: none;
-}
-.axb1-search-input:focus { border-color: #e8c879; }
-.axb1-search-count { font-size: 11px; color: #a4b5aa; white-space: nowrap; }
-.axb1-search-nav {
-  background: #14251b; border: 1px solid #294536; color: #f5f7f1;
-  width: 28px; height: 28px; border-radius: 50%; font-size: 14px;
-  display: grid; place-items: center; cursor: pointer;
-}
-.axb1-search-nav:hover { background: #1a2a20; border-color: #e8c879; }
-.ax-msg.axb1-highlight { outline: 2px solid #e8c879 !important; outline-offset: 2px; background: rgba(232, 200, 121, 0.15) !important; }
-
-/* ৩. ইমেজ গ্যালারি CSS */
-#axb1-gallery-modal {
-  position: fixed; inset: 0; z-index: 150; background: rgba(0,0,0,0.95);
-  display: none; align-items: center; justify-content: center; flex-direction: column;
-}
-#axb1-gallery-modal.open { display: flex; }
-#axb1-gallery-modal img { max-width: 92vw; max-height: 82vh; object-fit: contain; border-radius: 8px; }
-#axb1-gallery-modal .axb1-gallery-nav {
-  position: absolute; top: 50%; transform: translateY(-50%); width: 56px; height: 56px;
-  border-radius: 50%; background: rgba(255,255,255,0.15); border: 0; color: #fff;
-  font-size: 28px; display: grid; place-items: center; cursor: pointer; z-index: 2;
-}
-#axb1-gallery-modal .axb1-gallery-nav:hover { background: rgba(255,255,255,0.3); }
-#axb1-gallery-modal .axb1-prev { left: 20px; }
-#axb1-gallery-modal .axb1-next { right: 20px; }
-#axb1-gallery-modal .axb1-close {
-  position: absolute; top: 20px; right: 20px; width: 44px; height: 44px;
-  border-radius: 50%; background: rgba(255,255,255,0.15); border: 0;
-  color: #fff; font-size: 22px; cursor: pointer; z-index: 2;
-}
-#axb1-gallery-modal .axb1-counter {
-  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-  color: #fff; font-size: 14px; background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 99px;
-}
-#axb1-gallery-modal .axb1-download {
-  position: absolute; bottom: 20px; right: 20px; color: #e8c879; text-decoration: none;
-  font-size: 14px; padding: 6px 14px; border: 1px solid #e8c879; border-radius: 99px; background: rgba(0,0,0,0.5);
-}
-</style>
-
-<!-- HTML Elements -->
-<button id="axb1-theme-toggle" title="Light/Dark mode">🌙</button>
-
-<div id="axb1-gallery-modal">
-  <button class="axb1-close" onclick="axb1CloseGallery()">✕</button>
-  <button class="axb1-gallery-nav axb1-prev" onclick="axb1GalleryPrev()">‹</button>
-  <img id="axb1-gallery-img" alt="Gallery">
-  <button class="axb1-gallery-nav axb1-next" onclick="axb1GalleryNext()">›</button>
-  <div class="axb1-counter" id="axb1-gallery-counter">1 / 1</div>
-  <a class="axb1-download" id="axb1-gallery-download" href="#" download>⬇ ডাউনলোড</a>
-</div>
-
-<script>
-(function () {
-  "use strict";
-
-  /* ==========================================================
-     1. LIGHT MODE
-     ========================================================== */
-  const themeBtn = document.getElementById("axb1-theme-toggle");
-  const applyTheme = (theme) => {
-    document.body.classList.toggle("ax-light", theme === "light");
-    if (themeBtn) themeBtn.textContent = theme === "light" ? "☀️" : "🌙";
-  };
-  const savedTheme = localStorage.getItem("axb1_theme") || "dark";
-  applyTheme(savedTheme);
-  if (themeBtn) {
-    themeBtn.addEventListener("click", () => {
-      const isLight = document.body.classList.contains("ax-light");
-      const next = isLight ? "dark" : "light";
-      applyTheme(next);
-      localStorage.setItem("axb1_theme", next);
-    });
-  }
-
-  /* ==========================================================
-     2. MESSAGE SEARCH
-     ========================================================== */
-  function setupSearch() {
-    const chatView = document.getElementById("axChatView");
-    const chatBox = document.getElementById("axChatBox");
-    if (!chatView || !chatBox || document.getElementById("axb1-search-wrap")) return;
-
-    const searchBox = document.createElement("div");
-    searchBox.id = "axb1-search-wrap";
-    searchBox.className = "axb1-search-box";
-    searchBox.style.display = "none";
-    searchBox.innerHTML = `
-      <input type="text" class="axb1-search-input" id="axb1-search-input" placeholder="চ্যাটে খুঁজুন...">
-      <span class="axb1-search-count" id="axb1-search-count"></span>
-      <button class="axb1-search-nav" id="axb1-search-prev">↑</button>
-      <button class="axb1-search-nav" id="axb1-search-next">↓</button>
-      <button class="axb1-search-nav" id="axb1-search-close">✕</button>
     `;
-    const top = document.getElementById("axcTop");
-    if (top && top.parentNode) top.parentNode.insertBefore(searchBox, top.nextSibling);
-    else chatView.insertBefore(searchBox, chatBox);
-
-    const input = document.getElementById("axb1-search-input");
-    const count = document.getElementById("axb1-search-count");
-    let matches = [], currentIdx = -1;
-
-    function doSearch() {
-      chatBox.querySelectorAll(".axb1-highlight").forEach(el => el.classList.remove("axb1-highlight"));
-      matches = []; currentIdx = -1;
-      const q = input.value.trim().toLowerCase();
-      if (!q) { count.textContent = ""; return; }
-      chatBox.querySelectorAll(".ax-msg").forEach(el => {
-        if (el.textContent.toLowerCase().includes(q)) matches.push(el);
+    
+    document.body.appendChild(menu);
+    
+    setTimeout(() => {
+      document.addEventListener("click", function closeMenu(e) {
+        if (!menu.contains(e.target)) {
+          menu.remove();
+          document.removeEventListener("click", closeMenu);
+        }
       });
-      if (!matches.length) { count.textContent = "০ ফলাফল"; return; }
-      currentIdx = 0;
-      matches.forEach(m => m.classList.add("axb1-highlight"));
-      matches[0].scrollIntoView({ block: "center", behavior: "smooth" });
-      updateCount();
-    }
-    function updateCount() {
-      count.textContent = matches.length ? `${currentIdx + 1} / ${matches.length}` : "০ ফলাফল";
-    }
-    function jump(dir) {
-      if (!matches.length) return;
-      matches.forEach(m => m.classList.remove("axb1-highlight"));
-      currentIdx = (currentIdx + dir + matches.length) % matches.length;
-      matches[currentIdx].classList.add("axb1-highlight");
-      matches[currentIdx].scrollIntoView({ block: "center", behavior: "smooth" });
-      updateCount();
-    }
-
-    input.addEventListener("input", doSearch);
-    input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); jump(1); } });
-    document.getElementById("axb1-search-prev").onclick = () => jump(-1);
-    document.getElementById("axb1-search-next").onclick = () => jump(1);
-    document.getElementById("axb1-search-close").onclick = () => {
-      searchBox.style.display = "none";
-      input.value = "";
-      chatBox.querySelectorAll(".axb1-highlight").forEach(el => el.classList.remove("axb1-highlight"));
-      count.textContent = "";
-    };
-
-    const origOpenChat = window.axOpenChat;
-    if (typeof origOpenChat === "function") {
-      window.axOpenChat = async function (pid) {
-        await origOpenChat(pid);
-        searchBox.style.display = "flex";
-      };
-    }
+    }, 10);
   }
-  setTimeout(setupSearch, 2000);
-  setTimeout(setupSearch, 4000);
 
-  /* ==========================================================
-     3. IMAGE GALLERY
-     ========================================================== */
-  let galleryImages = [], galleryIndex = 0;
-
-  window.axb1OpenGallery = function (images, startIndex) {
+  // ২. গ্যালারি (Image Gallery) সিস্টেম
+  let galleryImgs = [], galleryIdx = 0;
+  window.axb1OpenGallery = function(images, startIndex) {
     if (!images || !images.length) return;
-    galleryImages = images;
-    galleryIndex = startIndex || 0;
+    galleryImgs = images;
+    galleryIdx = startIndex || 0;
     const modal = document.getElementById("axb1-gallery-modal");
+    if (!modal) return;
     const img = document.getElementById("axb1-gallery-img");
     const counter = document.getElementById("axb1-gallery-counter");
     const dl = document.getElementById("axb1-gallery-download");
-    const showNav = images.length > 1;
-
-    img.src = images[galleryIndex];
-    counter.textContent = (galleryIndex + 1) + " / " + images.length;
-    counter.style.display = showNav ? "block" : "none";
-    dl.href = images[galleryIndex];
-    modal.querySelector(".axb1-prev").style.display = showNav ? "grid" : "none";
-    modal.querySelector(".axb1-next").style.display = showNav ? "grid" : "none";
+    
+    img.src = galleryImgs[galleryIdx];
+    if(counter) counter.textContent = (galleryIdx + 1) + " / " + galleryImgs.length;
+    if(dl) dl.href = galleryImgs[galleryIdx];
     modal.classList.add("open");
   };
-  window.axb1CloseGallery = function () {
-    document.getElementById("axb1-gallery-modal").classList.remove("open");
+  
+  window.axb1CloseGallery = function() {
+    const modal = document.getElementById("axb1-gallery-modal");
+    if (modal) modal.classList.remove("open");
   };
-  window.axb1GalleryPrev = function () {
-    galleryIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length;
-    window.axb1OpenGallery(galleryImages, galleryIndex);
+  
+  window.axb1GalleryPrev = function() {
+    galleryIdx = (galleryIdx - 1 + galleryImgs.length) % galleryImgs.length;
+    window.axb1OpenGallery(galleryImgs, galleryIdx);
   };
-  window.axb1GalleryNext = function () {
-    galleryIndex = (galleryIndex + 1) % galleryImages.length;
-    window.axb1OpenGallery(galleryImages, galleryIndex);
+  
+  window.axb1GalleryNext = function() {
+    galleryIdx = (galleryIdx + 1) % galleryImgs.length;
+    window.axb1OpenGallery(galleryImgs, galleryIdx);
   };
 
-  document.getElementById("axb1-gallery-modal").addEventListener("click", e => {
+  document.addEventListener("click", function(e) {
     if (e.target.id === "axb1-gallery-modal") window.axb1CloseGallery();
   });
 
-  // Bind to image galleries in listing details
-  const detailsBox = document.getElementById("detailsContent");
-  if (detailsBox) {
-    new MutationObserver(() => {
-      const imgs = detailsBox.querySelectorAll(".gallery img");
-      if (!imgs.length) return;
-      const urls = Array.from(imgs).map(img => img.src);
-      imgs.forEach((img, idx) => {
-        img.onclick = (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          window.axb1OpenGallery(urls, idx);
-        };
-      });
-    }).observe(detailsBox, { childList: true, subtree: true });
-  }
+  // গ্যালারি বাটনগুলো কাজ করছে কিনা চেক করা
+  setTimeout(() => {
+    const prevBtn = document.querySelector(".axb1-prev");
+    const nextBtn = document.querySelector(".axb1-next");
+    if (prevBtn) prevBtn.onclick = window.axb1GalleryPrev;
+    if (nextBtn) nextBtn.onclick = window.axb1GalleryNext;
+    
+    // ইমেজ ট্যাগে ক্লিক করলে গ্যালারি ওপেন হওয়া
+    const detailsBox = document.getElementById("detailsContent");
+    if (detailsBox) {
+      new MutationObserver(() => {
+        const imgs = detailsBox.querySelectorAll(".gallery img");
+        if (!imgs.length) return;
+        const urls = Array.from(imgs).map(img => img.src);
+        imgs.forEach((img, idx) => {
+          img.onclick = (ev) => {
+            ev.preventDefault();
+            window.axb1OpenGallery(urls, idx);
+          };
+        });
+      }).observe(detailsBox, { childList: true, subtree: true });
+    }
+  }, 1500);
+
+  // ৩. চ্যাট ওপেন হলে এটাচমেন্ট মেনু ইনস্টল করা
+  const prevOpenChat = window.axOpenChat;
+  window.axOpenChat = async function(pid) {
+    await prevOpenChat(pid);
+    installAttachMenu();
+  };
+
 })();
 </script>
-<!-- ================= END BATCH 1 ================= -->
-        
+<!-- ================= END MESSENGER CHAT FIX ================= -->
+
 </body>
 </html>
