@@ -4593,6 +4593,918 @@ window.deletePost = async function (postId) {
 
 <!-- ================= END VERIFICATION REQUIRED ================= -->
 
+<!-- ================= ANSU ELITE: MESSENGER-STYLE CHAT UI (v1.0) =================
+     এই ব্লকটি সবার শেষে, </body> এর ঠিক আগে পেস্ট করুন।
+     পুরোনো চ্যাট কোড মুছবেন না — এটি শুধু ডিজাইন ওভারলে করে। -->
 
+<style id="axm-css">
+/* ============================================================
+   MESSENGER-STYLE CHAT UI
+   পুরোনো চ্যাট কোডকে ওভারলে করে, কিছু মুছেনা
+   ============================================================ */
+
+/* ---------- Modal base ---------- */
+#axInboxModal .modal-box {
+  padding: 0 !important;
+  background: #0a0f0d !important;
+  border: 1px solid #2a3d33 !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+  width: min(1000px, 100%) !important;
+  height: min(90vh, 780px) !important;
+  max-height: 90vh !important;
+  display: flex !important;
+  flex-direction: column;
+}
+#axInboxModal .modal-head {
+  padding: 12px 16px !important;
+  background: #0d1712 !important;
+  border-bottom: 1px solid #294536 !important;
+  margin: 0 !important;
+  flex-shrink: 0;
+  min-height: 56px;
+  align-items: center;
+}
+#axInboxModal .modal-head h2 {
+  font-size: 17px !important;
+  color: #e8c879 !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#axInboxModal .modal-head .close {
+  background: #1a2a20 !important;
+  color: #fff !important;
+  width: 36px;
+  height: 36px;
+  padding: 0 !important;
+  display: grid;
+  place-items: center;
+  border-radius: 50% !important;
+  font-size: 16px;
+  font-weight: bold;
+}
+#axInboxModal .modal-head > div {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ---------- Two-column layout (desktop) ---------- */
+#axInboxModal #axConvoList {
+  padding: 0 !important;
+  background: #0a0f0d !important;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+#axInboxModal #axChatView {
+  padding: 0 !important;
+  background: #061009 !important;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+#axInboxModal #axChatView.hidden {
+  display: none !important;
+}
+
+/* Desktop: when chat is open, show both side by side */
+@media (min-width: 800px) {
+  #axInboxModal .modal-box {
+    display: grid !important;
+    grid-template-columns: 340px 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  #axInboxModal .modal-head {
+    grid-column: 1 / -1;
+  }
+  #axInboxModal #axConvoList {
+    grid-column: 1;
+    grid-row: 2;
+    border-right: 1px solid #294536;
+  }
+  #axInboxModal #axChatView {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  /* When chat is "hidden" on desktop, still show list only */
+  #axInboxModal #axChatView.hidden {
+    display: flex !important;
+    opacity: .3;
+    pointer-events: none;
+  }
+  #axInboxModal #axChatView.hidden::after {
+    content: "💬 একটি চ্যাট নির্বাচন করুন";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #6b7d72;
+    font-size: 14px;
+    background: #061009;
+  }
+}
+
+/* Mobile: full screen chat when opened */
+@media (max-width: 799px) {
+  #axInboxModal .modal-box {
+    display: flex !important;
+    flex-direction: column;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+  }
+  #axInboxModal.modal {
+    padding: 0 !important;
+    background: #000 !important;
+  }
+  #axInboxModal .modal-head {
+    border-radius: 0 !important;
+    padding: max(10px, env(safe-area-inset-top, 0px)) 14px 10px !important;
+  }
+  /* On mobile, when chat is hidden, only show list; when visible, only show chat */
+  #axInboxModal #axConvoList.hidden { display: none !important; }
+  #axInboxModal #axChatView:not(.hidden) ~ #axConvoList { display: none !important; }
+  #axInboxModal #axChatView.hidden { display: none !important; }
+}
+
+/* ---------- Conversation List ---------- */
+#axInboxModal #axc2Search,
+#axInboxModal #axc2Search.axc2-search {
+  margin: 12px 14px 8px !important;
+  width: calc(100% - 28px) !important;
+  background: #14251b !important;
+  border: 1px solid #294536 !important;
+  padding: 10px 14px 10px 38px !important;
+  border-radius: 22px !important;
+  font-size: 13px !important;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='%236b7d72' viewBox='0 0 24 24'><path d='M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z'/></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-position: 14px center !important;
+  color: #f5f7f1 !important;
+}
+#axInboxModal #axc2Search:focus {
+  border-color: #e8c879 !important;
+  outline: none !important;
+}
+
+#axInboxModal .ax-list-item {
+  padding: 12px 16px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid #1a2a20 !important;
+  background: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  cursor: pointer;
+  transition: background .15s;
+  position: relative;
+}
+#axInboxModal .ax-list-item:hover {
+  background: #14251b !important;
+}
+#axInboxModal .ax-list-item.unread {
+  background: #14231c !important;
+}
+#axInboxModal .ax-list-item.unread:hover {
+  background: #1a2a20 !important;
+}
+#axInboxModal .ax-list-item .avatar {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #294536;
+  flex-shrink: 0;
+  position: relative;
+}
+#axInboxModal .ax-list-item.unread .avatar {
+  border-color: #e8c879;
+}
+#axInboxModal .ax-list-item .info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+#axInboxModal .ax-list-item .info strong {
+  font-size: 14px !important;
+  color: #f5f7f1;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#axInboxModal .ax-list-item.unread .info strong {
+  font-weight: 900;
+}
+#axInboxModal .ax-list-item .info small {
+  font-size: 12px !important;
+  color: #a4b5aa !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#axInboxModal .ax-list-item.unread .info small {
+  color: #d8e2d9 !important;
+  font-weight: 600;
+}
+#axInboxModal .ax-list-item .ax-unread {
+  background: #1bc78b !important;
+  color: #0a1913 !important;
+  border-radius: 99px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  padding: 3px 8px !important;
+  min-width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ---------- Chat View header (peer info) ---------- */
+#axInboxModal #axcTop {
+  background: #0d1712 !important;
+  border-bottom: 1px solid #294536 !important;
+  padding: 10px 16px !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  min-height: 62px;
+}
+#axInboxModal #axcTop .axc-warn {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+/* Hide the safety warning banner inside header — move to top of chat area instead */
+#axInboxModal #axcTop .axc-warn:first-child {
+  display: none !important;
+}
+#axInboxModal #axcTop .axc-peer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  margin: 0 !important;
+  width: 100%;
+}
+#axInboxModal #axcTop .axc-peer .avatar {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #294536;
+}
+#axInboxModal #axcTop .axc-peer .info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#axInboxModal #axcTop .axc-peer .info strong {
+  font-size: 15px !important;
+  font-weight: 800;
+  color: #f5f7f1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#axInboxModal #axcTop .axc-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+#axInboxModal #axcTop .axc-actions .btn {
+  padding: 6px 10px !important;
+  font-size: 11px !important;
+  border-radius: 8px !important;
+}
+#axInboxModal #axcTop .axc-admin-tag,
+#axInboxModal #axcTop .verified-badge {
+  display: inline-block;
+  font-size: 9px !important;
+  padding: 2px 7px !important;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+#axInboxModal #axcTop .axc-order {
+  display: none !important;
+}
+
+/* ---------- Status line (online/typing) ---------- */
+#axInboxModal #axc2Status {
+  font-size: 12px !important;
+  color: #a4b5aa !important;
+  padding: 6px 16px !important;
+  background: #0a0f0d !important;
+  border-bottom: 1px solid #1a2a20 !important;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+#axInboxModal #axc2Status:empty {
+  display: none;
+}
+
+/* ---------- Chat area ---------- */
+#axInboxModal #axChatBox,
+#axInboxModal .ax-chat {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  padding: 16px 20px !important;
+  background: #061009 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  scroll-behavior: smooth;
+}
+#axInboxModal #axChatBox::-webkit-scrollbar {
+  width: 8px;
+}
+#axInboxModal #axChatBox::-webkit-scrollbar-thumb {
+  background: #294536;
+  border-radius: 99px;
+}
+#axInboxModal #axChatBox::-webkit-scrollbar-thumb:hover {
+  background: #3a5a48;
+}
+
+/* ---------- Date separator ---------- */
+#axInboxModal .axc2-day {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0 12px;
+  flex-shrink: 0;
+}
+#axInboxModal .axc2-day span {
+  background: #14251b;
+  color: #a4b5aa;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-weight: 600;
+  border: 1px solid #294536;
+}
+
+/* ---------- Message bubble ---------- */
+#axInboxModal .ax-msg {
+  max-width: 72% !important;
+  margin: 2px 0 !important;
+  padding: 10px 14px !important;
+  border-radius: 18px !important;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  position: relative;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: axm-msg-in .18s ease;
+}
+@keyframes axm-msg-in {
+  from { opacity: 0; transform: translateY(4px) scale(.98); }
+  to { opacity: 1; transform: none; }
+}
+#axInboxModal .ax-msg.me {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #1bc78b, #0f9b6c) !important;
+  color: #07110b !important;
+  border-bottom-right-radius: 6px !important;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+#axInboxModal .ax-msg.me + .ax-msg.me {
+  border-bottom-right-radius: 18px !important;
+}
+#axInboxModal .ax-msg.me:has(+ .ax-msg.me) {
+  border-bottom-right-radius: 18px !important;
+}
+#axInboxModal .ax-msg.other {
+  align-self: flex-start;
+  background: #14251b !important;
+  color: #f5f7f1 !important;
+  border-bottom-left-radius: 6px !important;
+  margin-right: auto !important;
+  margin-left: 0 !important;
+  border: 1px solid #294536 !important;
+}
+#axInboxModal .ax-msg.other + .ax-msg.other {
+  border-bottom-left-radius: 18px !important;
+}
+#axInboxModal .ax-msg.me a {
+  color: #07110b !important;
+  text-decoration: underline;
+}
+#axInboxModal .ax-msg.other a {
+  color: #e8c879 !important;
+  text-decoration: underline;
+}
+
+/* Message content */
+#axInboxModal .ax-msg img,
+#axInboxModal .ax-msg video {
+  max-width: 100% !important;
+  max-height: 280px !important;
+  border-radius: 12px !important;
+  display: block;
+  cursor: pointer;
+  margin-top: 4px;
+}
+#axInboxModal .ax-msg audio {
+  max-width: 100% !important;
+  margin-top: 4px;
+}
+#axInboxModal .ax-msg .axc2-size {
+  display: block;
+  font-size: 10px;
+  opacity: .7;
+  margin-top: 2px;
+}
+
+/* Quote (reply preview inside message) */
+#axInboxModal .axc2-quote {
+  background: rgba(0, 0, 0, .25) !important;
+  border-left: 3px solid rgba(255, 255, 255, .6) !important;
+  padding: 6px 10px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  margin-bottom: 4px;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  opacity: .9;
+}
+#axInboxModal .ax-msg.other .axc2-quote {
+  border-left-color: #e8c879 !important;
+  background: rgba(0, 0, 0, .35) !important;
+}
+#axInboxModal .axc2-quote b {
+  color: inherit;
+  font-weight: 900;
+  font-size: 11px;
+  display: block;
+  margin-bottom: 2px;
+  opacity: .85;
+}
+
+/* Message time + ticks */
+#axInboxModal .ax-msg time {
+  display: flex !important;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px !important;
+  opacity: .7;
+  margin-top: 2px;
+  align-self: flex-end;
+  font-weight: 600;
+}
+#axInboxModal .ax-msg.me time {
+  color: #0a1913 !important;
+  opacity: .75;
+}
+
+/* Delete / reply action buttons */
+#axInboxModal .axc2-acts {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 4px;
+  opacity: 0;
+  transition: opacity .15s;
+}
+#axInboxModal .ax-msg:hover .axc2-acts {
+  opacity: 1;
+}
+@media (hover: none) {
+  #axInboxModal .axc2-acts { opacity: .6; }
+}
+#axInboxModal .axc2-acts button {
+  background: none !important;
+  border: 0 !important;
+  color: inherit !important;
+  font-size: 12px !important;
+  padding: 0 3px !important;
+  cursor: pointer;
+  opacity: .7;
+  transition: opacity .15s, transform .15s;
+}
+#axInboxModal .axc2-acts button:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* Highlight (jump to replied message) */
+#axInboxModal .axc2-flash {
+  animation: axm-flash 1.4s ease !important;
+}
+@keyframes axm-flash {
+  0%, 100% { background-color: inherit; }
+  20%, 80% { background-color: rgba(232, 200, 121, .35) !important; }
+}
+
+/* ---------- Composer (input area) ---------- */
+#axInboxModal #axChatView > .ax-bar {
+  background: #0d1712 !important;
+  border-top: 1px solid #294536 !important;
+  padding: 10px 14px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0;
+}
+#axInboxModal #axChatView > .ax-bar:first-of-type {
+  border-top: 0 !important;
+  border-bottom: 1px solid #294536 !important;
+}
+#axInboxModal #axChatView #axText {
+  background: #14251b !important;
+  border: 1px solid #294536 !important;
+  color: #f5f7f1 !important;
+  border-radius: 22px !important;
+  padding: 11px 16px !important;
+  font-size: 14px !important;
+  flex: 1 !important;
+  outline: none !important;
+  transition: border-color .15s;
+  min-width: 0;
+}
+#axInboxModal #axChatView #axText:focus {
+  border-color: #e8c879 !important;
+}
+#axInboxModal #axChatView #axText::placeholder {
+  color: #6b7d72 !important;
+}
+
+/* Composer buttons */
+#axInboxModal #axChatView > .ax-bar button {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: grid !important;
+  place-items: center;
+  font-size: 17px !important;
+  flex-shrink: 0;
+  background: #14251b !important;
+  border: 1px solid #294536 !important;
+  color: #a4b5aa !important;
+  transition: all .15s;
+}
+#axInboxModal #axChatView > .ax-bar button:hover {
+  background: #1a2a20 !important;
+  color: #e8c879 !important;
+  border-color: #3a5a48 !important;
+}
+/* Send button */
+#axInboxModal #axChatView > .ax-bar button[onclick*="axSendText"] {
+  background: linear-gradient(135deg, #1bc78b, #0f9b6c) !important;
+  border: 0 !important;
+  color: #07110b !important;
+  font-weight: bold;
+  width: auto !important;
+  padding: 0 16px !important;
+  border-radius: 22px !important;
+  font-size: 14px !important;
+  min-width: 72px;
+}
+#axInboxModal #axChatView > .ax-bar button[onclick*="axSendText"]:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(27, 199, 139, .3);
+}
+/* File input hidden */
+#axInboxModal #axFile {
+  display: none !important;
+}
+
+/* Emoji button active state */
+#axInboxModal #axc2Emoji {
+  background: #14251b !important;
+  border: 1px solid #294536 !important;
+}
+#axInboxModal #axc2Emoji.active {
+  background: #1a2a20 !important;
+  border-color: #e8c879 !important;
+}
+
+/* Emoji panel */
+#axInboxModal #axc2EmojiPanel {
+  background: #0d1712 !important;
+  border-top: 1px solid #294536 !important;
+  border-radius: 0 !important;
+  padding: 10px !important;
+  margin: 0 !important;
+  max-height: 220px !important;
+  overflow-y: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(9, 1fr) !important;
+  gap: 4px !important;
+}
+#axInboxModal #axc2EmojiPanel.hidden {
+  display: none !important;
+}
+#axInboxModal #axc2EmojiPanel button {
+  background: transparent !important;
+  border: 0 !important;
+  font-size: 24px !important;
+  padding: 6px !important;
+  border-radius: 8px !important;
+  cursor: pointer;
+  width: auto !important;
+  height: auto !important;
+  display: block !important;
+  transition: background .15s;
+}
+#axInboxModal #axc2EmojiPanel button:hover {
+  background: #14251b !important;
+  transform: scale(1.1);
+}
+
+/* Reply bar (above input) */
+#axInboxModal #axc2ReplyBar {
+  background: #14251b !important;
+  border-top: 1px solid #294536 !important;
+  border-left: 4px solid #1bc78b !important;
+  border-radius: 0 !important;
+  padding: 10px 14px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px !important;
+  color: #a4b5aa !important;
+}
+#axInboxModal #axc2ReplyBar.hidden {
+  display: none !important;
+}
+#axInboxModal #axc2ReplyBar span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#axInboxModal #axc2ReplyBar button {
+  background: none !important;
+  border: 0 !important;
+  color: #fff !important;
+  cursor: pointer;
+  font-size: 16px !important;
+  padding: 4px 8px !important;
+  border-radius: 6px;
+  width: auto !important;
+  height: auto !important;
+}
+#axInboxModal #axc2ReplyBar button:hover {
+  background: rgba(255, 255, 255, .1) !important;
+}
+
+/* ---------- Attachment menu (custom) ---------- */
+.axm-attach-menu {
+  position: fixed;
+  background: #14251b;
+  border: 1px solid #294536;
+  border-radius: 14px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+  z-index: 200;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .6);
+  animation: axm-menu-in .15s ease;
+}
+@keyframes axm-menu-in {
+  from { opacity: 0; transform: translateY(8px) scale(.95); }
+  to { opacity: 1; transform: none; }
+}
+.axm-attach-menu button {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 10px 14px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  color: #f5f7f1 !important;
+  font-size: 14px !important;
+  text-align: left;
+  cursor: pointer;
+  width: 100% !important;
+  height: auto !important;
+  font-weight: 600;
+  transition: background .15s;
+}
+.axm-attach-menu button:hover {
+  background: #1a2a20 !important;
+}
+.axm-attach-menu .axm-emoji {
+  font-size: 22px;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.axm-attach-menu .axm-label small {
+  display: block;
+  font-size: 11px;
+  color: #a4b5aa;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+/* ---------- Scroll to bottom button ---------- */
+.axm-scroll-down {
+  position: absolute;
+  bottom: 130px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1bc78b;
+  border: 0;
+  color: #07110b;
+  font-size: 20px;
+  font-weight: bold;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(27, 199, 139, .4);
+  z-index: 20;
+  animation: axm-bounce .8s infinite alternate;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.axm-scroll-down.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+@keyframes axm-bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(4px); }
+}
+
+/* ---------- Voice recording animation ---------- */
+@keyframes axm-rec-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 101, 116, .6); }
+  50% { box-shadow: 0 0 0 12px rgba(255, 101, 116, 0); }
+}
+#axInboxModal #axRecBtn.ax-rec,
+#axInboxModal #axRecBtn.axm-recording {
+  background: #ff6574 !important;
+  border-color: #ff6574 !important;
+  color: #fff !important;
+  animation: axm-rec-pulse 1.2s infinite !important;
+}
+
+/* ---------- Empty state ---------- */
+#axInboxModal .post-empty {
+  margin: 30px 20px;
+  padding: 40px 20px !important;
+  background: #0d1712 !important;
+  border: 1px dashed #294536 !important;
+  border-radius: 16px !important;
+  color: #a4b5aa !important;
+  font-size: 14px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* ---------- Mobile-specific tweaks ---------- */
+@media (max-width: 799px) {
+  #axInboxModal .modal-head {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  #axInboxModal #axChatView #axChatBox {
+    padding: 12px 12px !important;
+  }
+  #axInboxModal .ax-msg {
+    max-width: 82% !important;
+    font-size: 14px !important;
+  }
+  #axInboxModal #axc2EmojiPanel {
+    grid-template-columns: repeat(8, 1fr) !important;
+  }
+  #axInboxModal #axc2EmojiPanel button {
+    font-size: 22px !important;
+    padding: 4px !important;
+  }
+  #axInboxModal #axChatView > .ax-bar {
+    padding: 8px 10px !important;
+    gap: 6px !important;
+  }
+  #axInboxModal #axChatView #axText {
+    padding: 10px 14px !important;
+    font-size: 15px !important;
+  }
+}
+
+/* ---------- Dark mode friendly focus ---------- */
+#axInboxModal *:focus-visible {
+  outline: 2px solid #e8c879;
+  outline-offset: 2px;
+}
+
+/* ---------- Hide old "order card" in header if present ---------- */
+#axInboxModal #axcTop .axc-order,
+#axInboxModal #axcTop .axc-blocknote {
+  display: none !important;
+}
+
+/* ============ ALL MENU में चैट का बटन आकार ठीक ============ */
+.ax-menu-panel #axInboxBtn {
+  position: relative;
+}
+.ax-menu-panel #axInboxBtn .ax-unread {
+  margin-left: 4px;
+}
+
+</style>
+
+<script id="axm-js">
+/* ============================================================
+   MESSENGER-STYLE CHAT UI - JavaScript Enhancements
+   ============================================================ */
+(function () {
+  "use strict";
+  if (typeof window.axOpenChat !== "function") {
+    console.warn("[axm] Chat script not loaded yet");
+    return;
+  }
+
+  /* ---------- 1. Find attachment button & replace with menu ---------- */
+  function installAttachMenu() {
+    const chatView = document.getElementById("axChatView");
+    if (!chatView || chatView.dataset.axmAttach === "1") return;
+    chatView.dataset.axmAttach = "1";
+
+    // Find the paperclip button (📎)
+    const buttons = chatView.querySelectorAll(".ax-bar button");
+    let attachBtn = null;
+    buttons.forEach(b => {
+      if (b.textContent.includes("📎")) attachBtn = b;
+    });
+    if (!attachBtn) return;
+
+    // Replace its onclick with our menu
+    attachBtn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      showAttachMenu(attachBtn);
+    };
+  }
+
+  function showAttachMenu(anchor) {
+    // Remove existing
+    document.querySelectorAll(".axm-attach-menu").forEach(m => m.remove());
+
+    const rect = anchor.getBoundingClientRect();
+    const menu = document.createElement("div");
+    menu.className = "axm-attach-menu";
+    menu.innerHTML = `
+      <button type="button" data-type="image">
+        <span class="axm-emoji" style="background:#1b3a5c">📷</span>
+        <span class="axm-label">ছবি<small>Gallery থেকে</small></span>
+      </button>
+      <button type="button" data-type="video">
+        <span class="axm-emoji" style="background:#5c1b3a">🎬</span>
+        <span class="axm-label">ভিডিও<small>Camera বা Gallery</small></span>
+      </button>
+      <button type="button" data-type="file">
+        <span class="axm-emoji" style="background:#3a3a1b">📄</span>
+        <span class="axm
+        
 </body>
 </html>
