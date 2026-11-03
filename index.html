@@ -6114,6 +6114,37 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
   }, 1000);
 
 })();
+</script><!-- আপনার চ্যাট বক্স বা ইনপুট ফিল্ড -->
+<input type="text" id="user-input" placeholder="এআই-কে কিছু জিজ্ঞেস করুন..." />
+<button onclick="sendMessage()">পাঠান</button>
+<div id="chat-response"></div>
+
+<script>
+  // এখানে আমি আগের দেওয়া ফাংশনটি একটু এডিট করে দিলাম যাতে বাটনে ক্লিক করলে কাজ করে
+  async function sendMessage() {
+    const input = document.getElementById('user-input').value;
+    const responseBox = document.getElementById('chat-response');
+    
+    responseBox.innerText = "এআই ভাবছে...";
+
+    try {
+      const response = await fetch('https://qpcmfmhrigfdmvdtezli.supabase.co/functions/v1/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: input })
+      });
+
+      const data = await response.json();
+      
+      if (data.reply) {
+        responseBox.innerText = data.reply; // এখানে এআই-এর উত্তর দেখাবে
+      } else {
+        responseBox.innerText = "দুঃখিত, কোনো উত্তর পাওয়া যায়নি।";
+      }
+    } catch (error) {
+      responseBox.innerText = "নেটওয়ার্ক সমস্যা হচ্ছে।";
+    }
+  }
 </script>
 <!-- ================= END PIN MESSAGE DISPLAY ================= -->
   
