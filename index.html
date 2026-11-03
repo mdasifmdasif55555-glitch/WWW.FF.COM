@@ -6131,8 +6131,16 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
       const response = await fetch('https://qpcmfmhrigfdmvdtezli.supabase.co/functions/v1/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input })
-      });
+        body: JSON.stringify({
+  model: 'openai/gpt-oss-120b',
+  messages: [
+    { 
+      role: 'system', 
+      content: 'তুমি ansuytffbuysell.com ওয়েবসাইটের একজন সহায়ক এআই। তোমার কাজ হলো ইউজারদের এই ওয়েবসাইটের বায়ার-সেলার সংক্রান্ত প্রশ্নের উত্তর দেওয়া। মার্কেটপ্লেসের নিয়ম, পণ্য কেনাবেচা বা সাইট সম্পর্কিত প্রশ্নের উত্তর দেবে। আর কিছু না জানলে বিনয়ের সাথে বলবে যে তুমি শুধু এই সাইটের কাজে সাহায্য করতে পারো।' 
+    },
+    { role: 'user', content: message }
+  ],
+}),
 
       const data = await response.json();
       
