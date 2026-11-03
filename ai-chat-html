@@ -1,0 +1,44 @@
+<!-- আপনার চ্যাট বক্স বা ইনপুট ফিল্ড -->
+<div style="display: flex; gap: 8px; margin-bottom: 10px;">
+  <input type="text" id="user-input" class="field" placeholder="এআই-কে কিছু জিজ্ঞেস করুন..." style="flex: 1;" />
+  <button onclick="sendMessage()" class="btn">পাঠান</button>
+</div>
+<div id="chat-response" class="notice" style="min-height: 80px; white-space: pre-wrap;"></div>
+
+<script>
+  async function sendMessage() {
+    const input = document.getElementById('user-input').value;
+    const responseBox = document.getElementById('chat-response');
+    
+    if (!input.trim()) return; // খালি মেসেজ আটকানো
+    
+    responseBox.innerText = "এআই ভাবছে...";
+
+    try {
+      const response = await fetch('https://qpcmfmhrigfdmvdtezli.supabase.co/functions/v1/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'openai/gpt-oss-120b',
+          messages: [
+            { 
+              role: 'system', 
+              content: 'তুমি ansuytffbuysell.com ওয়েবসাইটের একজন সহায়ক এআই। তোমার কাজ হলো ইউজারদের এই ওয়েবসাইটের বায়ার-সেলার সংক্রান্ত প্রশ্নের উত্তর দেওয়া। মার্কেটপ্লেসের নিয়ম, পণ্য কেনাবেচা বা সাইট সম্পর্কিত প্রশ্নের উত্তর দেবে। আর কিছু না জানলে বিনয়ের সাথে বলবে যে তুমি শুধু এই সাইটের কাজে সাহায্য করতে পারো।' 
+            },
+            { role: 'user', content: input } // এখানে input ব্যবহার করা হয়েছে
+          ]
+        }) // এখানে বাড়তি কমা (,) সরানো হয়েছে
+      });
+
+      const data = await response.json();
+      
+      if (data.reply) {
+        responseBox.innerText = data.reply;
+      } else {
+        responseBox.innerText = "দুঃখিত, কোনো উত্তর পাওয়া যায়নি।";
+      }
+    } catch (error) {
+      responseBox.innerText = "নেটওয়ার্ক সমস্যা হচ্ছে।";
+    }
+  }
+</script>
