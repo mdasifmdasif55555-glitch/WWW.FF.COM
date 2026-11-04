@@ -345,11 +345,9 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
 <div class="particle-field" id="particleField" aria-hidden="true"></div>
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- Sticky Help Buttons -->
 <div class="sticky-help">
-  <!-- এআই চ্যাট ওপেন করার বাটন -->
-  <a href="javascript:void(0)" onclick="openModal('aiChatModal')" class="wa" title="AI Assistant" style="background: #8a4fc9; color: white; cursor: pointer;">🤖</a>
-  
-  <!-- টেলিগ্রাম আগের মতোই থাকবে -->
+  <a href="https://wa.me/8801726270731" target="_blank" rel="noopener" class="wa" title="WhatsApp Support">💬</a>
   <a href="https://t.me/ansu_elite" target="_blank" rel="noopener" class="tg" title="Telegram Support">✈️</a>
 </div>
 
@@ -611,26 +609,6 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
  <button class="btn" style="width:100%;margin-top:12px" onclick="closeModal('refundModal')">বন্ধ করুন</button>
 </div>
 </div>
-<!-- AI Chat Modal (এখানে বসান) -->
-<div class="modal" id="aiChatModal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h2>🤖 AI Assistant</h2>
-      <button class="close" onclick="closeModal('aiChatModal')">✕</button>
-    </div>
-    
-    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-      <input type="text" id="ai-user-input" class="field" placeholder="এআই-কে কিছু জিজ্ঞেস করুন..." style="flex: 1;" />
-      <button onclick="askAiAssistant()" class="btn">পাঠান</button>
-    </div>
-    <div id="ai-chat-response" class="notice" style="min-height: 80px; white-space: pre-wrap;"></div>
-    
-  </div>
-</div>
-<!-- AI Chat Modal শেষ -->
-
-<!-- Terms Modal -->
-<div class="modal" id="termsModal">
 
 <!-- Terms Modal -->
 <div class="modal" id="termsModal">
@@ -6136,41 +6114,7 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
   }, 1000);
 
 })();
-async function askAiAssistant() {
-    const input = document.getElementById('ai-user-input').value;
-    const responseBox = document.getElementById('ai-chat-response');
-    
-    if (!input.trim()) return; // খালি মেসেজ আটকানো
-    
-    responseBox.innerText = "এআই ভাবছে...";
 
-    try {
-      const response = await fetch('https://qpcmfmhrigfdmvdtezli.supabase.co/functions/v1/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'openai/gpt-oss-120b',
-          messages: [
-            { 
-              role: 'system', 
-              content: 'তুমি ansuytffbuysell.com ওয়েবসাইটের একজন সহায়ক এআই। তোমার কাজ হলো ইউজারদের এই ওয়েবসাইটের বায়ার-সেলার সংক্রান্ত প্রশ্নের উত্তর দেওয়া। মার্কেটপ্লেসের নিয়ম, পণ্য কেনাবেচা বা সাইট সম্পর্কিত প্রশ্নের উত্তর দেবে। আর কিছু না জানলে বিনয়ের সাথে বলবে যে তুমি শুধু এই সাইটের কাজে সাহায্য করতে পারো।' 
-            },
-            { role: 'user', content: input } 
-          ]
-        }) 
-      });
-
-      const data = await response.json();
-      
-      if (data.reply) {
-        responseBox.innerText = data.reply;
-      } else {
-        responseBox.innerText = "দুঃখিত, কোনো উত্তর পাওয়া যায়নি।";
-      }
-    } catch (error) {
-      responseBox.innerText = "নেটওয়ার্ক সমস্যা হচ্ছে।";
-    }
-  }
 </script>
 <!-- ================= END PIN MESSAGE DISPLAY ================= -->
   
