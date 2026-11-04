@@ -609,6 +609,26 @@ footer{margin-top:25px;border-top:1px solid #e8c87930;padding:40px 0 24px;color:
  <button class="btn" style="width:100%;margin-top:12px" onclick="closeModal('refundModal')">বন্ধ করুন</button>
 </div>
 </div>
+<!-- AI Chat Modal (এখানে বসান) -->
+<div class="modal" id="aiChatModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2>🤖 AI Assistant</h2>
+      <button class="close" onclick="closeModal('aiChatModal')">✕</button>
+    </div>
+    
+    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+      <input type="text" id="ai-user-input" class="field" placeholder="এআই-কে কিছু জিজ্ঞেস করুন..." style="flex: 1;" />
+      <button onclick="askAiAssistant()" class="btn">পাঠান</button>
+    </div>
+    <div id="ai-chat-response" class="notice" style="min-height: 80px; white-space: pre-wrap;"></div>
+    
+  </div>
+</div>
+<!-- AI Chat Modal শেষ -->
+
+<!-- Terms Modal -->
+<div class="modal" id="termsModal">
 
 <!-- Terms Modal -->
 <div class="modal" id="termsModal">
