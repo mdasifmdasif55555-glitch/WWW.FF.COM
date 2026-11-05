@@ -6116,7 +6116,597 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 })();
 
 </script>
-<!-- ================= END PIN MESSAGE DISPLAY ================= -->
-  
+<!-- ================= ANSU ELITE: PRO ADD-ON (</body>-এর ঠিক আগে, সবার শেষে পেস্ট করুন) =================
+     আগে ansu-pro-addon.sql চালান। পুরোনো কোড কিছুই বদলায় না, শুধু ওপরে মুড়ে (wrap) কাজ করে।
+     যোগ হচ্ছে: ডার্ক/লাইট মোড, কুকি ব্যানার + Privacy Policy, ছবি কম্প্রেশন, ডুপ্লিকেট TrxID চেক,
+     Invoice (PDF), অর্ডার লাইভ নোটিফিকেশন, Seller পাবলিক প্রোফাইলে রিভিউ, SEO টাইটেল,
+     Seller Wallet + Withdrawal, Admin Activity Log + Withdrawal ম্যানেজ + সেলস গ্রাফ, সেভ সার্চ অ্যালার্ট, PWA ইনস্টল -->
+<style>
+  /* ---------- ফ্লোটিং বাটন ---------- */
+  .axp-float { position: fixed; left: 16px; z-index: 30; width: 46px; height: 46px; border-radius: 50%; border: 1px solid #e8c87970; background: linear-gradient(145deg, #1a3024, #101a13); color: var(--gold2); font-size: 20px; display: grid; place-items: center; box-shadow: 0 6px 20px #0006; cursor: pointer; transition: .2s; }
+  .axp-float:hover { transform: scale(1.08); border-color: var(--gold); }
+  #axpThemeBtn { bottom: 20px; }
+  #axpInstallBtn { bottom: 76px; }
+  #axpInstallBtn.hidden { display: none !important; }
+
+  /* ---------- কুকি ব্যানার ---------- */
+  #axpCookie { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 60; max-width: 620px; margin: 0 auto; padding: 14px 16px; border-radius: 14px; background: #0d1912f5; border: 1px solid #e8c87960; box-shadow: 0 12px 40px #000a; font-size: 12px; line-height: 1.8; color: var(--muted); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  #axpCookie .txt { flex: 1 1 240px; }
+  #axpCookie a { color: var(--gold); cursor: pointer; text-decoration: underline; }
+
+  /* ---------- Seller wallet / admin tools ---------- */
+  .axp-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .axp-adm-tools { margin-bottom: 14px; }
+  .axp-chart { display: flex; align-items: flex-end; gap: 5px; height: 130px; margin: 12px 0 6px; }
+  .axp-bar { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; min-width: 0; }
+  .axp-bar span { display: block; width: 100%; border-radius: 5px 5px 0 0; background: linear-gradient(180deg, #f4dc94, #b68a3d); }
+  .axp-bar small { font-size: 9px; color: var(--muted); margin-top: 4px; white-space: nowrap; }
+  .axp-rev { padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: #0b1711; margin-bottom: 7px; font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
+  .axp-rev .stars { color: var(--gold); }
+  .axp-prof-extra { margin: 14px 0; padding: 12px; border: 1px solid #365340; border-radius: 12px; background: #0b1711aa; text-align: left; }
+  .axp-prof-extra h4 { margin: 0 0 8px; font-size: 13px; color: var(--gold2); }
+  .axp-prof-extra .join { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .axp-alert-btn { flex: 0 0 auto; }
+
+  /* ---------- Light mode ---------- */
+  body.ax-light { --bg: #f3f7f4; --card: #ffffff; --card2: #eef3ef; --line: #d4ddd6; --gold: #9a6f1c; --gold2: #7a5410; --text: #0d1912; --muted: #5a6b61; background: #f3f7f4; color: #0d1912; }
+  body.ax-light .bg-effects { background: linear-gradient(145deg, #f6faf7, #e9f0eb); }
+  body.ax-light .bg-effects:before, body.ax-light .bg-effects:after, body.ax-light .particle-field { display: none; }
+  body.ax-light header { background: #ffffffee; border-bottom-color: #d4ddd6; }
+  body.ax-light .brand span { color: #0d1912; }
+  body.ax-light .stat, body.ax-light .panel, body.ax-light .listing, body.ax-light .post-card, body.ax-light .post-composer,
+  body.ax-light .feature-card, body.ax-light .faq-item, body.ax-light .how-step, body.ax-light .testimonial-card, body.ax-light .law-card,
+  body.ax-light .ax-menu-panel, body.ax-light .ax-menu-bar, body.ax-light .community-hero, body.ax-light .law-hero, body.ax-light .trust-banner,
+  body.ax-light .stat-box, body.ax-light .review-box, body.ax-light .recent-card, body.ax-light .ax-member, body.ax-light .success-card,
+  body.ax-light .axp-rev, body.ax-light .axp-prof-extra, body.ax-light .notification-bar, body.ax-light .post-empty,
+  body.ax-light .modal:not(.public-profile-modal):not(#axInboxModal) .modal-box {
+    background: #ffffff !important; border-color: #d4ddd6 !important; color: #0d1912 !important;
+  }
+  body.ax-light .field, body.ax-light .post-input { background: #f6f9f7 !important; color: #0d1912 !important; border-color: #cdd8d0 !important; }
+  body.ax-light .field option { background: #fff; color: #0d1912; }
+  body.ax-light .btn.secondary { background: #fff; color: #0d1912; border-color: #cdd8d0; }
+  body.ax-light .hero p, body.ax-light .meta, body.ax-light .small-note, body.ax-light .stat span, body.ax-light footer, body.ax-light .footer-col a, body.ax-light .footer-col p { color: #5a6b61; }
+  body.ax-light footer { background: #ffffff; border-top-color: #d4ddd6; }
+  body.ax-light .notice, body.ax-light .safety-strip, body.ax-light .policy-intro, body.ax-light .policy-safety, body.ax-light .law-warn { background: #fff7e0; color: #6b4f12; border-color: #e0c778; }
+  body.ax-light .policy-step, body.ax-light .modal-box .close { background: #f0f4f1; color: #0d1912; }
+  body.ax-light #axpCookie { background: #fffffff5; color: #5a6b61; }
+  body.ax-light .axp-float { background: #fff; color: #7a5410; border-color: #d4ddd6; }
+  body.ax-light table, body.ax-light th, body.ax-light td { border-color: #d4ddd6; }
+</style>
+
+<script>
+(function () {
+  "use strict";
+  if (window.__axpro) return;           // ডুপ্লিকেট পেস্ট হলেও দ্বিতীয়বার চলবে না
+  window.__axpro = true;
+
+  const HAS = typeof sb !== "undefined" && !!sb;
+  const $$ = function (id) { return document.getElementById(id); };
+  const safe = function (fn) { return function () { try { return fn.apply(this, arguments); } catch (e) { console.warn("[axpro]", e); } }; };
+
+  /* পুরোনো ফাংশন মুড়ে নেওয়ার সহায়ক */
+  function hook(name, wrapper) {
+    const prev = window[name];
+    if (typeof prev !== "function") return;
+    window[name] = function () { return wrapper(prev, this, arguments); };
+  }
+  function mkModal(id, title) {
+    let m = $$(id);
+    if (m) return m;
+    m = document.createElement("div");
+    m.className = "modal"; m.id = id;
+    m.innerHTML = '<div class="modal-box" style="width:min(760px,100%)"><div class="modal-head"><h2>' + title + '</h2><button class="close" type="button" data-x>✕</button></div><div class="axp-body"></div></div>';
+    m.addEventListener("click", function (e) { if (e.target === m || e.target.closest("[data-x]")) m.classList.remove("open"); });
+    document.body.appendChild(m);
+    return m;
+  }
+  const bd = function (d) { return d ? new Date(d).toLocaleString("bn-BD", { dateStyle: "medium", timeStyle: "short" }) : ""; };
+
+  /* =====================================================
+     ১. ডার্ক / লাইট মোড
+  ===================================================== */
+  (function theme() {
+    const KEY = "axp_theme";
+    const btn = document.createElement("button");
+    btn.id = "axpThemeBtn"; btn.type = "button"; btn.className = "axp-float";
+    document.body.appendChild(btn);
+    function apply(t) {
+      document.body.classList.toggle("ax-light", t === "light");
+      btn.textContent = t === "light" ? "🌙" : "☀️";
+      btn.title = t === "light" ? "ডার্ক মোড" : "লাইট মোড";
+      const m = document.querySelector('meta[name="theme-color"]');
+      if (m) m.setAttribute("content", t === "light" ? "#f3f7f4" : "#050b08");
+    }
+    let cur = "dark";
+    try { cur = localStorage.getItem(KEY) || "dark"; } catch (_) {}
+    apply(cur);
+    btn.addEventListener("click", function () {
+      cur = cur === "light" ? "dark" : "light";
+      try { localStorage.setItem(KEY, cur); } catch (_) {}
+      apply(cur);
+    });
+  })();
+
+  /* =====================================================
+     ২. PWA ইনস্টল বাটন (হোম স্ক্রিনে যোগ)
+        দ্রষ্টব্য: পূর্ণ অফলাইন PWA-এর জন্য আলাদা manifest.json ও sw.js ফাইল লাগে।
+  ===================================================== */
+  (function pwa() {
+    try {
+      if (!document.querySelector('link[rel="manifest"]')) {
+        const icon = document.querySelector('link[rel="icon"]');
+        const m = { name: "ANSU ELITE", short_name: "ANSU", start_url: location.href.split("#")[0], display: "standalone", background_color: "#050b08", theme_color: "#050b08", lang: "bn" };
+        if (icon) m.icons = [{ src: new URL(icon.getAttribute("href"), location.href).href, sizes: "512x512", type: "image/png" }];
+        const l = document.createElement("link");
+        l.rel = "manifest";
+        l.href = URL.createObjectURL(new Blob([JSON.stringify(m)], { type: "application/manifest+json" }));
+        document.head.appendChild(l);
+      }
+    } catch (_) {}
+    let deferred = null;
+    const b = document.createElement("button");
+    b.id = "axpInstallBtn"; b.type = "button"; b.className = "axp-float hidden"; b.title = "অ্যাপ ইনস্টল করুন"; b.textContent = "📲";
+    document.body.appendChild(b);
+    window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; b.classList.remove("hidden"); });
+    b.addEventListener("click", async function () {
+      if (!deferred) return;
+      deferred.prompt();
+      try { await deferred.userChoice; } catch (_) {}
+      deferred = null; b.classList.add("hidden");
+    });
+    window.addEventListener("appinstalled", function () { b.classList.add("hidden"); });
+  })();
+
+  /* =====================================================
+     ৩. কুকি ব্যানার + Privacy Policy
+  ===================================================== */
+  (function privacy() {
+    const m = mkModal("axpPrivacyModal", "🔒 Privacy Policy");
+    m.querySelector(".axp-body").innerHTML =
+      '<div class="policy-intro">আপনার গোপনীয়তা আমাদের কাছে গুরুত্বপূর্ণ। নিচে সংক্ষেপে জানানো হলো আমরা কী তথ্য নিই ও কেন।</div>' +
+      '<div style="font-size:13px;line-height:1.9;color:var(--muted)">' +
+      '<p><strong style="color:var(--gold2)">১. কী তথ্য নিই</strong><br>নাম, ইমেইল, প্রোফাইল ছবি, অর্ডারের তথ্য (Transaction ID, পেমেন্ট স্ক্রিনশট) এবং Verification ডকুমেন্ট।</p>' +
+      '<p><strong style="color:var(--gold2)">২. কেন নিই</strong><br>অ্যাকাউন্ট চালু রাখা, পেমেন্ট ও Escrow যাচাই, প্রতারণা প্রতিরোধ এবং সাপোর্ট দেওয়ার জন্য।</p>' +
+      '<p><strong style="color:var(--gold2)">৩. কার সঙ্গে শেয়ার</strong><br>বিজ্ঞাপন বা বিক্রির জন্য বিক্রেতা ও ক্রেতাকে শুধু প্রয়োজনীয় তথ্য দেখানো হয়। আইনানুগ নির্দেশ ছাড়া তৃতীয় পক্ষকে দেওয়া হয় না।</p>' +
+      '<p><strong style="color:var(--gold2)">৪. ডকুমেন্ট</strong><br>NID/জন্মনিবন্ধন প্রাইভেট স্টোরেজে থাকে, শুধু Admin দেখতে পারে।</p>' +
+      '<p><strong style="color:var(--gold2)">৫. কুকি / লোকাল স্টোরেজ</strong><br>লগইন সেশন, ভাষা, থিম ও Recently Viewed মনে রাখতে ব্যবহার হয়। বিজ্ঞাপনের জন্য ট্র্যাকিং কুকি ব্যবহার করা হয় না।</p>' +
+      '<p><strong style="color:var(--gold2)">৬. আপনার অধিকার</strong><br>তথ্য সংশোধন বা অ্যাকাউন্ট মোছার অনুরোধ Support-এ জানান।</p></div>' +
+      '<button class="btn" type="button" style="width:100%;margin-top:12px" data-x>বুঝেছি</button>';
+    window.axpOpenPrivacy = function () { if (typeof openModal === "function") openModal("axpPrivacyModal"); else m.classList.add("open"); };
+
+    document.querySelectorAll(".footer-col").forEach(function (col) {
+      const h = col.querySelector("h4");
+      if (h && h.textContent.trim() === "পলিসি" && !col.querySelector("[data-axp]")) {
+        const a = document.createElement("a");
+        a.href = "#"; a.dataset.axp = "1"; a.textContent = "🔒 Privacy Policy";
+        a.onclick = function (e) { e.preventDefault(); window.axpOpenPrivacy(); };
+        col.appendChild(a);
+      }
+    });
+
+    let accepted = false;
+    try { accepted = !!localStorage.getItem("axp_cookie"); } catch (_) {}
+    if (!accepted) {
+      const c = document.createElement("div");
+      c.id = "axpCookie";
+      c.innerHTML = '<div class="txt">🍪 এই সাইট লগইন, ভাষা ও থিম মনে রাখতে কুকি/লোকাল স্টোরেজ ব্যবহার করে। <a onclick="axpOpenPrivacy()">Privacy Policy</a></div><button class="btn" type="button" id="axpCookieOk">ঠিক আছে</button>';
+      document.body.appendChild(c);
+      $$("axpCookieOk").addEventListener("click", function () {
+        try { localStorage.setItem("axp_cookie", "1"); } catch (_) {}
+        c.remove();
+      });
+    }
+  })();
+
+  /* =====================================================
+     ৪. আপলোডের আগে ছবি কম্প্রেশন (সাইট দ্রুত হবে)
+  ===================================================== */
+  async function compress(file) {
+    try {
+      if (!file || !/^image\/(jpeg|png|webp)$/.test(file.type) || file.size < 600 * 1024) return file;
+      const bmp = await createImageBitmap(file);
+      const sc = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+      const cv = document.createElement("canvas");
+      cv.width = Math.round(bmp.width * sc); cv.height = Math.round(bmp.height * sc);
+      const ctx = cv.getContext("2d");
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height);
+      ctx.drawImage(bmp, 0, 0, cv.width, cv.height);
+      const blob = await new Promise(function (r) { cv.toBlob(r, "image/jpeg", 0.82); });
+      if (!blob || blob.size >= file.size) return file;
+      return new File([blob], file.name.replace(/\.\w+$/, "") + ".jpg", { type: "image/jpeg" });
+    } catch (_) { return file; }
+  }
+  hook("uploadFile", async function (prev, t, a) {
+    const small = await compress(a[0]);
+    return prev.call(t, small, a[1]);
+  });
+
+  if (!HAS) return;   // নিচের সব ফিচার Supabase লাগে
+
+  /* =====================================================
+     ৫. ডুপ্লিকেট Transaction ID চেক (অর্ডার জমার আগে)
+  ===================================================== */
+  (function dupTrx() {
+    const form = $$("checkoutForm");
+    if (!form) return;
+    let pass = false;
+    form.addEventListener("submit", function (e) {
+      if (pass) { pass = false; return; }
+      e.preventDefault(); e.stopImmediatePropagation();
+      const trx = ($$("transactionId").value || "").trim();
+      (async function () {
+        let used = false;
+        try {
+          const r = await sb.rpc("ax_trx_used", { t: trx });
+          if (!r.error) used = r.data === true;
+          else {
+            const q = await sb.from("orders").select("id", { count: "exact", head: true }).ilike("transaction_id", trx).neq("order_status", "cancelled");
+            used = !q.error && (q.count || 0) > 0;
+          }
+        } catch (_) {}
+        if (used) { msg("checkoutMessage", "এই Transaction ID আগেই ব্যবহার হয়েছে। সঠিক ID দিন।"); return; }
+        pass = true;
+        form.requestSubmit();
+      })();
+    }, true);
+  })();
+
+  /* =====================================================
+     ৬. Invoice / Receipt (প্রিন্ট বা PDF সেভ)
+  ===================================================== */
+  window.axpInvoice = function (id) {
+    const o = (typeof cachedOrders !== "undefined" ? cachedOrders : []).find(function (x) { return String(x.id) === String(id); });
+    if (!o) return;
+    const l = Array.isArray(o.listings) ? o.listings[0] : o.listings;
+    const name = profileName(currentProfile, currentUser);
+    const w = window.open("", "_blank");
+    if (!w) { showToast("Pop-up অনুমতি দিন", "error"); return; }
+    w.document.write('<!doctype html><html lang="bn"><head><meta charset="utf-8"><title>Invoice ' + esc(String(o.id).slice(0, 8).toUpperCase()) + '</title>' +
+      '<style>body{font-family:Arial,"Noto Sans Bengali",sans-serif;max-width:640px;margin:30px auto;padding:0 18px;color:#111}h1{margin:0;color:#8a6a1a}table{width:100%;border-collapse:collapse;margin:18px 0}td{padding:9px;border-bottom:1px solid #ddd}td:first-child{color:#666;width:42%}.t{font-size:20px;font-weight:700}.n{font-size:12px;color:#666;line-height:1.8}button{padding:9px 16px;margin-top:10px}@media print{button{display:none}}</style></head><body>' +
+      '<h1>ANSU ELITE MARKETPLACE</h1><div class="n">Payment Receipt / Invoice</div><table>' +
+      '<tr><td>Invoice / Order ID</td><td>' + esc(String(o.id).toUpperCase()) + '</td></tr>' +
+      '<tr><td>তারিখ</td><td>' + esc(bd(o.created_at)) + '</td></tr>' +
+      '<tr><td>ক্রেতা</td><td>' + esc(name) + '</td></tr>' +
+      '<tr><td>অ্যাকাউন্ট</td><td>' + esc(l && l.title || "Free Fire Account") + '</td></tr>' +
+      '<tr><td>পেমেন্ট মাধ্যম</td><td>' + esc(o.payment_method || "") + '</td></tr>' +
+      '<tr><td>Transaction ID</td><td>' + esc(o.transaction_id || "—") + '</td></tr>' +
+      '<tr><td>স্ট্যাটাস</td><td>' + esc(o.order_status) + ' / ' + esc(o.payment_status) + '</td></tr>' +
+      '<tr><td class="t">মোট</td><td class="t">' + esc(money(o.amount)) + '</td></tr></table>' +
+      '<div class="n">এটি কম্পিউটার-জেনারেটেড রসিদ। Escrow সুরক্ষার আওতায় সম্পন্ন লেনদেন।</div>' +
+      '<button onclick="window.print()">🖨️ Print / PDF হিসেবে সেভ</button></body></html>');
+    w.document.close();
+  };
+  (function invoiceButtons() {
+    const c = $$("ordersContent");
+    if (!c) return;
+    const add = safe(function () {
+      c.querySelectorAll("tr").forEach(function (tr) {
+        if (tr.querySelector(".axp-inv")) return;
+        const chat = tr.querySelector('button[onclick^="openOrderChat"]');
+        if (!chat) return;
+        const m = /'([^']+)'/.exec(chat.getAttribute("onclick") || "");
+        const o = m && (typeof cachedOrders !== "undefined" ? cachedOrders : []).find(function (x) { return String(x.id) === m[1]; });
+        if (!o || o.order_status !== "completed") return;
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "btn secondary axp-inv"; b.style.cssText = "font-size:11px;margin:0 0 6px 4px";
+        b.textContent = "🧾 Invoice";
+        b.onclick = function () { window.axpInvoice(m[1]); };
+        chat.insertAdjacentElement("afterend", b);
+      });
+    });
+    new MutationObserver(add).observe(c, { childList: true, subtree: true });
+  })();
+
+  /* =====================================================
+     ৭. অর্ডার স্ট্যাটাস লাইভ নোটিফিকেশন (ক্রেতার জন্য)
+        দ্রষ্টব্য: Supabase-এ orders টেবিলে Realtime চালু থাকতে হবে (SQL ফাইলে আছে)।
+  ===================================================== */
+  (function orderWatch() {
+    let ch = null, uid = null;
+    const seen = new Map();
+    const sig = function (o) { return [o.payment_status, o.order_status, o.escrow_status].join("|"); };
+    function note(o) {
+      if (o.order_status === "cancelled") return ["❌ আপনার অর্ডার বাতিল হয়েছে।", "error"];
+      if (o.payment_status === "rejected") return ["❌ পেমেন্ট যাচাই হয়নি। My Orders দেখুন।", "error"];
+      if (o.escrow_status === "refunded") return ["↩️ আপনার টাকা রিফান্ড হয়েছে।", "info"];
+      if (o.order_status === "completed") return ["🎉 অর্ডার সম্পন্ন হয়েছে। ধন্যবাদ!", "success"];
+      if (o.order_status === "confirmed") return ["✅ অর্ডার কনফার্ম হয়েছে। বিক্রেতা অ্যাকাউন্ট হস্তান্তর করবে।", "success"];
+      if (o.payment_status === "approved") return ["✅ আপনার পেমেন্ট যাচাই হয়েছে।", "success"];
+      return null;
+    }
+    function stop() { if (ch) { sb.removeChannel(ch); ch = null; } uid = null; seen.clear(); }
+    async function start() {
+      const now = currentUser ? currentUser.id : null;
+      if (now === uid) return;
+      stop();
+      if (!now) return;
+      uid = now;
+      try {
+        const r = await sb.from("orders").select("id,payment_status,order_status,escrow_status").eq("buyer_id", now).limit(200);
+        (r.data || []).forEach(function (o) { seen.set(String(o.id), sig(o)); });
+      } catch (_) {}
+      ch = sb.channel("axp-orders-" + now)
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "orders", filter: "buyer_id=eq." + now }, function (p) {
+          const o = p.new; if (!o) return;
+          const k = String(o.id), s = sig(o);
+          if (seen.get(k) === s) return;
+          seen.set(k, s);
+          const n = note(o);
+          if (n) showToast(n[0], n[1], 6000);
+          const sec = $$("ordersSection");
+          if (sec && !sec.classList.contains("hidden") && typeof loadOrders === "function") loadOrders();
+        }).subscribe();
+    }
+    sb.auth.onAuthStateChange(function () { setTimeout(safe(start), 600); });
+    setTimeout(safe(start), 1800);
+    setTimeout(safe(start), 5000);
+  })();
+
+  /* =====================================================
+     ৮. Seller পাবলিক প্রোফাইলে জয়েন তারিখ + গড় রেটিং + রিভিউ লিস্ট
+  ===================================================== */
+  hook("showPublicProfile", async function (prev, t, a) {
+    const r = await prev.apply(t, a);
+    const uid = a[0];
+    try {
+      const [p, rv] = await Promise.all([
+        sb.from("profiles").select("created_at").eq("id", uid).maybeSingle(),
+        sb.from("reviews").select("rating,comment").eq("seller_id", uid).limit(100)
+      ]);
+      const box = $$("publicProfileContent");
+      const anchor = box && box.querySelector(".profile-trust");
+      if (!anchor || box.querySelector(".axp-prof-extra")) return r;
+      const list = (rv.data || []);
+      const avg = list.length ? list.reduce(function (s, x) { return s + Number(x.rating); }, 0) / list.length : 0;
+      const stars = function (n) { n = Math.round(n); return "★".repeat(n) + "☆".repeat(5 - n); };
+      const rows = list.filter(function (x) { return x.comment; }).slice(0, 5).map(function (x) {
+        return '<div class="axp-rev"><span class="stars">' + stars(x.rating) + '</span><br>' + esc(x.comment) + '</div>';
+      }).join("");
+      anchor.insertAdjacentHTML("afterend",
+        '<div class="axp-prof-extra"><h4>📋 Seller তথ্য</h4>' +
+        '<div class="join">📅 জয়েন: ' + esc(p.data && p.data.created_at ? new Date(p.data.created_at).toLocaleDateString("bn-BD", { dateStyle: "long" }) : "—") + '</div>' +
+        (list.length ? '<div class="axp-rev" style="border-color:#e8c87960"><span class="stars">' + stars(avg) + '</span> <b>' + avg.toFixed(1) + '</b> (' + list.length + ' রিভিউ)</div>' + rows : '<div class="small-note">এখনো কোনো রিভিউ নেই।</div>') +
+        '</div>');
+    } catch (_) {}
+    return r;
+  });
+
+  /* =====================================================
+     ৯. SEO: লিস্টিং খুললে পেজ টাইটেল ও Structured Data
+  ===================================================== */
+  (function seo() {
+    const base = document.title;
+    hook("showDetails", function (prev, t, a) {
+      const r = prev.apply(t, a);
+      try {
+        const it = listings.find(function (x) { return String(x.id) === String(a[0]); });
+        if (it) {
+          document.title = it.title + " | ANSU ELITE";
+          let s = $$("axpLd");
+          if (!s) { s = document.createElement("script"); s.id = "axpLd"; s.type = "application/ld+json"; document.head.appendChild(s); }
+          s.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "Product", name: it.title, description: it.features || it.title, offers: { "@type": "Offer", priceCurrency: "BDT", price: Number(it.price), availability: "https://schema.org/InStock" } });
+        }
+      } catch (_) {}
+      return r;
+    });
+    hook("closeModal", function (prev, t, a) {
+      if (a[0] === "detailsModal") { document.title = base; const s = $$("axpLd"); if (s) s.remove(); }
+      return prev.apply(t, a);
+    });
+  })();
+
+  /* =====================================================
+     ১০. সেভ সার্চ / প্রাইস অ্যালার্ট (নতুন ID মিললে জানাবে)
+  ===================================================== */
+  (function alertSearch() {
+    const KEY = "axp_alert";
+    const get = function () { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (_) { return null; } };
+    const cur = function () {
+      return { q: ($$("search").value || "").toLowerCase().trim(), type: $$("typeFilter").value, minP: Number($$("minPrice").value) || 0, maxP: Number($$("maxPrice").value) || 0, minL: Number($$("minLevel").value) || 0, maxL: Number($$("maxLevel").value) || 0 };
+    };
+    function match(x, f) {
+      const text = [x.title, x.description, x.features, x.level, x.region, x.account_type].join(" ").toLowerCase().indexOf(f.q) >= 0;
+      const type = !f.type || x.account_type === f.type;
+      const p = Number(x.price), lv = Number(x.level || 0);
+      return text && type && p >= f.minP && (!f.maxP || p <= f.maxP) && lv >= f.minL && (!f.maxL || lv <= f.maxL);
+    }
+    const bar = document.querySelector("#market .filters");
+    if (!bar) return;
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "btn secondary axp-alert-btn";
+    bar.appendChild(b);
+    const label = function () { b.textContent = get() ? "🔔 অ্যালার্ট চালু (বন্ধ করুন)" : "🔔 এই সার্চ সেভ করুন"; };
+    label();
+    b.addEventListener("click", function () {
+      if (get()) { localStorage.removeItem(KEY); showToast("অ্যালার্ট বন্ধ হয়েছে", "info"); }
+      else { localStorage.setItem(KEY, JSON.stringify({ f: cur(), last: new Date().toISOString() })); showToast("সেভ হয়েছে। নতুন ID এলে জানানো হবে 🔔", "success"); }
+      label();
+    });
+    hook("loadListings", async function (prev, t, a) {
+      const r = await prev.apply(t, a);
+      try {
+        const al = get();
+        if (al && Array.isArray(listings)) {
+          const fresh = listings.filter(function (x) { return x.created_at && x.created_at > al.last && match(x, al.f); });
+          if (fresh.length) showToast("🔔 আপনার সেভ করা সার্চে " + fresh.length + "টি নতুন ID এসেছে!", "success", 6000);
+          al.last = new Date().toISOString();
+          localStorage.setItem(KEY, JSON.stringify(al));
+        }
+      } catch (_) {}
+      return r;
+    });
+  })();
+
+  /* =====================================================
+     ১১. Seller Wallet + Withdrawal রিকোয়েস্ট
+  ===================================================== */
+  const WD = { available: 0 };
+  const WD_LABEL = { pending: "⏳ Pending", approved: "✔ Approved", paid: "✅ Paid", rejected: "❌ Rejected" };
+
+  async function renderWallet() {
+    if (!currentUser) return;
+    const box = $$("sellerContent");
+    if (!box) return;
+    const uid = currentUser.id;
+    const res = await Promise.all([
+      sb.from("orders").select("amount,seller_amount,order_status,listings!inner(seller_id)").eq("listings.seller_id", uid).eq("order_status", "completed").limit(2000),
+      sb.from("withdrawals").select("*").eq("seller_id", uid).order("created_at", { ascending: false }).limit(20)
+    ]);
+    const old = $$("axpWallet"); if (old) old.remove();
+    const w = document.createElement("div");
+    w.id = "axpWallet"; w.className = "feature-card";
+    if (res[0].error || res[1].error) {
+      w.innerHTML = '<h3>💼 Seller Wallet</h3><p class="small-note">Wallet চালু করতে ansu-pro-addon.sql চালান।</p>';
+      box.prepend(w); return;
+    }
+    const earned = (res[0].data || []).reduce(function (s, o) { return s + Number(o.seller_amount || o.amount || 0); }, 0);
+    const used = (res[1].data || []).filter(function (x) { return x.status !== "rejected"; }).reduce(function (s, x) { return s + Number(x.amount); }, 0);
+    WD.available = Math.max(0, earned - used);
+    const hist = (res[1].data || []).map(function (x) {
+      return '<tr><td>' + esc(bd(x.created_at)) + '</td><td>' + money(x.amount) + '</td><td>' + esc(x.method) + ' ' + esc(x.account_number) + '</td><td>' + esc(WD_LABEL[x.status] || x.status) + '</td></tr>';
+    }).join("");
+    w.innerHTML = '<h3>💼 Seller Wallet</h3>' +
+      '<div class="stat-grid"><div class="stat-box"><span>মোট আয় (সম্পন্ন)</span><strong>' + money(earned) + '</strong></div><div class="stat-box"><span>তোলার যোগ্য ব্যালেন্স</span><strong>' + money(WD.available) + '</strong></div></div>' +
+      '<div class="axp-row" style="margin-top:10px"><button class="btn" type="button" onclick="axpOpenWithdraw()">💸 টাকা তোলার অনুরোধ</button></div>' +
+      (hist ? '<div class="table-wrap" style="margin-top:10px"><table><thead><tr><th>তারিখ</th><th>পরিমাণ</th><th>মাধ্যম</th><th>স্ট্যাটাস</th></tr></thead><tbody>' + hist + '</tbody></table></div>' : '<p class="small-note">এখনো কোনো উইথড্রয়াল নেই।</p>');
+    box.prepend(w);
+  }
+  hook("loadSellerOrders", async function (prev, t, a) {
+    const r = await prev.apply(t, a);
+    try { await renderWallet(); } catch (e) { console.warn(e); }
+    return r;
+  });
+
+  window.axpOpenWithdraw = function () {
+    if (!requireLogin()) return;
+    const m = mkModal("axpWdModal", "💸 টাকা তোলার অনুরোধ");
+    m.querySelector(".axp-body").innerHTML =
+      '<div class="notice">তোলার যোগ্য ব্যালেন্স: <b>' + money(WD.available) + '</b></div>' +
+      '<form class="form" id="axpWdForm">' +
+      '<div><label>পরিমাণ (টাকা)</label><input class="field" id="axpWdAmt" type="number" min="100" max="' + WD.available + '" required></div>' +
+      '<div><label>মাধ্যম</label><select class="field" id="axpWdMethod"><option value="bkash">bKash</option><option value="nagad">Nagad</option></select></div>' +
+      '<div><label>আপনার নম্বর</label><input class="field" id="axpWdNum" maxlength="20" placeholder="01XXXXXXXXX" required></div>' +
+      '<button class="btn" type="submit">অনুরোধ পাঠান</button></form><div id="axpWdMsg"></div>';
+    $$("axpWdForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const amount = Number($$("axpWdAmt").value);
+      if (!(amount >= 100)) { msg("axpWdMsg", "সর্বনিম্ন ১০০ টাকা।"); return; }
+      if (amount > WD.available) { msg("axpWdMsg", "ব্যালেন্সের বেশি তোলা যাবে না।"); return; }
+      const { error } = await sb.from("withdrawals").insert({ seller_id: currentUser.id, amount: amount, method: $$("axpWdMethod").value, account_number: $$("axpWdNum").value.trim(), status: "pending" });
+      if (error) { msg("axpWdMsg", /insufficient/i.test(error.message || "") ? "ব্যালেন্স যথেষ্ট নয়।" : publicError(error)); return; }
+      showToast("অনুরোধ জমা হয়েছে", "success");
+      m.classList.remove("open");
+      renderWallet();
+    });
+    openModal("axpWdModal");
+  };
+
+  /* =====================================================
+     ১২. Admin: টুলবার (Activity Log, Withdrawals, সেলস গ্রাফ)
+  ===================================================== */
+  hook("loadAdmin", async function (prev, t, a) {
+    const r = await prev.apply(t, a);
+    try { if (isAdmin()) injectAdminTools(); } catch (e) { console.warn(e); }
+    return r;
+  });
+
+  function injectAdminTools() {
+    const c = $$("adminContent");
+    if (!c || $$("axpAdminTools")) return;
+    const d = document.createElement("div");
+    d.id = "axpAdminTools"; d.className = "axp-adm-tools";
+    d.innerHTML = '<div class="axp-row"><button class="btn secondary" type="button" onclick="axpAdminLogs()">📝 Activity Log</button><button class="btn secondary" type="button" onclick="axpAdminWd()">💸 Withdrawals</button></div><div id="axpChart"></div>';
+    c.insertBefore(d, c.firstChild);
+    renderChart($$("axpChart"));
+  }
+
+  async function renderChart(box) {
+    const since = new Date(Date.now() - 13 * 864e5); since.setHours(0, 0, 0, 0);
+    const { data, error } = await sb.from("orders").select("amount,created_at").eq("order_status", "completed").gte("created_at", since.toISOString()).limit(2000);
+    if (error || !box) return;
+    const days = [];
+    for (let i = 0; i < 14; i++) { const x = new Date(since.getTime() + i * 864e5); days.push({ k: x.toDateString(), l: x.getDate() + "/" + (x.getMonth() + 1), sum: 0, n: 0 }); }
+    (data || []).forEach(function (o) { const k = new Date(o.created_at).toDateString(); const d = days.find(function (z) { return z.k === k; }); if (d) { d.sum += Number(o.amount || 0); d.n++; } });
+    const max = Math.max(1, Math.max.apply(null, days.map(function (z) { return z.sum; })));
+    const total = days.reduce(function (s, z) { return s + z.sum; }, 0);
+    box.innerHTML = '<div class="feature-card"><h3>📈 গত ১৪ দিনের সেলস</h3><div class="axp-chart">' +
+      days.map(function (z) { return '<div class="axp-bar" title="' + esc(z.l) + ': ' + esc(money(z.sum)) + ' (' + z.n + 'টি)"><span style="height:' + Math.max(2, z.sum / max * 100) + '%"></span><small>' + esc(z.l) + '</small></div>'; }).join("") +
+      '</div><div class="small-note">১৪ দিনে মোট: <b>' + money(total) + '</b></div></div>';
+  }
+
+  window.axpAdminLogs = async function () {
+    if (!isAdmin()) return;
+    const m = mkModal("axpLogModal", "📝 Admin Activity Log");
+    const body = m.querySelector(".axp-body");
+    body.innerHTML = '<div class="panel">লোড হচ্ছে...</div>';
+    openModal("axpLogModal");
+    const { data, error } = await sb.from("admin_logs").select("*").order("created_at", { ascending: false }).limit(100);
+    if (error) { body.innerHTML = '<div class="panel">লোড করা যায়নি। SQL চালানো হয়েছে কিনা দেখুন।</div>'; return; }
+    if (!data.length) { body.innerHTML = '<div class="post-empty">এখনো কোনো লগ নেই।</div>'; return; }
+    const ids = Array.from(new Set(data.map(function (x) { return x.admin_id; }).filter(Boolean)));
+    const pr = await sb.from("profiles").select("id,full_name").in("id", ids);
+    const nm = {}; (pr.data || []).forEach(function (p) { nm[p.id] = p.full_name || "Admin"; });
+    body.innerHTML = '<div class="table-wrap"><table><thead><tr><th>সময়</th><th>Admin</th><th>কাজ</th><th>টার্গেট</th><th>বিবরণ</th></tr></thead><tbody>' +
+      data.map(function (x) { return '<tr><td>' + esc(bd(x.created_at)) + '</td><td>' + esc(nm[x.admin_id] || "—") + '</td><td>' + esc(x.action) + '</td><td>' + esc((x.target_type || "") + " " + String(x.target_id || "").slice(0, 8).toUpperCase()) + '</td><td>' + esc(JSON.stringify(x.details || {})) + '</td></tr>'; }).join("") +
+      '</tbody></table></div>';
+  };
+
+  window.axpAdminWd = async function () {
+    if (!isAdmin()) return;
+    const m = mkModal("axpAdmWdModal", "💸 Withdrawal Requests");
+    const body = m.querySelector(".axp-body");
+    body.innerHTML = '<div class="panel">লোড হচ্ছে...</div>';
+    openModal("axpAdmWdModal");
+    const { data, error } = await sb.from("withdrawals").select("*").eq("status", "pending").order("created_at", { ascending: true }).limit(100);
+    if (error) { body.innerHTML = '<div class="panel">লোড করা যায়নি। SQL চালানো হয়েছে কিনা দেখুন।</div>'; return; }
+    if (!data.length) { body.innerHTML = '<div class="post-empty">কোনো Pending রিকোয়েস্ট নেই।</div>'; return; }
+    const ids = Array.from(new Set(data.map(function (x) { return x.seller_id; })));
+    const pr = await sb.from("profiles").select("id,full_name").in("id", ids);
+    const nm = {}; (pr.data || []).forEach(function (p) { nm[p.id] = p.full_name || "Seller"; });
+    body.innerHTML = data.map(function (x) {
+      return '<div class="ax-member"><div class="info"><strong>' + esc(nm[x.seller_id] || "Seller") + '</strong> — <b>' + money(x.amount) + '</b><br><small class="small-note">' + esc(x.method) + ': ' + esc(x.account_number) + ' · ' + esc(bd(x.created_at)) + '</small></div>' +
+        '<button class="btn" type="button" onclick="axpWdDecide(\'' + esc(x.id) + '\',\'paid\')">✓ Paid</button>' +
+        '<button class="btn danger" type="button" onclick="axpWdDecide(\'' + esc(x.id) + '\',\'rejected\')">✕ Reject</button></div>';
+    }).join("");
+  };
+  window.axpWdDecide = async function (id, status) {
+    if (!isAdmin()) return;
+    if (!confirm(status === "paid" ? "টাকা পাঠানো হয়েছে নিশ্চিত?" : "রিজেক্ট করবেন?")) return;
+    const { data, error } = await sb.from("withdrawals").update({ status: status, processed_by: currentUser.id, processed_at: new Date().toISOString() }).eq("id", id).select("id");
+    if (error || !data || !data.length) { showToast("আপডেট করা যায়নি", "error"); return; }
+    try { await sb.from("admin_logs").insert({ admin_id: currentUser.id, action: "withdrawal_" + status, target_type: "withdrawal", target_id: String(id), details: {} }); } catch (_) {}
+    showToast("আপডেট হয়েছে", "success");
+    window.axpAdminWd();
+  };
+
+  /* =====================================================
+     ১৩. Admin Activity Log: অর্ডার ও লিস্টিং পরিবর্তন নিজে থেকে লগ হবে
+  ===================================================== */
+  async function logAction(row) {
+    try { if (currentUser && isAdmin()) await sb.from("admin_logs").insert(Object.assign({ admin_id: currentUser.id }, row)); } catch (_) {}
+  }
+  hook("updateOrder", async function (prev, t, a) {
+    const id = a[0];
+    const pay = $$("pay-" + id) && $$("pay-" + id).value, ord = $$("ord-" + id) && $$("ord-" + id).value, note = $$("note-" + id) && $$("note-" + id).value;
+    const r = await prev.apply(t, a);
+    try {
+      const q = await sb.from("orders").select("payment_status,order_status").eq("id", id).maybeSingle();
+      if (q.data && q.data.payment_status === pay && q.data.order_status === ord) {
+        await logAction({ action: "order_update", target_type: "order", target_id: String(id), details: { payment_status: pay, order_status: ord, note: note || "" } });
+      }
+    } catch (_) {}
+    return r;
+  });
+  hook("toggleListing", async function (prev, t, a) {
+    const r = await prev.apply(t, a);
+    try {
+      const q = await sb.from("listings").select("status").eq("id", a[0]).maybeSingle();
+      if (q.data && q.data.status === a[1]) await logAction({ action: "listing_" + a[1], target_type: "listing", target_id: String(a[0]), details: {} });
+    } catch (_) {}
+    return r;
+  });
+})();
+</script>
+
 </body>
 </html>
