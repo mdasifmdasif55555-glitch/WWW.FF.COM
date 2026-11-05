@@ -3266,6 +3266,139 @@ hook("openSell", async function(prev, self, args){
 console.log("[axAll] ✅ 8 features add-on loaded");
 })();
 </script>
+  <!-- ============================================================
+     ANSU ELITE — LAYOUT & MENU FIX (Final Block)
+============================================================ -->
+<style>
+/* ===== ১. মোবাইল নেভিগেশন বার (শুধু মোবাইলে দেখাবে) ===== */
+#axMobileNav {
+  display: none; /* ডেস্কটপে লুকানো থাকবে */
+}
+
+@media (max-width: 800px) {
+  #axMobileNav {
+    display: flex !important; 
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    right: 0; 
+    z-index: 50;
+    background: #0d1712f5; 
+    backdrop-filter: blur(16px);
+    border-top: 1px solid #e8c87940;
+    padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+    justify-content: space-around; 
+    align-items: center;
+  }
+  #axMobileNav a {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 2px;
+    color: #a4b5aa; 
+    font-size: 10px; 
+    text-decoration: none; 
+    padding: 6px 12px;
+    border-radius: 10px; 
+    transition: .2s; 
+    min-width: 56px;
+  }
+  #axMobileNav a.active { color: #e8c879; }
+  #axMobileNav a:active { background: #14251b; }
+  #axMobileNav .icon { font-size: 20px; line-height: 1; }
+  body { padding-bottom: 80px !important; }
+  
+  /* মোবাইলে নিচের বাটনগুলোর কন্টেইনার ঠিক করা */
+  #axMobileNav { justify-content: space-evenly; }
+}
+
+/* মেম্বার সেকশনের মার্জিন ঠিক করা যাতে নিচের বার এর সাথে না লাগে */
+#mlSection { padding-bottom: 100px !important; }
+</style>
+
+<!-- মোবাইল নেভিগেশন বার (প্রোফাইল বাটন ছাড়া) -->
+<nav id="axMobileNav">
+  <a href="#" onclick="event.preventDefault();var m=document.getElementById('market');if(m)m.scrollIntoView({behavior:'smooth'})" data-nav="market">
+    <span class="icon">🛒</span><span>মার্কেট</span>
+  </a>
+  <a href="#" onclick="event.preventDefault();var c=document.getElementById('community');if(c)c.scrollIntoView({behavior:'smooth'})" data-nav="community">
+    <span class="icon">💬</span><span>কমিউনিটি</span>
+  </a>
+  <a href="#" onclick="event.preventDefault();if(typeof axOpenInbox==='function')axOpenInbox()" data-nav="chat">
+    <span class="icon">✉️</span><span>চ্যাট</span>
+  </a>
+  <!-- প্রোফাইল বাটন এখান থেকে বাদ দেওয়া হয়েছে -->
+</nav>
+
+<script>
+(function(){
+  "use strict";
+  if(window.__axLayoutFix) return;
+  window.__axLayoutFix = true;
+
+  // ============================================================
+  // ২. ALL MENU-তে "Members" বাটন যোগ করা
+  // ============================================================
+  function addMembersToMenu() {
+    const menuPanel = document.getElementById("axAllMenuPanel");
+    if (!menuPanel) return;
+    
+    // যদি আগে থেকেই বাটন থাকে, তবে নতুন করে যোগ করব না
+    if (menuPanel.querySelector("#axMenuMembersBtn")) return;
+
+    // বাটন তৈরি
+    const btn = document.createElement("button");
+    btn.id = "axMenuMembersBtn";
+    btn.className = "btn secondary";
+    btn.type = "button";
+    btn.innerHTML = "👥 Members";
+    btn.style.margin = "4px";
+    btn.style.padding = "10px 14px";
+    btn.style.fontSize = "13px";
+    
+    // ক্লিক করলে মেম্বার সেকশনে স্ক্রল করে যাবে
+    btn.onclick = function() {
+      const sec = document.getElementById("mlSection");
+      if (sec) {
+        // মেনু বন্ধ করা
+        if (typeof closeModal === "function") closeModal("axAllMenuPanel");
+        const menuBar = document.getElementById("axAllMenuBtn");
+        if (menuBar) menuBar.setAttribute("aria-expanded", "false");
+        if (menuPanel) menuPanel.hidden = true;
+        
+        // স্ক্রল করা
+        sec.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+
+    // মেনু প্যানেলে বাটনটি যোগ করা
+    menuPanel.appendChild(btn);
+  }
+
+  // মেনু তৈরি হওয়া পর্যন্ত অপেক্ষা করা
+  const checkMenu = setInterval(function() {
+    const menuPanel = document.getElementById("axAllMenuPanel");
+    if (menuPanel) {
+      addMembersToMenu();
+      clearInterval(checkMenu);
+    }
+  }, 1000);
+
+  // যদি মেনু ডাইনামিকভাবে রি-রেন্ডার হয়, তবে MutationObserver দিয়ে খেয়াল রাখা
+  const observer = new MutationObserver(function() {
+    addMembersToMenu();
+  });
+  
+  const menuContainer = document.querySelector("header");
+  if (menuContainer) {
+    observer.observe(menuContainer, { childList: true, subtree: true });
+  }
+
+})();
+</script>
+<!-- ============================================================
+     END LAYOUT FIX
+============================================================ -->
 <!-- ============================================================
      ANSU ELITE — 8 FEATURES ADD-ON END
 ============================================================ -->
