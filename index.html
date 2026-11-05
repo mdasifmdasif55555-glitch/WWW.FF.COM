@@ -6706,6 +6706,586 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
     return r;
   });
 })();
+/* =====================================================
+    ১৪. WhatsApp-স্টাইল Inbox চ্যাট থিম (নিরাপদ Add-on)
+    - পুরোনো কোড ভাঙবে না
+    - Duplicate গার্ড আছে
+    - User নিজে থিম বদলাতে পারবে (localStorage সেভ)
+===================================================== */
+(function axpChatTheme() {
+  "use strict";
+  if (window.__axpChatTheme) return;   // ডুপ্লিকেট পেস্ট সেফ
+  window.__axpChatTheme = true;
+
+  const KEY = "axp_chat_theme";
+  const THEMES = {
+    whatsapp: { name: "WhatsApp সবুজ", icon: "💬" },
+    dark:     { name: "ডার্ক",          icon: "🌙" },
+    gold:     { name: "ANSU গোল্ড",    icon: "✨" },
+    light:    { name: "লাইট",          icon: "☀️" }
+  };
+
+  /* ---------- CSS ইনজেক্ট ---------- */
+  const css = `
+  /* === Inbox modal base === */
+  #axInboxModal .modal-box {
+    background: #0b141a !important;
+    border: 1px solid #1f2c34 !important;
+    overflow: hidden;
+  }
+  #axInboxModal .modal-head {
+    background: #1f2c34 !important;
+    border-bottom: 1px solid #2a3942 !important;
+    color: #e9edef !important;
+    padding: 10px 14px !important;
+  }
+  #axInboxModal .modal-head h2 { color: #e9edef !important; font-size: 15px !important; }
+
+  /* === Messages area — WhatsApp doodle pattern === */
+  #axInboxModal .messages,
+  #axInboxModal #axMessages,
+  #axInboxModal .chat-messages,
+  #axInboxModal [class*="message-list"],
+  #axInboxModal [class*="chat-body"] {
+    background-color: #0b141a !important;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(255,255,255,.018) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, rgba(255,255,255,.018) 1px, transparent 1px),
+      radial-gradient(circle at 10% 60%, rgba(255,255,255,.012) 1px, transparent 1px),
+      radial-gradient(circle at 90% 20%, rgba(255,255,255,.012) 1px, transparent 1px) !important;
+    background-size: 60px 60px, 60px 60px, 40px 40px, 40px 40px !important;
+    padding: 14px 10px !important;
+  }
+
+  /* === Message bubbles — WhatsApp style === */
+  #axInboxModal .msg,
+  #axInboxModal .message,
+  #axInboxModal .bubble,
+  #axInboxModal [class*="msg-"],
+  #axInboxModal [class*="message-"] {
+    max-width: 78% !important;
+    padding: 7px 11px !important;
+    border-radius: 10px !important;
+    font-size: 13.5px !important;
+    line-height: 1.45 !important;
+    word-wrap: break-word !important;
+    overflow-wrap: anywhere !important;
+    position: relative !important;
+    box-shadow: 0 1px 1px rgba(0,0,0,.25) !important;
+    margin-bottom: 6px !important;
+  }
+
+  /* নিজের মেসেজ (ডানে) */
+  #axInboxModal .msg.mine,
+  #axInboxModal .message.mine,
+  #axInboxModal .bubble.mine,
+  #axInboxModal .msg.self,
+  #axInboxModal .message.self,
+  #axInboxModal [class*="msg-"][class*="mine"],
+  #axInboxModal [class*="message-"][class*="mine"] {
+    background: #005c4b !important;
+    color: #e9edef !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    border-top-right-radius: 3px !important;
+    border-bottom-right-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+  }
+
+  /* অন্যের মেসেজ (বামে) */
+  #axInboxModal .msg.theirs,
+  #axInboxModal .message.theirs,
+  #axInboxModal .bubble.theirs,
+  #axInboxModal .msg.other,
+  #axInboxModal .message.other,
+  #axInboxModal [class*="msg-"][class*="theirs"],
+  #axInboxModal [class*="message-"][class*="theirs"] {
+    background: #202c33 !important;
+    color: #e9edef !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    border-top-left-radius: 3px !important;
+    border-bottom-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+  }
+
+  /* টাইম/মেটা টেক্সট */
+  #axInboxModal .msg small,
+  #axInboxModal .message small,
+  #axInboxModal .msg time,
+  #axInboxModal .message time {
+    color: #8696a0 !important;
+    font-size: 10px !important;
+    opacity: .85 !important;
+  }
+
+  /* Input area */
+  #axInboxModal .modal-box form,
+  #axInboxModal .chat-input,
+  #axInboxModal [class*="input-area"] {
+    background: #1f2c34 !important;
+    border-top: 1px solid #2a3942 !important;
+    padding: 8px 10px !important;
+  }
+  #axInboxModal input.field,
+  #axInboxModal textarea.field {
+    background: #2a3942 !important;
+    color: #e9edef !important;
+    border: none !important;
+    border-radius: 20px !important;
+    padding: 9px 14px !important;
+  }
+  #axInboxModal input.field::placeholder,
+  #axInboxModal textarea.field::placeholder {
+    color: #8696a0 !important;
+  }
+
+  /* Send button */
+  #axInboxModal form .btn:not(.secondary) {
+    background: #00a884 !important;
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    color: #fff !important;
+    border: none !important;
+  }
+
+  /* === থিম ভ্যারিয়েন্ট === */
+  body.ax-chat-dark #axInboxModal .messages {
+    background-image: none !important;
+    background: #0b141a !important;
+  }
+  body.ax-chat-gold #axInboxModal .messages {
+    background:
+      radial-gradient(circle at 20% 30%, #e8c87910, transparent 40%),
+      radial-gradient(circle at 80% 70%, #e8c87908, transparent 40%),
+      #0b1711 !important;
+  }
+  body.ax-chat-gold #axInboxModal .msg.mine {
+    background: linear-gradient(145deg, #1a3024, #254a34) !important;
+    color: #f4dc94 !important;
+  }
+  body.ax-chat-gold #axInboxModal .msg.theirs {
+    background: #101a13 !important;
+    color: #d4ddd6 !important;
+  }
+  body.ax-chat-gold #axInboxModal form .btn:not(.secondary) {
+    background: #b68a3d !important;
+  }
+  body.ax-chat-light #axInboxModal .modal-box { background: #efeae2 !important; }
+  body.ax-chat-light #axInboxModal .modal-head { background: #075e54 !important; }
+  body.ax-chat-light #axInboxModal .messages {
+    background-color: #efeae2 !important;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(0,0,0,.025) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, rgba(0,0,0,.025) 1px, transparent 1px) !important;
+    background-size: 40px 40px, 40px 40px !important;
+  }
+  body.ax-chat-light #axInboxModal .msg.mine {
+    background: #d9fdd3 !important; color: #111 !important;
+  }
+  body.ax-chat-light #axInboxModal .msg.theirs {
+    background: #ffffff !important; color: #111 !important;
+  }
+  body.ax-chat-light #axInboxModal .modal-box form { background: #f0f2f5 !important; }
+  body.ax-chat-light #axInboxModal input.field {
+    background: #fff !important; color: #111 !important;
+  }
+
+  /* === থিম বাটন === */
+  .axp-chat-theme-btn {
+    position: absolute;
+    top: 12px;
+    right: 52px;
+    z-index: 5;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 1px solid #2a3942;
+    background: #202c33;
+    color: #e9edef;
+    font-size: 16px;
+    cursor: pointer;
+    display: grid; place-items: center;
+    transition: .2s;
+  }
+  .axp-chat-theme-btn:hover { transform: scale(1.08); background: #2a3942; }
+  #axInboxModal .modal-head { position: relative; }
+  `;
+
+  const st = document.createElement("style");
+  st.id = "axpChatThemeCSS";
+  st.textContent = css;
+  document.head.appendChild(st);
+
+  /* ---------- থিম অ্যাপ্লাই ---------- */
+  function applyTheme(t) {
+    if (!THEMES[t]) t = "whatsapp";
+    document.body.classList.remove("ax-chat-dark", "ax-chat-gold", "ax-chat-light");
+    if (t !== "whatsapp") document.body.classList.add("ax-chat-" + t);
+    try { localStorage.setItem(KEY, t); } catch (_) {}
+    const btn = document.getElementById("axpChatThemeBtn");
+    if (btn) {
+      btn.textContent = THEMES[t].icon;
+      btn.title = "চ্যাট থিম: " + THEMES[t].name + " (পরের থিমে ক্লিক করুন)";
+    }
+  }
+
+  let current = "whatsapp";
+  try { current = localStorage.getItem(KEY) || "whatsapp"; } catch (_) {}
+  applyTheme(current);
+
+  /* ---------- থিম বাটন Inject (Inbox modal-এ) ---------- */
+  function injectBtn() {
+    const modal = document.getElementById("axInboxModal");
+    if (!modal) return;
+    const head = modal.querySelector(".modal-head");
+    if (!head || head.querySelector("#axpChatThemeBtn")) return;
+    const b = document.createElement("button");
+    b.type = "button";
+    b.id = "axpChatThemeBtn";
+    b.className = "axp-chat-theme-btn";
+    b.textContent = THEMES[current].icon;
+    b.title = "চ্যাট থিম বদলান";
+    b.addEventListener("click", function (e) {
+      e.preventDefault(); e.stopPropagation();
+      const keys = Object.keys(THEMES);
+      const next = keys[(keys.indexOf(current) + 1) % keys.length];
+      current = next;
+      applyTheme(next);
+      if (typeof showToast === "function") showToast("চ্যাট থিম: " + THEMES[next].name, "info", 2000);
+    });
+    head.appendChild(b);
+  }
+
+  /* ---------- Inbox খোলা ডিটেক্ট (MutationObserver) ---------- */
+  const mo = new MutationObserver(function () {
+    const modal = document.getElementById("axInboxModal");
+    if (modal && modal.classList.contains("open")) injectBtn();
+  });
+  mo.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["class"] });
+
+  /* প্রথমবারেই চেক */
+  document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("axInboxModal");
+    if (modal && modal.classList.contains("open")) injectBtn();
+  });
+
+  /* ---------- পুরোনো openInbox ফাংশন হুক (নিরাপদ) ---------- */
+  if (typeof window.openInbox === "function") {
+    const prev = window.openInbox;
+    window.openInbox = function () {
+      const r = prev.apply(this, arguments);
+      setTimeout(injectBtn, 80);
+      return r;
+    };
+  }
+  if (typeof window.openModal === "function") {
+    const prevOpen = window.openModal;
+    window.openModal = function (id) {
+      const r = prevOpen.apply(this, arguments);
+      if (id === "axInboxModal") setTimeout(injectBtn, 80);
+      return r;
+    };
+  }
+
+  console.log("[axp-chat-theme] ✅ WhatsApp-স্টাইল চ্যাট থিম চালু হয়েছে");
+})();
+<script>
+/* ===== WhatsApp Chat Theme Add-on ===== */
+(function axpChatTheme() {
+  // /* =====================================================
+    ১৪. WhatsApp-স্টাইল Inbox চ্যাট থিম (নিরাপদ Add-on)
+    - পুরোনো কোড ভাঙবে না
+    - Duplicate গার্ড আছে
+    - User নিজে থিম বদলাতে পারবে (localStorage সেভ)
+===================================================== */
+(function axpChatTheme() {
+  "use strict";
+  if (window.__axpChatTheme) return;   // ডুপ্লিকেট পেস্ট সেফ
+  window.__axpChatTheme = true;
+
+  const KEY = "axp_chat_theme";
+  const THEMES = {
+    whatsapp: { name: "WhatsApp সবুজ", icon: "💬" },
+    dark:     { name: "ডার্ক",          icon: "🌙" },
+    gold:     { name: "ANSU গোল্ড",    icon: "✨" },
+    light:    { name: "লাইট",          icon: "☀️" }
+  };
+
+  /* ---------- CSS ইনজেক্ট ---------- */
+  const css = `
+  /* === Inbox modal base === */
+  #axInboxModal .modal-box {
+    background: #0b141a !important;
+    border: 1px solid #1f2c34 !important;
+    overflow: hidden;
+  }
+  #axInboxModal .modal-head {
+    background: #1f2c34 !important;
+    border-bottom: 1px solid #2a3942 !important;
+    color: #e9edef !important;
+    padding: 10px 14px !important;
+  }
+  #axInboxModal .modal-head h2 { color: #e9edef !important; font-size: 15px !important; }
+
+  /* === Messages area — WhatsApp doodle pattern === */
+  #axInboxModal .messages,
+  #axInboxModal #axMessages,
+  #axInboxModal .chat-messages,
+  #axInboxModal [class*="message-list"],
+  #axInboxModal [class*="chat-body"] {
+    background-color: #0b141a !important;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(255,255,255,.018) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, rgba(255,255,255,.018) 1px, transparent 1px),
+      radial-gradient(circle at 10% 60%, rgba(255,255,255,.012) 1px, transparent 1px),
+      radial-gradient(circle at 90% 20%, rgba(255,255,255,.012) 1px, transparent 1px) !important;
+    background-size: 60px 60px, 60px 60px, 40px 40px, 40px 40px !important;
+    padding: 14px 10px !important;
+  }
+
+  /* === Message bubbles — WhatsApp style === */
+  #axInboxModal .msg,
+  #axInboxModal .message,
+  #axInboxModal .bubble,
+  #axInboxModal [class*="msg-"],
+  #axInboxModal [class*="message-"] {
+    max-width: 78% !important;
+    padding: 7px 11px !important;
+    border-radius: 10px !important;
+    font-size: 13.5px !important;
+    line-height: 1.45 !important;
+    word-wrap: break-word !important;
+    overflow-wrap: anywhere !important;
+    position: relative !important;
+    box-shadow: 0 1px 1px rgba(0,0,0,.25) !important;
+    margin-bottom: 6px !important;
+  }
+
+  /* নিজের মেসেজ (ডানে) */
+  #axInboxModal .msg.mine,
+  #axInboxModal .message.mine,
+  #axInboxModal .bubble.mine,
+  #axInboxModal .msg.self,
+  #axInboxModal .message.self,
+  #axInboxModal [class*="msg-"][class*="mine"],
+  #axInboxModal [class*="message-"][class*="mine"] {
+    background: #005c4b !important;
+    color: #e9edef !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    border-top-right-radius: 3px !important;
+    border-bottom-right-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+  }
+
+  /* অন্যের মেসেজ (বামে) */
+  #axInboxModal .msg.theirs,
+  #axInboxModal .message.theirs,
+  #axInboxModal .bubble.theirs,
+  #axInboxModal .msg.other,
+  #axInboxModal .message.other,
+  #axInboxModal [class*="msg-"][class*="theirs"],
+  #axInboxModal [class*="message-"][class*="theirs"] {
+    background: #202c33 !important;
+    color: #e9edef !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    border-top-left-radius: 3px !important;
+    border-bottom-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+  }
+
+  /* টাইম/মেটা টেক্সট */
+  #axInboxModal .msg small,
+  #axInboxModal .message small,
+  #axInboxModal .msg time,
+  #axInboxModal .message time {
+    color: #8696a0 !important;
+    font-size: 10px !important;
+    opacity: .85 !important;
+  }
+
+  /* Input area */
+  #axInboxModal .modal-box form,
+  #axInboxModal .chat-input,
+  #axInboxModal [class*="input-area"] {
+    background: #1f2c34 !important;
+    border-top: 1px solid #2a3942 !important;
+    padding: 8px 10px !important;
+  }
+  #axInboxModal input.field,
+  #axInboxModal textarea.field {
+    background: #2a3942 !important;
+    color: #e9edef !important;
+    border: none !important;
+    border-radius: 20px !important;
+    padding: 9px 14px !important;
+  }
+  #axInboxModal input.field::placeholder,
+  #axInboxModal textarea.field::placeholder {
+    color: #8696a0 !important;
+  }
+
+  /* Send button */
+  #axInboxModal form .btn:not(.secondary) {
+    background: #00a884 !important;
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    color: #fff !important;
+    border: none !important;
+  }
+
+  /* === থিম ভ্যারিয়েন্ট === */
+  body.ax-chat-dark #axInboxModal .messages {
+    background-image: none !important;
+    background: #0b141a !important;
+  }
+  body.ax-chat-gold #axInboxModal .messages {
+    background:
+      radial-gradient(circle at 20% 30%, #e8c87910, transparent 40%),
+      radial-gradient(circle at 80% 70%, #e8c87908, transparent 40%),
+      #0b1711 !important;
+  }
+  body.ax-chat-gold #axInboxModal .msg.mine {
+    background: linear-gradient(145deg, #1a3024, #254a34) !important;
+    color: #f4dc94 !important;
+  }
+  body.ax-chat-gold #axInboxModal .msg.theirs {
+    background: #101a13 !important;
+    color: #d4ddd6 !important;
+  }
+  body.ax-chat-gold #axInboxModal form .btn:not(.secondary) {
+    background: #b68a3d !important;
+  }
+  body.ax-chat-light #axInboxModal .modal-box { background: #efeae2 !important; }
+  body.ax-chat-light #axInboxModal .modal-head { background: #075e54 !important; }
+  body.ax-chat-light #axInboxModal .messages {
+    background-color: #efeae2 !important;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(0,0,0,.025) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, rgba(0,0,0,.025) 1px, transparent 1px) !important;
+    background-size: 40px 40px, 40px 40px !important;
+  }
+  body.ax-chat-light #axInboxModal .msg.mine {
+    background: #d9fdd3 !important; color: #111 !important;
+  }
+  body.ax-chat-light #axInboxModal .msg.theirs {
+    background: #ffffff !important; color: #111 !important;
+  }
+  body.ax-chat-light #axInboxModal .modal-box form { background: #f0f2f5 !important; }
+  body.ax-chat-light #axInboxModal input.field {
+    background: #fff !important; color: #111 !important;
+  }
+
+  /* === থিম বাটন === */
+  .axp-chat-theme-btn {
+    position: absolute;
+    top: 12px;
+    right: 52px;
+    z-index: 5;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 1px solid #2a3942;
+    background: #202c33;
+    color: #e9edef;
+    font-size: 16px;
+    cursor: pointer;
+    display: grid; place-items: center;
+    transition: .2s;
+  }
+  .axp-chat-theme-btn:hover { transform: scale(1.08); background: #2a3942; }
+  #axInboxModal .modal-head { position: relative; }
+  `;
+
+  const st = document.createElement("style");
+  st.id = "axpChatThemeCSS";
+  st.textContent = css;
+  document.head.appendChild(st);
+
+  /* ---------- থিম অ্যাপ্লাই ---------- */
+  function applyTheme(t) {
+    if (!THEMES[t]) t = "whatsapp";
+    document.body.classList.remove("ax-chat-dark", "ax-chat-gold", "ax-chat-light");
+    if (t !== "whatsapp") document.body.classList.add("ax-chat-" + t);
+    try { localStorage.setItem(KEY, t); } catch (_) {}
+    const btn = document.getElementById("axpChatThemeBtn");
+    if (btn) {
+      btn.textContent = THEMES[t].icon;
+      btn.title = "চ্যাট থিম: " + THEMES[t].name + " (পরের থিমে ক্লিক করুন)";
+    }
+  }
+
+  let current = "whatsapp";
+  try { current = localStorage.getItem(KEY) || "whatsapp"; } catch (_) {}
+  applyTheme(current);
+
+  /* ---------- থিম বাটন Inject (Inbox modal-এ) ---------- */
+  function injectBtn() {
+    const modal = document.getElementById("axInboxModal");
+    if (!modal) return;
+    const head = modal.querySelector(".modal-head");
+    if (!head || head.querySelector("#axpChatThemeBtn")) return;
+    const b = document.createElement("button");
+    b.type = "button";
+    b.id = "axpChatThemeBtn";
+    b.className = "axp-chat-theme-btn";
+    b.textContent = THEMES[current].icon;
+    b.title = "চ্যাট থিম বদলান";
+    b.addEventListener("click", function (e) {
+      e.preventDefault(); e.stopPropagation();
+      const keys = Object.keys(THEMES);
+      const next = keys[(keys.indexOf(current) + 1) % keys.length];
+      current = next;
+      applyTheme(next);
+      if (typeof showToast === "function") showToast("চ্যাট থিম: " + THEMES[next].name, "info", 2000);
+    });
+    head.appendChild(b);
+  }
+
+  /* ---------- Inbox খোলা ডিটেক্ট (MutationObserver) ---------- */
+  const mo = new MutationObserver(function () {
+    const modal = document.getElementById("axInboxModal");
+    if (modal && modal.classList.contains("open")) injectBtn();
+  });
+  mo.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["class"] });
+
+  /* প্রথমবারেই চেক */
+  document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("axInboxModal");
+    if (modal && modal.classList.contains("open")) injectBtn();
+  });
+
+  /* ---------- পুরোনো openInbox ফাংশন হুক (নিরাপদ) ---------- */
+  if (typeof window.openInbox === "function") {
+    const prev = window.openInbox;
+    window.openInbox = function () {
+      const r = prev.apply(this, arguments);
+      setTimeout(injectBtn, 80);
+      return r;
+    };
+  }
+  if (typeof window.openModal === "function") {
+    const prevOpen = window.openModal;
+    window.openModal = function (id) {
+      const r = prevOpen.apply(this, arguments);
+      if (id === "axInboxModal") setTimeout(injectBtn, 80);
+      return r;
+    };
+  }
+
+  console.log("[axp-chat-theme] ✅ WhatsApp-স্টাইল চ্যাট থিম চালু হয়েছে");
+})();
+})();
+
+  
 </script>
 
 </body>
