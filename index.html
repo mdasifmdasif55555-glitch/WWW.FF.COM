@@ -3900,4 +3900,67 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 
 })();
 </script>
+<!-- ============================================================== -->
+<!-- LIVE VERIFICATION NOTIFICATION SYSTEM -->
+<!-- HTML এর একদম শেষে বসান -->
+<!-- ============================================================== -->
+<script>
+(function() {
+  "use strict";
+  if (window.__liveVerificationNotif) return;
+  window.__liveVerificationNotif = true;
 
+  let notifChannel = null;
+
+  // যখন ইউজার লগইন করবে, তখন তার নোটিফিকেশন লিসেনার চালু হবে
+  function setupLiveNotifications() {
+    if (!currentUser || !window.sb) return;
+    
+    // আগের চ্যানেল থাকলে সরিয়ে ফেলা
+    if (notifChannel) {
+      sb.removeChannel(notifChannel);
+    }
+
+    // ডাটাবেসের notifications টেবিলে নতুন কিছু আসলে তা শোনা
+    notifChannel = sb.channel('live-notifs-' + currentUser.id)
+      .on('postgres_changes', { 
+        event: 'INSERT', 
+        schema: 'public', 
+        table: 'notifications', 
+        filter: `user_id=eq.${currentUser.id}` 
+      }, (payload) => {
+        const notif = payload.new;
+        
+        // ১. স্ক্রিনে সুন্দর একটি টোস্ট মেসেজ দেখানো
+        showToast(`🔔 ${notif.title}: ${notif.message}`, 'success', 8000);
+
+        // ২. উপরের বেল আইকনে নতুন নোটিফিকেশন লোড করা
+        if (typeof window.loadNotifications === 'function') {
+          window.loadNotifications(); 
+        }
+
+        // ৩. যদি সে প্রোফাইল পেজে থাকে, তবে প্রোফাইল রিফ্রেশ করা (যাতে ভেরিফাইড ব্যাজ চলে আসে)
+        if (document.getElementById('profileModal')?.classList.contains('open')) {
+          if (typeof window.openProfile === 'function') window.openProfile();
+        }
+      })
+      .subscribe();
+  }
+
+  // ইউজার লগইন বা লগআউট হলে চেক করা
+  let lastUserId = null;
+  setInterval(() => {
+    const nowId = currentUser ? currentUser.id : null;
+    if (nowId !== lastUserId) {
+      lastUserId = nowId;
+      if (nowId) {
+        setupLiveNotifications();
+      } else if (notifChannel) {
+        sb.removeChannel(notifChannel);
+        notifChannel = null;
+      }
+    }
+  }, 2000);
+
+})();
+</script>
