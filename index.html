@@ -4418,3 +4418,379 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 
 })();
 </script>
+  <!-- ============================================================== -->
+<!-- GROUP CHAT ADVANCED FEATURES (Group Info, Leave, Emoji) -->
+<!-- HTML এর একদম শেষে বসান -->
+<!-- ============================================================== -->
+<style>
+  /* ইমোজি প্যানেল ও গ্রুপ ইনফো স্টাইল */
+  .gc-emoji-panel { display: none; position: absolute; bottom: 60px; left: 10px; background: #202c33; border: 1px solid #2a3942; border-radius: 10px; padding: 10px; width: 260px; grid-template-columns: repeat(7, 1fr); gap: 5px; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+  .gc-emoji-panel.show { display: grid; }
+  .gc-emoji-panel span { font-size: 22px; cursor: pointer; text-align: center; padding: 4px; border-radius: 5px; transition: 0.2s; }
+  .gc-emoji-panel span:hover { background: #2a3942; transform: scale(1.2); }
+  
+  .gc-info-member { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #2a3942; }
+  .gc-info-member img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px; }
+</style>
+
+<script>
+(function() {
+  "use strict";
+  if (window.__groupChatAdvanced) return;
+  window.__groupChatAdvanced = true;
+
+  // ১. আগের ওপেন চ্যাট ফাংশনটিকে হুক করা (যাতে নতুন বাটনগুলো বসানো যায়)
+  const originalGcOpenChat = window.gcOpenChat;
+  window.gcOpenChat = async function(groupId, groupName) {
+    await originalGcOpenChat(groupId, groupName);
+    
+    // চ্যাট বক্সের HTML-এ ইমোজি এবং ইনফো বাটন যুক্ত করা
+    setTimeout(() => {
+      const inputArea = document.querySelector(".gc-input-area");
+      if (inputArea && !document.getElementById("gcEmojiBtn")) {
+        // ইমোজি বাটন
+        const emojiBtn = document.createElement("button");
+        emojiBtn.className = "gc-icon-btn";
+        emojiBtn.id = "gcEmojiBtn";
+        emojiBtn.innerHTML = "😀";
+        emojiBtn.onclick = (e) => { e.preventDefault(); window.gcToggleEmoji(); };
+        
+        // ইনফো (Group Info) বাটন - ফিরে যাওয়া বাটনের পাশে
+        const backBtn = document.querySelector("#gcContent > button:nth-child(1)");
+        if (backBtn && !document.getElementById("gcInfoBtn")) {
+          const infoBtn = document.createElement("button");
+          infoBtn.className = "btn secondary";
+          infoBtn.id = "gcInfoBtn";
+          infoBtn.style.cssText = "padding:5px 10px; font-size:11px; margin-bottom:10px; margin-left:5px;";
+          infoBtn.innerHTML = "ℹ️ Group Info";
+          infoBtn.onclick = () => window.gcOpenGroupInfo(groupId, groupName);
+          backBtn.insertAdjacentElement("afterend", infoBtn);
+        }
+
+        // ইমোজি বাটন ইনপুটের আগে বসানো
+        const firstChild = inputArea.firstChild;
+        inputArea.insertBefore(emojiBtn, firstChild);
+
+        // ইমোজি প্যানেল তৈরি করা
+        const emojiPanel = document.createElement("div");
+        emojiPanel.className = "gc-emoji-panel";
+        emojiPanel.id = "gcEmojiPanel";
+        
+        const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👍","👎","👌","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","👇","☝️","✋","🤚","🖐","🖖","👋","🤝","🙏","💪","🦾","🖕","✍️","🤳","💅","🦵","🦶","👂","🦻","👃","🧠","🦷","👀","👁","👅","👄","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟"];
+        
+        emojis.forEach(em => {
+          const span = document.createElement("span");
+          span.textContent = em;
+          span.onclick = () => {
+            const input = document.getElementById("gcMsgInput");
+            input.value += em;
+            input.focus();
+          };
+          emojiPanel.appendChild(span);
+        });
+        
+        // প্যানেলটি ইনপুট এরিয়ার ভেতরে পজিশন করার জন্য relative করা
+        inputArea.style.position = "relative";
+        inputArea.appendChild(emojiPanel);
+      }
+    }, 100); // DOM লোড হওয়ার জন্য সামান্য অপেক্ষা
+  };
+
+  // ২. ইমোজি প্যানেল টগল করা
+  window.gcToggleEmoji = function() {
+    const panel = document.getElementById("gcEmojiPanel");
+    if (panel) panel.classList.toggle("show");
+  };
+
+  // ৩. গ্রুপ ইনফো (মেম্বার লিস্ট, Leave Group) দেখানো
+  window.gcOpenGroupInfo = async function(groupId, groupName) {
+    const content = document.getElementById("gcContent");
+    content.innerHTML = '<div style="text-align:center; color:#a4b5aa; padding:20px;">মেম্বার লিস্ট লোড হচ্ছে... ⏳</div>';
+
+    try {
+      // ১. গ্রুপের সব মেম্বার আনা (নাম ও ছবি সহ)
+      const { data: members, error } = await sb.from("group_members")
+        .select("user_id, role, profiles(full_name, avatar_url)")
+        .eq("group_id", groupId);
+
+      if (error) throw error;
+
+      const isCreator = members.find(m => m.user_id === currentUser.id && m.role === 'admin');
+
+      let membersHtml = members.map(m => {
+        const isMe = m.user_id === currentUser.id;
+        const isAdmin = m.role === 'admin';
+        return `
+          <div class="gc-info-member">
+            <div style="display:flex; align-items:center;">
+              <img src="${esc(m.profiles?.avatar_url || 'https://placehold.co/100x100/202c33/ffffff?text=U')}">
+              <div>
+                <div style="color:#e9edef; font-size:14px; font-weight:bold;">${esc(m.profiles?.full_name || 'User')} ${isMe ? '(You)' : ''}</div>
+                <div style="color:${isAdmin ? '#e8c879' : '#a4b5aa'}; font-size:11px;">${isAdmin ? '👑 Admin' : 'Member'}</div>
+              </div>
+            </div>
+            ${(isCreator && !isMe) ? `<button class="btn danger" style="padding:4px 8px; font-size:10px;" onclick="gcKickMember('${groupId}', '${m.user_id}')">Kick</button>` : ''}
+          </div>
+        `;
+      }).join("");
+
+      // UI তৈরি
+      content.innerHTML = `
+        <button class="btn secondary" style="padding:5px 10px; font-size:11px; margin-bottom:15px;" onclick="gcOpenChat('${groupId}', '${esc(groupName)}')">← ফিরে যান</button>
+        
+        <h3 style="color:#e8c879; margin-bottom:10px;">ℹ️ Group Info</h3>
+        
+        <div style="background:#202c33; padding:15px; border-radius:10px; margin-bottom:15px; text-align:center;">
+          <div style="font-size:20px; font-weight:bold; color:#fff; margin-bottom:5px;">${esc(groupName)}</div>
+          <div style="font-size:12px; color:#a4b5aa;">${members.length} Members</div>
+        </div>
+
+        <h4 style="color:#e8c879; margin-bottom:10px; font-size:14px;">Members</h4>
+        <div style="max-height: 300px; overflow-y:auto; background:#111b21; border-radius:10px; border:1px solid #2a3942;">
+          ${membersHtml}
+        </div>
+
+        <div style="margin-top:20px; text-align:center;">
+          <button class="btn danger" style="width:100%;" onclick="gcLeaveGroup('${groupId}')">🚪 Leave Group</button>
+        </div>
+      `;
+
+    } catch (err) {
+      console.error(err);
+      content.innerHTML = '<div style="color:#ff6574; text-align:center;">লোড করা যায়নি।</div>';
+    }
+  };
+
+  // ৪. গ্রুপ ছেড়ে যাওয়া (Leave Group)
+  window.gcLeaveGroup = async function(groupId) {
+    if (!confirm("আপনি কি নিশ্চিত যে আপনি এই গ্রুপটি ছেড়ে যেতে চান?")) return;
+
+    try {
+      const { error } = await sb.from("group_members")
+        .delete()
+        .eq("group_id", groupId)
+        .eq("user_id", currentUser.id);
+
+      if (error) throw error;
+
+      showToast("আপনি গ্রুপ ছেড়ে দিয়েছেন।", "success");
+      // আগের গ্রুপ লিস্ট ট্যাবে ফিরে যাওয়া
+      if (typeof window.gcSwitchTab === "function") {
+        window.gcSwitchTab('list');
+      }
+    } catch (err) {
+      showToast("গ্রুপ ছাড়া যায়নি", "error");
+    }
+  };
+
+  // ৫. মেম্বার কিক করা (শুধু গ্রুপ অ্যাডমিন পারবে)
+  window.gcKickMember = async function(groupId, userId) {
+    if (!confirm("এই ইউজারকে গ্রুপ থেকে বের করে দিতে চান?")) return;
+    try {
+      const { error } = await sb.from("group_members")
+        .delete()
+        .eq("group_id", groupId)
+        .eq("user_id", userId);
+
+      if (error) throw error;
+      
+      showToast("ইউজারকে রিমুভ করা হয়েছে", "success");
+      // লিস্ট রিফ্রেশ করা
+      const groupName = document.getElementById("gcTitle").textContent.replace("💬 ", "");
+      window.gcOpenGroupInfo(groupId, groupName);
+    } catch (err) {
+      showToast("রিমুভ করা যায়নি", "error");
+    }
+  };
+
+})();
+</script>
+  <!-- ============================================================== -->
+<!-- AUTO ESCROW GROUP CREATION & MANDATORY INSTRUCTION POPUP -->
+<!-- HTML এর একদম শেষে বসান -->
+<!-- ============================================================== -->
+<style>
+  /* সুন্দর পপ-আপ ডিজাইন */
+  .ax-escrow-popup-box {
+    background: linear-gradient(145deg, #1a2a20, #0b1510);
+    border: 2px solid #1bc78b;
+    box-shadow: 0 0 40px rgba(27, 199, 139, 0.2);
+    text-align: center;
+    padding: 30px 20px;
+  }
+  .ax-escrow-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  @keyframes bounceIn {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  .ax-escrow-title {
+    color: #1bc78b;
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(27, 199, 139, 0.4);
+  }
+  .ax-escrow-steps {
+    text-align: left;
+    background: #14231c;
+    padding: 15px;
+    border-radius: 12px;
+    margin: 20px 0;
+    border: 1px solid #294536;
+  }
+  .ax-escrow-steps li {
+    font-size: 13px;
+    color: #f5f7f1;
+    margin-bottom: 12px;
+    line-height: 1.6;
+    position: relative;
+    padding-left: 5px;
+  }
+  .ax-escrow-steps li strong {
+    color: #e8c879;
+  }
+  .ax-escrow-steps li span {
+    color: #ff6574;
+    font-weight: bold;
+  }
+</style>
+
+<script>
+(function() {
+  "use strict";
+  if (window.__autoEscrowGroup) return;
+  window.__autoEscrowGroup = true;
+
+  // ১. চেকআউট ফর্ম সাবমিট হওয়ার পর নতুন অর্ডার ধরে গ্রুপ তৈরি করা
+  const checkoutForm = document.getElementById("checkoutForm");
+  
+  if (checkoutForm) {
+    // পুরনো ইভেন্ট লিসেনার কাজ করার পর আমরা ধরব
+    checkoutForm.addEventListener("submit", async function(e) {
+      // ফর্ম সাবমিট হওয়ার ৩ সেকেন্ড পর চেক করব (যাতে ডাটাবেসে অর্ডার সেভ হয়ে যায়)
+      setTimeout(async () => {
+        try {
+          // বায়ারের সবচেয়ে নতুন অর্ডারটি খুঁজে বের করা
+          const { data: orders, error: orderErr } = await sb.from("orders")
+            .select("id, amount, buyer_id, listings(seller_id, title)")
+            .eq("buyer_id", currentUser.id)
+            .order("created_at", { ascending: false })
+            .limit(1);
+
+          if (orderErr || !orders || orders.length === 0) return;
+          
+          const latestOrder = orders[0];
+          const sellerId = latestOrder.listings?.seller_id;
+          const accountTitle = latestOrder.listings?.title || "Free Fire Account";
+
+          if (!sellerId) return;
+
+          // চেক করা: এই অর্ডারের জন্য আগেই গ্রুপ তৈরি হয়েছে কিনা
+          const { data: existingGroup } = await sb.from("chat_groups")
+            .select("id")
+            .eq("order_id", latestOrder.id)
+            .maybeSingle();
+
+          let groupId = null;
+
+          if (!existingGroup) {
+            // নতুন গ্রুপ তৈরি করা
+            const groupName = `🔒 Escrow: ${accountTitle.substring(0, 15)}...`;
+            const { data: newGroup, error: groupErr } = await sb.from("chat_groups").insert({
+              name: groupName,
+              description: `Order ID: ${latestOrder.id}`,
+              creator_id: currentUser.id, // বায়ার ক্রিয়েটর
+              order_id: latestOrder.id
+            }).select("id").single();
+
+            if (groupErr) throw groupErr;
+            groupId = newGroup.id;
+
+            // এডমিনদের খুঁজে বের করা
+            const { data: admins } = await sb.from("profiles").select("id").eq("role", "admin");
+            
+            // মেম্বার লিস্ট তৈরি (বায়ার + সেলার + সব এডমিন)
+            let membersToInsert = [
+              { group_id: groupId, user_id: currentUser.id, role: "admin" },
+              { group_id: groupId, user_id: sellerId, role: "member" }
+            ];
+            
+            if (admins && admins.length > 0) {
+              admins.forEach(adm => {
+                membersToInsert.push({ group_id: groupId, user_id: adm.id, role: "admin" });
+              });
+            }
+
+            // মেম্বারদের গ্রুপে যুক্ত করা
+            await sb.from("group_members").insert(membersToInsert);
+          } else {
+            groupId = existingGroup.id;
+          }
+
+          // ২. সুন্দর নোটিফিকেশন পপ-আপ দেখানো
+          showEscrowPopup(groupId);
+
+        } catch (err) {
+          console.error("Auto Group Error:", err);
+        }
+      }, 3500); // ৩.৫ সেকেন্ড অপেক্ষা
+    });
+  }
+
+  // ৩. পপ-আপ তৈরি ও দেখানো
+  function showEscrowPopup(groupId) {
+    let modal = document.getElementById("axEscrowModal");
+    if (!modal) {
+      modal = document.createElement("div");
+      modal.className = "modal";
+      modal.id = "axEscrowModal";
+      // পপ-আপটি বন্ধ করার কোনো অপশন নেই (বাধ্যতামূলক), তাই ক্রস (X) বাটন নেই
+      modal.innerHTML = `
+        <div class="modal-box ax-escrow-popup-box" style="width: min(450px, 95%);">
+          <div class="ax-escrow-icon">🛡️</div>
+          <div class="ax-escrow-title">পেমেন্ট সফল হয়েছে!</div>
+          <p style="color:#a4b5aa; font-size:13px; margin-bottom:0;">আপনার অর্ডারটি সফলভাবে জমা হয়েছে এবং Escrow-এ টাকা হোল্ড করা হয়েছে।</p>
+          
+          <ul class="ax-escrow-steps" style="list-style:none; padding-left:15px;">
+            <li>১. আপনার, বিক্রেতা এবং অ্যাডমিনের জন্য একটি <strong>প্রাইভেট গ্রুপ</strong> তৈরি করা হয়েছে।</li>
+            <li>২. অ্যাকাউন্ট হ্যান্ডওভারের সব কাজ এখন এই গ্রুপেই হবে।</li>
+            <li>৩. <span>সতর্কতা:</span> কেউ যদি গ্রুপের বাইরে গোপনে টাকা বা পাসওয়ার্ড চায়, তবে সাথে সাথে অ্যাডমিনকে জানান।</li>
+            <li>৪. অ্যাকাউন্ট বুঝে পেয়ে অ্যাডমিনকে জানালে, সে টাকা রিলিজ করে দেবে।</li>
+          </ul>
+
+          <p style="color:#ff6574; font-size:12px; font-weight:bold; margin-bottom:15px;">
+            (এই গ্রুপে যোগ দেওয়া বাধ্যতামূলক)
+          </p>
+
+          <button class="btn" style="width:100%; padding:12px; font-size:16px;" onclick="window.axEnterEscrowGroup('${groupId}')">
+            💬 গ্রুপে প্রবেশ করুন
+          </button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+    openModal("axEscrowModal");
+  }
+
+  // ৪. গ্রুপে প্রবেশ করার ফাংশন
+  window.axEnterEscrowGroup = function(groupId) {
+    closeModal("axEscrowModal");
+    closeModal("checkoutModal");
+    
+    // গ্রুপ চ্যাট ওপেন করা
+    if (typeof window.gcOpenChat === "function") {
+      window.gcOpenChat(groupId, "🔒 Escrow Deal Group");
+    } else {
+      // যদি গ্রুপ ফাংশন না থাকে তবে অ্যালার্ট
+      alert("গ্রুপ সিস্টেমটি বর্তমানে লোড হয়নি। মেনু থেকে Groups-এ গিয়ে দেখুন।");
+      if (typeof window.openGroupChat === "function") window.openGroupChat();
+    }
+  };
+
+})();
+</script>
