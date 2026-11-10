@@ -3964,3 +3964,457 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 
 })();
 </script>
+<!-- ============================================================== -->
+<!-- ADMIN FULL NID DATABASE VIEWER (All Users) -->
+<!-- HTML এর একদম শেষে বসান -->
+<!-- ============================================================== -->
+<script>
+(function() {
+  "use strict";
+  if (window.__adminAllNidViewer) return;
+  window.__adminAllNidViewer = true;
+
+  // ১. অ্যাডমিন প্যানেলে নতুন বাটন যোগ করা
+  function addAllNidButton() {
+    const adminTabs = document.querySelector(".admin-tabs");
+    if (adminTabs && !document.getElementById("axAdminAllNidBtn")) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.id = "axAdminAllNidBtn";
+      btn.className = "btn secondary";
+      btn.innerHTML = "📁 All NID List";
+      btn.onclick = function() {
+        document.querySelectorAll(".admin-content-section").forEach(sec => sec.classList.add("hidden"));
+        document.querySelectorAll(".admin-tabs button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        window.axShowAllNidList();
+      };
+      adminTabs.appendChild(btn);
+    }
+  }
+
+  // মেইন লিস্ট দেখানোর ফাংশন
+  window.axShowAllNidList = async function() {
+    if (typeof isAdmin === "function" && !isAdmin()) return;
+
+    // মডাল তৈরি বা খোলা
+    let modal = document.getElementById("axAllNidModal");
+    if (!modal) {
+      modal = document.createElement("div");
+      modal.className = "modal";
+      modal.id = "axAllNidModal";
+      modal.innerHTML = `
+        <div class="modal-box ax-wide" style="height: 85vh; display: flex; flex-direction: column;">
+          <div class="modal-head">
+            <h2>📁 All Users NID Database</h2>
+            <button class="close" onclick="closeModal('axAllNidModal')">✕</button>
+          </div>
+          <input class="field" id="axNidSearch" placeholder="🔍 ইউজারের নাম বা ID দিয়ে খুঁজুন..." style="margin-bottom: 12px;" oninput="window.axFilterNidList(this.value)">
+          <div id="axNidListContainer" style="flex: 1; overflow-y: auto; padding-right: 5px;">
+            <div class="panel" style="text-align:center; color:#e8c879;">ডাটা লোড হচ্ছে... ⏳</div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+    openModal("axAllNidModal");
+
+    const container = document.getElementById("axNidListContainer");
+    container.innerHTML = '<div class="panel" style="text-align:center; color:#e8c879; padding:20px;">সব ইউজারের ডাটা লোড হচ্ছে... ⏳</div>';
+
+    try {
+      // যাদের ডকুমেন্ট পাথ আছে, তাদের সবাইকে আনা হচ্ছে (পেন্ডিং, অ্যাপ্রুভড, রিজেক্টেড)
+      const { data, error } = await sb.from("profiles")
+        .select("id, full_name, avatar_url, verification_doc_type, verification_doc_path, verification_status, is_verified, created_at")
+        .not("verification_doc_path", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(1000);
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        container.innerHTML = '<div class="post-empty" style="padding:30px; text-align:center;">এখনো কোনো ইউজার NID আপলোড করেনি।</div>';
+        return;
+      }
+
+      // গ্লোবাল ভেরিয়েবলে ডাটা সেভ করা (সার্চ করার জন্য)
+      window.__allNidData = data;
+      window.__renderedNidUrls = {}; // লিংক ক্যাশ করার জন্য
+
+      // লিস্ট রেন্ডার করা
+      window.axRenderNidCards(data);
+
+    } catch (err) {
+      console.error("All NID Fetch Error:", err);
+      container.innerHTML = `<div class="panel" style="color:#ff6574; padding:20px; text-align:center;">লোড করা যায়নি।<br>${err.message}</div>`;
+    }
+  };
+
+  // সার্চ ফিল্টার
+  window.axFilterNidList = function(query) {
+    if (!window.__allNidData) return;
+    const q = query.toLowerCase().trim();
+    const filtered = window.__allNidData.filter(u => 
+      (u.full_name || "").toLowerCase().includes(q) || 
+      u.id.toLowerCase().includes(q)
+    );
+    window.axRenderNidCards(filtered);
+  };
+
+  // কার্ড রেন্ডার করার ফাংশন
+  window.axRenderNidCards = async function(users) {
+    const container = document.getElementById("axNidListContainer");
+    if (users.length === 0) {
+      container.innerHTML = '<div class="post-empty" style="padding:30px; text-align:center;">কোনো ইউজার পাওয়া যায়নি।</div>';
+      return;
+    }
+
+    let html = '';
+
+    for (const user of users) {
+      const statusColor = user.verification_status === 'approved' ? '#1bc78b' : user.verification_status === 'rejected' ? '#ff6574' : '#e8c879';
+      const statusText = user.verification_status === 'approved' ? '✅ APPROVED' : user.verification_status === 'rejected' ? '❌ REJECTED' : '⏳ PENDING';
+      
+      let docUrl = window.__renderedNidUrls[user.id];
+
+      // যদি লিংক আগে থেকে না থাকে, তবে Supabase থেকে তৈরি করা
+      if (!docUrl) {
+        const { data: signedData } = await sb.storage
+          .from("verification-docs")
+          .createSignedUrl(user.verification_doc_path, 3600);
+        if (signedData) {
+          docUrl = signedData.signedUrl;
+          window.__renderedNidUrls[user.id] = docUrl;
+        }
+      }
+
+      const isPdf = docUrl && docUrl.toLowerCase().includes('.pdf');
+      let docPreview = '';
+
+      if (docUrl) {
+        if (isPdf) {
+          docPreview = `<a href="${esc(docUrl)}" target="_blank" style="display:block; padding:10px; background:#1a3024; color:#8ef0bf; text-align:center; border-radius:8px; font-weight:bold; text-decoration:none;">📄 PDF ডকুমেন্ট দেখুন</a>`;
+        } else {
+          docPreview = `
+            <a href="${esc(docUrl)}" target="_blank">
+              <img src="${esc(docUrl)}" alt="NID" style="width:100%; max-height:120px; object-fit:cover; border-radius:8px; border:1px solid #365340;">
+            </a>`;
+        }
+      } else {
+        docPreview = `<div style="padding:10px; color:#ff6574; text-align:center; background:#2a1216; border-radius:8px;">লোড করা যায়নি</div>`;
+      }
+
+      html += `
+        <div style="background:#14231c; border:1px solid #294536; border-radius:12px; padding:12px; margin-bottom:12px; display:flex; gap:12px; flex-wrap:wrap;">
+          
+          <div style="flex:1; min-width:200px; display:flex; gap:10px; align-items:flex-start;">
+            <img src="${esc(user.avatar_url || 'https://placehold.co/100x100/14251e/ffffff?text=U')}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
+            <div>
+              <div style="font-weight:bold; color:#f5f7f1; font-size:14px;">${esc(user.full_name || 'Unknown')}</div>
+              <div style="font-size:11px; color:#a4b5aa; margin-top:2px;">ID: ${esc(user.id.slice(0,8).toUpperCase())}</div>
+              <div style="font-size:10px; color:${statusColor}; font-weight:bold; margin-top:4px;">${statusText}</div>
+              <div style="font-size:10px; color:#a4b5aa; margin-top:2px;">${esc(user.verification_doc_type === 'nid' ? 'NID Card' : 'Birth Certificate')}</div>
+            </div>
+          </div>
+
+          <div style="flex: 0 0 160px; width: 160px;">
+            ${docPreview}
+          </div>
+
+        </div>
+      `;
+    }
+
+    container.innerHTML = html;
+  };
+
+  // অ্যাডমিন প্যানেল লোড হলে বাটনটি খুঁজে বের করে যোগ করা
+  const observer = new MutationObserver(function() {
+    if (document.getElementById("adminContent") && !document.getElementById("adminContent").classList.contains("hidden")) {
+      addAllNidButton();
+    }
+  });
+  
+  document.addEventListener("DOMContentLoaded", function() {
+    observer.observe(document.body, { childList: true, subtree: true });
+    // একবার চেক করা
+    setTimeout(addAllNidButton, 2000);
+  });
+
+})();
+</script>
+<!-- ============================================================== -->
+<!-- ADVANCED GROUP CHAT SYSTEM (Media + Typing Indicator) -->
+<!-- HTML এর একদম শেষে বসান -->
+<!-- ============================================================== -->
+<style>
+  /* গ্রুপ চ্যাটের নতুন ডিজাইন */
+  .gc-modal-box { width: min(650px, 100%); background: #0b141a; border: 1px solid #1f2c34; }
+  .gc-chat-box { height: 55vh; overflow-y: auto; background: #0b141a; padding: 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .gc-msg { max-width: 80%; padding: 8px 12px; border-radius: 8px; font-size: 13px; line-height: 1.5; word-wrap: break-word; position: relative; }
+  .gc-msg.me { background: #005c4b; align-self: flex-end; color: #e9edef; border-bottom-right-radius: 2px; }
+  .gc-msg.other { background: #202c33; align-self: flex-start; color: #e9edef; border-bottom-left-radius: 2px; }
+  .gc-sender-name { font-size: 11px; font-weight: bold; color: #e8c879; margin-bottom: 4px; display: block; }
+  .gc-msg img, .gc-msg video { max-width: 100%; max-height: 200px; border-radius: 6px; margin-top: 4px; cursor: pointer; }
+  .gc-msg audio { max-width: 100%; margin-top: 4px; }
+  .gc-typing { font-size: 11px; color: #1bc78b; height: 16px; padding-left: 10px; margin-bottom: 4px; font-style: italic; }
+  .gc-input-area { display: flex; gap: 8px; margin-top: 10px; align-items: center; background: #202c33; padding: 8px; border-radius: 8px; }
+  .gc-input-area input[type="text"] { flex: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 14px; }
+  .gc-icon-btn { background: transparent; border: none; color: #8696a0; font-size: 20px; cursor: pointer; padding: 4px; transition: 0.2s; }
+  .gc-icon-btn:hover { color: #e8c879; }
+  .gc-recording { color: #ff6574 !important; animation: pulseRed 1s infinite; }
+  @keyframes pulseRed { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+</style>
+
+<script>
+(function() {
+  "use strict";
+  if (window.__advancedGroupChat) return;
+  window.__advancedGroupChat = true;
+
+  let currentGroupId = null;
+  let currentGroupName = "";
+  let groupSubscription = null;
+  let typingTimeout = null;
+  let mediaRecorder = null;
+  let audioChunks = [];
+  let isRecording = false;
+  let currentTypingUsers = new Set();
+
+  // ১. গ্রুপ চ্যাট ওপেন করা
+  window.gcOpenChat = async function(groupId, groupName) {
+    currentGroupId = groupId;
+    currentGroupName = groupName;
+    
+    document.getElementById("gcTitle").textContent = "💬 " + groupName;
+    
+    const content = document.getElementById("gcContent");
+    content.innerHTML = `
+      <button class="btn secondary" style="padding:5px 10px; font-size:11px; margin-bottom:10px;" onclick="gcSwitchTab('list')">← ফিরে যান</button>
+      <button class="btn secondary" style="padding:5px 10px; font-size:11px; margin-bottom:10px; float:right;" onclick="gcOpenInviteModal('${groupId}')">➕ ইনভাইট</button>
+      
+      <div class="gc-chat-box" id="gcMessages">
+        <div style="text-align:center; color:#a4b5aa; margin-top:20px;">Loading messages...</div>
+      </div>
+      <div class="gc-typing" id="gcTypingIndicator"></div>
+      
+      <div class="gc-input-area">
+        <button class="gc-icon-btn" onclick="document.getElementById('gcFileInput').click()">📎</button>
+        <input type="file" id="gcFileInput" class="hidden" accept="image/*,video/*,audio/*" onchange="gcHandleFile(this)">
+        
+        <input type="text" id="gcMsgInput" placeholder="মেসেজ লিখুন..." 
+               onkeypress="if(event.key==='Enter') gcSendTextMsg()" 
+               oninput="gcHandleTyping()">
+        
+        <button class="gc-icon-btn" id="gcMicBtn" onclick="gcToggleRecording()">🎤</button>
+        <button class="gc-icon-btn" style="color:#e8c879;" onclick="gcSendTextMsg()">➤</button>
+      </div>
+    `;
+
+    await gcLoadMessages(groupId);
+    gcSubscribeToGroup(groupId);
+  };
+
+  // ২. রিয়েলটাইম সাবস্ক্রিপশন (মেসেজ এবং টাইপিং)
+  function gcSubscribeToGroup(groupId) {
+    if (groupSubscription) sb.removeChannel(groupSubscription);
+
+    groupSubscription = sb.channel('gc-live-' + groupId, {
+      config: { presence: { key: currentUser.id } }
+    })
+    // নতুন মেসেজ আসলে
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'group_messages', filter: `group_id=eq.${groupId}` }, (payload) => {
+      gcLoadMessages(groupId);
+    })
+    // কেউ টাইপ করলে (Presence/Broadcast এর মাধ্যমে)
+    .on('broadcast', { event: 'typing' }, (payload) => {
+      if (payload.payload.user_id === currentUser.id) return;
+      currentTypingUsers.add(payload.payload.name);
+      gcUpdateTypingUI();
+      setTimeout(() => {
+        currentTypingUsers.delete(payload.payload.name);
+        gcUpdateTypingUI();
+      }, 2500);
+    })
+    .subscribe();
+  }
+
+  // ৩. টাইপিং ইন্ডিকেটর দেখানো
+  function gcUpdateTypingUI() {
+    const indicator = document.getElementById("gcTypingIndicator");
+    if (!indicator) return;
+    if (currentTypingUsers.size > 0) {
+      const names = Array.from(currentTypingUsers).join(", ");
+      indicator.textContent = `${names} লিখছে...`;
+    } else {
+      indicator.textContent = "";
+    }
+  }
+
+  window.gcHandleTyping = function() {
+    if (!groupSubscription || !currentUser) return;
+    if (typingTimeout) clearTimeout(typingTimeout);
+
+    groupSubscription.send({
+      type: 'broadcast',
+      event: 'typing',
+      payload: { user_id: currentUser.id, name: profileName(currentProfile, currentUser) }
+    });
+
+    typingTimeout = setTimeout(() => {
+      // থামলে আর টাইপিং পাঠাবে না
+    }, 2000);
+  };
+
+  // ৪. মেসেজ লোড করা
+  async function gcLoadMessages(groupId) {
+    const { data, error } = await sb.from("group_messages")
+      .select("*, profiles:sender_id(full_name, avatar_url)")
+      .eq("group_id", groupId)
+      .order("created_at", { ascending: true })
+      .limit(100);
+
+    const box = document.getElementById("gcMessages");
+    if (!box) return;
+    if (error || !data.length) {
+      box.innerHTML = '<p style="color:#a4b5aa; text-align:center; margin-top:20px;">কোনো মেসেজ নেই। প্রথম মেসেজ দিন!</p>';
+      return;
+    }
+
+    box.innerHTML = data.map(m => {
+      const isMe = m.sender_id === currentUser.id;
+      const senderName = m.profiles?.full_name || "User";
+      let contentHtml = "";
+
+      // মেসেজের ধরন অনুযায়ী কন্টেন্ট তৈরি
+      if (m.msg_type === 'image') {
+        contentHtml = `<img src="${esc(m.media_url)}" onclick="window.open('${esc(m.media_url)}','_blank')">`;
+      } else if (m.msg_type === 'video') {
+        contentHtml = `<video src="${esc(m.media_url)}" controls></video>`;
+      } else if (m.msg_type === 'audio') {
+        contentHtml = `<audio src="${esc(m.media_url)}" controls></audio>`;
+      } else {
+        contentHtml = esc(m.message || "");
+      }
+
+      return `
+        <div class="gc-msg ${isMe ? 'me' : 'other'}">
+          ${!isMe ? `<span class="gc-sender-name">${esc(senderName)}</span>` : ''}
+          ${contentHtml}
+        </div>
+      `;
+    }).join("");
+    
+    box.scrollTop = box.scrollHeight;
+  }
+
+  // ৫. টেক্সট মেসেজ পাঠানো
+  window.gcSendTextMsg = async function() {
+    const input = document.getElementById("gcMsgInput");
+    const text = input.value.trim();
+    if (!text || !currentGroupId) return;
+
+    input.value = "";
+    await sb.from("group_messages").insert({
+      group_id: currentGroupId, sender_id: currentUser.id, message: text, msg_type: 'text'
+    });
+    gcLoadMessages(currentGroupId);
+  };
+
+  // ৬. ফাইল (ছবি/ভিডিও) পাঠানো
+  window.gcHandleFile = async function(input) {
+    const file = input.files[0];
+    if (!file) return;
+    input.value = ""; // ইনপুট রিসেট
+
+    if (file.size > 15 * 1024 * 1024) { // ১৫ MB লিমিট
+      return showToast("ফাইল সাইজ ১৫ MB এর কম হতে হবে", "error");
+    }
+
+    let type = 'file';
+    if (file.type.startsWith('image/')) type = 'image';
+    if (file.type.startsWith('video/')) type = 'video';
+
+    showToast("আপলোড হচ্ছে...", "info");
+
+    try {
+      // Supabase Storage এ আপলোড
+      const fileName = `${currentUser.id}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
+      const { data, error } = await sb.storage.from("listing-images").upload(fileName, file);
+      
+      if (error) throw error;
+      
+      const { data: urlData } = sb.storage.from("listing-images").getPublicUrl(data.path);
+      
+      await sb.from("group_messages").insert({
+        group_id: currentGroupId,
+        sender_id: currentUser.id,
+        msg_type: type,
+        media_url: urlData.publicUrl,
+        file_name: file.name
+      });
+      
+      gcLoadMessages(currentGroupId);
+    } catch (err) {
+      console.error(err);
+      showToast("ফাইল পাঠানো যায়নি", "error");
+    }
+  };
+
+  // ৭. ভয়েস রেকর্ডিং (Voice Message)
+  window.gcToggleRecording = async function() {
+    const btn = document.getElementById("gcMicBtn");
+    if (!navigator.mediaDevices || !window.MediaRecorder) {
+      return showToast("আপনার ব্রাউজারে ভয়েস রেকর্ডিং সাপোর্ট করে না", "error");
+    }
+
+    if (isRecording) {
+      // রেকর্ডিং বন্ধ
+      mediaRecorder.stop();
+      isRecording = false;
+      btn.classList.remove("gc-recording");
+      btn.innerHTML = "🎤";
+    } else {
+      // রেকর্ডিং শুরু
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+        
+        mediaRecorder.onstop = async () => {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          stream.getTracks().forEach(track => track.stop()); // মাইক বন্ধ
+          
+          showToast("ভয়েস আপলোড হচ্ছে...", "info");
+          const fileName = `${currentUser.id}/voice_${Date.now()}.webm`;
+          
+          const { data, error } = await sb.storage.from("listing-images").upload(fileName, audioBlob);
+          if (error) return showToast("ভয়েস পাঠানো যায়নি", "error");
+          
+          const { data: urlData } = sb.storage.from("listing-images").getPublicUrl(data.path);
+          
+          await sb.from("group_messages").insert({
+            group_id: currentGroupId,
+            sender_id: currentUser.id,
+            msg_type: 'audio',
+            media_url: urlData.publicUrl
+          });
+          gcLoadMessages(currentGroupId);
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        btn.classList.add("gc-recording");
+        btn.innerHTML = "⏹️";
+        showToast("রেকর্ডিং চলছে... কথা বলুন", "info");
+
+      } catch (err) {
+        showToast("মাইক্রোফোনের অনুমতি দিন", "error");
+      }
+    }
+  };
+
+})();
+</script>
