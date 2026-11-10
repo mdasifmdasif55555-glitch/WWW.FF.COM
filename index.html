@@ -3777,7 +3777,127 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 
 })();
 </script>
+  <!-- ============================================================== -->
+<!-- ADMIN VERIFICATION & BUY/SELL PERMISSION FIX (FINAL CODE) -->
+<!-- এই কোডটি আপনার HTML এর একদম শেষে বসান -->
 <!-- ============================================================== -->
-<!-- END OF ANSU ELITE FIX CODE -->
-<!-- ============================================================== -->
-  
+<script>
+(function() {
+  "use strict";
+
+  if (window.__verificationSystemFixed) return;
+  window.__verificationSystemFixed = true;
+
+  // ==========================================
+  // ১. অ্যাডমিন প্যানেল থেকে ম্যানুয়ালি ভেরিফাই করা
+  // ==========================================
+  window.axDecide = async function(userId, approve) {
+    if (typeof isAdmin === "function" && !isAdmin()) {
+      return showToast("আপনার এই কাজ করার অনুমতি নেই", "error");
+    }
+
+    const updateData = approve 
+      ? { verification_status: "approved", is_verified: true, verified_at: new Date().toISOString() }
+      : { verification_status: "rejected", is_verified: false };
+
+    try {
+      // ডাটাবেসে আপডেট পাঠানো
+      const { data, error } = await sb.from("profiles").update(updateData).eq("id", userId).select("id");
+
+      if (error) throw error;
+      
+      if (!data || data.length === 0) {
+        // যদি RLS (Row Level Security) এর কারণে আপডেট না হয়
+        return showToast("আপডেট হয়নি! Supabase RLS Policy চেক করুন।", "error", 5000);
+      }
+
+      showToast(approve ? "সফলভাবে ভেরিফাই করা হয়েছে ✓" : "ভেরিফিকেশন রিজেক্ট করা হয়েছে", "success");
+      
+      // অ্যাডমিন প্যানেলের লিস্ট রিফ্রেশ করা
+      if (typeof window.axOpenAdminVerify === "function") {
+        await window.axOpenAdminVerify();
+      }
+      
+      // মেইন অ্যাডমিন ড্যাশবোর্ড রিফ্রেশ করা
+      if (typeof window.loadAdmin === "function") {
+        await window.loadAdmin();
+      }
+
+    } catch (err) {
+      console.error("Verification Error:", err);
+      showToast("সমস্যা হয়েছে: " + (err.message || "Unknown Error"), "error", 5000);
+    }
+  };
+
+  // ==========================================
+  // ২. ইউজার কেনাবেচা করার আগে চেক (Buy/Sell Permission)
+  // ==========================================
+  // আগের ফাংশনটিকে ওভাররাইড করা হচ্ছে
+  async function checkUserCanTrade(actionName) {
+    if (!currentUser) {
+      openModal("authModal");
+      return false;
+    }
+
+    // প্রোফাইল রিফ্রেশ করা যাতে নতুন ভেরিফিকেশন স্ট্যাটাস পাওয়া যায়
+    if (typeof loadProfile === "function") {
+      await loadProfile();
+    }
+
+    const isApproved = currentProfile?.is_verified === true || currentProfile?.role === "admin";
+
+    if (!isApproved) {
+      const status = currentProfile?.verification_status;
+      let msg = "";
+      
+      if (status === "pending") {
+        msg = "আপনার ভেরিফিকেশন এখনো পেন্ডিং আছে। অ্যাডমিন অ্যাপ্রুভ করলেই আপনি " + actionName + " করতে পারবেন।";
+      } else if (status === "rejected") {
+        msg = "আপনার ডকুমেন্ট রিজেক্ট করা হয়েছে। নতুন করে ভেরিফাই করে " + actionName + " করুন।";
+      } else {
+        msg = actionName + " করার জন্য আগে NID বা জন্মনিবন্ধন দিয়ে ভেরিফাই করতে হবে।";
+      }
+
+      showToast(msg, "error", 5000);
+      
+      // ভেরিফাই মডাল ওপেন করা (যদি ফাংশনটি থাকে)
+      if (status !== "pending" && typeof window.axOpenVerify === "function") {
+        window.axOpenVerify();
+      }
+      return false;
+    }
+    return true;
+  }
+
+  // পুরনো openSell ফাংশনটি হুক করা (Sell করার আগে চেক)
+  const originalOpenSell = window.openSell;
+  if (typeof originalOpenSell === "function") {
+    window.openSell = async function() {
+      const canTrade = await checkUserCanTrade("অ্যাকাউন্ট বিক্রি");
+      if (canTrade) originalOpenSell();
+    };
+  }
+
+  // পুরনো startCheckout ফাংশনটি হুক করা (Buy করার আগে চেক)
+  const originalStartCheckout = window.startCheckout;
+  if (typeof originalStartCheckout === "function") {
+    window.startCheckout = async function() {
+      const canTrade = await checkUserCanTrade("অ্যাকাউন্ট কেনা");
+      if (canTrade) originalStartCheckout();
+    };
+  }
+
+  // ==========================================
+  // ৩. ইউজারের ডাটা লোড হওয়ার পর UI আপডেট
+  // ==========================================
+  const originalLoadProfile = window.loadProfile;
+  if (typeof originalLoadProfile === "function") {
+    window.loadProfile = async function() {
+      await originalLoadProfile();
+      // এখানে চাইলে ভেরিফাইড ইউজারদের জন্য আলাদা কোনো ব্যাজ দেখানো যেতে পারে
+    };
+  }
+
+})();
+</script>
+
