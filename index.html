@@ -3736,6 +3736,47 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 
 })();
 </script>
+  <script>
+(function() {
+  "use strict";
+
+  // অটোমেটিক হেডার বা মেনুতে Groups বাটন যুক্ত করা
+  function injectGroupButton() {
+    // যদি বাটন আগেই থাকে, তবে আর যোগ করবে না
+    if (document.getElementById("axGroupBtn")) return;
+
+    const btn = document.createElement("button");
+    btn.className = "btn secondary";
+    btn.id = "axGroupBtn";
+    btn.innerHTML = "👥 Groups";
+    btn.setAttribute("onclick", "openGroupChat()");
+    
+    // মেনু প্যানেল বা হেডারের অ্যাকশন এরিয়ায় বাটনটি খোঁজা
+    const menuActions = document.querySelector(".ax-menu-panel .actions");
+    const headerActions = document.querySelector(".actions");
+    
+    if (menuActions) {
+      // "ALL MENU"-এর ভেতরে Inbox বাটনের ঠিক পরে বসাবে
+      const inboxBtn = document.getElementById("axInboxBtn");
+      if (inboxBtn) {
+        menuActions.insertBefore(btn, inboxBtn.nextSibling);
+      } else {
+        menuActions.appendChild(btn);
+      }
+    } else if (headerActions) {
+      // সরাসরি হেডারে বসাবে
+      headerActions.appendChild(btn);
+    }
+  }
+
+  // স্ক্রিপ্ট চালু হওয়ার পর বাটনটি ইনজেক্ট করা
+  document.addEventListener("DOMContentLoaded", injectGroupButton);
+  
+  // যদি মেনু লোড হতে দেরি হয়, তবে ২ সেকেন্ড পর আবার চেক করবে
+  setTimeout(injectGroupButton, 2000);
+
+})();
+</script>
 <!-- ============================================================== -->
 <!-- END OF ANSU ELITE FIX CODE -->
 <!-- ============================================================== -->
