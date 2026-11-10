@@ -3396,6 +3396,60 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
     observer.observe(document.body, { childList: true, subtree: true });
   });
 </script>
+  <script>
+(function() {
+  "use strict";
+
+  // ১. প্রোফাইল ছবি আপলোড হওয়ার পর নতুন ছবি ফোর্স করে দেখানোর ফাংশন
+  const originalProfileForm = document.getElementById("profileForm");
+  
+  if (originalProfileForm) {
+    originalProfileForm.addEventListener("submit", async function(e) {
+      // ফর্ম সাবমিট হওয়ার ২ সেকেন্ড পর পেজে থাকা সব ছবি রিফ্রেশ করব
+      setTimeout(async () => {
+        try {
+          // ১. প্রোফাইল ডাটা আবার লোড করা
+          if (typeof loadProfile === "function") await loadProfile();
+          
+          // ২. ইউজার ইন্টারফেস আপডেট করা (উপরের ডান কোণায় ছবি)
+          if (typeof updateUI === "function") updateUI();
+          
+          // ৩. কমিউনিটি পোস্ট আবার লোড করা (যাতে নতুন ছবি আসে)
+          if (typeof loadPosts === "function") await loadPosts();
+          
+          // ৪. প্রোফাইল মডাল আবার ওপেন করা (নতুন ছবি দেখানোর জন্য)
+          if (typeof openProfile === "function") await openProfile();
+          
+          console.log("Profile image refreshed successfully!");
+          
+        } catch (err) {
+          console.error("Error refreshing image:", err);
+        }
+      }, 2000); // ২ সেকেন্ড ওয়েট করবে যাতে Supabase আপলোড শেষ করতে পারে
+    }, true); // 'true' মানে আগের কোডের আগে এটি রান হবে
+  }
+
+  // ২. ইউজারের প্রোফাইল ছবি লোড করার সময় ব্রাউজার ক্যাশ বাইপাস করা
+  const originalProfileAvatar = window.profileAvatar;
+  window.profileAvatar = function(profile) {
+    if (!profile || !profile.avatar_url) {
+      return "https://placehold.co/100x100/14251e/ffffff?text=User";
+    }
+    
+    // ছবির লিংকের শেষে একটি টাইমস্ট্যাম্প যোগ করা হচ্ছে
+    // যাতে ব্রাউজার নতুন ছবি হিসেবে চিনতে পারে এবং ক্যাশ না করে
+    let url = profile.avatar_url;
+    const timestamp = profile.updated_at ? new Date(profile.updated_at).getTime() : Date.now();
+    
+    if (url.includes("?")) {
+      return url + "&t=" + timestamp;
+    } else {
+      return url + "?t=" + timestamp;
+    }
+  };
+
+})();
+</script>
 <!-- ============================================================== -->
 <!-- END OF ANSU ELITE FIX CODE -->
 <!-- ============================================================== -->
