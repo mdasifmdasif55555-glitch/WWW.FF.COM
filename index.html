@@ -4794,3 +4794,297 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 
 })();
 </script>
+<!-- ============================================================== -->
+<!-- OFFER SYSTEM, COUPON & 16-DAY GUARANTEE (ALL-IN-ONE) -->
+<!-- HTML এর একদম শেষে বসান -->
+<!-- ============================================================== -->
+<style>
+  .ax-offer-badge { background: linear-gradient(135deg, #1bc78b, #0f9b6c); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 5px; }
+  .ax-offer-box { background: #14231c; border: 1px solid #294536; padding: 12px; border-radius: 10px; margin-top: 10px; }
+  .ax-offer-input { display: flex; gap: 8px; margin-top: 8px; }
+  .ax-offer-input input { flex: 1; padding: 8px 12px; background: #0b1711; border: 1px solid #365340; border-radius: 8px; color: #fff; outline: none; }
+  .ax-offer-input button { padding: 8px 16px; background: #1bc78b; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+  
+  .ax-offer-list-card { background: #0b1711; border: 1px solid #294536; border-radius: 12px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  
+  .ax-coupon-section { background: #101a13; border: 1px dashed #e8c879; padding: 12px; border-radius: 10px; margin: 15px 0; }
+  .ax-coupon-input { display: flex; gap: 8px; }
+  .ax-coupon-input input { flex: 1; padding: 10px; background: #0b1711; border: 1px solid #365340; border-radius: 8px; color: #fff; text-transform: uppercase; }
+  .ax-coupon-input button { padding: 0 20px; background: #e8c879; color: #172017; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+  
+  .ax-guarantee-badge { display: flex; align-items: center; gap: 6px; background: rgba(232, 200, 121, 0.1); border: 1px solid #e8c87970; color: #e8c879; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-top: 10px; }
+</style>
+
+<script>
+(function() {
+  "use strict";
+  if (window.__advancedBuyingSystem) return;
+  window.__advancedBuyingSystem = true;
+
+  // ==========================================
+  // ১. সেলারের অফার ম্যানেজমেন্ট ড্যাশবোর্ড
+  // ==========================================
+  window.axOpenSellerOffers = async function() {
+    if (!currentUser) return showToast("লগইন করুন", "error");
+    openModal("sellerSection");
+    
+    const content = document.getElementById("sellerContent");
+    if (!content) return;
+    
+    content.innerHTML = '<div class="panel" style="text-align:center; color:#e8c879;">অফার লোড হচ্ছে... ⏳</div>';
+
+    try {
+      const { data: offers, error } = await sb.from("listing_offers")
+        .select("*, listings(title, price), profiles:buyer_id(full_name)")
+        .eq("seller_id", currentUser.id)
+        .eq("status", "pending")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      if (!offers || offers.length === 0) {
+        content.innerHTML = '<div class="post-empty">আপনার কাছে এখনো কোনো নতুন অফার আসেনি।</div>';
+        return;
+      }
+
+      let html = '<h3 style="color:#e8c879; margin-bottom:15px;">💰 আপনার কাছে আসা অফারসমূহ</h3>';
+      
+      offers.forEach(o => {
+        html += `
+          <div class="ax-offer-list-card">
+            <div>
+              <div style="font-size:12px; color:#a4b5aa; margin-bottom:4px;">${esc(o.listings?.title || 'Account')}</div>
+              <div style="font-size:15px; color:#fff; font-weight:bold;">
+                ${esc(o.profiles?.full_name || 'Buyer')} দিয়েছে: <span style="color:#1bc78b">৳${o.offer_amount}</span>
+              </div>
+              <div style="font-size:11px; color:#a4b5aa;">আসল দাম: ৳${o.listings?.price}</div>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button class="btn" style="padding:6px 12px; font-size:11px; background:#1bc78b; border:none;" onclick="axRespondOffer('${o.id}', 'accepted')">✓ Accept</button>
+              <button class="btn danger" style="padding:6px 12px; font-size:11px;" onclick="axRespondOffer('${o.id}', 'rejected')">✕ Reject</button>
+            </div>
+          </div>
+        `;
+      });
+
+      content.innerHTML = html;
+
+    } catch (err) {
+      content.innerHTML = '<div class="panel" style="color:#ff6574;">লোড করা যায়নি</div>';
+    }
+  };
+
+  // সেলার অফার Accept বা Reject করলে
+  window.axRespondOffer = async function(offerId, status) {
+    try {
+      const { data: offer, error } = await sb.from("listing_offers").update({ status }).eq("id", offerId).select("*").single();
+      if (error) throw error;
+
+      if (status === 'accepted') {
+        // অফার গ্রহণ করলে লিস্টিং-এর দাম অটোমেটিক পরিবর্তন হয়ে যাবে বায়ারের জন্য
+        await sb.from("listings").update({ price: offer.offer_amount }).eq("id", offer.listing_id);
+        showToast("অফার গ্রহণ করা হয়েছে! দাম আপডেট হয়েছে।", "success");
+      } else {
+        showToast("অফার রিজেক্ট করা হয়েছে", "info");
+      }
+
+      axOpenSellerOffers(); // রিফ্রেশ
+    } catch (err) {
+      showToast("সমস্যা হয়েছে", "error");
+    }
+  };
+
+  // ==========================================
+  // ২. বায়ারের জন্য অফার পাঠানোর অপশন (Details Modal এ যুক্ত হবে)
+  // ==========================================
+  const originalShowDetails = window.showDetails;
+  window.showDetails = function(id) {
+    originalShowDetails(id);
+    
+    // Details Modal রেন্ডার হওয়ার পর অফার এবং গ্যারান্টি সেকশন যুক্ত করা
+    setTimeout(() => {
+      const detailsContent = document.getElementById("detailsContent");
+      const listing = listings.find(l => String(l.id) === String(id));
+      
+      if (detailsContent && listing && !document.getElementById("axOfferSection")) {
+        // গ্যারান্টি ব্যাজ
+        const guaranteeHtml = `
+          <div class="ax-guarantee-badge">
+            🛡️ ১৬ দিনের অ্যাকাউন্ট রিকভারি গ্যারান্টি
+          </div>
+        `;
+        
+        // অফার বক্স
+        const offerHtml = `
+          <div class="ax-offer-box" id="axOfferSection">
+            <div style="font-size:12px; color:#a4b5aa; margin-bottom:5px;">দামাদামি করতে চান? সেলারকে অফার দিন।</div>
+            <div class="ax-offer-input">
+              <input type="number" id="axOfferInput" placeholder="আপনার অফার (৳)" min="1">
+              <button onclick="window.axSendOffer('${listing.id}', '${listing.seller_id}')">অফার পাঠান</button>
+            </div>
+          </div>
+        `;
+
+        // Buy Now বাটনের ঠিক আগে বসানো
+        const buyBtn = detailsContent.querySelector('button[onclick="startCheckout()"]');
+        if (buyBtn) {
+          buyBtn.insertAdjacentHTML('beforebegin', guaranteeHtml + offerHtml);
+        }
+      }
+    }, 100);
+  };
+
+  // বায়ার অফার পাঠালে
+  window.axSendOffer = async function(listingId, sellerId) {
+    if (!currentUser) return showToast("লগইন করুন", "error");
+    const amount = Number(document.getElementById("axOfferInput").value);
+    if (!amount || amount <= 0) return showToast("সঠিক পরিমাণ লিখুন", "error");
+
+    const btn = document.querySelector("#axOfferSection button");
+    btn.disabled = true; btn.textContent = "পাঠানো হচ্ছে...";
+
+    try {
+      const { error } = await sb.from("listing_offers").insert({
+        listing_id: listingId, buyer_id: currentUser.id, seller_id: sellerId, offer_amount: amount
+      });
+      if (error) throw error;
+      showToast("আপনার অফার সেলারকে পাঠানো হয়েছে! ✅", "success");
+      document.getElementById("axOfferInput").value = "";
+    } catch (err) {
+      showToast("অফার পাঠানো যায়নি", "error");
+    } finally {
+      btn.disabled = false; btn.textContent = "অফার পাঠান";
+    }
+  };
+
+  // ==========================================
+  // ৩. চেকআউট পেজে কুপন সিস্টেম যুক্ত করা
+  // ==========================================
+  const originalStartCheckout = window.startCheckout;
+  window.startCheckout = function() {
+    originalStartCheckout();
+    
+    // চেকআউট মডাল ওপেন হওয়ার পর কুপন ইনপুট বসানো
+    setTimeout(() => {
+      const checkoutForm = document.getElementById("checkoutForm");
+      if (checkoutForm && !document.getElementById("axCouponSection")) {
+        const couponHtml = `
+          <div class="ax-coupon-section" id="axCouponSection">
+            <div style="font-size:12px; color:#e8c879; font-weight:bold; margin-bottom:8px;">🎟️ কোনো ডিসকাউন্ট কুপন আছে?</div>
+            <div class="ax-coupon-input">
+              <input type="text" id="axCouponCode" placeholder="কোড লিখুন (যেমন: ANSU10)">
+              <button type="button" onclick="window.axApplyCoupon()">Apply</button>
+            </div>
+            <div id="axCouponMsg" style="font-size:11px; margin-top:5px;"></div>
+          </div>
+        `;
+        // পেমেন্ট মেথডের আগে বসানো
+        const paymentMethodDiv = document.getElementById("paymentMethod").closest('div');
+        if (paymentMethodDiv) {
+          paymentMethodDiv.insertAdjacentHTML('beforebegin', couponHtml);
+        }
+      }
+    }, 100);
+  };
+
+  let appliedDiscountPercent = 0;
+  let appliedCouponCode = null;
+
+  window.axApplyCoupon = async function() {
+    const code = document.getElementById("axCouponCode").value.trim().toUpperCase();
+    const msgDiv = document.getElementById("axCouponMsg");
+    if (!code) return;
+
+    msgDiv.innerHTML = "চেক করা হচ্ছে...";
+    msgDiv.style.color = "#a4b5aa";
+
+    try {
+      const { data, error } = await sb.from("coupons").select("*").eq("code", code).eq("is_active", true).maybeSingle();
+      if (error) throw error;
+
+      if (!data) {
+        msgDiv.innerHTML = "❌ ভুল বা মেয়াদোত্তীর্ণ কুপন কোড।";
+        msgDiv.style.color = "#ff6574";
+        appliedDiscountPercent = 0;
+        appliedCouponCode = null;
+        return;
+      }
+
+      appliedDiscountPercent = data.discount_percent;
+      appliedCouponCode = data.code;
+      
+      const originalPrice = selectedListing.price;
+      const discountAmount = Math.round((originalPrice * appliedDiscountPercent) / 100);
+      const newPrice = originalPrice - discountAmount;
+
+      msgDiv.innerHTML = `✅ কুপন কাজ করেছে! ৳${discountAmount} ছাড়। নতুন দাম: ৳${newPrice}`;
+      msgDiv.style.color = "#1bc78b";
+      
+      showPaymentInstructions(); // পেমেন্টের দাম আপডেট করা
+
+    } catch (err) {
+      msgDiv.innerHTML = "❌ সমস্যা হয়েছে।";
+      msgDiv.style.color = "#ff6574";
+    }
+  };
+
+  // পেমেন্ট ইনস্ট্রাকশনে ডিসকাউন্ট দাম দেখানো
+  const originalPaymentInstructions = window.showPaymentInstructions;
+  window.showPaymentInstructions = function() {
+    originalPaymentInstructions();
+    if (appliedDiscountPercent > 0 && selectedListing) {
+      const instructions = document.getElementById("paymentInstructions");
+      const finalPrice = selectedListing.price - Math.round((selectedListing.price * appliedDiscountPercent) / 100);
+      
+      // আগের লেখা মুছে নতুন করে লেখা
+      const method = document.getElementById("paymentMethod").value;
+      instructions.innerHTML = `
+        <b>${method === 'bkash' ? 'bKash' : 'Nagad'}</b><br>
+        টাকা পাঠানোর নম্বর: <strong>${esc(PAYMENT_NUMBERS[method])}</strong><br>
+        <span style="color:#1bc78b; font-weight:bold;">ডিসকাউন্ট (${appliedCouponCode}): ৳${Math.round((selectedListing.price * appliedDiscountPercent) / 100)} ছাড়</span><br>
+        পাঠানোর পরিমাণ: <strong>৳${finalPrice}</strong><br>
+        Send Money করার পর আসল Transaction ID ও স্ক্রিনশট দিন।
+      `;
+    }
+  };
+
+  // অর্ডার সাবমিট হওয়ার সময় ডিসকাউন্ট ডাটা সেভ করা (আগের কোডের সাথে ইন্টিগ্রেশন)
+  const checkoutForm = document.getElementById("checkoutForm");
+  if (checkoutForm) {
+    checkoutForm.addEventListener("submit", async function(e) {
+      if (!appliedDiscountPercent) return; // কুপন না থাকলে আগের মতোই কাজ করবে
+      
+      // কুপন থাকলে অর্ডারের অ্যামাউন্ট আপডেট করার জন্য একটি ব্যাকগ্রাউন্ড প্রসেস
+      setTimeout(async () => {
+        try {
+          const { data: latestOrder } = await sb.from("orders")
+            .select("id, amount").eq("buyer_id", currentUser.id)
+            .order("created_at", { ascending: false }).limit(1).maybeSingle();
+            
+          if (latestOrder && selectedListing) {
+            const discountAmount = Math.round((selectedListing.price * appliedDiscountPercent) / 100);
+            const finalPrice = selectedListing.price - discountAmount;
+            
+            // ১৬ দিনের গ্যারান্টি টাইমার সেট করা
+            const guaranteeExpires = new Date();
+            guaranteeExpires.setDate(guaranteeExpires.getDate() + 16);
+
+            await sb.from("orders").update({
+              amount: finalPrice,
+              applied_coupon: appliedCouponCode,
+              discount_amount: discountAmount,
+              guarantee_expires_at: guaranteeExpires.toISOString()
+            }).eq("id", latestOrder.id);
+          }
+          // রিসেট
+          appliedDiscountPercent = 0;
+          appliedCouponCode = null;
+        } catch (err) {
+          console.log("Coupon sync error:", err);
+        }
+      }, 2500);
+    }, true);
+  }
+
+})();
+</script>
