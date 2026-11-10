@@ -3097,6 +3097,184 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 
 })();
 </script>
+
+  <!-- ============================================================== -->
+<!-- Members Modal Old UI Hiding (Fix for duplicate Search & Tabs)  -->
+<!-- ============================================================== -->
+<style>
+  /* ১. পুরোনো সার্চ বার এবং ট্যাব লুকানো */
+  #axMembersModal > .modal-box > .field,
+  #axMembersModal #axMemberSearch,
+  #axMembersModal #axMemberTabs {
+    display: none !important;
+  }
+
+  /* ২. নতুন সার্চ বার এবং ট্যাব যাতে সুন্দর দেখায় */
+  #axFixSearch {
+    width: 100%;
+    padding: 12px 15px;
+    background: #0b1711;
+    border: 1px solid #294536;
+    border-radius: 10px;
+    color: #fff;
+    margin-bottom: 12px;
+    outline: none;
+  }
+  #axFixSearch:focus {
+    border-color: #e8c879;
+  }
+
+  /* ৩. হেডার এর "0 জন" টেক্সট আপডেট করার জন্য একটু জায়গা */
+  #axMemberCount {
+    font-size: 14px;
+    color: #e8c879;
+    margin-left: 10px;
+  }
+</style>
+
+<script>
+(function() {
+  "use strict";
+
+  // পুরোনো সিস্টেমের রেন্ডারিং বন্ধ করা
+  // যাতে পুরোনো axRenderMembers ফাংশন নতুন ডিজাইনে হস্তক্ষেপ না করে
+  window.axRenderMembers = function() {
+    // এটি ফাঁকা রাখা হলো, যাতে আগের কোড রান না করে
+  };
+
+  // মেম্বার মডাল ওপেন হলে নতুন UI রেন্ডার করা
+  const originalOpenMembers = window.axOpenMembers;
+  
+  window.axOpenMembers = async function() {
+    if (!currentUser) {
+      if (typeof showToast === 'function') showToast("মেম্বার দেখতে আগে লগইন করুন", "error");
+      return;
+    }
+    
+    if (typeof openModal === 'function') openModal("axMembersModal");
+    
+    const listContainer = document.getElementById("axMemberList");
+    if (!listContainer) return;
+    
+    listContainer.innerHTML = '<div class="panel" style="text-align:center; color:#e8c879; padding: 20px;">ডাটা লোড হচ্ছে... অপেক্ষা করুন ⏳</div>';
+
+    try {
+      // ডাটাবেস থেকে ডাটা আনা
+      const [profilesRes, listingsRes] = await Promise.all([
+        sb.from("profiles").select("id,full_name,avatar_url,role,is_verified,verification_status").order("created_at", { ascending: false }).limit(5000),
+        sb.from("listings").select("seller_id").limit(5000)
+      ]);
+
+      if (profilesRes.error) throw profilesRes.error;
+
+      const allMembers = profilesRes.data || [];
+      const sellerIds = new Set((listingsRes.data || []).map(x => x.seller_id));
+
+      // হেডারের মেম্বার সংখ্যা আপডেট করা
+      const countBadge = document.getElementById("axMemberCount");
+      if (countBadge) countBadge.textContent = allMembers.length + " জন";
+
+      // নতুন UI রেন্ডার
+      renderNewUI(allMembers, sellerIds);
+
+    } catch (err) {
+      console.error(err);
+      listContainer.innerHTML = '<div class="panel" style="color:#ff6574; padding: 20px;">লোড করা যায়নি। Supabase RLS চেক করুন।</div>';
+    }
+  };
+
+  function renderNewUI(allMembers, sellerIds) {
+    const listContainer = document.getElementById("axMemberList");
+    let currentTab = "all";
+    let currentSearch = "";
+
+    listContainer.innerHTML = `
+      <input class="field" id="axFixSearch" placeholder="🔍 নাম বা User ID দিয়ে খুঁজুন..." oninput="window.__membersSearch(this.value)">
+      <div class="ax-fix-tabs" id="axFixTabs">
+        <button class="ax-fix-tab active" onclick="window.__membersTab('all', this)">👥 সবাই (${allMembers.length})</button>
+        <button class="ax-fix-tab" onclick="window.__membersTab('admin', this)">👑 Admin</button>
+        <button class="ax-fix-tab" onclick="window.__membersTab('seller', this)">🛍️ Seller</button>
+        <button class="ax-fix-tab" onclick="window.__membersTab('user', this)">👤 General</button>
+      </div>
+      <div id="axFixList"></div>
+    `;
+
+    function getMemberRole(member) {
+      if (member.role === "admin") return "admin";
+      if (member.role === "seller" || sellerIds.has(member.id)) return "seller";
+      return "user";
+    }
+
+    function drawList() {
+      const listDiv = document.getElementById("axFixList");
+      if (!listDiv) return;
+
+      const filtered = allMembers.filter(m => {
+        const role = getMemberRole(m);
+        const matchesTab = (currentTab === "all" || currentTab === role);
+        const name = (m.full_name || "").toLowerCase();
+        const uid = (m.id || "").toLowerCase();
+        const matchesSearch = !currentSearch || name.includes(currentSearch) || uid.includes(currentSearch);
+        return matchesTab && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        listDiv.innerHTML = '<div class="post-empty" style="padding:30px;">কোনো সদস্য পাওয়া যায়নি।</div>';
+        return;
+      }
+
+      const badges = {
+        admin: '<span class="ax-fix-badge admin">👑 ADMIN</span>',
+        seller: '<span class="ax-fix-badge seller">🛍️ SELLER</span>',
+        user: '<span class="ax-fix-badge user">👤 MEMBER</span>'
+      };
+
+      listDiv.innerHTML = filtered.map(m => {
+        const role = getMemberRole(m);
+        const isMe = currentUser && currentUser.id === m.id;
+        const avatar = m.avatar_url || "https://placehold.co/100x100/14251e/ffffff?text=User";
+        const name = m.full_name || "Unknown User";
+        const shortId = m.id.slice(0, 8).toUpperCase();
+        const verified = m.is_verified ? '<span class="ax-fix-badge verified">✓ VERIFIED</span>' : '';
+
+        return `
+          <div class="ax-fix-card">
+            <img src="${esc(avatar)}" class="ax-fix-avatar ${role === 'admin' ? 'admin' : ''}" onclick="showPublicProfile('${esc(m.id)}')" alt="User">
+            <div class="ax-fix-info">
+              <div class="ax-fix-name ${role === 'admin' ? 'admin-user-name' : ''}" onclick="showPublicProfile('${esc(m.id)}')">
+                ${esc(name)} ${verified}
+              </div>
+              <div style="display:flex; gap:6px; align-items:center; margin-top:4px; flex-wrap:wrap;">
+                ${badges[role]}
+                <span class="ax-fix-id">ID: ${esc(shortId)}</span>
+              </div>
+            </div>
+            <div class="ax-fix-actions">
+              <button class="btn secondary" onclick="showPublicProfile('${esc(m.id)}')">Profile</button>
+              ${isMe ? "" : `<button class="btn" onclick="axOpenChat('${esc(m.id)}')">💬 Message</button>`}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    window.__membersTab = function(tab, btn) {
+      currentTab = tab;
+      document.querySelectorAll("#axFixTabs .ax-fix-tab").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      drawList();
+    };
+
+    window.__membersSearch = function(val) {
+      currentSearch = (val || "").toLowerCase().trim();
+      drawList();
+    };
+
+    drawList();
+  }
+
+})();
+</script>
 <!-- ============================================================== -->
 <!-- END OF ANSU ELITE FIX CODE -->
 <!-- ============================================================== -->
