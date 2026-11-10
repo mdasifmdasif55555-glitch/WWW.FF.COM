@@ -3450,6 +3450,292 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 
 })();
 </script>
+  <!-- ============================================== -->
+<!-- GROUP CHAT SYSTEM (Verified Users Only)        -->
+<!-- ============================================== -->
+<style>
+  .gc-modal-box { width: min(600px, 100%); background: #0b141a; border: 1px solid #1f2c34; }
+  .gc-tab { background: #202c33; color: #a4b5aa; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; }
+  .gc-tab.active { background: #00a884; color: #fff; }
+  .gc-group-card { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #2a3942; border-radius: 10px; background: #111b21; margin-bottom: 8px; cursor: pointer; transition: 0.2s; }
+  .gc-group-card:hover { border-color: #00a884; background: #202c33; }
+  .gc-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: #2a3942; }
+  .gc-chat-box { height: 50vh; overflow-y: auto; background: #0b141a; padding: 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .gc-msg { max-width: 80%; padding: 8px 12px; border-radius: 8px; font-size: 13px; line-height: 1.5; word-wrap: break-word; }
+  .gc-msg.me { background: #005c4b; align-self: flex-end; color: #e9edef; }
+  .gc-msg.other { background: #202c33; align-self: flex-start; color: #e9edef; }
+  .gc-msg small { display: block; font-size: 10px; color: #8696a0; margin-bottom: 2px; }
+  .gc-invite-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #111b21; border: 1px solid #2a3942; border-radius: 8px; margin-bottom: 8px; font-size: 13px; }
+</style>
+
+<div class="modal" id="gcGroupModal">
+  <div class="modal-box gc-modal-box">
+    <div class="modal-head">
+      <h2 id="gcTitle">👥 Groups</h2>
+      <button class="close" onclick="closeModal('gcGroupModal')">✕</button>
+    </div>
+    
+    <!-- ট্যাব বাটন -->
+    <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+      <button class="gc-tab active" onclick="gcSwitchTab('list')" id="gcTabList">My Groups</button>
+      <button class="gc-tab" onclick="gcSwitchTab('invites')" id="gcTabInvites">Invitations</button>
+      <button class="gc-tab" onclick="gcSwitchTab('create')" id="gcTabCreate">+ Create Group</button>
+    </div>
+
+    <!-- কন্টেন্ট এরিয়া -->
+    <div id="gcContent" style="min-height: 250px;"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  "use strict";
+  if (window.__groupChatSystem) return;
+  window.__groupChatSystem = true;
+
+  let currentGroupId = null;
+  let groupSubscription = null;
+
+  // ১. গ্রুপ সিস্টেম ওপেন করা
+  window.openGroupChat = function() {
+    if (!currentUser) return showToast("লগইন করুন", "error");
+    openModal("gcGroupModal");
+    gcSwitchTab('list');
+  };
+
+  // ২. ট্যাব পরিবর্তন
+  window.gcSwitchTab = async function(tab) {
+    document.querySelectorAll(".gc-tab").forEach(b => b.classList.remove("active"));
+    document.getElementById("gcTab" + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add("active");
+    document.getElementById("gcTitle").textContent = "👥 Groups";
+
+    const content = document.getElementById("gcContent");
+    content.innerHTML = '<div style="text-align:center; padding:20px; color:#a4b5aa;">লোড হচ্ছে...</div>';
+
+    if (tab === 'list') await gcLoadMyGroups();
+    if (tab === 'invites') await gcLoadInvites();
+    if (tab === 'create') gcShowCreateForm();
+  };
+
+  // ৩. আমার গ্রুপগুলো লোড করা
+  async function gcLoadMyGroups() {
+    const content = document.getElementById("gcContent");
+    const { data, error } = await sb.from("group_members")
+      .select("group_id, role, chat_groups(id, name, avatar_url)")
+      .eq("user_id", currentUser.id);
+
+    if (error) return content.innerHTML = '<p style="color:#ff6574;">লোড করা যায়নি</p>';
+    if (!data.length) return content.innerHTML = '<p style="color:#a4b5aa; text-align:center;">আপনি এখনো কোনো গ্রুপে নেই।</p>';
+
+    content.innerHTML = data.map(m => {
+      const g = m.chat_groups;
+      if (!g) return '';
+      return `
+        <div class="gc-group-card" onclick="gcOpenChat('${g.id}', '${esc(g.name)}')">
+          <img class="gc-avatar" src="${esc(g.avatar_url || 'https://placehold.co/100x100/202c33/ffffff?text=G')}">
+          <div style="flex:1;">
+            <b style="color:#e9edef; font-size:14px;">${esc(g.name)}</b>
+            <div style="font-size:11px; color:#a4b5aa;">${m.role === 'admin' ? '👑 Admin' : 'Member'}</div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // ৪. ইনভাইটেশন লোড করা
+  async function gcLoadInvites() {
+    const content = document.getElementById("gcContent");
+    const { data, error } = await sb.from("group_invitations")
+      .select("id, chat_groups(name), profiles:inviter_id(full_name)")
+      .eq("invitee_id", currentUser.id)
+      .eq("status", "pending");
+
+    if (error) return content.innerHTML = '<p style="color:#ff6574;">লোড করা যায়নি</p>';
+    if (!data.length) return content.innerHTML = '<p style="color:#a4b5aa; text-align:center;">কোনো নতুন ইনভাইট নেই।</p>';
+
+    content.innerHTML = data.map(inv => `
+      <div class="gc-invite-item">
+        <div>
+          <b style="color:#e8c879;">${esc(inv.chat_groups?.name || "Group")}</b><br>
+          <small style="color:#a4b5aa;">By ${esc(inv.profiles?.full_name || "Admin")}</small>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn" style="padding:6px 10px; font-size:11px;" onclick="gcAcceptInvite('${inv.id}')">✓ Accept</button>
+          <button class="btn danger" style="padding:6px 10px; font-size:11px;" onclick="gcRejectInvite('${inv.id}')">✕</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // ৫. ইনভাইট Accept / Reject
+  window.gcAcceptInvite = async function(id) {
+    const { error } = await sb.from("group_invitations").update({ status: "accepted" }).eq("id", id);
+    if (error) return showToast("সমস্যা হয়েছে", "error");
+    showToast("গ্রুপে জয়েন করেছেন! 🎉", "success");
+    gcLoadInvites();
+  };
+
+  window.gcRejectInvite = async function(id) {
+    await sb.from("group_invitations").update({ status: "rejected" }).eq("id", id);
+    gcLoadInvites();
+  };
+
+  // ৬. গ্রুপ তৈরি করার ফর্ম
+  function gcShowCreateForm() {
+    if (!currentProfile?.is_verified && currentProfile?.role !== 'admin') {
+      return document.getElementById("gcContent").innerHTML = `
+        <div style="text-align:center; padding:20px;">
+          <p style="color:#ff6574; font-size:13px;">দুঃখিত, গ্রুপ তৈরি করতে হলে আপনাকে আগে Verified হতে হবে।</p>
+          <button class="btn secondary" onclick="closeModal('gcGroupModal'); if(typeof axOpenVerify==='function') axOpenVerify();">🪪 Verify করুন</button>
+        </div>`;
+    }
+
+    document.getElementById("gcContent").innerHTML = `
+      <form id="gcCreateForm" class="form">
+        <div><label>গ্রুপের নাম</label><input class="field" id="gcName" required maxlength="50"></div>
+        <div><label>ছবি (URL - ঐচ্ছিক)</label><input class="field" id="gcImg" type="url" placeholder="https://..."></div>
+        <button class="btn" style="margin-top:10px;">গ্রুপ তৈরি করুন</button>
+      </form>
+    `;
+
+    document.getElementById("gcCreateForm").onsubmit = async function(e) {
+      e.preventDefault();
+      const name = document.getElementById("gcName").value.trim();
+      const img = document.getElementById("gcImg").value.trim();
+
+      const { data: g, error } = await sb.from("chat_groups").insert({
+        name: name, avatar_url: img || null, creator_id: currentUser.id
+      }).select("id").single();
+
+      if (error) return showToast("গ্রুপ তৈরি হয়নি", "error");
+
+      // ক্রিয়েটরকে অ্যাডমিন বানানো
+      await sb.from("group_members").insert({ group_id: g.id, user_id: currentUser.id, role: "admin" });
+      
+      showToast("গ্রুপ তৈরি হয়েছে! 🎉", "success");
+      gcSwitchTab('list');
+    };
+  }
+
+  // ৭. গ্রুপ চ্যাট ওপেন করা
+  window.gcOpenChat = async function(groupId, groupName) {
+    currentGroupId = groupId;
+    document.getElementById("gcTitle").textContent = "💬 " + groupName;
+    
+    const content = document.getElementById("gcContent");
+    content.innerHTML = `
+      <button class="btn secondary" style="padding:5px 10px; font-size:11px; margin-bottom:10px;" onclick="gcSwitchTab('list')">← ফিরে যান</button>
+      <button class="btn secondary" style="padding:5px 10px; font-size:11px; margin-bottom:10px; float:right;" onclick="gcOpenInviteModal('${groupId}')">➕ ইনভাইট</button>
+      
+      <div class="gc-chat-box" id="gcMessages">Loading...</div>
+      
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <input class="field" id="gcMsgInput" placeholder="মেসেজ লিখুন..." onkeypress="if(event.key==='Enter') gcSendMsg()">
+        <button class="btn" onclick="gcSendMsg()">পাঠান</button>
+      </div>
+    `;
+
+    await gcLoadMessages(groupId);
+
+    // রিয়েলটাইম মেসেজ শোনা
+    if (groupSubscription) sb.removeChannel(groupSubscription);
+    groupSubscription = sb.channel('gc-' + groupId)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'group_messages', filter: `group_id=eq.${groupId}` }, () => {
+        gcLoadMessages(groupId);
+      }).subscribe();
+  };
+
+  // ৮. মেসেজ লোড করা
+  async function gcLoadMessages(groupId) {
+    const { data, error } = await sb.from("group_messages")
+      .select("*, profiles:sender_id(full_name)")
+      .eq("group_id", groupId)
+      .order("created_at", { ascending: true })
+      .limit(100);
+
+    const box = document.getElementById("gcMessages");
+    if (!box) return;
+    if (error || !data.length) {
+      box.innerHTML = '<p style="color:#a4b5aa; text-align:center; margin-top:20px;">কোনো মেসেজ নেই। প্রথম মেসেজ দিন!</p>';
+      return;
+    }
+
+    box.innerHTML = data.map(m => {
+      const isMe = m.sender_id === currentUser.id;
+      return `
+        <div class="gc-msg ${isMe ? 'me' : 'other'}">
+          ${!isMe ? `<small>${esc(m.profiles?.full_name || "User")}</small>` : ''}
+          ${esc(m.message)}
+        </div>
+      `;
+    }).join("");
+    
+    box.scrollTop = box.scrollHeight;
+  }
+
+  // ৯. মেসেজ পাঠানো
+  window.gcSendMsg = async function() {
+    const input = document.getElementById("gcMsgInput");
+    const text = input.value.trim();
+    if (!text || !currentGroupId) return;
+
+    input.value = "";
+    const { error } = await sb.from("group_messages").insert({
+      group_id: currentGroupId,
+      sender_id: currentUser.id,
+      message: text
+    });
+
+    if (error) showToast("মেসেজ পাঠানো যায়নি", "error");
+    else gcLoadMessages(currentGroupId);
+  };
+
+  // ১০. ইনভাইট পাঠানোর মডাল (Verified ইউজারদের লিস্ট)
+  window.gcOpenInviteModal = async function(groupId) {
+    const { data, error } = await sb.from("profiles")
+      .select("id, full_name, avatar_url")
+      .eq("is_verified", true)
+      .neq("id", currentUser.id)
+      .limit(50);
+
+    if (error) return showToast("লোড করা যায়নি", "error");
+
+    let inviteHtml = data.map(u => `
+      <div class="gc-invite-item">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <img src="${esc(u.avatar_url || 'https://placehold.co/100x100/202c33/ffffff?text=U')}" class="gc-avatar" style="width:30px; height:30px;">
+          <b>${esc(u.full_name || "User")}</b>
+        </div>
+        <button class="btn" style="padding:4px 10px; font-size:11px;" onclick="gcSendInvite('${groupId}', '${u.id}')">Invite</button>
+      </div>
+    `).join("");
+
+    document.getElementById("gcContent").innerHTML = `
+      <button class="btn secondary" style="padding:5px 10px; font-size:11px; margin-bottom:10px;" onclick="gcOpenChat('${groupId}', 'Group')">← ফিরে যান</button>
+      <h3 style="color:#e8c879; margin-bottom:10px; font-size:14px;">Verified Members</h3>
+      <div style="max-height: 300px; overflow-y:auto;">${inviteHtml || '<p style="color:#a4b5aa;">কোনো ভেরিফাইড ইউজার নেই।</p>'}</div>
+    `;
+  };
+
+  // ১১. ইনভাইট পাঠানো
+  window.gcSendInvite = async function(groupId, userId) {
+    const { error } = await sb.from("group_invitations").insert({
+      group_id: groupId,
+      inviter_id: currentUser.id,
+      invitee_id: userId,
+      status: "pending"
+    });
+
+    if (error) {
+      if (error.code === '23505') showToast("ইতিমধ্যে ইনভাইট পাঠানো হয়েছে", "error");
+      else showToast("ইনভাইট পাঠানো যায়নি", "error");
+    } else {
+      showToast("ইনভাইট পাঠানো হয়েছে ✅", "success");
+    }
+  };
+
+})();
+</script>
 <!-- ============================================================== -->
 <!-- END OF ANSU ELITE FIX CODE -->
 <!-- ============================================================== -->
