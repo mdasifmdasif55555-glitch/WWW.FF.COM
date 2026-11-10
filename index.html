@@ -3275,6 +3275,127 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 
 })();
 </script>
+  <style>
+  /* =========================================================
+     ADMIN 3-COLOR ROTATING RINGS (গোল্ড, সায়ান, পার্পল)
+     ========================================================= */
+
+  /* অ্যাভাটারের চারপাশের মূল কন্টেইনার */
+  .ax-admin-3-rings {
+    position: relative;
+    display: inline-block;
+    border-radius: 50%;
+    padding: 6px; /* রিং এবং ছবির মাঝে দূরত্ব */
+  }
+
+  /* ৩টি রিং-এর কমন ডিজাইন */
+  .ax-admin-3-rings::before,
+  .ax-admin-3-rings::after,
+  .ax-admin-3-rings .ring-3 {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  /* ১. প্রথম রিং: গোল্ডেন (ডান দিকে ঘুরবে) */
+  .ax-admin-3-rings::before {
+    width: 115%;
+    height: 115%;
+    border: 2px solid transparent;
+    border-top-color: #e8c879; /* গোল্ড */
+    border-right-color: #fff0b8;
+    animation: axSpinRight 3s linear infinite;
+    box-shadow: 0 0 15px rgba(232, 200, 121, 0.5);
+    z-index: 3;
+  }
+
+  /* ২. দ্বিতীয় রিং: সায়ান/নীল (বাম দিকে ঘুরবে) */
+  .ax-admin-3-rings::after {
+    width: 122%;
+    height: 122%;
+    border: 2px dashed transparent;
+    border-bottom-color: #00d2ff; /* সায়ান */
+    border-left-color: #3a7bd5;
+    animation: axSpinLeft 5s linear infinite;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+    z-index: 2;
+  }
+
+  /* ৩. তৃতীয় রিং: পার্পল/ম্যাজেন্টা (ডান দিকে ঘুরবে) */
+  .ax-admin-3-rings .ring-3 {
+    width: 130%;
+    height: 130%;
+    border: 2px dotted transparent;
+    border-top-color: #c471ed; /* পার্পল */
+    border-bottom-color: #f64f59; /* লালচে/পিঙ্ক */
+    animation: axSpinRight 7s linear infinite;
+    box-shadow: 0 0 15px rgba(196, 113, 237, 0.4);
+    z-index: 1;
+  }
+
+  /* অ্যানিমেশন কীফ্রেম: ডান দিকে ঘোরা */
+  @keyframes axSpinRight {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* অ্যানিমেশন কীফ্রেম: বাম দিকে ঘোরা (বিপরীত) */
+  @keyframes axSpinLeft {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(-360deg); }
+  }
+
+  /* ভেতরের অ্যাভাটার ইমেজকে রিং-এর ওপরে রাখার জন্য */
+  .ax-admin-3-rings .profile-avatar-lg,
+  .ax-admin-3-rings .admin-avatar-large,
+  .ax-admin-3-rings .avatar {
+    position: relative;
+    z-index: 10;
+    margin: 0 !important;
+    display: block;
+    border: 3px solid #0d1912 !important; /* ছবির চারপাশে ডার্ক বর্ডার */
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // যেকোনো অ্যাডমিন ছবি বা গোল্ডেন রিং-এর জায়গায় নতুন 3-রিং বসানো
+    const observer = new MutationObserver(function() {
+      
+      // ১. পাবলিক প্রোফাইল মডালের অ্যাডমিন অ্যাভাটার
+      const adminAvatarWrap = document.querySelector(".profile-card-admin .profile-avatar-wrap");
+      if (adminAvatarWrap && !adminAvatarWrap.classList.contains("ax-admin-3-rings")) {
+        // পুরনো ১টি রিং সরিয়ে দেওয়া
+        const oldRing = adminAvatarWrap.querySelector(".profile-avatar-ring");
+        if (oldRing) oldRing.remove();
+        
+        // নতুন ক্লাস এবং ৩ নাম্বার রিং যুক্ত করা
+        adminAvatarWrap.classList.add("ax-admin-3-rings");
+        if (!adminAvatarWrap.querySelector(".ring-3")) {
+          adminAvatarWrap.insertAdjacentHTML('beforeend', '<div class="ring-3"></div>');
+        }
+      }
+
+      // ২. অ্যাডমিন প্যানেলের বড় অ্যাভাটার (যদি থাকে)
+      const adminPanelAvatar = document.querySelector(".admin-avatar-large");
+      if (adminPanelAvatar && !adminPanelAvatar.parentElement.classList.contains("ax-admin-3-rings")) {
+        // প্যারেন্ট র‍্যাপার তৈরি করে দেওয়া
+        const wrap = document.createElement('div');
+        wrap.className = 'ax-admin-3-rings';
+        adminPanelAvatar.parentNode.insertBefore(wrap, adminPanelAvatar);
+        wrap.appendChild(adminPanelAvatar);
+        wrap.insertAdjacentHTML('beforeend', '<div class="ring-3"></div>');
+      }
+    });
+
+    // পুরো পেজে পরিবর্তন লক্ষ্য রাখা
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+</script>
 <!-- ============================================================== -->
 <!-- END OF ANSU ELITE FIX CODE -->
 <!-- ============================================================== -->
