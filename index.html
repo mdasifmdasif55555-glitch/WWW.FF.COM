@@ -2862,4 +2862,242 @@ body.ax-light .axb1-pinned-bar b { color: #b68a3d; }
 
 })();
 </script>
+  <!-- ============================================================== -->
+<!-- ANSU ELITE : ALL-IN-ONE UI FIX & MEMBERS SYSTEM (FINAL CODE) -->
+<!-- এই কোডটি আপনার HTML এর একদম শেষে দিলে সব ঠিক হয়ে যাবে -->
+<!-- ============================================================== -->
+<style>
+/* ১. কাস্টম স্ক্রলবার (সুন্দর ডিজাইনের জন্য) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #050b08; }
+::-webkit-scrollbar-thumb { background: #365340; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #e8c879; }
+
+/* ২. হিরো সেকশনের গ্লোয়িং ইফেক্ট */
+.hero h1 span {
+  text-shadow: 0 0 20px rgba(232, 200, 121, 0.4), 0 0 40px rgba(232, 200, 121, 0.2);
+  animation: glowPulse 3s infinite alternate;
+}
+@keyframes glowPulse {
+  0% { text-shadow: 0 0 15px rgba(232, 200, 121, 0.3); }
+  100% { text-shadow: 0 0 35px rgba(232, 200, 121, 0.6), 0 0 60px rgba(232, 200, 121, 0.3); }
+}
+
+/* ৩. লিস্টিং কার্ডে শাইন (Shine) এবং জুম ইফেক্ট */
+.listing { position: relative; overflow: hidden; }
+.listing::before {
+  content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: skewX(-25deg); transition: 0.7s; z-index: 1; pointer-events: none;
+}
+.listing:hover::before { left: 150%; }
+.listing .cover img { transition: transform 0.4s ease; }
+.listing:hover .cover img { transform: scale(1.08); }
+.listing .price { text-shadow: 0 0 10px rgba(232, 200, 121, 0.5); }
+
+/* ৪. বাটনে ক্লিক ইফেক্ট ও সাপোর্ট বাটনে পালস */
+.btn:active { transform: scale(0.95) !important; box-shadow: none !important; }
+.btn.whatsapp { animation: pulseWhatsapp 2s infinite; }
+@keyframes pulseWhatsapp {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+/* ৫. স্ক্রল অ্যানিমেশন (নিচ থেকে ফেড হয়ে আসা) */
+.animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+.animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+
+/* ৬. Members Modal এর নতুন ডিজাইন (ট্যাব ও কার্ড) */
+.ax-fix-tabs { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.ax-fix-tabs::-webkit-scrollbar { display: none; }
+.ax-fix-tab { flex: 0 0 auto; background: #13231a; border: 1px solid #365340; color: #a4b5aa; padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.ax-fix-tab.active { background: linear-gradient(135deg, #f4dc94, #b68a3d); color: #172017; border-color: #fff0b8; }
+
+.ax-fix-card { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid #294536; border-radius: 14px; background: linear-gradient(145deg, #14231c, #0b1510); margin-bottom: 10px; transition: 0.2s; }
+.ax-fix-card:hover { border-color: #e8c879; box-shadow: 0 4px 15px rgba(232, 200, 121, 0.1); }
+.ax-fix-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #365340; cursor: pointer; flex-shrink: 0; }
+.ax-fix-avatar.admin { border-color: #e8c879; box-shadow: 0 0 15px rgba(232, 200, 121, 0.4); }
+.ax-fix-info { flex: 1; min-width: 0; }
+.ax-fix-name { font-size: 15px; font-weight: 800; color: #f5f7f1; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+.ax-fix-id { font-size: 11px; color: #a4b5aa; margin-top: 4px; }
+
+.ax-fix-badge { font-size: 9px; padding: 3px 8px; border-radius: 6px; font-weight: 900; letter-spacing: 0.5px; white-space: nowrap; }
+.ax-fix-badge.admin { background: linear-gradient(110deg, #fff0b8, #b68a3d); color: #1a1508; }
+.ax-fix-badge.seller { background: linear-gradient(110deg, #1a3a5c, #2a6bb0); color: #fff; }
+.ax-fix-badge.user { background: #1a3024; color: #a4b5aa; border: 1px solid #365340; }
+.ax-fix-badge.verified { background: #0d2418; color: #8ef0bf; border: 1px solid #1bc78b70; }
+
+.ax-fix-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.ax-fix-actions .btn { padding: 6px 10px !important; font-size: 11px !important; }
+@media (max-width: 500px) { 
+  .ax-fix-card { flex-wrap: wrap; } 
+  .ax-fix-actions { width: 100%; } 
+  .ax-fix-actions .btn { flex: 1; }
+}
+</style>
+
+<script>
+(function() {
+  "use strict";
+
+  // ==========================================
+  // ১. স্ক্রল অ্যানিমেশন (নিচ থেকে ফেড হয়ে আসা)
+  // ==========================================
+  document.addEventListener("DOMContentLoaded", function() {
+    const sections = document.querySelectorAll("section, .hero, .stat, .trust-banner, .listing, .post-card");
+    sections.forEach(sec => sec.classList.add("animate-on-scroll"));
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    sections.forEach(sec => observer.observe(sec));
+  });
+
+  // ==========================================
+  // ২. Members সিস্টেম (Admin, Seller, User আলাদা করা)
+  // ==========================================
+  if (window.__membersSystemFixed) return; 
+  window.__membersSystemFixed = true;
+
+  let allMembers = [];
+  let sellerIds = new Set();
+  let currentTab = "all";
+  let currentSearch = "";
+
+  // মেম্বার মডাল ওপেন
+  window.axOpenMembers = async function() {
+    if (!currentUser) {
+      showToast("মেম্বার দেখতে আগে লগইন করুন", "error");
+      return;
+    }
+    
+    openModal("axMembersModal");
+    const listContainer = document.getElementById("axMemberList");
+    if (!listContainer) return;
+    
+    listContainer.innerHTML = '<div class="panel" style="text-align:center; color:#e8c879;">ডাটা লোড হচ্ছে... অপেক্ষা করুন ⏳</div>';
+
+    try {
+      const [profilesRes, listingsRes] = await Promise.all([
+        sb.from("profiles").select("id,full_name,avatar_url,role,is_verified,verification_status").order("created_at", { ascending: false }).limit(5000),
+        sb.from("listings").select("seller_id").limit(5000)
+      ]);
+
+      if (profilesRes.error) throw profilesRes.error;
+
+      allMembers = profilesRes.data || [];
+      sellerIds = new Set((listingsRes.data || []).map(x => x.seller_id));
+
+      renderMemberUI();
+
+    } catch (err) {
+      console.error(err);
+      listContainer.innerHTML = '<div class="panel" style="color:#ff6574;">লোড করা যায়নি। Supabase RLS চেক করুন।</div>';
+    }
+  };
+
+  // UI (ট্যাব ও সার্চ বার) তৈরি
+  function renderMemberUI() {
+    const listContainer = document.getElementById("axMemberList");
+    const total = allMembers.length;
+
+    listContainer.innerHTML = `
+      <input class="field" id="axFixSearch" placeholder="🔍 নাম বা User ID দিয়ে খুঁজুন..." style="margin-bottom: 12px;" oninput="window.__membersSearch(this.value)">
+      <div class="ax-fix-tabs" id="axFixTabs">
+        <button class="ax-fix-tab active" onclick="window.__membersTab('all', this)">👥 সবাই (${total})</button>
+        <button class="ax-fix-tab" onclick="window.__membersTab('admin', this)">👑 Admin</button>
+        <button class="ax-fix-tab" onclick="window.__membersTab('seller', this)">🛍️ Seller</button>
+        <button class="ax-fix-tab" onclick="window.__membersTab('user', this)">👤 Member</button>
+      </div>
+      <div id="axFixList"></div>
+    `;
+
+    renderMemberList();
+  }
+
+  // ট্যাব ক্লিক ও সার্চ হ্যান্ডলার
+  window.__membersTab = function(tab, btn) {
+    currentTab = tab;
+    document.querySelectorAll("#axFixTabs .ax-fix-tab").forEach(b => b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
+    renderMemberList();
+  };
+
+  window.__membersSearch = function(val) {
+    currentSearch = (val || "").toLowerCase().trim();
+    renderMemberList();
+  };
+
+  // রোল বের করা (Admin > Seller > User)
+  function getMemberRole(member) {
+    if (member.role === "admin") return "admin";
+    if (member.role === "seller" || sellerIds.has(member.id)) return "seller";
+    return "user";
+  }
+
+  // লিস্ট রেন্ডার
+  function renderMemberList() {
+    const listDiv = document.getElementById("axFixList");
+    if (!listDiv) return;
+
+    const filtered = allMembers.filter(m => {
+      const role = getMemberRole(m);
+      const matchesTab = (currentTab === "all" || currentTab === role);
+      const name = (m.full_name || "").toLowerCase();
+      const uid = (m.id || "").toLowerCase();
+      const matchesSearch = !currentSearch || name.includes(currentSearch) || uid.includes(currentSearch);
+      return matchesTab && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      listDiv.innerHTML = '<div class="post-empty" style="padding:30px;">কোনো সদস্য পাওয়া যায়নি।</div>';
+      return;
+    }
+
+    const badges = {
+      admin: '<span class="ax-fix-badge admin">👑 ADMIN</span>',
+      seller: '<span class="ax-fix-badge seller">🛍️ SELLER</span>',
+      user: '<span class="ax-fix-badge user">👤 MEMBER</span>'
+    };
+
+    listDiv.innerHTML = filtered.map(m => {
+      const role = getMemberRole(m);
+      const isMe = currentUser && currentUser.id === m.id;
+      const avatar = m.avatar_url || "https://placehold.co/100x100/14251e/ffffff?text=User";
+      const name = m.full_name || "Unknown User";
+      const shortId = m.id.slice(0, 8).toUpperCase();
+      const verified = m.is_verified ? '<span class="ax-fix-badge verified">✓ VERIFIED</span>' : '';
+
+      return `
+        <div class="ax-fix-card">
+          <img src="${esc(avatar)}" class="ax-fix-avatar ${role === 'admin' ? 'admin' : ''}" onclick="showPublicProfile('${esc(m.id)}')" alt="User">
+          <div class="ax-fix-info">
+            <div class="ax-fix-name ${role === 'admin' ? 'admin-user-name' : ''}" onclick="showPublicProfile('${esc(m.id)}')">
+              ${esc(name)} ${verified}
+            </div>
+            <div style="display:flex; gap:6px; align-items:center; margin-top:4px; flex-wrap:wrap;">
+              ${badges[role]}
+              <span class="ax-fix-id">ID: ${esc(shortId)}</span>
+            </div>
+          </div>
+          <div class="ax-fix-actions">
+            <button class="btn secondary" onclick="showPublicProfile('${esc(m.id)}')">Profile</button>
+            ${isMe ? "" : `<button class="btn" onclick="axOpenChat('${esc(m.id)}')">💬 Message</button>`}
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+})();
+</script>
+<!-- ============================================================== -->
+<!-- END OF ANSU ELITE FIX CODE -->
+<!-- ============================================================== -->
   
