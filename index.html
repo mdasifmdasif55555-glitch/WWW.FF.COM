@@ -4066,4 +4066,28 @@ header .actions .header-icon-btn + .header-icon-btn {
   };
 
 })();
-</script>
+</script><style id="ansuBG">
+body { background: #0a0512 !important; }
+.bg-effects {
+  background:
+    radial-gradient(ellipse at 15% 20%, #7c3aed25, transparent 45%),
+    radial-gradient(ellipse at 85% 60%, #db277720, transparent 45%),
+    radial-gradient(ellipse at 50% 100%, #4338ca15, transparent 55%),
+    linear-gradient(160deg, #0a0512 0%, #12082a 50%, #0f0519 100%) !important;
+}
+.bg-effects:before {
+  background:
+    repeating-linear-gradient(90deg, transparent 0 150px, #a855f708 151px 152px, transparent 153px 300px) !important;
+  animation: bgDrift 35s linear infinite !important;
+}
+.bg-effects:after {
+  background:
+    radial-gradient(circle at 30% 40%, #c084fc12, transparent 30%),
+    radial-gradient(circle at 70% 70%, #ec489912, transparent 30%),
+    linear-gradient(115deg, transparent 20%, #a855f710 47%, transparent 55%) !important;
+  animation: lightSweep 20s ease-in-out infinite !important;
+}
+.particle { background: #c084fc !important; box-shadow: 0 0 14px #c084fc !important; }
+header { background: #0a0512ee !important; border-bottom-color: #a855f740 !important; }
+.brand { color: #e8c879 !important; }
+</style>
