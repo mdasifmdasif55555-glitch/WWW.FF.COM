@@ -4241,3 +4241,108 @@ header { background: #0a0512ee !important; border-bottom-color: #a855f740 !impor
     }
 })();
 </script>
+  <!-- ============================================================
+     ANSU ELITE — ADMIN PROFILE RINGS FIX
+     এই কোডটি অ্যাডমিন প্রোফাইলের রিংগুলোকে নিখুঁতভাবে 
+     সেন্টার করবে এবং ভাঙন দূর করবে।
+     ============================================================ -->
+<style id="ansuRingFixStyle">
+/* অ্যাভাটার র‍্যাপারকে পারফেক্টলি সেন্টার করা */
+.profile-avatar-wrap.ax-admin-3-rings,
+.ax-admin-3-rings {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 auto 20px auto !important;
+    width: 130px !important;  /* রিং এর সাইজ */
+    height: 130px !important; /* রিং এর সাইজ */
+    overflow: visible !important;
+    border-radius: 50% !important;
+}
+
+/* ভেতরের অ্যাভাটার ইমেজ ফিক্স */
+.profile-avatar-wrap.ax-admin-3-rings img,
+.ax-admin-3-rings img {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    position: relative !important;
+    z-index: 5 !important;
+    border: 3px solid #0d1912 !important;
+    margin: 0 !important;
+    transform: none !important; /* আগের কোনো ট্রান্সফর্ম থাকলে বাতিল */
+}
+
+/* রিংগুলোর বেস সেটআপ (সেন্টারিং ঠিক করার জন্য) */
+.ax-admin-3-rings::before,
+.ax-admin-3-rings::after,
+.ax-admin-3-rings .ring-3 {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    border-radius: 50% !important;
+    pointer-events: none !important;
+    box-sizing: border-box !important;
+}
+
+/* ১. প্রথম রিং: গোল্ডেন (রোটেশন ফিক্সসহ) */
+.ax-admin-3-rings::before {
+    width: 115% !important;
+    height: 115% !important;
+    border: 2px solid transparent !important;
+    border-top-color: #e8c879 !important;
+    border-right-color: #fff0b8 !important;
+    box-shadow: 0 0 15px rgba(232, 200, 121, 0.4) !important;
+    z-index: 4 !important;
+    animation: axSpinRightFixed 3s linear infinite !important;
+    transform: translate(-50%, -50%) !important;
+}
+
+/* ২. দ্বিতীয় রিং: সায়ান (রোটেশন ফিক্সসহ) */
+.ax-admin-3-rings::after {
+    width: 124% !important;
+    height: 124% !important;
+    border: 2px dashed transparent !important;
+    border-bottom-color: #00d2ff !important;
+    border-left-color: #3a7bd5 !important;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.3) !important;
+    z-index: 3 !important;
+    animation: axSpinLeftFixed 5s linear infinite !important;
+    transform: translate(-50%, -50%) !important;
+}
+
+/* ৩. তৃতীয় রিং: পার্পল (রোটেশন ফিক্সসহ) */
+.ax-admin-3-rings .ring-3 {
+    width: 133% !important;
+    height: 133% !important;
+    border: 2px dotted transparent !important;
+    border-top-color: #c471ed !important;
+    border-bottom-color: #f64f59 !important;
+    box-shadow: 0 0 15px rgba(196, 113, 237, 0.3) !important;
+    z-index: 2 !important;
+    animation: axSpinRightFixed 7s linear infinite !important;
+    transform: translate(-50%, -50%) !important;
+}
+
+/* অ্যানিমেশন কীফ্রেম (সেন্টারিং ঠিক রাখার জন্য translate(-50%, -50%) যোগ করা হয়েছে) */
+@keyframes axSpinRightFixed {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes axSpinLeftFixed {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+/* অ্যাডমিন প্যানেলের ভেতরের ছোট অ্যাভাটার ফিক্স (যদি থাকে) */
+.admin-avatar-large.ax-admin-3-rings,
+.ax-admin-3-rings:has(.admin-avatar-large) {
+    width: 90px !important;
+    height: 90px !important;
+    margin: 0 !important;
+}
+</style>
