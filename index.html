@@ -4346,3 +4346,2645 @@ header { background: #0a0512ee !important; border-bottom-color: #a855f740 !impor
     margin: 0 !important;
 }
 </style>
+  <!-- ============================================================
+     ANSU ELITE v3.0 — FACEBOOK-STYLE COMMUNITY + PROFILE SYSTEM
+     এই ব্লকটি HTML-এর একদম শেষে বসান। আগের সব ফাংশন ওভাররাইড হবে
+     কিন্তু কোনো conflict হবে না। বারবার পেস্ট করলেও একবারই চলবে।
+     ============================================================ -->
+<style id="ansuV3CommunityStyle">
+/* ============ ভ্যারিয়েবল ============ */
+:root {
+  --fb-bg: #0b141a;
+  --fb-card: #111b21;
+  --fb-card-hover: #1a2730;
+  --fb-line: #2a3942;
+  --fb-text: #e9edef;
+  --fb-muted: #8696a0;
+  --fb-blue: #1877f2;
+  --fb-blue-hover: #166fe0;
+  --fb-red: #f02849;
+  --fb-green: #00a884;
+  --fb-radius: 12px;
+  --fb-radius-lg: 16px;
+}
+
+/* ============ Community Section ============ */
+#community {
+  padding: 20px 0 40px;
+}
+
+/* ---- কমিউনিটি হেডার ---- */
+.ansu-community-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.ansu-community-title {
+  font-size: 22px;
+  font-weight: 900;
+  background: linear-gradient(110deg, #fff0b8, #e8c879, #c69b49);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 0;
+}
+
+.ansu-community-subtitle {
+  font-size: 12px;
+  color: var(--fb-muted);
+  margin-top: 4px;
+}
+
+.ansu-community-stats {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--fb-muted);
+}
+
+.ansu-community-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: var(--fb-card);
+  border: 1px solid var(--fb-line);
+  border-radius: 99px;
+}
+
+.ansu-community-stat b {
+  color: #e8c879;
+  font-weight: 900;
+}
+
+/* ---- পোস্ট কম্পোজার ---- */
+.ansu-composer {
+  background: var(--fb-card);
+  border: 1px solid var(--fb-line);
+  border-radius: var(--fb-radius-lg);
+  padding: 14px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.ansu-composer-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.ansu-composer-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--fb-line);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.ansu-composer-avatar.admin {
+  border-color: #e8c879;
+  box-shadow: 0 0 12px rgba(232,200,121,0.4);
+}
+
+.ansu-composer-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ansu-composer-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--fb-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ansu-composer-name.admin {
+  background: linear-gradient(90deg, #fff0b8, #e8c879, #c69b49);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ansu-composer-meta {
+  font-size: 11px;
+  color: var(--fb-muted);
+  margin-top: 2px;
+}
+
+/* ---- পোস্ট টেক্সটএরিয়া ---- */
+.ansu-post-input-wrap {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.ansu-post-input {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  background: #0b141a;
+  color: var(--fb-text);
+  border: 1px solid var(--fb-line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.ansu-post-input:focus {
+  border-color: #e8c879;
+}
+
+.ansu-post-input::placeholder {
+  color: var(--fb-muted);
+}
+
+/* ---- ইমেজ প্রিভিউ গ্রিড ---- */
+.ansu-img-preview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.ansu-img-preview:empty {
+  display: none;
+}
+
+.ansu-img-preview-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--fb-line);
+}
+
+.ansu-img-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ansu-img-preview-item .ansu-img-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 14px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s;
+}
+
+.ansu-img-preview-item .ansu-img-remove:hover {
+  background: var(--fb-red);
+}
+
+.ansu-img-preview-item .ansu-img-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ---- কম্পোজার অ্যাকশন বার ---- */
+.ansu-composer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--fb-line);
+}
+
+.ansu-composer-tools {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.ansu-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 11px;
+  background: transparent;
+  border: 1px solid var(--fb-line);
+  border-radius: 8px;
+  color: var(--fb-muted);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ansu-tool-btn:hover {
+  background: var(--fb-card-hover);
+  color: var(--fb-text);
+  border-color: #e8c879;
+}
+
+.ansu-tool-btn .emoji {
+  font-size: 15px;
+}
+
+.ansu-tool-btn.active {
+  background: rgba(232,200,121,0.1);
+  color: #e8c879;
+  border-color: #e8c879;
+}
+
+.ansu-publish-btn {
+  padding: 9px 20px;
+  background: linear-gradient(135deg, #f4dc94, #b68a3d);
+  color: #172017;
+  border: none;
+  border-radius: 9px;
+  font-size: 12.5px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-width: 110px;
+}
+
+.ansu-publish-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(232,200,121,0.3);
+}
+
+.ansu-publish-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- কম্পোজার মেসেজ ---- */
+.ansu-composer-msg {
+  font-size: 12px;
+  margin-top: 8px;
+  min-height: 16px;
+}
+
+.ansu-composer-msg.error { color: var(--fb-red); }
+.ansu-composer-msg.success { color: var(--fb-green); }
+
+/* ============ পোস্ট ফিড ============ */
+.ansu-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ansu-post {
+  background: var(--fb-card);
+  border: 1px solid var(--fb-line);
+  border-radius: var(--fb-radius-lg);
+  overflow: hidden;
+  animation: ansuPostIn 0.35s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  transition: border-color 0.2s;
+}
+
+.ansu-post:hover {
+  border-color: rgba(232,200,121,0.3);
+}
+
+@keyframes ansuPostIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- পোস্ট হেডার ---- */
+.ansu-post-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px 10px;
+}
+
+.ansu-post-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ansu-post-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--fb-line);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.ansu-post-avatar:hover {
+  transform: scale(1.05);
+}
+
+.ansu-post-avatar.admin {
+  border-color: #e8c879;
+  box-shadow: 0 0 12px rgba(232,200,121,0.4);
+  animation: ansuAdminPulse 3s ease-in-out infinite;
+}
+
+.ansu-post-avatar.seller {
+  border-color: var(--fb-blue);
+  box-shadow: 0 0 10px rgba(24,119,242,0.35);
+}
+
+@keyframes ansuAdminPulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(232,200,121,0.4); }
+  50% { box-shadow: 0 0 22px rgba(232,200,121,0.65); }
+}
+
+.ansu-post-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ansu-post-author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 3px;
+}
+
+.ansu-post-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--fb-text);
+  cursor: pointer;
+  transition: color 0.15s;
+  overflow-wrap: anywhere;
+}
+
+.ansu-post-name:hover {
+  color: #e8c879;
+  text-decoration: underline;
+}
+
+.ansu-post-name.admin {
+  background: linear-gradient(90deg, #fff0b8, #e8c879, #c69b49);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ansu-post-name.admin:hover {
+  text-decoration: underline;
+}
+
+/* ---- রোল ব্যাজ ---- */
+.ansu-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+
+.ansu-role-badge.admin {
+  background: linear-gradient(110deg, #fff0b8, #e8c879);
+  color: #1a1508;
+}
+
+.ansu-role-badge.seller {
+  background: linear-gradient(110deg, #1a3a5c, #2a6bb0);
+  color: #fff;
+}
+
+.ansu-role-badge.verified {
+  background: rgba(0,168,132,0.15);
+  color: #4ade80;
+  border: 1px solid rgba(0,168,132,0.5);
+}
+
+.ansu-role-badge.premium {
+  background: linear-gradient(110deg, #4a2a6b, #8a4fc9);
+  color: #fff;
+}
+
+/* ---- মেটা (সময় / আইডি) ---- */
+.ansu-post-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--fb-muted);
+  flex-wrap: wrap;
+}
+
+.ansu-post-meta .dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--fb-muted);
+}
+
+/* ---- মোর মেনু ---- */
+.ansu-post-more {
+  background: transparent;
+  border: none;
+  color: var(--fb-muted);
+  font-size: 18px;
+  padding: 4px 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.ansu-post-more:hover {
+  background: var(--fb-card-hover);
+  color: var(--fb-text);
+}
+
+/* ---- পোস্ট কন্টেন্ট ---- */
+.ansu-post-content {
+  padding: 4px 16px 10px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--fb-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* ---- পোস্ট ইমেজ (Facebook style) ---- */
+.ansu-post-imgs {
+  display: grid;
+  gap: 3px;
+  background: #000;
+  margin: 0;
+  border-top: 1px solid var(--fb-line);
+  border-bottom: 1px solid var(--fb-line);
+}
+
+.ansu-post-imgs[data-count="1"] {
+  grid-template-columns: 1fr;
+  max-height: 520px;
+}
+
+.ansu-post-imgs[data-count="1"] img {
+  max-height: 520px;
+  object-fit: contain;
+  background: #000;
+}
+
+.ansu-post-imgs[data-count="2"] {
+  grid-template-columns: 1fr 1fr;
+}
+
+.ansu-post-imgs[data-count="3"] {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.ansu-post-imgs[data-count="3"] img:first-child {
+  grid-row: span 2;
+}
+
+.ansu-post-imgs[data-count="4"] {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.ansu-post-imgs img {
+  width: 100%;
+  height: 100%;
+  min-height: 140px;
+  max-height: 420px;
+  object-fit: cover;
+  cursor: pointer;
+  display: block;
+  transition: opacity 0.15s;
+}
+
+.ansu-post-imgs img:hover {
+  opacity: 0.92;
+}
+
+.ansu-post-imgs[data-count="1"] img {
+  min-height: auto;
+}
+
+/* ---- কাউন্টার (Like/Comment/Share সংখ্যা) ---- */
+.ansu-post-counters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px 8px;
+  font-size: 12px;
+  color: var(--fb-muted);
+  border-bottom: 1px solid var(--fb-line);
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ansu-post-counters .left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ansu-reaction-stack {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 4px;
+}
+
+.ansu-reaction-stack span {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 10px;
+  margin-right: -4px;
+  border: 1.5px solid var(--fb-card);
+}
+
+.ansu-reaction-stack span.like { background: #1877f2; }
+.ansu-reaction-stack span.heart { background: #f02849; }
+.ansu-reaction-stack span.love { background: #f02849; }
+
+.ansu-post-counters .right {
+  display: flex;
+  gap: 10px;
+}
+
+.ansu-post-counters .right span {
+  cursor: pointer;
+}
+
+.ansu-post-counters .right span:hover {
+  text-decoration: underline;
+  color: var(--fb-text);
+}
+
+/* ---- অ্যাকশন বার (Like/Comment/Share) ---- */
+.ansu-post-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 4px 8px;
+  gap: 2px;
+}
+
+.ansu-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--fb-muted);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.ansu-action-btn:hover {
+  background: var(--fb-card-hover);
+  color: var(--fb-text);
+}
+
+.ansu-action-btn .emoji {
+  font-size: 17px;
+  transition: transform 0.2s;
+}
+
+.ansu-action-btn.active-like {
+  color: var(--fb-blue);
+}
+
+.ansu-action-btn.active-like .emoji {
+  animation: ansuLikePop 0.35s ease;
+}
+
+.ansu-action-btn.active-heart {
+  color: var(--fb-red);
+}
+
+.ansu-action-btn.active-heart .emoji {
+  animation: ansuLikePop 0.35s ease;
+}
+
+@keyframes ansuLikePop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.4) rotate(-8deg); }
+  70% { transform: scale(0.95) rotate(4deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* ---- কমেন্ট সেকশন ---- */
+.ansu-comments {
+  border-top: 1px solid var(--fb-line);
+  padding: 12px 16px;
+  background: rgba(0,0,0,0.15);
+  display: none;
+}
+
+.ansu-comments.open {
+  display: block;
+}
+
+.ansu-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.ansu-comments-list:empty {
+  display: none;
+}
+
+.ansu-comments-empty {
+  text-align: center;
+  color: var(--fb-muted);
+  font-size: 12px;
+  padding: 10px;
+}
+
+.ansu-comment {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.ansu-comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--fb-line);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.ansu-comment-avatar.admin {
+  border-color: #e8c879;
+  box-shadow: 0 0 8px rgba(232,200,121,0.4);
+}
+
+.ansu-comment-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ansu-comment-bubble {
+  background: var(--fb-card-hover);
+  border-radius: 14px;
+  padding: 8px 12px;
+  display: inline-block;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+.ansu-comment-name {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--fb-text);
+  margin-bottom: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.ansu-comment-name:hover {
+  text-decoration: underline;
+}
+
+.ansu-comment-name.admin {
+  background: linear-gradient(90deg, #fff0b8, #e8c879, #c69b49);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ansu-comment-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fb-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.ansu-comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--fb-muted);
+  margin-top: 3px;
+  padding-left: 10px;
+  flex-wrap: wrap;
+}
+
+.ansu-comment-meta button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.ansu-comment-meta button:hover {
+  color: var(--fb-text);
+  text-decoration: underline;
+}
+
+.ansu-comment-meta button.liked {
+  color: var(--fb-blue);
+}
+
+.ansu-comment-delete {
+  background: transparent;
+  border: none;
+  color: var(--fb-muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.ansu-comment:hover .ansu-comment-delete {
+  opacity: 1;
+}
+
+.ansu-comment-delete:hover {
+  color: var(--fb-red);
+  background: rgba(240,40,73,0.1);
+}
+
+/* ---- কমেন্ট ইনপুট ---- */
+.ansu-comment-input-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding-top: 8px;
+  border-top: 1px solid var(--fb-line);
+}
+
+.ansu-comment-input-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--fb-line);
+  flex-shrink: 0;
+}
+
+.ansu-comment-input-box {
+  flex: 1;
+  display: flex;
+  background: var(--fb-card-hover);
+  border: 1px solid var(--fb-line);
+  border-radius: 20px;
+  padding: 4px 4px 4px 14px;
+  align-items: center;
+  gap: 4px;
+  transition: border-color 0.15s;
+}
+
+.ansu-comment-input-box:focus-within {
+  border-color: #e8c879;
+}
+
+.ansu-comment-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--fb-text);
+  font-size: 13px;
+  padding: 6px 0;
+  outline: none;
+  font-family: inherit;
+  min-width: 0;
+}
+
+.ansu-comment-input::placeholder {
+  color: var(--fb-muted);
+}
+
+.ansu-comment-send {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--fb-blue);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.ansu-comment-send:hover:not(:disabled) {
+  background: var(--fb-blue-hover);
+}
+
+.ansu-comment-send:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============ পাবলিক প্রোফাইল মডাল (Facebook style) ============ */
+.ansu-profile-modal-box {
+  width: min(560px, 100%) !important;
+  padding: 0 !important;
+  background: var(--fb-bg) !important;
+  border: 1px solid var(--fb-line) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  max-height: 92vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.ansu-profile-header {
+  position: relative;
+  padding: 0;
+  background: linear-gradient(135deg, #1a2a20, #0d1912);
+  border-bottom: 1px solid var(--fb-line);
+}
+
+.ansu-profile-cover {
+  height: 100px;
+  background: linear-gradient(135deg, #1a3024, #2a2410, #1a3024);
+  position: relative;
+  overflow: hidden;
+}
+
+.ansu-profile-cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(232,200,121,0.25), transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(0,168,132,0.2), transparent 50%);
+}
+
+.ansu-profile-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  font-size: 15px;
+  display: grid;
+  place-items: center;
+  z-index: 5;
+  transition: background 0.15s;
+}
+
+.ansu-profile-close:hover {
+  background: var(--fb-red);
+}
+
+.ansu-profile-avatar-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin: -48px auto 0;
+  border-radius: 50%;
+  background: var(--fb-card);
+  padding: 4px;
+  z-index: 3;
+}
+
+.ansu-profile-avatar-wrap.admin::before,
+.ansu-profile-avatar-wrap.seller::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  animation: ansuRingSpin 3s linear infinite;
+  pointer-events: none;
+}
+
+.ansu-profile-avatar-wrap.admin::before {
+  border-top-color: #e8c879;
+  border-right-color: #fff0b8;
+  box-shadow: 0 0 16px rgba(232,200,121,0.5);
+}
+
+.ansu-profile-avatar-wrap.seller::before {
+  border-top-color: var(--fb-blue);
+  border-right-color: #4a9eff;
+  box-shadow: 0 0 16px rgba(24,119,242,0.5);
+}
+
+@keyframes ansuRingSpin {
+  to { transform: rotate(360deg); }
+}
+
+.ansu-profile-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--fb-bg);
+  position: relative;
+  z-index: 2;
+}
+
+.ansu-profile-body {
+  padding: 12px 20px 20px;
+  text-align: center;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.ansu-profile-name {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--fb-text);
+  margin: 0 0 6px;
+  overflow-wrap: anywhere;
+}
+
+.ansu-profile-name.admin {
+  background: linear-gradient(90deg, #fff0b8, #e8c879, #c69b49, #e8c879);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: ansuShimmer 4s linear infinite;
+}
+
+@keyframes ansuShimmer {
+  to { background-position: 200% center; }
+}
+
+.ansu-profile-badges {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.ansu-profile-id {
+  font-size: 11px;
+  color: var(--fb-muted);
+  font-family: 'Courier New', monospace;
+  margin-bottom: 14px;
+}
+
+.ansu-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ansu-profile-stat {
+  background: var(--fb-card);
+  border: 1px solid var(--fb-line);
+  border-radius: 10px;
+  padding: 10px 8px;
+  transition: border-color 0.15s;
+}
+
+.ansu-profile-stat:hover {
+  border-color: #e8c879;
+}
+
+.ansu-profile-stat strong {
+  display: block;
+  font-size: 17px;
+  color: #e8c879;
+  font-weight: 900;
+  margin-bottom: 2px;
+}
+
+.ansu-profile-stat span {
+  font-size: 10.5px;
+  color: var(--fb-muted);
+  font-weight: 600;
+}
+
+.ansu-profile-info-grid {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.ansu-profile-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  background: var(--fb-card);
+  border: 1px solid var(--fb-line);
+  border-radius: 8px;
+  font-size: 12px;
+  gap: 8px;
+}
+
+.ansu-profile-info-row .label {
+  color: var(--fb-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ansu-profile-info-row .value {
+  color: var(--fb-text);
+  font-weight: 700;
+  text-align: right;
+}
+
+.ansu-profile-trust {
+  padding: 10px 12px;
+  background: var(--fb-card);
+  border: 1px solid var(--fb-line);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.ansu-profile-trust-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  margin-bottom: 6px;
+}
+
+.ansu-profile-trust-head span { color: var(--fb-muted); }
+.ansu-profile-trust-head strong { color: #e8c879; }
+
+.ansu-profile-trust-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.ansu-profile-trust-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--fb-green), #e8c879);
+  transition: width 0.6s ease;
+}
+
+.ansu-profile-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ansu-profile-btn {
+  padding: 11px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--fb-line);
+  background: var(--fb-card);
+  color: var(--fb-text);
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: inherit;
+}
+
+.ansu-profile-btn:hover {
+  background: var(--fb-card-hover);
+  border-color: #e8c879;
+  transform: translateY(-1px);
+}
+
+.ansu-profile-btn.primary {
+  background: linear-gradient(135deg, #f4dc94, #b68a3d);
+  color: #172017;
+  border-color: transparent;
+  grid-column: 1 / -1;
+}
+
+.ansu-profile-btn.primary:hover {
+  box-shadow: 0 4px 14px rgba(232,200,121,0.35);
+}
+
+/* ---- লোডিং স্কেলেটন ---- */
+.ansu-skeleton {
+  background: linear-gradient(90deg, var(--fb-card) 25%, var(--fb-card-hover) 50%, var(--fb-card) 75%);
+  background-size: 200% 100%;
+  animation: ansuSkeletonShine 1.4s ease infinite;
+  border-radius: 8px;
+}
+
+@keyframes ansuSkeletonShine {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.ansu-skeleton-post {
+  height: 280px;
+  border-radius: var(--fb-radius-lg);
+  margin-bottom: 14px;
+}
+
+/* ---- ইমেজ লাইটবক্স ---- */
+.ansu-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+  cursor: zoom-out;
+}
+
+.ansu-lightbox.open {
+  display: flex;
+}
+
+.ansu-lightbox img {
+  max-width: 92vw;
+  max-height: 82vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+.ansu-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 24px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s;
+}
+
+.ansu-lightbox-nav:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.ansu-lightbox-nav.prev { left: 16px; }
+.ansu-lightbox-nav.next { right: 16px; }
+
+.ansu-lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 20px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.ansu-lightbox-counter {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ---- রেসপন্সিভ ---- */
+@media (max-width: 600px) {
+  #community { padding: 14px 0 30px; }
+  .ansu-community-title { font-size: 18px; }
+  .ansu-composer { padding: 11px; border-radius: 12px; }
+  .ansu-composer-avatar { width: 36px; height: 36px; }
+  .ansu-post-header { padding: 11px 12px 8px; gap: 10px; }
+  .ansu-post-avatar { width: 38px; height: 38px; }
+  .ansu-post-content { padding: 4px 12px 10px; font-size: 13.5px; }
+  .ansu-post-counters { padding: 8px 12px 6px; font-size: 11px; }
+  .ansu-post-actions { padding: 3px 4px; }
+  .ansu-action-btn { padding: 8px 4px; font-size: 12px; gap: 4px; }
+  .ansu-action-btn .emoji { font-size: 15px; }
+  .ansu-comments { padding: 10px 12px; }
+  .ansu-img-preview { grid-template-columns: repeat(2, 1fr); }
+  .ansu-composer-actions { gap: 6px; }
+  .ansu-tool-btn { padding: 6px 9px; font-size: 10.5px; }
+  .ansu-tool-btn .emoji { font-size: 13px; }
+  .ansu-publish-btn { padding: 8px 16px; font-size: 11.5px; }
+  .ansu-profile-stats { gap: 6px; }
+  .ansu-profile-stat strong { font-size: 15px; }
+  .ansu-profile-stat span { font-size: 9.5px; }
+  .ansu-profile-info-row { font-size: 11.5px; padding: 8px 10px; }
+  .ansu-post-imgs img { min-height: 110px; max-height: 320px; }
+}
+
+@media (max-width: 380px) {
+  .ansu-post-avatar { width: 34px; height: 34px; }
+  .ansu-action-btn { font-size: 11px; }
+  .ansu-community-stats { font-size: 10.5px; }
+}
+</style>
+
+<!-- ============================================================
+     Community Lightbox
+     ============================================================ -->
+<div class="ansu-lightbox" id="ansuLightbox" onclick="ansuLightboxClose(event)">
+  <button class="ansu-lightbox-close" onclick="ansuLightboxClose(event, true)" aria-label="বন্ধ">✕</button>
+  <button class="ansu-lightbox-nav prev" onclick="ansuLightboxNav(event, -1)" aria-label="আগের">‹</button>
+  <img id="ansuLightboxImg" alt="">
+  <button class="ansu-lightbox-nav next" onclick="ansuLightboxNav(event, 1)" aria-label="পরের">›</button>
+  <div class="ansu-lightbox-counter" id="ansuLightboxCounter"></div>
+</div>
+
+<script id="ansuV3CommunityScript">
+(function ansuV3Community() {
+  "use strict";
+
+  /* ============================================================
+     0. DUPLICATE GUARD
+     ============================================================ */
+  if (window.__ANSU_V3_COMMUNITY__) {
+    console.log("[ANSU v3 Community] ইতিমধ্যে সক্রিয়, নতুন করে চালু হবে না।");
+    return;
+  }
+  window.__ANSU_V3_COMMUNITY__ = true;
+
+  /* ============================================================
+     CONSTANTS
+     ============================================================ */
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+
+  const MAX_IMAGES = 4;
+  const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // ৫ MB প্রতিটি
+  const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+
+  /* ============================================================
+     STATE
+     ============================================================ */
+  const state = {
+    posts: [],
+    profiles: {},
+    reactions: {},          // { postId: [{user_id, reaction}] }
+    comments: {},           // { postId: [...] }
+    commentReactions: {},   // { commentId: [{user_id, reaction}] }
+    imagePreview: [],       // Selected files for new post
+    commentImagePreview: [],// (reserved)
+    loading: false,
+    realtimeChannel: null,
+    activeCommentInput: null
+  };
+
+  /* ============================================================
+     HELPERS
+     ============================================================ */
+  const safe = (fn) => function () {
+    try { return fn.apply(this, arguments); }
+    catch (e) { console.warn("[ANSU v3]", e); }
+  };
+
+  const profileAvatar = (p) => p?.avatar_url || "https://placehold.co/100x100/14251e/ffffff?text=User";
+  const profileName = (p, u) => p?.full_name || u?.user_metadata?.full_name || u?.email?.split("@")[0] || "Community Member";
+  const currentUid = () => window.currentUser?.id || null;
+
+  const fmtTime = (iso) => {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (isNaN(d)) return "";
+    const diff = (Date.now() - d.getTime()) / 1000;
+    if (diff < 60) return "এইমাত্র";
+    if (diff < 3600) return Math.floor(diff / 60) + " মিনিট আগে";
+    if (diff < 86400) return Math.floor(diff / 3600) + " ঘণ্টা আগে";
+    if (diff < 604800) return Math.floor(diff / 86400) + " দিন আগে";
+    return d.toLocaleDateString("bn-BD", { day: "numeric", month: "short", year: "numeric" });
+  };
+
+  /* ============================================================
+     1. ROLE HELPERS
+     ============================================================ */
+  function userRole(profile) {
+    if (!profile) return "user";
+    if (profile.role === "admin") return "admin";
+    if (profile.role === "seller") return "seller";
+    if (profile.is_premium) return "premium";
+    return "user";
+  }
+
+  function roleBadge(profile) {
+    const r = userRole(profile);
+    if (r === "admin") return '<span class="ansu-role-badge admin">👑 ADMIN</span>';
+    if (r === "seller") return '<span class="ansu-role-badge seller">🛍️ SELLER</span>';
+    if (r === "premium") return '<span class="ansu-role-badge premium">✦ PREMIUM</span>';
+    return "";
+  }
+
+  function verifiedBadge(profile) {
+    return profile?.is_verified ? '<span class="ansu-role-badge verified">✓ VERIFIED</span>' : "";
+  }
+
+  function isAdminUser() {
+    return window.currentProfile?.role === "admin";
+  }
+
+  /* ============================================================
+     2. FORMAT POST HTML — Main Facebook-style renderer
+     ============================================================ */
+  function getPostImages(post) {
+    let imgs = post.image_urls;
+    if (Array.isArray(imgs)) return imgs.filter(x => typeof x === "string" && x.trim()).slice(0, MAX_IMAGES);
+    if (typeof imgs === "string") {
+      try {
+        const parsed = JSON.parse(imgs);
+        if (Array.isArray(parsed)) return parsed.filter(x => typeof x === "string" && x.trim()).slice(0, MAX_IMAGES);
+      } catch (_) {}
+      if (imgs.startsWith("http")) return [imgs];
+    }
+    // fallback পুরোনো single image_url
+    if (post.image_url && typeof post.image_url === "string" && post.image_url.startsWith("http")) {
+      return [post.image_url];
+    }
+    return [];
+  }
+
+  function postReactionsFor(postId) {
+    return state.reactions[String(postId)] || [];
+  }
+
+  function countByType(arr, type) {
+    return arr.filter(r => r.reaction === type).length;
+  }
+
+  function myReactionOnPost(postId, uid) {
+    const arr = postReactionsFor(postId);
+    return arr.find(r => r.user_id === uid)?.reaction || null;
+  }
+
+  function commentReactionsFor(commentId) {
+    return state.commentReactions[String(commentId)] || [];
+  }
+
+  function myReactionOnComment(commentId, uid) {
+    const arr = commentReactionsFor(commentId);
+    return arr.find(r => r.user_id === uid)?.reaction || null;
+  }
+
+  function renderComment(comment, postId) {
+    const uid = currentUid();
+    const prof = state.profiles[comment.user_id] || {};
+    const name = profileName(prof);
+    const avatar = profileAvatar(prof);
+    const isAdmin = prof.role === "admin";
+    const reactions = commentReactionsFor(comment.id);
+    const likes = countByType(reactions, "like") + countByType(reactions, "heart");
+    const myReact = myReactionOnComment(comment.id, uid);
+    const canDelete = uid && (comment.user_id === uid || isAdminUser());
+    const verified = verifiedBadge(prof);
+    const role = roleBadge(prof);
+
+    return `
+      <div class="ansu-comment" data-comment-id="${esc(comment.id)}">
+        <img src="${esc(avatar)}" class="ansu-comment-avatar ${isAdmin ? "admin" : ""}" alt="" onclick="ansuShowProfile('${esc(comment.user_id)}')">
+        <div class="ansu-comment-body">
+          <div class="ansu-comment-bubble">
+            <div class="ansu-comment-name ${isAdmin ? "admin" : ""}" onclick="ansuShowProfile('${esc(comment.user_id)}')">
+              ${esc(name)} ${role} ${verified}
+            </div>
+            <div class="ansu-comment-text">${esc(comment.content || "")}</div>
+          </div>
+          <div class="ansu-comment-meta">
+            <button onclick="ansuToggleCommentReaction('${esc(comment.id)}','${esc(postId)}','like')" class="${myReact === "like" ? "liked" : ""}">
+              ${myReact === "like" ? "👍 Like হয়েছে" : "👍 Like"}
+            </button>
+            <button onclick="ansuToggleCommentReaction('${esc(comment.id)}','${esc(postId)}','heart')" class="${myReact === "heart" ? "liked" : ""}">
+              ${myReact === "heart" ? "❤️ Loved" : "❤️ Love"}
+            </button>
+            ${likes > 0 ? `<span>${likes} জন</span>` : ""}
+            <span>${esc(fmtTime(comment.created_at))}</span>
+            ${canDelete ? `<button class="ansu-comment-delete" onclick="ansuDeleteComment('${esc(comment.id)}','${esc(postId)}')" title="মুছুন">🗑</button>` : ""}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderPost(post) {
+    const uid = currentUid();
+    const prof = state.profiles[post.user_id] || {};
+    const name = profileName(prof);
+    const avatar = profileAvatar(prof);
+    const role = userRole(prof);
+    const isAdmin = role === "admin";
+    const isSeller = role === "seller";
+
+    const reactions = postReactionsFor(post.id);
+    const likes = countByType(reactions, "like");
+    const hearts = countByType(reactions, "heart");
+    const totalReactions = likes + hearts;
+    const myReaction = myReactionOnPost(post.id, uid);
+
+    const comments = state.comments[String(post.id)] || [];
+    const commentCount = comments.length;
+
+    const images = getPostImages(post);
+    const canDelete = uid && (post.user_id === uid || isAdminUser());
+
+    // Image grid HTML
+    let imgsHtml = "";
+    if (images.length > 0) {
+      imgsHtml = `
+        <div class="ansu-post-imgs" data-count="${images.length}">
+          ${images.map((url, i) =>
+            `<img src="${esc(url)}" alt="Post image ${i + 1}" loading="lazy" onclick="ansuOpenLightbox(${JSON.stringify(images).replace(/"/g, "&quot;")}, ${i})">`
+          ).join("")}
+        </div>
+      `;
+    }
+
+    // Reaction stack (like + heart small icons)
+    let stackHtml = "";
+    if (totalReactions > 0) {
+      const parts = [];
+      if (likes > 0) parts.push('<span class="like">👍</span>');
+      if (hearts > 0) parts.push('<span class="heart">❤️</span>');
+      stackHtml = `<div class="ansu-reaction-stack">${parts.join("")}</div><span>${totalReactions}</span>`;
+    }
+
+    return `
+      <article class="ansu-post" data-post-id="${esc(post.id)}">
+        <div class="ansu-post-header">
+          <div class="ansu-post-avatar-wrap">
+            <img src="${esc(avatar)}" class="ansu-post-avatar ${isAdmin ? "admin" : isSeller ? "seller" : ""}" alt="" onclick="ansuShowProfile('${esc(post.user_id)}')">
+          </div>
+          <div class="ansu-post-info">
+            <div class="ansu-post-author">
+              <span class="ansu-post-name ${isAdmin ? "admin" : ""}" onclick="ansuShowProfile('${esc(post.user_id)}')">${esc(name)}</span>
+              ${roleBadge(prof)}
+              ${verifiedBadge(prof)}
+            </div>
+            <div class="ansu-post-meta">
+              <span>${esc(fmtTime(post.created_at))}</span>
+              <span class="dot"></span>
+              <span style="font-family:monospace;">ID: ${esc(String(post.user_id || "").slice(0, 8).toUpperCase())}</span>
+            </div>
+          </div>
+          ${canDelete ? `<button class="ansu-post-more" onclick="ansuDeletePost('${esc(post.id)}')" title="মুছুন">🗑</button>` : ""}
+        </div>
+
+        ${post.content ? `<div class="ansu-post-content">${esc(post.content)}</div>` : ""}
+        ${imgsHtml}
+
+        <div class="ansu-post-counters">
+          <div class="left">${stackHtml || '<span>প্রথম রিঅ্যাকশন দিন</span>'}</div>
+          <div class="right">
+            ${commentCount > 0 ? `<span onclick="ansuToggleComments('${esc(post.id)}', true)">${commentCount} মন্তব্য</span>` : ""}
+          </div>
+        </div>
+
+        <div class="ansu-post-actions">
+          <button class="ansu-action-btn ${myReaction === "like" ? "active-like" : ""}" onclick="ansuToggleReaction('${esc(post.id)}','like')">
+            <span class="emoji">👍</span> Like
+          </button>
+          <button class="ansu-action-btn ${myReaction === "heart" ? "active-heart" : ""}" onclick="ansuToggleReaction('${esc(post.id)}','heart')">
+            <span class="emoji">❤️</span> Heart
+          </button>
+          <button class="ansu-action-btn" onclick="ansuToggleComments('${esc(post.id)}')">
+            <span class="emoji">💬</span> Comment
+          </button>
+        </div>
+
+        <div class="ansu-comments" id="ansu-comments-${esc(post.id)}">
+          <div class="ansu-comments-list" id="ansu-comments-list-${esc(post.id)}">
+            ${commentCount === 0 ? '<div class="ansu-comments-empty">এখনো কোনো মন্তব্য নেই। প্রথম মন্তব্যটি আপনিই করুন।</div>' : comments.map(c => renderComment(c, post.id)).join("")}
+          </div>
+          <div class="ansu-comment-input-wrap">
+            <img src="${esc(window.currentProfile ? profileAvatar(window.currentProfile) : "https://placehold.co/32x32/14251e/ffffff?text=U")}" class="ansu-comment-input-avatar" alt="">
+            <div class="ansu-comment-input-box">
+              <input type="text" class="ansu-comment-input" placeholder="মন্তব্য লিখুন..." maxlength="500" 
+                     onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();ansuSubmitComment('${esc(post.id)}');}" 
+                     id="ansu-comment-input-${esc(post.id)}">
+              <button class="ansu-comment-send" onclick="ansuSubmitComment('${esc(post.id)}')" aria-label="পাঠান">➤</button>
+            </div>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  /* ============================================================
+     3. RENDER FEED
+     ============================================================ */
+  function renderFeed() {
+    const container = $("ansuCommunityFeed");
+    if (!container) return;
+
+    if (state.loading) {
+      container.innerHTML = Array(3).fill('<div class="ansu-skeleton ansu-skeleton-post"></div>').join("");
+      return;
+    }
+
+    if (!state.posts.length) {
+      container.innerHTML = `
+        <div class="ansu-post" style="padding:40px 20px;text-align:center;">
+          <div style="font-size:52px;margin-bottom:14px;">🌟</div>
+          <div style="font-size:16px;font-weight:800;color:#e8c879;margin-bottom:8px;">এখনো কোনো পোস্ট নেই</div>
+          <div style="font-size:13px;color:var(--fb-muted);">প্রথম পোস্টটি আপনিই করুন। আপনার Free Fire অভিজ্ঞতা শেয়ার করুন!</div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = state.posts.map(renderPost).join("");
+  }
+
+  /* ============================================================
+     4. RENDER COMPOSER (Facebook-style)
+     ============================================================ */
+  function renderComposer() {
+    const container = $("ansuCommunityComposer");
+    if (!container) return;
+
+    if (!window.currentUser) {
+      container.innerHTML = `
+        <div class="ansu-composer" style="text-align:center;padding:22px;">
+          <div style="font-size:15px;font-weight:800;color:#e8c879;margin-bottom:8px;">পোস্ট করতে লগইন করুন</div>
+          <div style="font-size:12px;color:var(--fb-muted);margin-bottom:14px;">Community-তে যোগ দিতে আগে লগইন করুন</div>
+          <button class="ansu-publish-btn" onclick="openModal('authModal')" style="min-width:140px;">🔐 Login</button>
+        </div>
+      `;
+      return;
+    }
+
+    const prof = window.currentProfile || {};
+    const isAdmin = prof.role === "admin";
+    const name = profileName(prof, window.currentUser);
+    const avatar = profileAvatar(prof);
+    const verified = verifiedBadge(prof);
+    const role = roleBadge(prof);
+
+    container.innerHTML = `
+      <div class="ansu-composer">
+        <div class="ansu-composer-top">
+          <img src="${esc(avatar)}" class="ansu-composer-avatar ${isAdmin ? "admin" : ""}" alt="" onclick="ansuShowProfile('${esc(window.currentUser.id)}')">
+          <div class="ansu-composer-info">
+            <div class="ansu-composer-name ${isAdmin ? "admin" : ""}">${esc(name)} ${role} ${verified}</div>
+            <div class="ansu-composer-meta">নিজের অভিজ্ঞতা বা স্ক্রিনশট শেয়ার করুন</div>
+          </div>
+        </div>
+
+        <div class="ansu-post-input-wrap">
+          <textarea class="ansu-post-input" id="ansuPostText" maxlength="2000" placeholder="আপনার Free Fire অভিজ্ঞতা, স্ক্রিনশট বা মজার কিছু লিখুন..."></textarea>
+        </div>
+
+        <div class="ansu-img-preview" id="ansuImgPreview"></div>
+
+        <div class="ansu-composer-actions">
+          <div class="ansu-composer-tools">
+            <button type="button" class="ansu-tool-btn" id="ansuAddPhotoBtn">
+              <span class="emoji">📷</span> ছবি যোগ করুন
+            </button>
+            <input type="file" id="ansuPostImages" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+            <span style="font-size:11px;color:var(--fb-muted);display:inline-flex;align-items:center;padding:0 6px;" id="ansuImgCounter"></span>
+          </div>
+          <button type="button" class="ansu-publish-btn" id="ansuPublishBtn">🚀 পোস্ট করুন</button>
+        </div>
+
+        <div class="ansu-composer-msg" id="ansuComposerMsg"></div>
+      </div>
+    `;
+
+    bindComposerEvents();
+  }
+
+  function bindComposerEvents() {
+    const addPhotoBtn = $("ansuAddPhotoBtn");
+    const fileInput = $("ansuPostImages");
+    const publishBtn = $("ansuPublishBtn");
+    const textInput = $("ansuPostText");
+
+    if (addPhotoBtn && fileInput) {
+      addPhotoBtn.addEventListener("click", () => fileInput.click());
+      fileInput.addEventListener("change", handleImageSelect);
+    }
+    if (publishBtn) publishBtn.addEventListener("click", handlePublishPost);
+    if (textInput) {
+      textInput.addEventListener("input", () => {
+        // Auto-grow
+        textInput.style.height = "auto";
+        textInput.style.height = Math.min(textInput.scrollHeight, 240) + "px";
+      });
+    }
+  }
+
+  function updateImgCounter() {
+    const counter = $("ansuImgCounter");
+    if (counter) {
+      counter.textContent = state.imagePreview.length > 0
+        ? `${state.imagePreview.length}/${MAX_IMAGES}টি ছবি`
+        : `সর্বোচ্চ ${MAX_IMAGES}টি`;
+    }
+  }
+
+  function handleImageSelect(e) {
+    const files = Array.from(e.target.files || []);
+    e.target.value = "";
+    for (const file of files) {
+      if (state.imagePreview.length >= MAX_IMAGES) {
+        setComposerMsg(`সর্বোচ্চ ${MAX_IMAGES}টি ছবি যোগ করা যাবে।`, "error");
+        break;
+      }
+      if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        setComposerMsg("শুধু JPEG, PNG, WEBP বা GIF ছবি দিন।", "error");
+        continue;
+      }
+      if (file.size > MAX_IMAGE_SIZE) {
+        setComposerMsg("প্রতিটি ছবি সর্বোচ্চ ৫ MB হতে পারবে।", "error");
+        continue;
+      }
+      state.imagePreview.push(file);
+    }
+    renderImagePreview();
+    updateImgCounter();
+  }
+
+  function renderImagePreview() {
+    const grid = $("ansuImgPreview");
+    if (!grid) return;
+    grid.innerHTML = "";
+    state.imagePreview.forEach((file, idx) => {
+      const url = URL.createObjectURL(file);
+      const item = document.createElement("div");
+      item.className = "ansu-img-preview-item";
+      item.innerHTML = `
+        <img src="${url}" alt="Preview ${idx + 1}">
+        <button type="button" class="ansu-img-remove" data-idx="${idx}" aria-label="সরান">✕</button>
+        <span class="ansu-img-badge">${idx + 1}</span>
+      `;
+      item.querySelector(".ansu-img-remove").addEventListener("click", () => {
+        state.imagePreview.splice(idx, 1);
+        renderImagePreview();
+        updateImgCounter();
+      });
+      grid.appendChild(item);
+    });
+  }
+
+  function setComposerMsg(text, type = "") {
+    const msg = $("ansuComposerMsg");
+    if (!msg) return;
+    msg.textContent = text;
+    msg.className = "ansu-composer-msg" + (type ? " " + type : "");
+    if (text) {
+      setTimeout(() => {
+        if (msg.textContent === text) {
+          msg.textContent = "";
+          msg.className = "ansu-composer-msg";
+        }
+      }, 5000);
+    }
+  }
+
+  /* ============================================================
+     5. PUBLISH POST
+     ============================================================ */
+  async function handlePublishPost() {
+    if (!window.currentUser || !window.sb) return;
+
+    const textInput = $("ansuPostText");
+    const content = (textInput?.value || "").trim();
+
+    if (!content && state.imagePreview.length === 0) {
+      setComposerMsg("লেখা বা ছবি — অন্তত একটি দিন।", "error");
+      return;
+    }
+
+    const publishBtn = $("ansuPublishBtn");
+    if (publishBtn) {
+      publishBtn.disabled = true;
+      publishBtn.textContent = "⏳ প্রকাশ হচ্ছে...";
+    }
+
+    try {
+      // Upload images
+      const uploadedUrls = [];
+      if (state.imagePreview.length > 0 && typeof window.uploadFile === "function") {
+        for (let i = 0; i < state.imagePreview.length; i++) {
+          try {
+            const file = state.imagePreview[i];
+            const url = await window.uploadFile(file, "community");
+            uploadedUrls.push(url);
+          } catch (uploadErr) {
+            console.warn("Image upload failed:", uploadErr);
+            setComposerMsg(`ছবি ${i + 1} আপলোড করা যায়নি।`, "error");
+          }
+        }
+      }
+
+      if (state.imagePreview.length > 0 && uploadedUrls.length === 0) {
+        throw new Error("কোনো ছবি আপলোড করা যায়নি।");
+      }
+
+      // Insert post
+      const insertData = {
+        user_id: window.currentUser.id,
+        content: content || ""
+      };
+
+      // Try image_urls (new schema), then image_url (fallback)
+      if (uploadedUrls.length > 0) {
+        insertData.image_urls = uploadedUrls;
+        insertData.image_url = uploadedUrls[0]; // fallback column
+      }
+
+      let result = await window.sb.from("community_posts").insert(insertData).select("*").single();
+
+      // If image_urls column doesn't exist, retry with only image_url
+      if (result.error && /image_urls/i.test(result.error.message || "")) {
+        delete insertData.image_urls;
+        result = await window.sb.from("community_posts").insert(insertData).select("*").single();
+      }
+
+      // If image_url also doesn't exist, retry without images
+      if (result.error && /image_url/i.test(result.error.message || "")) {
+        delete insertData.image_url;
+        result = await window.sb.from("community_posts").insert(insertData).select("*").single();
+      }
+
+      if (result.error) throw result.error;
+
+      // Success!
+      if (textInput) textInput.value = "";
+      state.imagePreview = [];
+      renderImagePreview();
+      updateImgCounter();
+      setComposerMsg("✅ পোস্ট সফলভাবে প্রকাশ হয়েছে!", "success");
+
+      if (typeof window.showToast === "function") {
+        window.showToast("পোস্ট প্রকাশ হয়েছে! 🎉", "success", 2500);
+      }
+
+      // Reload feed
+      await loadCommunityFeed();
+    } catch (err) {
+      console.error("[ANSU v3] Publish error:", err);
+      setComposerMsg("পোস্ট প্রকাশ করা যায়নি: " + (err.message || "Unknown"), "error");
+      if (typeof window.showToast === "function") {
+        window.showToast("পোস্ট প্রকাশ ব্যর্থ", "error");
+      }
+    } finally {
+      if (publishBtn) {
+        publishBtn.disabled = false;
+        publishBtn.textContent = "🚀 পোস্ট করুন";
+      }
+    }
+  }
+
+  /* ============================================================
+     6. LOAD COMMUNITY DATA
+     ============================================================ */
+  async function loadCommunityFeed() {
+    if (!window.sb) return;
+    state.loading = true;
+    renderFeed();
+
+    try {
+      // 1. Posts
+      const { data: posts, error: postErr } = await window.sb
+        .from("community_posts")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (postErr) throw postErr;
+      state.posts = posts || [];
+
+      // 2. Profiles
+      const userIds = [...new Set(state.posts.map(p => p.user_id).filter(Boolean))];
+      if (userIds.length > 0) {
+        const { data: profiles } = await window.sb
+          .from("profiles")
+          .select("id, full_name, avatar_url, role, is_premium, is_verified")
+          .in("id", userIds);
+        state.profiles = {};
+        (profiles || []).forEach(p => { state.profiles[p.id] = p; });
+      }
+
+      // 3. Post reactions
+      if (state.posts.length > 0) {
+        const postIds = state.posts.map(p => p.id);
+        const { data: reactions } = await window.sb
+          .from("post_reactions")
+          .select("post_id, user_id, reaction")
+          .in("post_id", postIds);
+        state.reactions = {};
+        (reactions || []).forEach(r => {
+          const pid = String(r.post_id);
+          if (!state.reactions[pid]) state.reactions[pid] = [];
+          state.reactions[pid].push(r);
+        });
+
+        // 4. Comments (with profile join via separate fetch)
+        const { data: comments, error: commentErr } = await window.sb
+          .from("post_comments")
+          .select("*")
+          .in("post_id", postIds)
+          .order("created_at", { ascending: true })
+          .limit(1000);
+
+        // If table doesn't exist, gracefully continue
+        state.comments = {};
+        if (!commentErr && comments) {
+          comments.forEach(c => {
+            const pid = String(c.post_id);
+            if (!state.comments[pid]) state.comments[pid] = [];
+            state.comments[pid].push(c);
+          });
+
+          // Load commenter profiles
+          const commenterIds = [...new Set(comments.map(c => c.user_id).filter(Boolean))]
+            .filter(id => !state.profiles[id]);
+          if (commenterIds.length > 0) {
+            const { data: cProfiles } = await window.sb
+              .from("profiles")
+              .select("id, full_name, avatar_url, role, is_premium, is_verified")
+              .in("id", commenterIds);
+            (cProfiles || []).forEach(p => { state.profiles[p.id] = p; });
+          }
+
+          // Comment reactions
+          const commentIds = comments.map(c => c.id);
+          if (commentIds.length > 0) {
+            const { data: cReactions } = await window.sb
+              .from("comment_reactions")
+              .select("comment_id, user_id, reaction")
+              .in("comment_id", commentIds);
+            state.commentReactions = {};
+            (cReactions || []).forEach(r => {
+              const cid = String(r.comment_id);
+              if (!state.commentReactions[cid]) state.commentReactions[cid] = [];
+              state.commentReactions[cid].push(r);
+            });
+          }
+        }
+      }
+
+      state.loading = false;
+      renderFeed();
+    } catch (err) {
+      console.error("[ANSU v3] Feed load error:", err);
+      state.loading = false;
+      const container = $("ansuCommunityFeed");
+      if (container) {
+        container.innerHTML = `
+          <div class="ansu-post" style="padding:30px;text-align:center;">
+            <div style="font-size:36px;margin-bottom:10px;">⚠️</div>
+            <div style="color:var(--fb-red);font-size:14px;font-weight:700;">Community লোড করা যায়নি</div>
+            <div style="color:var(--fb-muted);font-size:12px;margin-top:6px;">${esc(err.message || "Unknown error")}</div>
+            <button class="ansu-publish-btn" style="margin-top:14px;" onclick="window.ansuReloadCommunity()">🔄 আবার চেষ্টা করুন</button>
+          </div>
+        `;
+      }
+    }
+  }
+
+  /* ============================================================
+     7. TOGGLE REACTION (Like / Heart)
+     ============================================================ */
+  async function toggleReaction(postId, reaction) {
+    if (!window.currentUser) {
+      if (typeof window.openModal === "function") window.openModal("authModal");
+      return;
+    }
+    if (!["like", "heart"].includes(reaction)) return;
+    if (!window.sb) return;
+
+    const pid = String(postId);
+    const uid = window.currentUser.id;
+    const arr = state.reactions[pid] || [];
+    const existing = arr.find(r => r.user_id === uid);
+
+    // Optimistic update
+    if (existing && existing.reaction === reaction) {
+      state.reactions[pid] = arr.filter(r => r.user_id !== uid);
+    } else if (existing) {
+      existing.reaction = reaction;
+    } else {
+      if (!state.reactions[pid]) state.reactions[pid] = [];
+      state.reactions[pid].push({ post_id: postId, user_id: uid, reaction });
+    }
+    renderFeed();
+
+    try {
+      if (existing && existing.reaction === reaction) {
+        // Delete
+        const { error } = await window.sb
+          .from("post_reactions")
+          .delete()
+          .eq("post_id", postId)
+          .eq("user_id", uid);
+        if (error) throw error;
+      } else if (existing) {
+        // Update
+        const { error } = await window.sb
+          .from("post_reactions")
+          .update({ reaction })
+          .eq("post_id", postId)
+          .eq("user_id", uid);
+        if (error) throw error;
+      } else {
+        // Insert
+        const { error } = await window.sb
+          .from("post_reactions")
+          .insert({ post_id: postId, user_id: uid, reaction });
+        if (error) throw error;
+      }
+    } catch (err) {
+      console.error("[ANSU v3] Reaction error:", err);
+      // Reload to fix state
+      await loadCommunityFeed();
+    }
+  }
+
+  /* ============================================================
+     8. TOGGLE COMMENTS SECTION
+     ============================================================ */
+  function toggleComments(postId, forceOpen = false) {
+    const el = $("ansu-comments-" + postId);
+    if (!el) return;
+    if (forceOpen) {
+      el.classList.add("open");
+      setTimeout(() => {
+        const input = $("ansu-comment-input-" + postId);
+        if (input) input.focus();
+      }, 100);
+    } else {
+      el.classList.toggle("open");
+      if (el.classList.contains("open")) {
+        setTimeout(() => {
+          const input = $("ansu-comment-input-" + postId);
+          if (input) input.focus();
+        }, 100);
+      }
+    }
+  }
+
+  /* ============================================================
+     9. SUBMIT COMMENT
+     ============================================================ */
+  async function submitComment(postId) {
+    if (!window.currentUser) {
+      if (typeof window.openModal === "function") window.openModal("authModal");
+      return;
+    }
+    if (!window.sb) return;
+
+    const input = $("ansu-comment-input-" + postId);
+    if (!input) return;
+    const content = (input.value || "").trim();
+    if (!content) return;
+
+    const pid = String(postId);
+    input.disabled = true;
+
+    try {
+      const { data, error } = await window.sb
+        .from("post_comments")
+        .insert({ post_id: postId, user_id: window.currentUser.id, content })
+        .select("*")
+        .single();
+
+      if (error) throw error;
+
+      // Ensure profile loaded
+      if (!state.profiles[window.currentUser.id] && window.currentProfile) {
+        state.profiles[window.currentUser.id] = window.currentProfile;
+      }
+
+      if (!state.comments[pid]) state.comments[pid] = [];
+      state.comments[pid].push(data);
+
+      input.value = "";
+      renderFeed();
+
+      // Re-open comments section & scroll to bottom
+      const section = $("ansu-comments-" + pid);
+      if (section) {
+        section.classList.add("open");
+        const list = $("ansu-comments-list-" + pid);
+        if (list) list.scrollTop = list.scrollHeight;
+      }
+    } catch (err) {
+      console.error("[ANSU v3] Comment error:", err);
+      const msg = /does not exist|schema/i.test(err.message || "")
+        ? "কমেন্ট সিস্টেম চালু করতে database table দরকার।"
+        : "কমেন্ট পাঠানো যায়নি।";
+      if (typeof window.showToast === "function") window.showToast(msg, "error");
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
+  }
+
+  /* ============================================================
+     10. COMMENT REACTIONS
+     ============================================================ */
+  async function toggleCommentReaction(commentId, postId, reaction) {
+    if (!window.currentUser || !window.sb) return;
+    const uid = window.currentUser.id;
+    const cid = String(commentId);
+    const arr = state.commentReactions[cid] || [];
+    const existing = arr.find(r => r.user_id === uid);
+
+    // Optimistic
+    if (existing && existing.reaction === reaction) {
+      state.commentReactions[cid] = arr.filter(r => r.user_id !== uid);
+    } else if (existing) {
+      existing.reaction = reaction;
+    } else {
+      if (!state.commentReactions[cid]) state.commentReactions[cid] = [];
+      state.commentReactions[cid].push({ comment_id: commentId, user_id: uid, reaction });
+    }
+    renderFeed();
+
+    try {
+      if (existing && existing.reaction === reaction) {
+        const { error } = await window.sb
+          .from("comment_reactions")
+          .delete()
+          .eq("comment_id", commentId)
+          .eq("user_id", uid);
+        if (error) throw error;
+      } else if (existing) {
+        const { error } = await window.sb
+          .from("comment_reactions")
+          .update({ reaction })
+          .eq("comment_id", commentId)
+          .eq("user_id", uid);
+        if (error) throw error;
+      } else {
+        const { error } = await window.sb
+          .from("comment_reactions")
+          .insert({ comment_id: commentId, user_id: uid, reaction });
+        if (error) throw error;
+      }
+    } catch (err) {
+      console.error("[ANSU v3] Comment reaction error:", err);
+      await loadCommunityFeed();
+    }
+  }
+
+  /* ============================================================
+     11. DELETE COMMENT
+     ============================================================ */
+  async function deleteComment(commentId, postId) {
+    if (!window.currentUser || !window.sb) return;
+    if (!confirm("এই মন্তব্যটি মুছে ফেলবেন?")) return;
+
+    try {
+      const { error } = await window.sb
+        .from("post_comments")
+        .delete()
+        .eq("id", commentId);
+      if (error) throw error;
+
+      const pid = String(postId);
+      if (state.comments[pid]) {
+        state.comments[pid] = state.comments[pid].filter(c => String(c.id) !== String(commentId));
+      }
+      renderFeed();
+    } catch (err) {
+      console.error("[ANSU v3] Delete comment error:", err);
+      if (typeof window.showToast === "function") window.showToast("মন্তব্য মোছা যায়নি", "error");
+    }
+  }
+
+  /* ============================================================
+     12. DELETE POST
+     ============================================================ */
+  async function deletePost(postId) {
+    if (!window.currentUser || !window.sb) return;
+    if (!confirm("এই পোস্টটি মুছে ফেলবেন?")) return;
+
+    try {
+      const { error } = await window.sb
+        .from("community_posts")
+        .delete()
+        .eq("id", postId);
+      if (error) throw error;
+
+      state.posts = state.posts.filter(p => String(p.id) !== String(postId));
+      renderFeed();
+
+      if (typeof window.showToast === "function") {
+        window.showToast("পোস্ট মুছে ফেলা হয়েছে", "success");
+      }
+    } catch (err) {
+      console.error("[ANSU v3] Delete post error:", err);
+      if (typeof window.showToast === "function") window.showToast("পোস্ট মোছা যায়নি", "error");
+    }
+  }
+
+  /* ============================================================
+     13. LIGHTBOX
+     ============================================================ */
+  let lightboxState = { images: [], index: 0 };
+
+  function openLightbox(images, index) {
+    lightboxState = { images: Array.isArray(images) ? images : [], index: index || 0 };
+    const lb = $("ansuLightbox");
+    const img = $("ansuLightboxImg");
+    const counter = $("ansuLightboxCounter");
+    if (!lb || !img) return;
+    img.src = lightboxState.images[lightboxState.index] || "";
+    if (counter) counter.textContent = `${lightboxState.index + 1} / ${lightboxState.images.length}`;
+    lb.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function lightboxClose(e, force) {
+    if (force || !e || e.target.id === "ansuLightbox" || e.target.classList.contains("ansu-lightbox-close")) {
+      const lb = $("ansuLightbox");
+      if (lb) lb.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+  }
+
+  function lightboxNav(e, dir) {
+    e.stopPropagation();
+    if (!lightboxState.images.length) return;
+    lightboxState.index = (lightboxState.index + dir + lightboxState.images.length) % lightboxState.images.length;
+    const img = $("ansuLightboxImg");
+    const counter = $("ansuLightboxCounter");
+    if (img) img.src = lightboxState.images[lightboxState.index];
+    if (counter) counter.textContent = `${lightboxState.index + 1} / ${lightboxState.images.length}`;
+  }
+
+  /* ============================================================
+     14. PUBLIC PROFILE MODAL
+     ============================================================ */
+  async function showProfile(userId) {
+    if (!userId || !window.sb) return;
+
+    // If it's the current user, open regular profile modal
+    if (userId === currentUid() && typeof window.openProfile === "function") {
+      window.openProfile();
+      return;
+    }
+
+    // Build modal HTML shell
+    let modal = $("ansuProfileModal");
+    if (!modal) {
+      modal = document.createElement("div");
+      modal.className = "modal";
+      modal.id = "ansuProfileModal";
+      modal.innerHTML = '<div class="modal-box ansu-profile-modal-box" id="ansuProfileContent"></div>';
+      modal.addEventListener("click", (e) => { if (e.target === modal) closeProfile(); });
+      document.body.appendChild(modal);
+    }
+
+    const content = $("ansuProfileContent");
+    content.innerHTML = `
+      <div style="padding:40px;text-align:center;">
+        <div class="ansu-skeleton" style="width:96px;height:96px;border-radius:50%;margin:0 auto 16px;"></div>
+        <div class="ansu-skeleton" style="height:20px;width:60%;margin:0 auto 10px;"></div>
+        <div class="ansu-skeleton" style="height:14px;width:40%;margin:0 auto;"></div>
+      </div>
+    `;
+
+    if (typeof window.openModal === "function") window.openModal("ansuProfileModal");
+    else modal.classList.add("open");
+
+    try {
+      // Fetch profile + stats
+      const [profileRes, listingRes, soldRes, boughtRes] = await Promise.all([
+        window.sb.from("profiles").select("*").eq("id", userId).maybeSingle(),
+        window.sb.from("listings").select("id", { count: "exact", head: true }).eq("seller_id", userId),
+        window.sb.from("orders").select("id, amount", { count: "exact" }).eq("order_status", "completed").eq("listings.seller_id", userId).limit(1),
+        window.sb.from("orders").select("id", { count: "exact", head: true }).eq("buyer_id", userId).eq("order_status", "completed")
+      ]);
+
+      const profile = profileRes.data;
+      if (!profile) {
+        content.innerHTML = `
+          <div style="padding:40px;text-align:center;">
+            <div style="font-size:36px;margin-bottom:10px;">👤</div>
+            <div style="color:var(--fb-muted);">প্রোফাইল পাওয়া যায়নি</div>
+            <button class="ansu-profile-btn primary" style="margin-top:14px;max-width:200px;margin-left:auto;margin-right:auto;" onclick="ansuCloseProfile()">বন্ধ করুন</button>
+          </div>
+        `;
+        return;
+      }
+
+      const role = userRole(profile);
+      const isAdmin = role === "admin";
+      const isSeller = role === "seller";
+      const avatar = profileAvatar(profile);
+      const name = profileName(profile);
+      const shortId = String(profile.id).slice(0, 8).toUpperCase();
+
+      const listingCount = listingRes.count || 0;
+      const soldCount = soldRes.count || 0;
+      const boughtCount = boughtRes.count || 0;
+
+      // Trust score
+      const trust = Math.min(100, Math.round(
+        40 + listingCount * 3 + soldCount * 5 + boughtCount * 4 +
+        (profile.is_verified ? 15 : 0) + (isAdmin ? 30 : 0) + (profile.is_premium ? 10 : 0)
+      ));
+
+      // Join date
+      const joinDate = profile.created_at
+        ? new Date(profile.created_at).toLocaleDateString("bn-BD", { day: "numeric", month: "long", year: "numeric" })
+        : "—";
+
+      const avatarWrapClass = isAdmin ? "admin" : isSeller ? "seller" : "";
+      const nameClass = isAdmin ? "admin" : "";
+
+      content.innerHTML = `
+        <div class="ansu-profile-header">
+          <div class="ansu-profile-cover"></div>
+          <button class="ansu-profile-close" onclick="ansuCloseProfile()" aria-label="বন্ধ">✕</button>
+        </div>
+        <div class="ansu-profile-body">
+          <div class="ansu-profile-avatar-wrap ${avatarWrapClass}">
+            <img src="${esc(avatar)}" class="ansu-profile-avatar" alt="">
+          </div>
+          <h2 class="ansu-profile-name ${nameClass}">${esc(name)}</h2>
+          <div class="ansu-profile-badges">
+            ${roleBadge(profile)}
+            ${verifiedBadge(profile)}
+          </div>
+          <div class="ansu-profile-id">User ID: ${esc(shortId)}</div>
+
+          <div class="ansu-profile-stats">
+            <div class="ansu-profile-stat">
+              <strong>${listingCount}</strong>
+              <span>Listings</span>
+            </div>
+            <div class="ansu-profile-stat">
+              <strong>${soldCount}</strong>
+              <span>Sold</span>
+            </div>
+            <div class="ansu-profile-stat">
+              <strong>${boughtCount}</strong>
+              <span>Bought</span>
+            </div>
+          </div>
+
+          <div class="ansu-profile-trust">
+            <div class="ansu-profile-trust-head">
+              <span>🛡️ Trust Score</span>
+              <strong>${trust}/100</strong>
+            </div>
+            <div class="ansu-profile-trust-bar"><span style="width:${trust}%"></span></div>
+          </div>
+
+          <div class="ansu-profile-info-grid">
+            <div class="ansu-profile-info-row">
+              <span class="label">📅 জয়েন</span>
+              <span class="value">${esc(joinDate)}</span>
+            </div>
+            <div class="ansu-profile-info-row">
+              <span class="label">🎭 রোল</span>
+              <span class="value">${isAdmin ? "👑 Admin" : isSeller ? "🛍️ Seller" : profile.is_premium ? "✦ Premium" : "👤 Member"}</span>
+            </div>
+            <div class="ansu-profile-info-row">
+              <span class="label">✓ ভেরিফাই</span>
+              <span class="value">${profile.is_verified ? "✅ Verified" : "❌ Not Verified"}</span>
+            </div>
+          </div>
+
+          <div class="ansu-profile-actions">
+            <button class="ansu-profile-btn primary" onclick="ansuMessageUser('${esc(profile.id)}')">
+              💬 মেসেজ করুন
+            </button>
+            <button class="ansu-profile-btn" onclick="ansuCloseProfile()">বন্ধ করুন</button>
+            <button class="ansu-profile-btn" onclick="ansuReportUser('${esc(profile.id)}')">🚩 রিপোর্ট</button>
+          </div>
+        </div>
+      `;
+    } catch (err) {
+      console.error("[ANSU v3] Profile error:", err);
+      content.innerHTML = `
+        <div style="padding:40px;text-align:center;">
+          <div style="font-size:36px;margin-bottom:10px;">⚠️</div>
+          <div style="color:var(--fb-red);">প্রোফাইল লোড করা যায়নি</div>
+          <button class="ansu-profile-btn primary" style="margin-top:14px;max-width:200px;margin-left:auto;margin-right:auto;" onclick="ansuCloseProfile()">বন্ধ করুন</button>
+        </div>
+      `;
+    }
+  }
+
+  function closeProfile() {
+    if (typeof window.closeModal === "function") window.closeModal("ansuProfileModal");
+    else {
+      const modal = $("ansuProfileModal");
+      if (modal) modal.classList.remove("open");
+    }
+  }
+
+  function messageUser(userId) {
+    closeProfile();
+    if (typeof window.axOpenChat === "function") {
+      window.axOpenChat(userId);
+    } else {
+      if (typeof window.showToast === "function") {
+        window.showToast("চ্যাট সিস্টেম এখনো লোড হয়নি", "error");
+      }
+    }
+  }
+
+  function reportUser(userId) {
+    closeProfile();
+    if (typeof window.showToast === "function") {
+      window.showToast("রিপোর্ট সিস্টেম চ্যাট রিপোর্ট থেকে ব্যবহার করুন", "info", 4000);
+    }
+  }
+
+  /* ============================================================
+     15. REALTIME SUBSCRIPTION
+     ============================================================ */
+  function setupRealtime() {
+    if (!window.sb || state.realtimeChannel) return;
+
+    state.realtimeChannel = window.sb
+      .channel("ansu-v3-community")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "community_posts" }, async (payload) => {
+        // Reload feed to get fresh data
+        await loadCommunityFeed();
+      })
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "community_posts" }, (payload) => {
+        state.posts = state.posts.filter(p => String(p.id) !== String(payload.old.id));
+        renderFeed();
+      })
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "post_comments" }, async (payload) => {
+        const c = payload.new;
+        if (!c) return;
+        const pid = String(c.post_id);
+        // If we don't have this post loaded, skip
+        if (!state.posts.find(p => String(p.id) === pid)) return;
+        // Already in our state? Skip (optimistic insert)
+        if (state.comments[pid]?.some(x => String(x.id) === String(c.id))) return;
+        if (!state.comments[pid]) state.comments[pid] = [];
+        state.comments[pid].push(c);
+        // Load profile if missing
+        if (!state.profiles[c.user_id]) {
+          const { data: p } = await window.sb.from("profiles").select("id, full_name, avatar_url, role, is_premium, is_verified").eq("id", c.user_id).maybeSingle();
+          if (p) state.profiles[p.id] = p;
+        }
+        renderFeed();
+      })
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "post_comments" }, (payload) => {
+        const old = payload.old;
+        if (!old) return;
+        const pid = String(old.post_id);
+        if (state.comments[pid]) {
+          state.comments[pid] = state.comments[pid].filter(c => String(c.id) !== String(old.id));
+          renderFeed();
+        }
+      })
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") console.log("[ANSU v3] Realtime connected");
+      });
+  }
+
+  /* ============================================================
+     16. BUILD COMMUNITY UI (inject into #community)
+     ============================================================ */
+  function buildCommunityUI() {
+    const section = $("community");
+    if (!section) {
+      console.warn("[ANSU v3] #community section not found");
+      return;
+    }
+
+    // Check if already built
+    if ($("ansuCommunityFeed")) return;
+
+    // Get existing stats display
+    const existingPostCount = $("postCount")?.textContent || "0 POSTS";
+
+    // Build new UI — keep the id "postCount" for backward compatibility
+    section.innerHTML = `
+      <div class="ansu-community-header">
+        <div>
+          <h2 class="ansu-community-title">🔥 Elite Community</h2>
+          <p class="ansu-community-subtitle">নিজের নামে পোস্ট করুন, Like, Heart ও Comment দিন</p>
+        </div>
+        <div class="ansu-community-stats">
+          <span class="ansu-community-stat" id="postCount">${existingPostCount}</span>
+          <button class="ansu-tool-btn" onclick="window.ansuReloadCommunity()" title="রিফ্রেশ">
+            <span class="emoji">↻</span> রিফ্রেশ
+          </button>
+        </div>
+      </div>
+
+      <div id="ansuCommunityComposer"></div>
+      <div class="ansu-feed" id="ansuCommunityFeed"></div>
+    `;
+
+    renderComposer();
+    renderFeed();
+  }
+
+  /* ============================================================
+     17. UPDATE POSTCOUNT
+     ============================================================ */
+  function updatePostCount() {
+    const el = $("postCount");
+    if (el) el.textContent = state.posts.length + " POSTS";
+  }
+
+  // Hook into renderFeed to update count
+  const _origRenderFeed = renderFeed;
+  const _renderFeed = function () {
+    _origRenderFeed();
+    updatePostCount();
+  };
+
+  /* ============================================================
+     18. OVERRIDE / HOOK EXISTING FUNCTIONS
+     ============================================================ */
+
+  // Replace loadPosts to use our own
+  window.loadPosts = safe(async function () {
+    await loadCommunityFeed();
+  });
+
+  // Replace renderPosts
+  window.renderPosts = safe(function () {
+    _renderFeed();
+  });
+
+  // Hook updateUI to refresh composer (login state changed)
+  const _origUpdateUI = window.updateUI;
+  if (typeof _origUpdateUI === "function") {
+    window.updateUI = safe(function () {
+      _origUpdateUI.apply(this, arguments);
+      // Refresh composer if community is visible
+      if ($("ansuCommunityComposer")) {
+        renderComposer();
+      }
+    });
+  }
+
+  // Replace old axShowProfile if it exists
+  window.ansuShowProfile = safe(showProfile);
+  window.axShowProfile = window.ansuShowProfile;  // alias
+
+  // Preserve existing showPublicProfile as alias
+  const _origShowPublicProfile = window.showPublicProfile;
+  window.showPublicProfile = safe(async function (userId) {
+    await showProfile(userId);
+  });
+
+  // Public API
+  window.ansuReloadCommunity = safe(async function () {
+    await loadCommunityFeed();
+    if (typeof window.showToast === "function") {
+      window.showToast("Community রিফ্রেশ হয়েছে", "success", 1500);
+    }
+  });
+
+  window.ansuToggleReaction = toggleReaction;
+  window.ansuToggleComments = toggleComments;
+  window.ansuSubmitComment = submitComment;
+  window.ansuToggleCommentReaction = toggleCommentReaction;
+  window.ansuDeleteComment = deleteComment;
+  window.ansuDeletePost = deletePost;
+  window.ansuOpenLightbox = openLightbox;
+  window.ansuLightboxClose = lightboxClose;
+  window.ansuLightboxNav = lightboxNav;
+  window.ansuCloseProfile = closeProfile;
+  window.ansuMessageUser = messageUser;
+  window.ansuReportUser = reportUser;
+
+  /* ============================================================
+     19. INITIALIZATION
+     ============================================================ */
+  async function initialize() {
+    // Build UI
+    buildCommunityUI();
+
+    // Load data
+    await loadCommunityFeed();
+
+    // Realtime
+    if (window.currentUser) {
+      setupRealtime();
+    }
+  }
+
+  // Watch for auth change to reload community
+  if (window.sb?.auth) {
+    window.sb.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "SIGNED_OUT") {
+        setTimeout(safe(async () => {
+          buildCommunityUI();
+          renderComposer();
+          await loadCommunityFeed();
+          if (window.currentUser && !state.realtimeChannel) setupRealtime();
+        }), 600);
+      }
+    });
+  }
+
+  // Boot when DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", safe(initialize));
+  } else {
+    setTimeout(safe(initialize), 400);
+  }
+
+  // Escape key closes lightbox and profile
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const lb = $("ansuLightbox");
+      if (lb?.classList.contains("open")) lightboxClose(null, true);
+    }
+    // Arrow keys for lightbox
+    const lb = $("ansuLightbox");
+    if (lb?.classList.contains("open")) {
+      if (e.key === "ArrowLeft") lightboxNav(e, -1);
+      if (e.key === "ArrowRight") lightboxNav(e, 1);
+    }
+  });
+
+  console.log("%c✦ ANSU v3 Community সক্রিয় ✓", "color:#e8c879;font-weight:bold;font-size:13px");
+  console.log("%c✓ Facebook-style feed ✓ 4 images ✓ Comment ✓ Profile ✓ Realtime", "color:#00a884;");
+})();
+</script>
