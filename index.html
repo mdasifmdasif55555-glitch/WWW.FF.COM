@@ -4091,3 +4091,153 @@ body { background: #0a0512 !important; }
 header { background: #0a0512ee !important; border-bottom-color: #a855f740 !important; }
 .brand { color: #e8c879 !important; }
 </style>
+<!-- ============================================================
+     ANSU ELITE — Listing Details Button Compactor
+     এই কোডটি শুধুমাত্র Details মডালের ভেতরের বাটনগুলোকে ছোট ও
+     সুন্দর গ্রিড লেআউটে সাজাবে। আগের কোডের সাথে conflict করবে না।
+     ============================================================ -->
+<style id="ansuDetailsBtnStyle">
+/* ১. বাটনগুলোর মূল কন্টেইনারকে গ্রিড লেআউট দেওয়া */
+#detailsContent .panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* বাটনগুলোর মাঝে দূরত্ব */
+}
+
+/* ২. অফার সেকশন (দামাদামি) সুন্দর করা */
+#detailsContent #axOfferSection {
+    padding: 10px !important;
+    margin-top: 5px !important;
+    border-radius: 10px !important;
+}
+#detailsContent .ax-offer-input {
+    gap: 6px !important;
+    margin-top: 6px !important;
+}
+#detailsContent .ax-offer-input input {
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+    border-radius: 6px !important;
+}
+#detailsContent .ax-offer-input button {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    border-radius: 6px !important;
+    white-space: nowrap;
+}
+
+/* ৩. মূল অ্যাকশন বাটনগুলো (Buy Now, Message, Wishlist) ছোট করা */
+#detailsContent > .panel > .btn {
+    padding: 8px 12px !important;
+    font-size: 12.5px !important;
+    min-height: 36px !important;
+    border-radius: 8px !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* ৪. নিচের ছোট বাটনগুলো (Compare, Share, Report) এক লাইনে আনা */
+/* আমরা একটি ভার্চুয়াল গ্রিড তৈরি করছি যাতে Compare এবং Share পাশাপাশি থাকে */
+#detailsContent .btn.secondary[onclick*="addToCompare"],
+#detailsContent .btn.secondary[onclick*="shareListing"],
+#detailsContent .report-btn {
+    padding: 6px 10px !important;
+    font-size: 11.5px !important;
+    min-height: 30px !important;
+    border-radius: 6px !important;
+    margin: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1; /* পাশাপাশি সমান জায়গা নেবে */
+    white-space: nowrap;
+}
+
+/* রিপোর্ট বাটনকে একটু আলাদা জায়গা দেওয়া (পুরো লাইন জুড়ে থাকবে) */
+#detailsContent .report-btn {
+    flex: 1 1 100% !important; 
+    margin-top: 4px !important;
+    background: #2a1216 !important; 
+}
+
+/* ৫. মোবাইল স্ক্রিনের জন্য আরও কমপ্যাক্ট */
+@media (max-width: 480px) {
+    #detailsContent > .panel > .btn {
+        padding: 7px 10px !important;
+        font-size: 12px !important;
+        min-height: 32px !important;
+    }
+    #detailsContent .btn.secondary[onclick*="addToCompare"],
+    #detailsContent .btn.secondary[onclick*="shareListing"] {
+        font-size: 11px !important;
+        padding: 6px 8px !important;
+    }
+}
+</style>
+
+<script id="ansuDetailsBtnScript">
+(function() {
+    "use strict";
+    // বারবার পেস্ট করলে যেন ডুপ্লিকেট না হয়
+    if (window.__ansuDetailsBtn) return;
+    window.__ansuDetailsBtn = true;
+
+    // মডাল ওপেন হওয়ার সময় বাটনগুলোর স্ট্রাকচার ঠিক করা
+    document.addEventListener("click", function(e) {
+        // যদি Details বাটনে ক্লিক করা হয়
+        if (e.target.closest('button[onclick*="showDetails"]')) {
+            // DOM আপডেট হওয়ার জন্য সামান্য দেরি করে র‍্যাপার তৈরি করব
+            setTimeout(() => {
+                const content = document.getElementById("detailsContent");
+                if (!content) return;
+                
+                // একবার র‍্যাপার তৈরি হয়ে গেলে আর করব না
+                if (content.querySelector(".ansu-btn-wrapper")) return;
+
+                const compareBtn = content.querySelector('.btn[onclick*="addToCompare"]');
+                const shareBtn = content.querySelector('.btn[onclick*="shareListing"]');
+                const reportBtn = content.querySelector('.report-btn');
+
+                // যদি Compare এবং Share বাটন থাকে, তবে তাদের একটি ডিভ-এর ভেতরে রাখব
+                if (compareBtn && shareBtn) {
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "ansu-btn-wrapper";
+                    wrapper.style.cssText = "display: flex !important; gap: 6px !important; width: 100% !important; margin-top: 4px !important;";
+                    
+                    // বাটন দুটোকে র‍্যাপারের ভেতরে সরানো
+                    compareBtn.parentNode.insertBefore(wrapper, compareBtn);
+                    wrapper.appendChild(compareBtn);
+                    wrapper.appendChild(shareBtn);
+                }
+            }, 50);
+        }
+    });
+    
+    // যদি অলরেডি মডাল ওপেন থাকে (অ্যাডমিন প্যানেল থেকে আসার সময়), তবে তাও হ্যান্ডেল করা
+    const observer = new MutationObserver(() => {
+        const content = document.getElementById("detailsContent");
+        if (content && content.innerHTML.includes("Buy Now") && !content.querySelector(".ansu-btn-wrapper")) {
+            const compareBtn = content.querySelector('.btn[onclick*="addToCompare"]');
+            const shareBtn = content.querySelector('.btn[onclick*="shareListing"]');
+            if (compareBtn && shareBtn) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "ansu-btn-wrapper";
+                wrapper.style.cssText = "display: flex !important; gap: 6px !important; width: 100% !important; margin-top: 4px !important;";
+                compareBtn.parentNode.insertBefore(wrapper, compareBtn);
+                wrapper.appendChild(compareBtn);
+                wrapper.appendChild(shareBtn);
+            }
+        }
+    });
+    
+    // detailsContent এর ভেতরের পরিবর্তন লক্ষ্য করা
+    const target = document.getElementById("detailsContent");
+    if (target) {
+        observer.observe(target, { childList: true, subtree: true });
+    }
+})();
+</script>
