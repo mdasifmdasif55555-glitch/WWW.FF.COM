@@ -6989,195 +6989,157 @@ header { background: #0a0512ee !important; border-bottom-color: #a855f740 !impor
 })();
 </script>
 <!-- ============================================================
-     ANSU ELITE — ABSOLUTE FIX FOR LOGIN & PROFILE BUTTON
-     এই স্ক্রিপ্টটি আগের সমস্ত ভাঙা ফাংশন বাইপাস করে কাজ করবে
+     ANSU ELITE — DIRECT DOM FIX (Login + Profile + Delete)
      ============================================================ -->
-<script id="ansuAbsoluteFix">
+<script id="ansuDirectDomFix">
 (function() {
   "use strict";
-  if (window.__ABSOLUTE_FIX__) return;
-  window.__ABSOLUTE_FIX__ = true;
+  if (window.__ANSU_DIRECT_FIX__) return;
+  window.__ANSU_DIRECT_FIX__ = true;
 
   const $ = (id) => document.getElementById(id);
-
-  // ১. Members এর Profile বাটনের সমস্যা সমাধান
-  // গ্লোবাল showPublicProfile ফাংশনটিকে জোর করে ঠিক করা হলো
-  window.showPublicProfile = function(userId) {
-    if (!userId) return;
-    console.log("[Fix] Profile opening for:", userId);
-    
-    // যদি ansuShowProfile (v3 এর নতুন ফাংশন) থাকে, তবে সেটা কল করব
-    if (typeof window.ansuShowProfile === "function") {
-      window.ansuShowProfile(userId);
-    } else {
-      // যদি না থাকে, তবে গ্লোবাল showToast দিয়ে মেসেজ দেব
-      if (typeof window.showToast === "function") {
-        window.showToast("প্রোফাইল লোড হচ্ছে...", "info");
+  
+  // ============================================================
+  // ১. মেম্বারদের "Profile" বাটনে ক্লিক করলে নতুন প্রোফাইল ওপেন হবে
+  // ============================================================
+  document.addEventListener("click", function(e) {
+    // যদি Profile বাটনে ক্লিক করা হয়
+    const btn = e.target.closest('button');
+    if (btn && btn.textContent.trim() === "Profile") {
+      // কোনো মেম্বার কার্ডের ভেতরে আছে কিনা চেক করি
+      const card = btn.closest('.ax-fix-card') || btn.closest('.ax-member');
+      if (card) {
+        // কার্ড থেকে ইউজার আইডি বের করি
+        let userId = null;
+        const onclickAttr = card.querySelector('[onclick*="showPublicProfile"]')?.getAttribute('onclick');
+        if (onclickAttr) {
+          const match = onclickAttr.match(/showPublicProfile\('([^']+)'\)/);
+          if (match) userId = match[1];
+        }
+        
+        if (userId && typeof window.ansuShowProfile === "function") {
+          e.preventDefault();
+          e.stopPropagation();
+          // সরাসরি নতুন প্রোফাইল মডাল কল করি
+          window.ansuShowProfile(userId);
+        }
       }
     }
-  };
+  }, true); // true মানে capture phase, যাতে আগে এক্সিকিউট হয়
 
-  // ২. কমিউনিটির কম্পোজার (লগইন চেক) ঠিক করা
-  // যেহেতু আপনি লগইন আছেন, তাই কম্পোজারে সরাসরি পোস্ট করার বক্স দেখাতে হবে
-  async function fixComposer() {
+  // ============================================================
+  // ২. Community-তে লগইন সমস্যা ফিক্স (লগইন থাকলে কম্পোজার দেখাবে)
+  // ============================================================
+  // পুরোনো রেন্ডারিং বাদ দিয়ে সরাসরি ইনপুট বক্স দেখাব
+  setInterval(async function() {
+    if (!window.sb || !window.sb.auth) return;
+    
+    // লগইন চেক
+    const { data } = await window.sb.auth.getSession();
+    const user = data?.session?.user;
+    if (!user) return; // লগইন না থাকলে কিছু করব না
+
+    // লগইন করা আছে, এখন কম্পোজার চেক করি
     const composer = $("ansuCommunityComposer");
     if (!composer) return;
 
-    // আপনার বর্তমান লগইন স্টেট চেক করা
-    let isLoggedIn = false;
-    let userProfile = null;
-
-    if (window.sb && window.sb.auth) {
-      const { data } = await window.sb.auth.getSession();
-      if (data && data.session && data.session.user) {
-        isLoggedIn = true;
-        // প্রোফাইল ডাটা আনা
-        const { data: p } = await window.sb.from("profiles").select("*").eq("id", data.session.user.id).single();
-        userProfile = p;
-      }
-    }
-
-    // যদি লগইন করা থাকে কিন্তু লগইন বাটন দেখায়
-    if (isLoggedIn && composer.querySelector('button[onclick*="authModal"]')) {
-      console.log("[Fix] Logged in but login button showing. Fixing composer...");
+    // যদি কম্পোজারে "Login" বাটন দেখায়, কিন্তু ইউজার লগইন করা আছে
+    if (composer.innerHTML.includes("authModal") && composer.innerHTML.includes("লগইন করুন")) {
+      console.log("[Fix] Community লগইন ফিক্স হচ্ছে...");
       
-      const name = userProfile?.full_name || "User";
-      const avatar = userProfile?.avatar_url || "https://placehold.co/100x100/14251e/ffffff?text=User";
-      const isAdmin = userProfile?.role === "admin";
-
-      // নতুন কম্পোজার বসানো
+      // প্রোফাইল ডাটা আনি
+      const { data: profile } = await window.sb.from("profiles").select("*").eq("id", user.id).single();
+      const name = profile?.full_name || "User";
+      const avatar = profile?.avatar_url || "https://placehold.co/100x100/14251e/ffffff?text=User";
+      
+      // সরাসরি কম্পোজার HTML বসিয়ে দিই
       composer.innerHTML = `
         <div class="ansu-composer">
           <div class="ansu-composer-top">
-            <img src="${avatar}" class="ansu-composer-avatar ${isAdmin ? 'admin' : ''}" alt="">
+            <img src="${avatar}" class="ansu-composer-avatar" alt="">
             <div class="ansu-composer-info">
-              <div class="ansu-composer-name ${isAdmin ? 'admin' : ''}">${name}</div>
-              <div class="ansu-composer-meta">নিজের অভিজ্ঞতা বা স্ক্রিনশট শেয়ার করুন</div>
+              <div class="ansu-composer-name">${name}</div>
+              <div class="ansu-composer-meta">নিজের অভিজ্ঞতা শেয়ার করুন</div>
             </div>
           </div>
           <div class="ansu-post-input-wrap">
-            <textarea class="ansu-post-input" id="nucPostText" placeholder="আপনার Free Fire অভিজ্ঞতা, স্ক্রিনশট বা মজার কিছু লিখুন..."></textarea>
+            <textarea class="ansu-post-input" id="fixPostText" placeholder="আপনার Free Fire অভিজ্ঞতা লিখুন..."></textarea>
           </div>
-          <div class="ansu-img-preview" id="nucImgPreview"></div>
+          <div class="ansu-img-preview" id="fixImgPreview"></div>
           <div class="ansu-composer-actions">
             <div class="ansu-composer-tools">
-              <button type="button" class="ansu-tool-btn" onclick="document.getElementById('nucFileInput').click()">
-                <span class="emoji">📷</span> ছবি
+              <button type="button" class="ansu-tool-btn" onclick="document.getElementById('fixFileInput').click()">
+                <span class="emoji">📷</span> ছবি যোগ করুন
               </button>
-              <input type="file" id="nucFileInput" accept="image/*" multiple hidden>
+              <input type="file" id="fixFileInput" accept="image/*" multiple hidden>
             </div>
-            <button type="button" class="ansu-publish-btn" onclick="window.__nucPublish(this)">🚀 পোস্ট করুন</button>
+            <button type="button" class="ansu-publish-btn" id="fixPublishBtn">🚀 পোস্ট করুন</button>
           </div>
-          <div class="ansu-composer-msg" id="nucMsg"></div>
+          <div class="ansu-composer-msg" id="fixMsg"></div>
         </div>
       `;
-
-      // পোস্ট করার ফাংশন
-      window.__nucPublish = async function(btn) {
-        const text = $("nucPostText").value.trim();
-        const fileInput = $("nucFileInput");
-        const msgBox = $("nucMsg");
+      
+      // পাবলিশ বাটনের ইভেন্ট
+      $("fixPublishBtn").onclick = async function() {
+        const text = $("fixPostText").value.trim();
+        const fileInput = $("fixFileInput");
+        const files = fileInput.files;
         
-        if (!text && (!fileInput.files || fileInput.files.length === 0)) {
-          msgBox.textContent = "লেখা বা ছবি দিন!";
-          msgBox.style.color = "#f02849";
+        if (!text && files.length === 0) {
+          $("fixMsg").textContent = "লেখা বা ছবি দিন!";
+          $("fixMsg").className = "ansu-composer-msg error";
           return;
         }
-
-        btn.textContent = "⏳ হচ্ছে...";
-        btn.disabled = true;
-
+        
+        this.disabled = true;
+        this.textContent = "⏳ হচ্ছে...";
+        
         try {
           let imageUrls = [];
-          if (fileInput.files.length > 0) {
-            for (let i = 0; i < Math.min(fileInput.files.length, 4); i++) {
+          if (files.length > 0) {
+            for (let i = 0; i < Math.min(files.length, 4); i++) {
               if (typeof window.uploadFile === "function") {
-                const url = await window.uploadFile(fileInput.files[i], "community");
-                if (url) imageUrls.push(url);
+                const url = await window.uploadFile(files[i], "community");
+                imageUrls.push(url);
               }
             }
           }
-
-          const insertData = {
-            user_id: data.session.user.id,
-            content: text
-          };
+          
+          let postData = { user_id: user.id, content: text };
           if (imageUrls.length > 0) {
-            insertData.image_urls = imageUrls;
-            insertData.image_url = imageUrls[0];
+            postData.image_urls = imageUrls;
+            postData.image_url = imageUrls[0];
           }
-
-          const { error } = await window.sb.from("community_posts").insert(insertData);
           
-          if (error) throw error;
+          let res = await window.sb.from("community_posts").insert(postData).select().single();
+          // যদি image_urls কলাম না থাকে
+          if (res.error && res.error.message.includes("image_urls")) {
+            delete postData.image_urls;
+            res = await window.sb.from("community_posts").insert(postData).select().single();
+          }
           
-          msgBox.textContent = "✅ পোস্ট হয়েছে!";
-          msgBox.style.color = "#00a884";
-          $("nucPostText").value = "";
+          if (res.error) throw res.error;
+          
+          $("fixMsg").textContent = "✅ পোস্ট সফল হয়েছে!";
+          $("fixMsg").className = "ansu-composer-msg success";
+          $("fixPostText").value = "";
           fileInput.value = "";
           
-          if (typeof window.ansuReloadCommunity === "function") {
-            window.ansuReloadCommunity();
-          }
+          // পোস্ট রিলোড
+          if (typeof window.loadPosts === "function") await window.loadPosts();
+          if (typeof window.ansuReloadCommunity === "function") await window.ansuReloadCommunity();
+          
         } catch (err) {
           console.error(err);
-          msgBox.textContent = "❌ সমস্যা হয়েছে: " + err.message;
-          msgBox.style.color = "#f02849";
+          $("fixMsg").textContent = "❌ ব্যর্থ: " + err.message;
+          $("fixMsg").className = "ansu-composer-msg error";
         } finally {
-          btn.textContent = "🚀 পোস্ট করুন";
-          btn.disabled = false;
+          this.disabled = false;
+          this.textContent = "🚀 পোস্ট করুন";
         }
       };
     }
-  }
-
-  // ৩. মেম্বার্স লিস্টে পুরোনো ভাঙা বাটনগুলোকে ঠিক করা
-  function fixMembersButtons() {
-    const containers = [$("axMemberList"), $("axFixList")];
-    containers.forEach(c => {
-      if (!c) return;
-      // যেসব বাটনে showPublicProfile আছে, সেগুলো ঠিক করা
-      c.querySelectorAll('[onclick*="showPublicProfile"]').forEach(el => {
-        if (el.dataset.fixed) return;
-        const match = /showPublicProfile\(['"]([^'"]+)['"]\)/.exec(el.getAttribute("onclick"));
-        if (match) {
-          // সরাসরি নতুন v3 ফাংশন কল করব
-          el.setAttribute("onclick", `ansuShowProfile('${match[1]}')`);
-          el.dataset.fixed = "true";
-        }
-      });
-    });
-  }
-
-  // ৪. সবকিছু চালু করা
-  function init() {
-    fixComposer();
-    fixMembersButtons();
-
-    // মেম্বার্স মডাল ওপেন হলে বাটন ফিক্স করব
-    const observer = new MutationObserver(() => {
-      fixMembersButtons();
-    });
-    
-    const membersModal = $("axMembersModal");
-    if (membersModal) {
-      observer.observe(membersModal, { childList: true, subtree: true });
-    }
-
-    // প্রতি ২ সেকেন্ডে কম্পোজার এবং বাটন চেক করব
-    setInterval(() => {
-      fixComposer();
-      fixMembersButtons();
-    }, 2000);
-  }
-
-  // পেজ লোড হলে রান করব
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-
-  console.log("%c✦ ANSU ABSOLUTE FIX সক্রিয়", "color:#00a884;font-weight:bold;font-size:16px;");
+  }, 1500); // প্রতি ১.৫ সেকেন্ড পর পর চেক করবে
+  
 })();
 </script>
