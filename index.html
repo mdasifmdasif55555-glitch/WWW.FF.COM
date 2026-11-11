@@ -6987,5 +6987,104 @@ header { background: #0a0512ee !important; border-bottom-color: #a855f740 !impor
   console.log("%c✦ ANSU v3 Community সক্রিয় ✓", "color:#e8c879;font-weight:bold;font-size:13px");
   console.log("%c✓ Facebook-style feed ✓ 4 images ✓ Comment ✓ Profile ✓ Realtime", "color:#00a884;");
 })();
+</script><!-- ============================================================
+     ANSU v3 — AUTH STATE FIX
+     Community-তে আলাদা লগইন চাওয়া বন্ধ করবে
+     v3 স্ক্রিপ্টের ঠিক পরে বসান
+     ============================================================ -->
+<script id="ansuV3AuthFix">
+(function ansuV3AuthFix() {
+  "use strict";
+  if (window.__ANSU_V3_AUTH_FIX__) return;
+  window.__ANSU_V3_AUTH_FIX__ = true;
+
+  const $ = (id) => document.getElementById(id);
+
+  // ১. কম্পোজারে লগইন চেক ঠিক করা
+  function fixComposerLoginCheck() {
+    // পুরোনো v3 কম্পোজার রেন্ডার ফাংশনকে hook করা
+    // সরাসরি currentUser চেক করার বদলে একটু দেরি করে চেক করি
+    let tries = 0;
+    const timer = setInterval(() => {
+      tries++;
+      const composer = $("ansuCommunityComposer");
+      if (!composer) {
+        if (tries > 20) clearInterval(timer);
+        return;
+      }
+
+      // যদি currentUser থাকে কিন্তু কম্পোজারে লগইন বাটন দেখায় → রিফ্রেশ
+      const hasLoginBtn = composer.querySelector('button[onclick*="authModal"]');
+      if (window.currentUser && hasLoginBtn) {
+        console.log("[v3 Auth Fix] লগইন থাকা সত্ত্বেও কম্পোজারে লগইন চাওয়া হচ্ছে → ঠিক করা হচ্ছে");
+        if (typeof window.ansuReloadCommunity === "function") {
+          window.ansuReloadCommunity();
+        }
+        clearInterval(timer);
+      } else if (!window.currentUser && !hasLoginBtn && composer.querySelector(".ansu-composer-top")) {
+        // লগআউট অবস্থায় কম্পোজার দেখাচ্ছে → রিফ্রেশ
+        if (typeof window.ansuReloadCommunity === "function") {
+          window.ansuReloadCommunity();
+        }
+        clearInterval(timer);
+      }
+
+      if (tries > 40) clearInterval(timer);
+    }, 500);
+  }
+
+  // ২. পুরোনো authModal কে কাজ করা থেকে আটকানো
+  // v3 নিজেই সঠিকভাবে openModal কল করবে, কিন্তু যদি পুরোনো modal
+  // খুলে যায় সেটা ঠিক করা
+  const origOpenModal = window.openModal;
+  if (typeof origOpenModal === "function") {
+    window.openModal = function (id) {
+      // যদি authModal খোলা হয় এবং ইউজার আগে থেকেই লগইন করা
+      if (id === "authModal" && window.currentUser) {
+        console.log("[v3 Auth Fix] ইতিমধ্যে লগইন করা আছেন — authModal খোলা হচ্ছে না");
+        if (typeof window.showToast === "function") {
+          window.showToast("আপনি ইতিমধ্যেই লগইন করা আছেন ✓", "success", 2000);
+        }
+        return;
+      }
+      return origOpenModal.apply(this, arguments);
+    };
+  }
+
+  // ৩. auth state পরিবর্তন হলে কম্পোজার refresh
+  if (window.sb?.auth) {
+    window.sb.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "TOKEN_REFRESHED") {
+        setTimeout(() => {
+          if (window.currentUser !== (session?.user || null)) {
+            window.currentUser = session?.user || null;
+          }
+          if (typeof window.ansuReloadCommunity === "function") {
+            window.ansuReloadCommunity();
+          }
+        }, 800);
+      }
+    });
+  }
+
+  // ৪. পেজ লোড হওয়ার সাথে সাথে একবার চেক
+  setTimeout(fixComposerLoginCheck, 1500);
+  setTimeout(fixComposerLoginCheck, 4000);
+
+  // ৫. প্রতি ৫ সেকেন্ডে একবার সেফটি চেক
+  setInterval(() => {
+    const composer = $("ansuCommunityComposer");
+    if (!composer) return;
+    const hasLoginBtn = composer.querySelector('button[onclick*="authModal"]');
+    if (window.currentUser && hasLoginBtn) {
+      console.log("[v3 Auth Fix] auto-fix triggered");
+      if (typeof window.ansuReloadCommunity === "function") {
+        window.ansuReloadCommunity();
+      }
+    }
+  }, 5000);
+
+  console.log("%c✦ ANSU v3 Auth Fix সক্রিয়", "color:#00a884;font-weight:bold;");
+})();
 </script>
 
