@@ -6989,77 +6989,74 @@ header { background: #0a0512ee !important; border-bottom-color: #a855f740 !impor
 })();
 </script>
 <!-- ============================================================
-     ANSU v3 — AUTH + PROFILE BUTTON FIX v2
-     Community লগইন + Members Profile বাটন সমস্যা সমাধান
-     v3 স্ক্রিপ্টের ঠিক পরে বসান
+     ANSU ELITE — NUCLEAR FIX v3
+     সব পুরোনো override বাইপাস করে সরাসরি কাজ করবে
      ============================================================ -->
-<script id="ansuV3AuthProfileFix">
-(function ansuV3Fix() {
+<script id="ansuNuclearFix">
+(function ansuNuclearFix() {
   "use strict";
-  if (window.__ANSU_V3_FIX_V2__) return;
-  window.__ANSU_V3_FIX_V2__ = true;
+  if (window.__ANSU_NUCLEAR__) return;
+  window.__ANSU_NUCLEAR__ = true;
 
   const $ = (id) => document.getElementById(id);
-  const safe = (fn) => function () {
-    try { return fn.apply(this, arguments); }
-    catch (e) { console.warn("[v3 Fix]", e); }
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+
+  const MAX_IMAGES = 4;
+  const MAX_SIZE = 5 * 1024 * 1024;
+  const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+
+  const state = {
+    user: null,
+    profile: null,
+    pendingImages: [],
+    publishing: false
   };
 
   /* ============================================================
-     সমস্যা ১: Community লগইন চেক ঠিক করা
+     1. REAL AUTH — সরাসরি Supabase থেকে
      ============================================================ */
-
-  // আসল currentUser খোঁজার helper
-  async function getRealUser() {
-    if (!window.sb?.auth) return window.currentUser || null;
+  async function getRealAuth() {
+    if (!window.sb?.auth) return { user: null, profile: null };
     try {
       const { data } = await window.sb.auth.getSession();
-      return data?.session?.user || null;
-    } catch (_) {
-      return window.currentUser || null;
-    }
-  }
+      const user = data?.session?.user || null;
+      if (!user) return { user: null, profile: null };
 
-  // currentProfile লোড করা
-  async function getRealProfile() {
-    const user = await getRealUser();
-    if (!user) return null;
-    if (window.currentProfile && window.currentProfile.id === user.id) {
-      return window.currentProfile;
-    }
-    try {
-      const { data } = await window.sb
+      const { data: profile } = await window.sb
         .from("profiles")
         .select("*")
         .eq("id", user.id)
         .maybeSingle();
-      return data || null;
-    } catch (_) {
-      return null;
+
+      return { user, profile: profile || null };
+    } catch (e) {
+      console.warn("[Nuclear] auth error:", e);
+      return { user: null, profile: null };
     }
   }
 
-  // কম্পোজার নিজে থেকে রেন্ডার করা (আসল currentUser/profile দিয়ে)
-  async function forceRenderComposer() {
+  /* ============================================================
+     2. FORCE RENDER COMPOSER — সরাসরি HTML
+     ============================================================ */
+  async function renderComposer(force) {
     const container = $("ansuCommunityComposer");
     if (!container) return;
 
-    const user = await getRealUser();
-    const profile = await getRealProfile();
+    const { user, profile } = await getRealAuth();
+    state.user = user;
+    state.profile = profile;
 
-    // window.currentUser / currentProfile sync
-    if (user && window.currentUser !== user) {
-      window.currentUser = user;
-    }
-    if (profile && window.currentProfile !== profile) {
-      window.currentProfile = profile;
-    }
+    // window globals sync
+    if (user) window.currentUser = user;
+    if (profile) window.currentProfile = profile;
 
-    // লগইন না থাকলে
     if (!user) {
-      if (container.querySelector('button[onclick*="authModal"]')) return; // already showing
+      // লগআউট অবস্থা
+      if (container.querySelector(".nuclear-login-view")) return;
       container.innerHTML = `
-        <div class="ansu-composer" style="text-align:center;padding:22px;">
+        <div class="ansu-composer nuclear-login-view" style="text-align:center;padding:22px;">
           <div style="font-size:15px;font-weight:800;color:#e8c879;margin-bottom:8px;">পোস্ট করতে লগইন করুন</div>
           <div style="font-size:12px;color:var(--fb-muted);margin-bottom:14px;">Community-তে যোগ দিতে আগে লগইন করুন</div>
           <button class="ansu-publish-btn" onclick="openModal('authModal')" style="min-width:140px;">🔐 Login</button>
@@ -7068,293 +7065,323 @@ header { background: #0a0512ee !important; border-bottom-color: #a855f740 !impor
       return;
     }
 
-    // লগইন আছে → আসল কম্পোজার দেখাও
+    // লগইন আছে
     const isAdmin = profile?.role === "admin";
-    const name = profile?.full_name || user.email?.split("@")[0] || "Community Member";
+    const name = profile?.full_name || user.email?.split("@")[0] || "Member";
     const avatar = profile?.avatar_url || "https://placehold.co/100x100/14251e/ffffff?text=User";
 
-    const roleBadge = isAdmin
-      ? '<span class="ansu-role-badge admin">👑 ADMIN</span>'
-      : profile?.role === "seller"
-      ? '<span class="ansu-role-badge seller">🛍️ SELLER</span>'
-      : profile?.is_premium
-      ? '<span class="ansu-role-badge premium">✦ PREMIUM</span>'
-      : "";
-    const verifiedBadge = profile?.is_verified
-      ? '<span class="ansu-role-badge verified">✓ VERIFIED</span>'
-      : "";
+    const badges = [];
+    if (isAdmin) badges.push('<span class="ansu-role-badge admin">👑 ADMIN</span>');
+    else if (profile?.role === "seller") badges.push('<span class="ansu-role-badge seller">🛍️ SELLER</span>');
+    else if (profile?.is_premium) badges.push('<span class="ansu-role-badge premium">✦ PREMIUM</span>');
+    if (profile?.is_verified) badges.push('<span class="ansu-role-badge verified">✓ VERIFIED</span>');
 
     container.innerHTML = `
-      <div class="ansu-composer">
+      <div class="ansu-composer nuclear-composer">
         <div class="ansu-composer-top">
-          <img src="${avatar}" class="ansu-composer-avatar ${isAdmin ? "admin" : ""}" alt="" onclick="ansuShowProfile('${user.id}')">
+          <img src="${esc(avatar)}" class="ansu-composer-avatar ${isAdmin ? "admin" : ""}" 
+               alt="" onclick="ansuShowProfile('${esc(user.id)}')">
           <div class="ansu-composer-info">
-            <div class="ansu-composer-name ${isAdmin ? "admin" : ""}">${name} ${roleBadge} ${verifiedBadge}</div>
+            <div class="ansu-composer-name ${isAdmin ? "admin" : ""}">
+              ${esc(name)} ${badges.join("")}
+            </div>
             <div class="ansu-composer-meta">নিজের অভিজ্ঞতা বা স্ক্রিনশট শেয়ার করুন</div>
           </div>
         </div>
         <div class="ansu-post-input-wrap">
-          <textarea class="ansu-post-input" id="ansuPostText" maxlength="2000" placeholder="আপনার Free Fire অভিজ্ঞতা, স্ক্রিনশট বা মজার কিছু লিখুন..."></textarea>
+          <textarea class="ansu-post-input" id="nucPostText" maxlength="2000" 
+                    placeholder="আপনার Free Fire অভিজ্ঞতা, স্ক্রিনশট বা মজার কিছু লিখুন..."></textarea>
         </div>
-        <div class="ansu-img-preview" id="ansuImgPreview"></div>
+        <div class="ansu-img-preview" id="nucImgPreview"></div>
         <div class="ansu-composer-actions">
           <div class="ansu-composer-tools">
-            <button type="button" class="ansu-tool-btn" id="ansuAddPhotoBtn">
+            <button type="button" class="ansu-tool-btn" id="nucAddPhoto">
               <span class="emoji">📷</span> ছবি যোগ করুন
             </button>
-            <input type="file" id="ansuPostImages" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
-            <span style="font-size:11px;color:var(--fb-muted);display:inline-flex;align-items:center;padding:0 6px;" id="ansuImgCounter">সর্বোচ্চ ৪টি</span>
+            <input type="file" id="nucFileInput" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+            <span style="font-size:11px;color:var(--fb-muted);padding:0 6px;" id="nucCounter">সর্বোচ্চ ৪টি</span>
           </div>
-          <button type="button" class="ansu-publish-btn" id="ansuPublishBtn">🚀 পোস্ট করুন</button>
+          <button type="button" class="ansu-publish-btn" id="nucPublish">🚀 পোস্ট করুন</button>
         </div>
-        <div class="ansu-composer-msg" id="ansuComposerMsg"></div>
+        <div class="ansu-composer-msg" id="nucMsg"></div>
       </div>
     `;
 
-    // Rebind events (v3 এর ভেতরের ফাংশন ব্যবহার)
-    const addPhotoBtn = $("ansuAddPhotoBtn");
-    const fileInput = $("ansuPostImages");
-    const publishBtn = $("ansuPublishBtn");
-    const textInput = $("ansuPostText");
+    bindComposerEvents();
+  }
 
-    if (addPhotoBtn && fileInput) {
-      addPhotoBtn.addEventListener("click", () => fileInput.click());
-      fileInput.addEventListener("change", function (e) {
-        // v3 এর internal handler — hook করে কল করি
-        if (typeof window.__ansuImageSelectHook === "function") {
-          window.__ansuImageSelectHook(e);
-        } else {
-          console.warn("Image handler missing");
-        }
-      });
+  /* ============================================================
+     3. BIND EVENTS
+     ============================================================ */
+  function bindComposerEvents() {
+    const addBtn = $("nucAddPhoto");
+    const fileInput = $("nucFileInput");
+    const publishBtn = $("nucPublish");
+    const textarea = $("nucPostText");
+
+    if (addBtn && fileInput) {
+      addBtn.onclick = () => fileInput.click();
+      fileInput.onchange = handleImages;
     }
-    if (publishBtn) {
-      publishBtn.addEventListener("click", function () {
-        if (typeof window.__ansuPublishHook === "function") {
-          window.__ansuPublishHook();
-        }
-      });
-    }
-    if (textInput) {
-      textInput.addEventListener("input", function () {
-        textInput.style.height = "auto";
-        textInput.style.height = Math.min(textInput.scrollHeight, 240) + "px";
-      });
+    if (publishBtn) publishBtn.onclick = handlePublish;
+    if (textarea) {
+      textarea.oninput = () => {
+        textarea.style.height = "auto";
+        textarea.style.height = Math.min(textarea.scrollHeight, 240) + "px";
+      };
     }
   }
 
   /* ============================================================
-     সমস্যা ২: Members Profile বাটন ঠিক করা
+     4. IMAGE HANDLING
      ============================================================ */
+  function handleImages(e) {
+    const files = Array.from(e.target.files || []);
+    e.target.value = "";
 
-  // পুরোনো showPublicProfile কে ওভাররাইড — শুধু আমাদের showProfile চলবে
-  window.showPublicProfile = safe(async function (userId) {
+    for (const file of files) {
+      if (state.pendingImages.length >= MAX_IMAGES) {
+        showMsg("সর্বোচ্চ ৪টি ছবি দেওয়া যাবে।", "error");
+        break;
+      }
+      if (!ALLOWED.includes(file.type)) {
+        showMsg("শুধু JPEG, PNG, WEBP বা GIF দিন।", "error");
+        continue;
+      }
+      if (file.size > MAX_SIZE) {
+        showMsg("প্রতিটি ছবি সর্বোচ্চ ৫ MB।", "error");
+        continue;
+      }
+      state.pendingImages.push(file);
+    }
+    renderPreviews();
+  }
+
+  function renderPreviews() {
+    const grid = $("nucImgPreview");
+    const counter = $("nucCounter");
+    if (!grid) return;
+
+    grid.innerHTML = "";
+    state.pendingImages.forEach((file, idx) => {
+      const url = URL.createObjectURL(file);
+      const div = document.createElement("div");
+      div.className = "ansu-img-preview-item";
+      div.innerHTML = `
+        <img src="${url}" alt="">
+        <button type="button" class="ansu-img-remove" data-idx="${idx}">✕</button>
+        <span class="ansu-img-badge">${idx + 1}</span>
+      `;
+      div.querySelector(".ansu-img-remove").onclick = () => {
+        state.pendingImages.splice(idx, 1);
+        renderPreviews();
+      };
+      grid.appendChild(div);
+    });
+
+    if (counter) {
+      counter.textContent = state.pendingImages.length > 0
+        ? `${state.pendingImages.length}/4টি ছবি`
+        : "সর্বোচ্চ ৪টি";
+    }
+  }
+
+  function showMsg(text, type = "") {
+    const el = $("nucMsg");
+    if (!el) return;
+    el.textContent = text;
+    el.className = "ansu-composer-msg " + type;
+    if (text) {
+      setTimeout(() => {
+        if (el.textContent === text) {
+          el.textContent = "";
+          el.className = "ansu-composer-msg";
+        }
+      }, 5000);
+    }
+  }
+
+  /* ============================================================
+     5. PUBLISH POST — Direct upload + insert
+     ============================================================ */
+  async function handlePublish() {
+    if (state.publishing) return;
+    if (!state.user) {
+      openModal("authModal");
+      return;
+    }
+
+    const textarea = $("nucPostText");
+    const content = (textarea?.value || "").trim();
+    const images = state.pendingImages;
+
+    if (!content && images.length === 0) {
+      showMsg("লেখা বা ছবি — অন্তত একটি দিন।", "error");
+      return;
+    }
+
+    state.publishing = true;
+    const btn = $("nucPublish");
+    if (btn) { btn.disabled = true; btn.textContent = "⏳ আপলোড হচ্ছে..."; }
+
+    try {
+      // 1. Upload images
+      const urls = [];
+      for (let i = 0; i < images.length; i++) {
+        const file = images[i];
+        try {
+          if (typeof window.uploadFile !== "function") {
+            throw new Error("uploadFile missing");
+          }
+          const url = await window.uploadFile(file, "community");
+          if (url) urls.push(url);
+        } catch (e) {
+          console.warn(`Image ${i+1} upload failed:`, e);
+          throw new Error(`ছবি ${i+1} আপলোড ব্যর্থ`);
+        }
+      }
+
+      // 2. Insert post — try image_urls first
+      const postData = {
+        user_id: state.user.id,
+        content: content || ""
+      };
+
+      if (urls.length > 0) {
+        postData.image_urls = urls;
+        postData.image_url = urls[0]; // fallback for older schema
+      }
+
+      let result = await window.sb
+        .from("community_posts")
+        .insert(postData)
+        .select("*")
+        .single();
+
+      // Retry without image_urls if column missing
+      if (result.error && /image_urls/i.test(result.error.message || "")) {
+        delete postData.image_urls;
+        result = await window.sb.from("community_posts").insert(postData).select("*").single();
+      }
+      if (result.error && /image_url/i.test(result.error.message || "")) {
+        delete postData.image_url;
+        result = await window.sb.from("community_posts").insert(postData).select("*").single();
+      }
+
+      if (result.error) throw result.error;
+
+      // 3. Success — reset
+      if (textarea) textarea.value = "";
+      state.pendingImages = [];
+      renderPreviews();
+      showMsg("✅ পোস্ট প্রকাশ হয়েছে!", "success");
+
+      if (typeof window.showToast === "function") {
+        window.showToast("পোস্ট প্রকাশ হয়েছে! 🎉", "success", 2500);
+      }
+
+      // 4. Reload feed
+      if (typeof window.ansuReloadCommunity === "function") {
+        await window.ansuReloadCommunity();
+      }
+    } catch (err) {
+      console.error("[Nuclear] publish error:", err);
+      showMsg("ব্যর্থ: " + (err.message || "Unknown"), "error");
+      if (typeof window.showToast === "function") {
+        window.showToast("পোস্ট প্রকাশ ব্যর্থ", "error");
+      }
+    } finally {
+      state.publishing = false;
+      if (btn) { btn.disabled = false; btn.textContent = "🚀 পোস্ট করুন"; }
+    }
+  }
+
+  /* ============================================================
+     6. MEMBERS PROFILE BUTTON FIX
+     ============================================================ */
+  // সরাসরি showPublicProfile ওভাররাইড — শুধু ansuShowProfile কল হবে
+  window.showPublicProfile = function (userId) {
     if (!userId) return;
     if (typeof window.ansuShowProfile === "function") {
       return window.ansuShowProfile(userId);
     }
-  });
+    console.warn("[Nuclear] ansuShowProfile missing, falling back");
+  };
 
-  // পুরোনো axShowProfile ও alias
-  window.axShowProfile = window.showPublicProfile;
+  // Members list এলে onclick rewrite
+  function fixMembersButtons() {
+    const containers = [$("axMemberList"), $("axFixList"), $("axMembersModal")];
+    containers.forEach(container => {
+      if (!container) return;
 
-  // Members modal-এর প্রোফাইল বাটনে ক্লিক হ্যান্ডল
-  // (পুরোনো onclick="showPublicProfile(...)" এখন আমাদের ফাংশন কল করবে)
-
-  // সেফটি: যদি কোনো কারণে showProfile না পায়, নিজের মতো করে খুলি
-  function attachMembersProfileFix() {
-    const memberList = $("axMemberList") || $("axFixList");
-    if (!memberList) return;
-
-    // পুরোনো বাটনে নতুন onclick বসানো — শুধু যেগুলো এখনো পুরোনো showPublicProfile কল করছে
-    memberList.querySelectorAll('button[onclick*="showPublicProfile"]').forEach(function (btn) {
-      if (btn.dataset.fixed === "1") return;
-      const match = /showPublicProfile\(['"]([^'"]+)['"]\)/.exec(btn.getAttribute("onclick") || "");
-      if (match) {
-        btn.setAttribute("onclick", `ansuShowProfile('${match[1]}')`);
-        btn.dataset.fixed = "1";
-      }
-    });
-
-    // ইমেজেও একই ফিক্স
-    memberList.querySelectorAll('img[onclick*="showPublicProfile"]').forEach(function (img) {
-      if (img.dataset.fixed === "1") return;
-      const match = /showPublicProfile\(['"]([^'"]+)['"]\)/.exec(img.getAttribute("onclick") || "");
-      if (match) {
-        img.setAttribute("onclick", `ansuShowProfile('${match[1]}')`);
-        img.dataset.fixed = "1";
-      }
-    });
-
-    // নামেও
-    memberList.querySelectorAll('[onclick*="showPublicProfile"]').forEach(function (el) {
-      if (el.dataset.fixed === "1") return;
-      const match = /showPublicProfile\(['"]([^'"]+)['"]\)/.exec(el.getAttribute("onclick") || "");
-      if (match) {
-        el.setAttribute("onclick", `ansuShowProfile('${match[1]}')`);
-        el.dataset.fixed = "1";
-      }
-    });
-  }
-
-  // Members list রেন্ডার হলে অটো ফিক্স
-  const observer = new MutationObserver(safe(function () {
-    attachMembersProfileFix();
-  }));
-
-  // DOM ready হলে observer বসাই
-  function startObserver() {
-    const targets = ["axMemberList", "axFixList", "axMembersModal"];
-    targets.forEach(function (id) {
-      const el = $(id);
-      if (el) {
-        observer.observe(el, { childList: true, subtree: true });
-      }
-    });
-    // যদি এখনো তৈরি না হয়, ২ সেকেন্ড পর আবার চেষ্টা
-    setTimeout(function () {
-      targets.forEach(function (id) {
-        const el = $(id);
-        if (el) {
-          try { observer.observe(el, { childList: true, subtree: true }); } catch (_) {}
+      container.querySelectorAll('[onclick*="showPublicProfile"]').forEach(el => {
+        if (el.dataset.nucFixed === "1") return;
+        const m = /showPublicProfile\(['"]([^'"]+)['"]\)/.exec(el.getAttribute("onclick") || "");
+        if (m) {
+          el.setAttribute("onclick", `ansuShowProfile('${m[1]}')`);
+          el.dataset.nucFixed = "1";
         }
       });
-      attachMembersProfileFix();
-    }, 2000);
+    });
+  }
+
+  // Members observer
+  function observeMembers() {
+    const target = $("axMemberList") || $("axFixList");
+    if (!target) {
+      setTimeout(observeMembers, 1000);
+      return;
+    }
+    const obs = new MutationObserver(() => {
+      setTimeout(fixMembersButtons, 50);
+    });
+    obs.observe(target, { childList: true, subtree: true });
+    fixMembersButtons();
   }
 
   /* ============================================================
-     v3 Internal Hooks — যাতে ফিক্স করা কম্পোজারও কাজ করে
-     ============================================================ */
-
-  // v3 এর ভেতরের ফাংশনগুলো exposed না, তাই আমরা নিজের হ্যান্ডলার বানাই
-  window.__ansuImageSelectHook = safe(async function (event) {
-    const files = Array.from(event.target.files || []);
-    event.target.value = "";
-    // v3 internal image handling সরাসরি কল করা যাবে না, তাই নিজে আপলোডের ব্যবস্থা
-    // কিন্তু v3 এর state.imagePreview লাগবে — তাই ভিন্ন উপায়ে
-    // সহজ পথ: ফাইলগুলো ধরে রাখি এবং publish এ ব্যবহার করি
-    window.__ansuPendingImages = files.slice(0, 4);
-    // Preview দেখাও
-    const grid = $("ansuImgPreview");
-    if (grid) {
-      grid.innerHTML = "";
-      window.__ansuPendingImages.forEach(function (file, idx) {
-        const url = URL.createObjectURL(file);
-        const div = document.createElement("div");
-        div.className = "ansu-img-preview-item";
-        div.innerHTML = `
-          <img src="${url}" alt="">
-          <button type="button" class="ansu-img-remove" data-idx="${idx}">✕</button>
-          <span class="ansu-img-badge">${idx + 1}</span>
-        `;
-        div.querySelector(".ansu-img-remove").addEventListener("click", function () {
-          window.__ansuPendingImages.splice(idx, 1);
-          window.__ansuImageSelectHook({ target: { files: [], value: "" } });
-        });
-        grid.appendChild(div);
-      });
-    }
-    const counter = $("ansuImgCounter");
-    if (counter) counter.textContent = (window.__ansuPendingImages.length || 0) + "/4টি ছবি";
-  });
-
-  window.__ansuPublishHook = safe(async function () {
-    if (!window.currentUser) return;
-    const textInput = $("ansuPostText");
-    const content = (textInput?.value || "").trim();
-    const images = window.__ansuPendingImages || [];
-
-    if (!content && images.length === 0) {
-      const msg = $("ansuComposerMsg");
-      if (msg) { msg.textContent = "লেখা বা ছবি — অন্তত একটি দিন।"; msg.className = "ansu-composer-msg error"; }
-      return;
-    }
-
-    const publishBtn = $("ansuPublishBtn");
-    if (publishBtn) { publishBtn.disabled = true; publishBtn.textContent = "⏳ প্রকাশ হচ্ছে..."; }
-
-    try {
-      const uploadedUrls = [];
-      for (const file of images) {
-        try {
-          const url = await window.uploadFile(file, "community");
-          if (url) uploadedUrls.push(url);
-        } catch (e) { console.warn("Upload failed", e); }
-      }
-
-      const insertData = {
-        user_id: window.currentUser.id,
-        content: content || ""
-      };
-      if (uploadedUrls.length > 0) {
-        insertData.image_urls = uploadedUrls;
-        insertData.image_url = uploadedUrls[0];
-      }
-
-      let result = await window.sb.from("community_posts").insert(insertData).select("*").single();
-      if (result.error && /image_urls/i.test(result.error.message || "")) {
-        delete insertData.image_urls;
-        result = await window.sb.from("community_posts").insert(insertData).select("*").single();
-      }
-      if (result.error) throw result.error;
-
-      if (textInput) textInput.value = "";
-      window.__ansuPendingImages = [];
-      const grid = $("ansuImgPreview");
-      if (grid) grid.innerHTML = "";
-      const msg = $("ansuComposerMsg");
-      if (msg) { msg.textContent = "✅ পোস্ট প্রকাশ হয়েছে!"; msg.className = "ansu-composer-msg success"; }
-
-      if (typeof window.showToast === "function") window.showToast("পোস্ট প্রকাশ হয়েছে! 🎉", "success");
-      if (typeof window.ansuReloadCommunity === "function") await window.ansuReloadCommunity();
-    } catch (err) {
-      console.error("[v3 Fix] Publish error:", err);
-      const msg = $("ansuComposerMsg");
-      if (msg) { msg.textContent = "পোস্ট ব্যর্থ: " + (err.message || "Unknown"); msg.className = "ansu-composer-msg error"; }
-    } finally {
-      if (publishBtn) { publishBtn.disabled = false; publishBtn.textContent = "🚀 পোস্ট করুন"; }
-    }
-  });
-
-  /* ============================================================
-     Boot
+     7. BOOT
      ============================================================ */
   async function boot() {
-    // একবার কম্পোজার force render
-    await forceRenderComposer();
-    startObserver();
-    attachMembersProfileFix();
+    await renderComposer();
+    observeMembers();
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", safe(boot));
+    document.addEventListener("DOMContentLoaded", boot);
   } else {
-    setTimeout(safe(boot), 500);
+    setTimeout(boot, 600);
   }
 
-  // Auth state পরিবর্তনে কম্পোজার আপডেট
+  // Auth change → re-render composer
   if (window.sb?.auth) {
-    window.sb.auth.onAuthStateChange(safe(async function () {
-      setTimeout(forceRenderComposer, 800);
-    }));
+    window.sb.auth.onAuthStateChange(() => {
+      setTimeout(renderComposer, 800);
+    });
   }
 
-  // পিরিয়ডিক চেক (৩ সেকেন্ড পর পর)
-  setInterval(safe(async function () {
+  // Periodic safety: composer ভুল অবস্থায় থাকলে ঠিক করবে
+  setInterval(async () => {
     const composer = $("ansuCommunityComposer");
     if (!composer) return;
-    const hasLoginBtn = composer.querySelector('button[onclick*="authModal"]');
-    const user = await getRealUser();
-    if (user && hasLoginBtn) {
-      console.log("[v3 Fix] লগইন আছে কিন্তু বাটন দেখাচ্ছে — force render");
-      await forceRenderComposer();
-    } else if (!user && composer.querySelector(".ansu-composer-top")) {
-      console.log("[v3 Fix] লগইন নেই কিন্তু কম্পোজার দেখাচ্ছে — force render");
-      await forceRenderComposer();
-    }
-  }), 3000);
 
-  console.log("%c✦ ANSU v3 Fix v2 সক্রিয় — Community লগইন + Profile বাটন ঠিক হবে", "color:#00a884;font-weight:bold;");
+    const { user } = await getRealAuth();
+    const hasLoginView = composer.querySelector(".nuclear-login-view");
+    const hasComposerView = composer.querySelector(".nuclear-composer");
+
+    if (user && hasLoginView) {
+      console.log("[Nuclear] লগইন আছে কিন্তু লগইন ভিউ দেখাচ্ছে → force render");
+      await renderComposer(true);
+    } else if (!user && hasComposerView) {
+      console.log("[Nuclear] লগইন নেই কিন্তু কম্পোজার দেখাচ্ছে → force render");
+      await renderComposer(true);
+    }
+  }, 4000);
+
+  // Members ফিক্স প্রতি ২ সেকেন্ডে
+  setInterval(fixMembersButtons, 2000);
+
+  console.log("%c✦ ANSU NUCLEAR FIX সক্রিয়", "color:#00a884;font-weight:bold;font-size:13px;");
+  console.log("%c✓ Direct Supabase auth ✓ Force render ✓ Members fix", "color:#e8c879;");
 })();
 </script>
